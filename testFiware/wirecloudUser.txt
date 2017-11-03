@@ -1,0 +1,2 @@
+docker exec -it wirecloud /docker-entrypoint.sh initdb
+docker exec -it wirecloud /docker-entrypoint.sh createsuperuser
