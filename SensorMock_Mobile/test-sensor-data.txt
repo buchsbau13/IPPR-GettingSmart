@@ -1,0 +1,1 @@
+Streetlight1-temperature,t,int,13
