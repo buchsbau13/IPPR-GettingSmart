@@ -1,0 +1,419 @@
+{
+	"variables": [],
+	"info": {
+		"name": "GettingSmart",
+		"_postman_id": "07a78381-de83-921e-f2fc-2e8f2cecabc9",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Orion",
+			"description": "",
+			"item": [
+				{
+					"name": "Streetlight1",
+					"request": {
+						"url": "http://localhost:1026/v2/entities/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"Streetlight1\",\r\n    \"type\": \"Static\",\r\n    \r\n    \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne 1\"\r\n    },\r\n    \r\n    \"description\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne Niesenbergergasse\"            \r\n    },\r\n    \r\n    \"location\": {\r\n        \"type\": \"geo:point\",\r\n        \"value\": \"47.069389, 15.421638\"\r\n    },\r\n    \r\n    \"address\": {\r\n        \"type\": \"PostalAddress\",\r\n        \"value\": {\r\n            \"streetAddress\": \"Niesenbergergasse 51\",\r\n            \"addressRegion\": \"Styria\",\r\n            \"addressLocality\": \"Graz\",\r\n            \"postalCode\": \"8020\"\r\n        }\r\n    }\r\n}\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Streetlight2",
+					"request": {
+						"url": "http://localhost:1026/v2/entities/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"Streetlight2\",\r\n    \"type\": \"Static\",\r\n    \r\n    \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne 2\"\r\n    },\r\n    \r\n    \"description\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne Alte Poststraße\"            \r\n    },\r\n    \r\n    \"location\": {\r\n        \"type\": \"geo:point\",\r\n        \"value\": \"47.069718, 15.409874\"\r\n    },\r\n    \r\n    \"address\": {\r\n        \"type\": \"PostalAddress\",\r\n        \"value\": {\r\n            \"streetAddress\": \"Alte Poststraße 147\",\r\n            \"addressRegion\": \"Styria\",\r\n            \"addressLocality\": \"Graz\",\r\n            \"postalCode\": \"8020\"\r\n        }\r\n    }\r\n}\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Streetlight3",
+					"request": {
+						"url": "http://localhost:1026/v2/entities/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"Streetlight3\",\r\n    \"type\": \"Static\",\r\n    \r\n    \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne 3\"\r\n    },\r\n    \r\n    \"description\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne Elisabethstraße\"            \r\n    },\r\n    \r\n    \"location\": {\r\n        \"type\": \"geo:point\",\r\n        \"value\": \"47.074023, 15.447250\"\r\n    },\r\n    \r\n    \"address\": {\r\n        \"type\": \"PostalAddress\",\r\n        \"value\": {\r\n            \"streetAddress\": \"Elisabethstraße 1\",\r\n            \"addressRegion\": \"Styria\",\r\n            \"addressLocality\": \"Graz\",\r\n            \"postalCode\": \"8010\"\r\n        }\r\n    }\r\n}\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Bus1",
+					"request": {
+						"url": "http://localhost:1026/v2/entities/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"Bus1\",\r\n    \"type\": \"Mobile\",\r\n    \r\n    \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Bus 1\"\r\n    },\r\n    \r\n    \"description\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Bus Linie 35\"            \r\n    },\r\n    \r\n    \"address\": {\r\n        \"type\": \"PostalAddress\",\r\n        \"value\": {\r\n            \"streetAddress\": \"Jakominiolatz 1\",\r\n            \"addressRegion\": \"Styria\",\r\n            \"addressLocality\": \"Graz\",\r\n            \"postalCode\": \"8010\"\r\n        }\r\n    }\r\n}\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "IDAS",
+			"description": "",
+			"item": [
+				{
+					"name": "ServiceStatic",
+					"request": {
+						"url": "http://localhost:4041/iot/services",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"services\": [\r\n        {\r\n            \"apikey\": \"graziot-devices\",\r\n            \"token\": \"token1\",\r\n            \"cbroker\": \"http://localhost:1026\",\r\n            \"resource\": \"/iot/d\",\r\n            \"entity_type\": \"Static\"\r\n        }\r\n    ]\r\n}\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Streetlight1-temperature",
+					"request": {
+						"url": "http://localhost:4041/iot/devices",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Streetlight1-temperature\",\r\n            \"entity_name\": \"Streetlight1\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"Static\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n                    \"object_id\": \"t\",\r\n                    \"name\": \"temperature\",\r\n                    \"type\": \"Number\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Streetlight2-temperature",
+					"request": {
+						"url": "http://localhost:4041/iot/devices",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Streetlight2-temperature\",\r\n            \"entity_name\": \"Streetlight2\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"Static\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n                    \"object_id\": \"t\",\r\n                    \"name\": \"temperature\",\r\n                    \"type\": \"Number\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Streetlight3-temperature",
+					"request": {
+						"url": "http://localhost:4041/iot/devices",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Streetlight3-temperature\",\r\n            \"entity_name\": \"Streetlight3\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"Static\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n                    \"object_id\": \"t\",\r\n                    \"name\": \"temperature\",\r\n                    \"type\": \"Number\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "ServiceMobile",
+					"request": {
+						"url": "http://localhost:4041/iot/services",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"services\": [\r\n        {\r\n            \"apikey\": \"graziot-mobileDevices\",\r\n            \"token\": \"token1\",\r\n            \"cbroker\": \"http://localhost:1026\",\r\n            \"resource\": \"/iot/d\",\r\n            \"entity_type\": \"Mobile\"\r\n        }\r\n    ]\r\n}\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Bus1-temperature",
+					"request": {
+						"url": "http://localhost:4041/iot/devices",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Bus1-temperature\",\r\n            \"entity_name\": \"Bus1\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"Mobile\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n                    \"object_id\": \"t\",\r\n                    \"name\": \"temperature\",\r\n                    \"type\": \"Number\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Bus1-location",
+					"request": {
+						"url": "http://localhost:4041/iot/devices",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Bus1-location\",\r\n            \"entity_name\": \"Bus1\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"Mobile\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n                    \"object_id\": \"l\",\r\n                    \"name\": \"location\",\r\n                    \"type\": \"geo:point\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cygnus",
+			"description": "",
+			"item": [
+				{
+					"name": "Streetlight1-Temperature",
+					"request": {
+						"url": "http://localhost:1026/v1/subscribeContext",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"entities\": [\r\n        {\r\n            \"type\": \"Static\",\r\n            \"isPattern\": \"false\",\r\n            \"id\": \"Streetlight1\"\r\n        }\r\n    ],\r\n    \"attributes\": [\r\n        \"temperature\"\r\n    ],\r\n    \"reference\": \"http://172.20.128.3:5050/notify\",\r\n    \"duration\": \"P1000000M\",\r\n    \"notifyConditions\": [\r\n        {\r\n            \"type\": \"ONCHANGE\",\r\n            \"condValues\": [\r\n                \"temperature\"\r\n            ]\r\n        }\r\n    ],\r\n    \"throttling\": \"PT1S\"\r\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Bus1-Location",
+					"request": {
+						"url": "http://localhost:1026/v1/subscribeContext",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"entities\": [\r\n        {\r\n            \"type\": \"Mobile\",\r\n            \"isPattern\": \"false\",\r\n            \"id\": \"Bus1\"\r\n        }\r\n    ],\r\n    \"attributes\": [\r\n        \"location\"\r\n    ],\r\n    \"reference\": \"http://172.20.128.3:5050/notify\",\r\n    \"duration\": \"P1000000M\",\r\n    \"notifyConditions\": [\r\n        {\r\n            \"type\": \"ONCHANGE\",\r\n            \"condValues\": [\r\n                \"location\"\r\n            ]\r\n        }\r\n    ],\r\n    \"throttling\": \"PT1S\"\r\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
