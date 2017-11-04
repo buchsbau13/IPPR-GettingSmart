@@ -8,11 +8,18 @@ Python 2.7 and the python module 'requests' (install using pip)
 >>Execution<<
 'SendRandMeasurements.py':
 
-python .\SendRandMeasurements.py test-sensor-data.txt
-(you can replace 'test-sensor-data.txt' with your own file)
+python .\SendRandMeasurements.py test-data.txt
+(you can replace 'test-data.txt' with your own file)
 
 'SendCoordList.py':
 
-python .\SendCoordList.py Bus_1 l test-coords.txt
-(replace 'Bus_1' (sensor id) and 'l' (alias for location attribute) with appropriate values from your setup,
-you can replace 'test-coords.txt' with your own file)
+python .\SendCoordList.py Bus_1 apimobile l test-coords.txt
+(replace 'Bus_1' (sensor id), 'apimobile' (api key) and 'l' (alias for location attribute)
+ with appropriate values from your setup, you can replace 'test-coords.txt' with your own file)
+
+'CreateObjects.py':
+
+python .\CreateObjects.py ent Lamp_1.txt
+(replace 'ent' with the type of object you want to create ('ent' for entity, 'srv' for service,
+ 'dev' for device and 'sub' for subscription), replace 'Lamp_1.txt' with the name of the file
+ containing the corresponding payload in json format)

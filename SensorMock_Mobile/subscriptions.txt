@@ -1,0 +1,25 @@
+{
+  "entities": [
+    {
+      "type": "static",
+      "isPattern": "false",
+      "id": "Lamp_1"
+    },
+    {
+      "type": "mobile",
+      "isPattern": "false",
+      "id": "Bus_1"
+    }
+  ],
+  "notifyConditions": [
+    {
+      "type": "ONCHANGE",
+      "condValues": [
+        "TimeInstant"
+      ]
+    }
+  ],
+  "reference": "http://comet:8666/notify",
+  "duration": "P1Y",
+  "throttling": "PT1S"
+}

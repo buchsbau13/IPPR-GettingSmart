@@ -1,0 +1,14 @@
+{
+  "id": "Bus_1",
+  "type": "mobile",
+  "name":
+    {
+      "type": "Text",
+      "value": "Bus 1"
+    },
+  "description":
+    {
+      "type": "Text",
+      "value": "Bus Linie 63"            
+    }
+}

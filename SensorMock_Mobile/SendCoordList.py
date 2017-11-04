@@ -27,19 +27,21 @@ CONFIG_FILE = "./config.ini"
 NUM_ARG=len(sys.argv)
 COMMAND=sys.argv[0] 
 
-if NUM_ARG==4:
+if NUM_ARG==5:
    SENSOR_ID=sys.argv[1]
-   LOC_ALIAS=sys.argv[2]
-   FILE_NAME=sys.argv[3]
+   API_KEY=sys.argv[2]
+   LOC_ALIAS=sys.argv[3]
+   FILE_NAME=sys.argv[4]
 else:
-   print 'Usage: '+COMMAND+' [DEV_ID] [LOC_ALIAS] [FILE_NAME]'
-   print '  Where DEV_ID = Any Device as listed with LisDevices.py'
+   print 'Usage: '+COMMAND+' [DEV_ID] [API_KEY] [LOC_ALIAS] [FILE_NAME]'
+   print '  Where DEV_ID = Device ID of your sensor'
+   print '        API_KEY = API key for the service used with this device'
    print '        LOC_ALIAS = Alias for the location attribute, e.g. l'
    print '        FILE_NAME = Name of the file containing coordinates (must be in current directory)'
    print '        The file with the coordinates must contain one or more lines in the geo:point format:'
    print '        <LAT>,<LON>'
    print
-   print '        Example: python .\SendCoordList.py Bus_1 l test-coords.txt'
+   print '        Example: python .\SendCoordList.py Bus_1 apimobile l test-coords.txt'
    print
    sys.exit(2)
 
@@ -52,11 +54,8 @@ config.readfp(io.BytesIO(sample_config))
 IDAS_HOST=config.get('idas', 'host')
 IDAS_ADMIN_PORT=config.get('idas', 'adminport')
 IDAS_UL20_PORT=config.get('idas', 'ul20port')
-FIWARE_SERVICE=config.get('idas', 'fiware-service')
-FIWARE_SERVICE_PATH=config.get('idas', 'fiware-service-path')
-APIKEY=config.get('idas', 'apikey')
-
-HOST_ID=config.get('local', 'host_id')
+FIWARE_SERVICE=config.get('idas', 'fiware_service')
+FIWARE_SERVICEPATH=config.get('idas', 'fiware_service_path')
 
 IDAS_AAA=config.get('idas', 'OAuth')
 if IDAS_AAA == "yes":
@@ -75,10 +74,10 @@ data = [line.replace(" ","").strip() for line in lines]
 
 cd.close()
 
-URL = "http://"+IDAS_HOST+":"+IDAS_UL20_PORT+'/iot/d?k='+APIKEY+'&i='+SENSOR_ID
+URL = "http://"+IDAS_HOST+":"+IDAS_UL20_PORT+'/iot/d?k='+API_KEY+'&i='+SENSOR_ID
 
-HEADERS = {'content-type': 'text/plain' , 'X-Auth-Token' : TOKEN, 'Fiware-Service' : FIWARE_SERVICE, 'Fiware-ServicePath' : FIWARE_SERVICE_PATH }
-HEADERS_SHOW = {'content-type': 'text/plain' , 'X-Auth-Token' : TOKEN_SHOW, 'Fiware-Service' : FIWARE_SERVICE, 'Fiware-ServicePath' : FIWARE_SERVICE_PATH}
+HEADERS = {'content-type': 'text/plain' , 'X-Auth-Token' : TOKEN, 'Fiware-Service' : FIWARE_SERVICE, 'Fiware-ServicePath' : FIWARE_SERVICEPATH }
+HEADERS_SHOW = {'content-type': 'text/plain' , 'X-Auth-Token' : TOKEN_SHOW, 'Fiware-Service' : FIWARE_SERVICE, 'Fiware-ServicePath' : FIWARE_SERVICEPATH}
 
 try:
    while True:
@@ -93,6 +92,6 @@ try:
          r = requests.post(URL, data=PAYLOAD, headers=HEADERS)
          print "* Status Code: "+str(r.status_code)
 
-         time.sleep(120)
+         time.sleep(5)
 except KeyboardInterrupt:
    pass

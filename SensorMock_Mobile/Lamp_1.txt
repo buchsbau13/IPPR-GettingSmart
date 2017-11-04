@@ -1,0 +1,30 @@
+{
+  "id": "Lamp_1",
+  "type": "static",
+  "name":
+    {
+      "type": "Text",
+      "value": "Laterne 1"
+    },
+  "description":
+    {
+      "type": "Text",
+      "value": "Laterne Niesenbergergasse"            
+    },
+  "location":
+    {
+      "type": "geo:point",
+      "value": "47.069389,15.421638"
+    },
+  "address":
+    {
+      "type": "PostalAddress",
+      "value":
+        {
+          "streetAddress": "Niesenbergergasse 51",
+          "addressRegion": "Styria",
+          "addressLocality": "Graz",
+          "postalCode": "8020"
+        }
+    }
+}
