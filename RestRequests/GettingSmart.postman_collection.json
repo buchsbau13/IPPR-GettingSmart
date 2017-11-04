@@ -12,7 +12,7 @@
 			"description": "",
 			"item": [
 				{
-					"name": "Streetlight1",
+					"name": "Lamp_1",
 					"request": {
 						"url": "http://localhost:1026/v2/entities/",
 						"method": "POST",
@@ -35,14 +35,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": \"Streetlight1\",\r\n    \"type\": \"Static\",\r\n    \r\n    \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne 1\"\r\n    },\r\n    \r\n    \"description\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne Niesenbergergasse\"            \r\n    },\r\n    \r\n    \"location\": {\r\n        \"type\": \"geo:point\",\r\n        \"value\": \"47.069389, 15.421638\"\r\n    },\r\n    \r\n    \"address\": {\r\n        \"type\": \"PostalAddress\",\r\n        \"value\": {\r\n            \"streetAddress\": \"Niesenbergergasse 51\",\r\n            \"addressRegion\": \"Styria\",\r\n            \"addressLocality\": \"Graz\",\r\n            \"postalCode\": \"8020\"\r\n        }\r\n    }\r\n}\r\n"
+							"raw": "{\r\n    \"id\": \"Lamp_1\",\r\n    \"type\": \"static\",\r\n    \r\n    \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne 1\"\r\n    },\r\n    \r\n    \"description\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne Niesenbergergasse\"            \r\n    },\r\n    \r\n    \"location\": {\r\n        \"type\": \"geo:point\",\r\n        \"value\": \"47.069389, 15.421638\"\r\n    },\r\n    \r\n    \"address\": {\r\n        \"type\": \"PostalAddress\",\r\n        \"value\": {\r\n            \"streetAddress\": \"Niesenbergergasse 51\",\r\n            \"addressRegion\": \"Styria\",\r\n            \"addressLocality\": \"Graz\",\r\n            \"postalCode\": \"8020\"\r\n        }\r\n    }\r\n}\r\n"
 						},
 						"description": ""
 					},
 					"response": []
 				},
 				{
-					"name": "Streetlight2",
+					"name": "Lamp_2",
 					"request": {
 						"url": "http://localhost:1026/v2/entities/",
 						"method": "POST",
@@ -65,14 +65,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": \"Streetlight2\",\r\n    \"type\": \"Static\",\r\n    \r\n    \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne 2\"\r\n    },\r\n    \r\n    \"description\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne Alte Poststraße\"            \r\n    },\r\n    \r\n    \"location\": {\r\n        \"type\": \"geo:point\",\r\n        \"value\": \"47.069718, 15.409874\"\r\n    },\r\n    \r\n    \"address\": {\r\n        \"type\": \"PostalAddress\",\r\n        \"value\": {\r\n            \"streetAddress\": \"Alte Poststraße 147\",\r\n            \"addressRegion\": \"Styria\",\r\n            \"addressLocality\": \"Graz\",\r\n            \"postalCode\": \"8020\"\r\n        }\r\n    }\r\n}\r\n"
+							"raw": "{\r\n    \"id\": \"Lamp_2\",\r\n    \"type\": \"static\",\r\n    \r\n    \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne 2\"\r\n    },\r\n    \r\n    \"description\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne Alte Poststraße\"            \r\n    },\r\n    \r\n    \"location\": {\r\n        \"type\": \"geo:point\",\r\n        \"value\": \"47.069718, 15.409874\"\r\n    },\r\n    \r\n    \"address\": {\r\n        \"type\": \"PostalAddress\",\r\n        \"value\": {\r\n            \"streetAddress\": \"Alte Poststraße 147\",\r\n            \"addressRegion\": \"Styria\",\r\n            \"addressLocality\": \"Graz\",\r\n            \"postalCode\": \"8020\"\r\n        }\r\n    }\r\n}\r\n"
 						},
 						"description": ""
 					},
 					"response": []
 				},
 				{
-					"name": "Streetlight3",
+					"name": "Lamp_3",
 					"request": {
 						"url": "http://localhost:1026/v2/entities/",
 						"method": "POST",
@@ -95,14 +95,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": \"Streetlight3\",\r\n    \"type\": \"Static\",\r\n    \r\n    \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne 3\"\r\n    },\r\n    \r\n    \"description\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne Elisabethstraße\"            \r\n    },\r\n    \r\n    \"location\": {\r\n        \"type\": \"geo:point\",\r\n        \"value\": \"47.074023, 15.447250\"\r\n    },\r\n    \r\n    \"address\": {\r\n        \"type\": \"PostalAddress\",\r\n        \"value\": {\r\n            \"streetAddress\": \"Elisabethstraße 1\",\r\n            \"addressRegion\": \"Styria\",\r\n            \"addressLocality\": \"Graz\",\r\n            \"postalCode\": \"8010\"\r\n        }\r\n    }\r\n}\r\n"
+							"raw": "{\r\n    \"id\": \"Lamp_3\",\r\n    \"type\": \"static\",\r\n    \r\n    \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne 3\"\r\n    },\r\n    \r\n    \"description\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Laterne Elisabethstraße\"            \r\n    },\r\n    \r\n    \"location\": {\r\n        \"type\": \"geo:point\",\r\n        \"value\": \"47.074023, 15.447250\"\r\n    },\r\n    \r\n    \"address\": {\r\n        \"type\": \"PostalAddress\",\r\n        \"value\": {\r\n            \"streetAddress\": \"Elisabethstraße 1\",\r\n            \"addressRegion\": \"Styria\",\r\n            \"addressLocality\": \"Graz\",\r\n            \"postalCode\": \"8010\"\r\n        }\r\n    }\r\n}\r\n"
 						},
 						"description": ""
 					},
 					"response": []
 				},
 				{
-					"name": "Bus1",
+					"name": "Bus_1",
 					"request": {
 						"url": "http://localhost:1026/v2/entities/",
 						"method": "POST",
@@ -125,7 +125,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": \"Bus1\",\r\n    \"type\": \"Mobile\",\r\n    \r\n    \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Bus 1\"\r\n    },\r\n    \r\n    \"description\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Bus Linie 35\"            \r\n    },\r\n    \r\n    \"address\": {\r\n        \"type\": \"PostalAddress\",\r\n        \"value\": {\r\n            \"streetAddress\": \"Jakominiolatz 1\",\r\n            \"addressRegion\": \"Styria\",\r\n            \"addressLocality\": \"Graz\",\r\n            \"postalCode\": \"8010\"\r\n        }\r\n    }\r\n}\r\n"
+							"raw": "{\r\n    \"id\": \"Bus_1\",\r\n    \"type\": \"mobile\",\r\n    \r\n    \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Bus 1\"\r\n    },\r\n    \r\n    \"description\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Bus Linie 35\"            \r\n    }\r\n}\r\n"
 						},
 						"description": ""
 					},
@@ -161,97 +161,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"services\": [\r\n        {\r\n            \"apikey\": \"graziot-devices\",\r\n            \"token\": \"token1\",\r\n            \"cbroker\": \"http://localhost:1026\",\r\n            \"resource\": \"/iot/d\",\r\n            \"entity_type\": \"Static\"\r\n        }\r\n    ]\r\n}\r\n"
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "Streetlight1-temperature",
-					"request": {
-						"url": "http://localhost:4041/iot/devices",
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							},
-							{
-								"key": "Fiware-Service",
-								"value": "graziot",
-								"description": ""
-							},
-							{
-								"key": "Fiware-ServicePath",
-								"value": "/",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Streetlight1-temperature\",\r\n            \"entity_name\": \"Streetlight1\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"Static\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n                    \"object_id\": \"t\",\r\n                    \"name\": \"temperature\",\r\n                    \"type\": \"Number\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n\r\n"
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "Streetlight2-temperature",
-					"request": {
-						"url": "http://localhost:4041/iot/devices",
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							},
-							{
-								"key": "Fiware-Service",
-								"value": "graziot",
-								"description": ""
-							},
-							{
-								"key": "Fiware-ServicePath",
-								"value": "/",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Streetlight2-temperature\",\r\n            \"entity_name\": \"Streetlight2\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"Static\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n                    \"object_id\": \"t\",\r\n                    \"name\": \"temperature\",\r\n                    \"type\": \"Number\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n\r\n"
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "Streetlight3-temperature",
-					"request": {
-						"url": "http://localhost:4041/iot/devices",
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							},
-							{
-								"key": "Fiware-Service",
-								"value": "graziot",
-								"description": ""
-							},
-							{
-								"key": "Fiware-ServicePath",
-								"value": "/",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Streetlight3-temperature\",\r\n            \"entity_name\": \"Streetlight3\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"Static\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n                    \"object_id\": \"t\",\r\n                    \"name\": \"temperature\",\r\n                    \"type\": \"Number\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n\r\n"
+							"raw": "{\r\n    \"services\": [\r\n        {\r\n            \"apikey\": \"apistatic\",\r\n            \"token\": \"token2\",\r\n            \"cbroker\": \"http://orion:1026\",\r\n            \"entity_type\": \"static\",\r\n            \"resource\": \"/iot/d\"\r\n        }\r\n    ]\r\n}\r\n"
 						},
 						"description": ""
 					},
@@ -281,14 +191,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"services\": [\r\n        {\r\n            \"apikey\": \"graziot-mobileDevices\",\r\n            \"token\": \"token1\",\r\n            \"cbroker\": \"http://localhost:1026\",\r\n            \"resource\": \"/iot/d\",\r\n            \"entity_type\": \"Mobile\"\r\n        }\r\n    ]\r\n}\r\n"
+							"raw": "{\r\n    \"services\": [\r\n        {\r\n            \"apikey\": \"apimobile\",\r\n            \"token\": \"token2\",\r\n            \"cbroker\": \"http://orion:1026\",\r\n            \"entity_type\": \"mobile\",\r\n            \"resource\": \"/iot/d\"\r\n        }\r\n    ]\r\n}\r\n"
 						},
 						"description": ""
 					},
 					"response": []
 				},
 				{
-					"name": "Bus1-temperature",
+					"name": "Temp_Lamp_1",
 					"request": {
 						"url": "http://localhost:4041/iot/devices",
 						"method": "POST",
@@ -311,14 +221,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Bus1-temperature\",\r\n            \"entity_name\": \"Bus1\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"Mobile\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n                    \"object_id\": \"t\",\r\n                    \"name\": \"temperature\",\r\n                    \"type\": \"Number\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n\r\n"
+							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Temp_Lamp_1\",\r\n            \"entity_name\": \"Lamp_1\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"static\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n            \t\t\"object_id\": \"t\",\r\n            \t\t\"name\": \"temperature\",\r\n            \t\t\"type\": \"float\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"ti\",\r\n            \t\t\"name\": \"temp_sensor_info\",\r\n            \t\t\"type\": \"string\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"ts\",\r\n            \t\t\"name\": \"temp_sensor_status\",\r\n            \t\t\"type\": \"string\"\r\n            \t}\r\n        \t]\r\n        }\r\n    ]\r\n}\r\n\r\n"
 						},
 						"description": ""
 					},
 					"response": []
 				},
 				{
-					"name": "Bus1-location",
+					"name": "Temp_Lamp_2",
 					"request": {
 						"url": "http://localhost:4041/iot/devices",
 						"method": "POST",
@@ -341,7 +251,217 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Bus1-location\",\r\n            \"entity_name\": \"Bus1\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"Mobile\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n                    \"object_id\": \"l\",\r\n                    \"name\": \"location\",\r\n                    \"type\": \"geo:point\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n\r\n"
+							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Temp_Lamp_2\",\r\n            \"entity_name\": \"Lamp_2\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"static\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n            \t\t\"object_id\": \"t\",\r\n            \t\t\"name\": \"temperature\",\r\n            \t\t\"type\": \"float\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"ti\",\r\n            \t\t\"name\": \"temp_sensor_info\",\r\n            \t\t\"type\": \"string\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"ts\",\r\n            \t\t\"name\": \"temp_sensor_status\",\r\n            \t\t\"type\": \"string\"\r\n            \t}\r\n        \t]\r\n        }\r\n    ]\r\n}\r\n\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Temp_Lamp_3",
+					"request": {
+						"url": "http://localhost:4041/iot/devices",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Temp_Lamp_3\",\r\n            \"entity_name\": \"Lamp_3\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"static\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n            \t\t\"object_id\": \"t\",\r\n            \t\t\"name\": \"temperature\",\r\n            \t\t\"type\": \"float\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"ti\",\r\n            \t\t\"name\": \"temp_sensor_info\",\r\n            \t\t\"type\": \"string\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"ts\",\r\n            \t\t\"name\": \"temp_sensor_status\",\r\n            \t\t\"type\": \"string\"\r\n            \t}\r\n        \t]\r\n        }\r\n    ]\r\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Humid_Lamp_1",
+					"request": {
+						"url": "http://localhost:4041/iot/devices",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Humid_Lamp_1\",\r\n            \"entity_name\": \"Lamp_1\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"static\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n            \t\t\"object_id\": \"h\",\r\n            \t\t\"name\": \"humidity\",\r\n            \t\t\"type\": \"int\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"hi\",\r\n            \t\t\"name\": \"humid_sensor_info\",\r\n            \t\t\"type\": \"string\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"hs\",\r\n            \t\t\"name\": \"humid_sensor_status\",\r\n            \t\t\"type\": \"string\"\r\n            \t}\r\n        \t]\r\n        }\r\n    ]\r\n}\r\n\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Humid_Lamp_2",
+					"request": {
+						"url": "http://localhost:4041/iot/devices",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Humid_Lamp_2\",\r\n            \"entity_name\": \"Lamp_2\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"static\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n            \t\t\"object_id\": \"h\",\r\n            \t\t\"name\": \"humidity\",\r\n            \t\t\"type\": \"int\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"hi\",\r\n            \t\t\"name\": \"humid_sensor_info\",\r\n            \t\t\"type\": \"string\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"hs\",\r\n            \t\t\"name\": \"humid_sensor_status\",\r\n            \t\t\"type\": \"string\"\r\n            \t}\r\n        \t]\r\n        }\r\n    ]\r\n}\r\n\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Humid_Lamp_3",
+					"request": {
+						"url": "http://localhost:4041/iot/devices",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Humid_Lamp_3\",\r\n            \"entity_name\": \"Lamp_3\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"static\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n            \t\t\"object_id\": \"h\",\r\n            \t\t\"name\": \"humidity\",\r\n            \t\t\"type\": \"int\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"hi\",\r\n            \t\t\"name\": \"humid_sensor_info\",\r\n            \t\t\"type\": \"string\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"hs\",\r\n            \t\t\"name\": \"humid_sensor_status\",\r\n            \t\t\"type\": \"string\"\r\n            \t}\r\n        \t]\r\n        }\r\n    ]\r\n}\r\n\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Loc_Bus_1",
+					"request": {
+						"url": "http://localhost:4041/iot/devices",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Loc_Bus_1\",\r\n            \"entity_name\": \"Bus_1\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"mobile\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n            \t\t\"object_id\": \"l\",\r\n            \t\t\"name\": \"location\",\r\n            \t\t\"type\": \"geo:point\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"li\",\r\n            \t\t\"name\": \"loc_sensor_info\",\r\n            \t\t\"type\": \"string\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"ls\",\r\n            \t\t\"name\": \"loc_sensor_status\",\r\n            \t\t\"type\": \"string\"\r\n            \t}\r\n        \t]\r\n        }\r\n    ]\r\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Temp_Bus_1",
+					"request": {
+						"url": "http://localhost:4041/iot/devices",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Temp_Bus_1\",\r\n            \"entity_name\": \"Bus_1\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"mobile\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n            \t\t\"object_id\": \"t\",\r\n            \t\t\"name\": \"temperature\",\r\n            \t\t\"type\": \"float\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"ti\",\r\n            \t\t\"name\": \"temp_sensor_info\",\r\n            \t\t\"type\": \"string\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"ts\",\r\n            \t\t\"name\": \"temp_sensor_status\",\r\n            \t\t\"type\": \"string\"\r\n            \t}\r\n        \t]\r\n        }\r\n    ]\r\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Humid_Bus_1",
+					"request": {
+						"url": "http://localhost:4041/iot/devices",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devices\": [\r\n        {\r\n            \"device_id\": \"Humid_Bus_1\",\r\n            \"entity_name\": \"Bus_1\",\r\n            \"protocol\": \"UL20\",\r\n            \"entity_type\": \"mobile\",\r\n            \"timezone\": \"Europe/Vienna\",\r\n            \"attributes\": [\r\n                {\r\n            \t\t\"object_id\": \"h\",\r\n            \t\t\"name\": \"humidity\",\r\n            \t\t\"type\": \"int\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"hi\",\r\n            \t\t\"name\": \"humid_sensor_info\",\r\n            \t\t\"type\": \"string\"\r\n            \t},\r\n            \t{\r\n            \t\t\"object_id\": \"hs\",\r\n            \t\t\"name\": \"humid_sensor_status\",\r\n            \t\t\"type\": \"string\"\r\n            \t}\r\n        \t]\r\n        }\r\n    ]\r\n}\r\n\r\n"
 						},
 						"description": ""
 					},
@@ -354,7 +474,7 @@
 			"description": "",
 			"item": [
 				{
-					"name": "Streetlight1-Temperature",
+					"name": "Sub_Lamp_1",
 					"request": {
 						"url": "http://localhost:1026/v1/subscribeContext",
 						"method": "POST",
@@ -377,14 +497,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"entities\": [\r\n        {\r\n            \"type\": \"Static\",\r\n            \"isPattern\": \"false\",\r\n            \"id\": \"Streetlight1\"\r\n        }\r\n    ],\r\n    \"attributes\": [\r\n        \"temperature\"\r\n    ],\r\n    \"reference\": \"http://172.20.128.3:5050/notify\",\r\n    \"duration\": \"P1000000M\",\r\n    \"notifyConditions\": [\r\n        {\r\n            \"type\": \"ONCHANGE\",\r\n            \"condValues\": [\r\n                \"temperature\"\r\n            ]\r\n        }\r\n    ],\r\n    \"throttling\": \"PT1S\"\r\n}"
+							"raw": "{\r\n    \"entities\": [\r\n        {\r\n            \"type\": \"static\",\r\n            \"isPattern\": \"false\",\r\n            \"id\": \"Lamp_1\"\r\n        }\r\n    ],\r\n    \"attributes\": [\r\n        \"temperature\", \r\n        \"temp_sensor_info\",\r\n        \"temp_sensor_status\",\r\n        \"humidity\",\r\n        \"humid_sensor_info\", \r\n        \"humid_sensor_status\"\r\n    ],\r\n    \"reference\": \"http://cygnus:5050/notify\",\r\n    \"duration\": \"P1000000M\",\r\n    \"notifyConditions\": [\r\n        {\r\n            \"type\": \"ONCHANGE\",\r\n            \"condValues\": [\r\n                \"temperature\",\r\n                \"temp_sensor_info\",\r\n        \t\t\"temp_sensor_status\",\r\n        \t\t\"humidity\",\r\n        \t\t\"humid_sensor_info\", \r\n        \t\t\"humid_sensor_status\"\r\n            ]\r\n        }\r\n    ],\r\n    \"throttling\": \"PT1S\"\r\n}"
 						},
 						"description": ""
 					},
 					"response": []
 				},
 				{
-					"name": "Bus1-Location",
+					"name": "Sub_Lamp_2",
 					"request": {
 						"url": "http://localhost:1026/v1/subscribeContext",
 						"method": "POST",
@@ -407,7 +527,67 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"entities\": [\r\n        {\r\n            \"type\": \"Mobile\",\r\n            \"isPattern\": \"false\",\r\n            \"id\": \"Bus1\"\r\n        }\r\n    ],\r\n    \"attributes\": [\r\n        \"location\"\r\n    ],\r\n    \"reference\": \"http://172.20.128.3:5050/notify\",\r\n    \"duration\": \"P1000000M\",\r\n    \"notifyConditions\": [\r\n        {\r\n            \"type\": \"ONCHANGE\",\r\n            \"condValues\": [\r\n                \"location\"\r\n            ]\r\n        }\r\n    ],\r\n    \"throttling\": \"PT1S\"\r\n}"
+							"raw": "{\r\n    \"entities\": [\r\n        {\r\n            \"type\": \"static\",\r\n            \"isPattern\": \"false\",\r\n            \"id\": \"Lamp_2\"\r\n        }\r\n    ],\r\n    \"attributes\": [\r\n        \"temperature\", \r\n        \"temp_sensor_info\",\r\n        \"temp_sensor_status\",\r\n        \"humidity\",\r\n        \"humid_sensor_info\", \r\n        \"humid_sensor_status\"\r\n    ],\r\n    \"reference\": \"http://cygnus:5050/notify\",\r\n    \"duration\": \"P1000000M\",\r\n    \"notifyConditions\": [\r\n        {\r\n            \"type\": \"ONCHANGE\",\r\n            \"condValues\": [\r\n                \"temperature\",\r\n                \"temp_sensor_info\",\r\n        \t\t\"temp_sensor_status\",\r\n        \t\t\"humidity\",\r\n        \t\t\"humid_sensor_info\", \r\n        \t\t\"humid_sensor_status\"\r\n            ]\r\n        }\r\n    ],\r\n    \"throttling\": \"PT1S\"\r\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Sub_Lamp_3",
+					"request": {
+						"url": "http://localhost:1026/v1/subscribeContext",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"entities\": [\r\n        {\r\n            \"type\": \"static\",\r\n            \"isPattern\": \"false\",\r\n            \"id\": \"Lamp_3\"\r\n        }\r\n    ],\r\n    \"attributes\": [\r\n        \"temperature\", \r\n        \"temp_sensor_info\",\r\n        \"temp_sensor_status\",\r\n        \"humidity\",\r\n        \"humid_sensor_info\", \r\n        \"humid_sensor_status\"\r\n    ],\r\n    \"reference\": \"http://cygnus:5050/notify\",\r\n    \"duration\": \"P1000000M\",\r\n    \"notifyConditions\": [\r\n        {\r\n            \"type\": \"ONCHANGE\",\r\n            \"condValues\": [\r\n                \"temperature\",\r\n                \"temp_sensor_info\",\r\n        \t\t\"temp_sensor_status\",\r\n        \t\t\"humidity\",\r\n        \t\t\"humid_sensor_info\", \r\n        \t\t\"humid_sensor_status\"\r\n            ]\r\n        }\r\n    ],\r\n    \"throttling\": \"PT1S\"\r\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Sub_Bus_1",
+					"request": {
+						"url": "http://localhost:1026/v1/subscribeContext",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Fiware-Service",
+								"value": "graziot",
+								"description": ""
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "/",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"entities\": [\r\n        {\r\n            \"type\": \"mobile\",\r\n            \"isPattern\": \"false\",\r\n            \"id\": \"Bus_1\"\r\n        }\r\n    ],\r\n    \"attributes\": [\r\n        \"location\",\r\n        \"temperature\",\r\n        \"temp_sensor_info\",\r\n        \"temp_sensor_status\",\r\n        \"humidity\",\r\n        \"humid_sensor_info\", \r\n        \"humid_sensor_status\"\r\n    ],\r\n    \"reference\": \"http://cygnus:5050/notify\",\r\n    \"duration\": \"P1000000M\",\r\n    \"notifyConditions\": [\r\n        {\r\n            \"type\": \"ONCHANGE\",\r\n            \"condValues\": [\r\n                \"location\",\r\n\t\t        \"temperature\",\r\n\t\t        \"temp_sensor_info\",\r\n\t\t        \"temp_sensor_status\",\r\n\t\t        \"humidity\",\r\n\t\t        \"humid_sensor_info\", \r\n\t\t        \"humid_sensor_status\"\r\n            ]\r\n        }\r\n    ],\r\n    \"throttling\": \"PT1S\"\r\n}"
 						},
 						"description": ""
 					},
