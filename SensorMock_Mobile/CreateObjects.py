@@ -28,9 +28,9 @@ if NUM_ARG==3:
 
 else:
     print 'Usage: '+COMMAND+' [TYPE] [FILE_NAME]'
-    print '  Where TYPE = Type of object(s) to create, can be ent for entity, srv for services,'
-    print '          dev for devices or sub for subscription'
-    print '        FILE_NAME = Name of the file containing service/entity/device/subscription data'
+    print '  Where TYPE = Type of object(s) to create, can be ent for entity, srv for services or'
+    print '          dev for devices'
+    print '        FILE_NAME = Name of the file containing service/entity/device data'
     print '          in JSON format (must be in current directory)'
     print
     print '        Example: python .\CreateObjects.py ent Lamp_1.txt'
@@ -57,7 +57,7 @@ CB_FIWARE_SERVICE=config.get('contextbroker', 'fiware_service')
 CB_FIWARE_SERVICEPATH=config.get('contextbroker', 'fiware_service_path')
 CB_AAA=config.get('contextbroker', 'OAuth')
 
-if ((TYPE == "srv" or TYPE == "dev") and IDAS_AAA == "yes") or ((TYPE == "ent" or TYPE == "sub") and CB_AAA == "yes"):
+if ((TYPE == "srv" or TYPE == "dev") and IDAS_AAA == "yes") or (TYPE == "ent" and CB_AAA == "yes"):
     TOKEN=config.get('user', 'token')
     TOKEN_SHOW=TOKEN[1:5]+"**********************************************************************"+TOKEN[-5:]
 else:
@@ -66,11 +66,8 @@ else:
 
 f.close()
 
-if TYPE == "ent" or TYPE == "sub":
-    if TYPE == "ent":
-        URL = "http://"+CB_HOST+":"+CB_PORT+'/v2/entities'
-    else:
-        URL = "http://"+CB_HOST+":"+CB_PORT+'/v1/subscribeContext'
+if TYPE == "ent":
+    URL = "http://"+CB_HOST+":"+CB_PORT+'/v2/entities'
     HEADERS = {'content-type': 'application/json','accept': 'application/json', 'Fiware-Service': CB_FIWARE_SERVICE ,'Fiware-ServicePath': CB_FIWARE_SERVICEPATH,'X-Auth-Token' : TOKEN}
     HEADERS_SHOW = {'content-type': 'application/json', 'accept': 'application/json' , 'Fiware-Service': CB_FIWARE_SERVICE ,'Fiware-ServicePath': CB_FIWARE_SERVICEPATH , 'X-Auth-Token' : TOKEN_SHOW}
 else:
@@ -81,22 +78,20 @@ else:
     HEADERS = {'content-type': 'application/json' , 'X-Auth-Token' : TOKEN, 'Fiware-Service' : IDAS_FIWARE_SERVICE, 'Fiware-ServicePath' : IDAS_FIWARE_SERVICEPATH}
     HEADERS_SHOW = {'content-type': 'application/json' , 'X-Auth-Token' : TOKEN_SHOW, 'Fiware-Service' : IDAS_FIWARE_SERVICE, 'Fiware-ServicePath' : IDAS_FIWARE_SERVICEPATH}
 
-# Load the entity data file
-with open('./'+FILE_NAME,'r+') as ed:
-    PAYLOAD = ed.read()
+# Load the object data file
+with open('./'+FILE_NAME,'r+') as od:
+    PAYLOAD = od.read()
     
-ed.close()
+od.close()
 
 if TYPE == "ent":
     OBJECT = "entity"
-elif TYPE == "sub":
-    OBJECT = "subscription"
 elif TYPE == "srv":
     OBJECT = "service"
 else:
     OBJECT = "device"
 
-print "* Sending "+OBJECT+" PAYLOAD: "
+print "* Sending "+OBJECT+" payload: "
 print json.dumps(json.loads(PAYLOAD), indent=4)
 print
 r = requests.post(URL, data=PAYLOAD, headers=HEADERS)

@@ -1,0 +1,8 @@
+Lamp_1,static,temperature
+Lamp_1,static,humidity
+Bus_1,mobile,temperature
+Bus_1,mobile,humidity
+Bus_1,mobile,location
+Tram_1,mobile,temperature
+Tram_1,mobile,humidity
+Tram_1,mobile,location

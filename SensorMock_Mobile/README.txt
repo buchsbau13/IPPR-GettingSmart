@@ -20,6 +20,11 @@ python .\SendCoordList.py Loc_Bus_1 apimobile l test-coords.txt
 'CreateObjects.py':
 
 python .\CreateObjects.py ent Lamp_1.txt
-(replace 'ent' with the type of object you want to create ('ent' for entity, 'srv' for service,
- 'dev' for device and 'sub' for subscription), replace 'Lamp_1.txt' with the name of the file
+(replace 'ent' with the type of object you want to create ('ent' for entity, 'srv' for service or
+ 'dev' for device), replace 'Lamp_1.txt' with the name of the file
  containing the corresponding payload in json format)
+ 
+'CreateSubscriptions.py':
+ 
+python .\CreateSubscriptions.py subscriptions.txt
+(you can replace 'subscriptions.txt' with your own file)
