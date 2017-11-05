@@ -1,14 +1,14 @@
 {
-  "id": "Bus_1",
+  "id": "Tram_1",
   "type": "mobile",
   "name":
     {
       "type": "string",
-      "value": "Bus 1"
+      "value": "Strassenbahn 1"
     },
   "description":
     {
       "type": "string",
-      "value": "Bus Linie 63"            
+      "value": "Strassenbahn Linie 7"            
     }
 }

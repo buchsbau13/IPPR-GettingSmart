@@ -3,12 +3,12 @@
   "type": "static",
   "name":
     {
-      "type": "Text",
+      "type": "string",
       "value": "Laterne 1"
     },
   "description":
     {
-      "type": "Text",
+      "type": "string",
       "value": "Laterne Niesenbergergasse"            
     },
   "location":

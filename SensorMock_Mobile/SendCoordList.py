@@ -41,7 +41,7 @@ else:
    print '        The file with the coordinates must contain one or more lines in the geo:point format:'
    print '        <LAT>,<LON>'
    print
-   print '        Example: python .\SendCoordList.py Bus_1 apimobile l test-coords.txt'
+   print '        Example: python .\SendCoordList.py Loc_Bus_1 apimobile l test-coords.txt'
    print
    sys.exit(2)
 

@@ -13,8 +13,8 @@ python .\SendRandMeasurements.py test-data.txt
 
 'SendCoordList.py':
 
-python .\SendCoordList.py Bus_1 apimobile l test-coords.txt
-(replace 'Bus_1' (sensor id), 'apimobile' (api key) and 'l' (alias for location attribute)
+python .\SendCoordList.py Loc_Bus_1 apimobile l test-coords.txt
+(replace 'Loc_Bus_1' (sensor id), 'apimobile' (api key) and 'l' (alias for location attribute)
  with appropriate values from your setup, you can replace 'test-coords.txt' with your own file)
 
 'CreateObjects.py':

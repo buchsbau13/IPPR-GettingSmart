@@ -9,6 +9,11 @@
       "type": "mobile",
       "isPattern": "false",
       "id": "Bus_1"
+    },
+    {
+      "type": "mobile",
+      "isPattern": "false",
+      "id": "Tram_1"
     }
   ],
   "notifyConditions": [
