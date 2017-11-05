@@ -4,16 +4,6 @@
       "type": "static",
       "isPattern": "false",
       "id": "Lamp_1"
-    },
-    {
-      "type": "mobile",
-      "isPattern": "false",
-      "id": "Bus_1"
-    },
-    {
-      "type": "mobile",
-      "isPattern": "false",
-      "id": "Tram_1"
     }
   ],
   "notifyConditions": [
@@ -24,7 +14,7 @@
       ]
     }
   ],
-  "reference": "http://comet:8666/notify",
+  "reference": "http://cygnus:5050/notify",
   "duration": "P1Y",
   "throttling": "PT1S"
 }

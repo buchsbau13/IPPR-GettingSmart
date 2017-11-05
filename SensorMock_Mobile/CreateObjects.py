@@ -29,7 +29,7 @@ if NUM_ARG==3:
 else:
     print 'Usage: '+COMMAND+' [TYPE] [FILE_NAME]'
     print '  Where TYPE = Type of object(s) to create, can be ent for entity, srv for services,'
-    print '          dev for devices or sub for subscriptions'
+    print '          dev for devices or sub for subscription'
     print '        FILE_NAME = Name of the file containing service/entity/device/subscription data'
     print '          in JSON format (must be in current directory)'
     print
