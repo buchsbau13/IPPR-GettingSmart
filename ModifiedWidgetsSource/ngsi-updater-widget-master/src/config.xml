@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="ngsi-updater" version="3.0.1">
+    <details>
+        <title>NGSI Updater</title>
+        <authors>Álvaro Arranz García &lt;aarranz@conwet.com&gt;</authors>
+        <homepage>https://github.com/wirecloud-fiware/ngsi-updater</homepage>
+        <email>aarranz@conwet.com</email>
+        <image>images/catalogue.png</image>
+        <smartphoneimage>images/catalogue.png</smartphoneimage>
+        <description>Introspect and update attributes of entitites stored in a Orion Context Broker Server</description>
+        <longdescription>DESCRIPTION.md</longdescription>
+        <doc>https://github.com/wirecloud-fiware/ngsi-updater</doc>
+        <changelog>doc/changelog.md</changelog>
+    </details>
+    <requirements>
+        <feature name="NGSI"/>
+    </requirements>
+    <preferences>
+        <preference name="ngsi_server" type="text" label="NGSI Server" description="NGSI Server where the lamp post info is located" default="http://orion.lab.fiware.org:1026/"/>
+        <preference name="use_user_fiware_token" type="boolean" label="Use the FIWARE credentials of the user" description="Use the FIWARE credentials of the user logged into WireCloud. Take into account this option cannot be enabled if you want to use this widget in a public workspace as anonoymous users doesn't have a valid FIWARE auth token. As an alternative, you can make use of the &quot;Use the FIWARE credentials of the workspace owner&quot; preference." default="true"/>
+        <preference name="use_owner_credentials" type="boolean" label="Use the FIWARE credentials of the workspace owner" description="Use the FIWARE credentials of the owner of the workspace. This preference takes preference over &quot;Use the FIWARE credentials of the user&quot;. This feature is available on WireCloud 0.7.0+ in a experimental basis, future versions of WireCloud can change the way to use it making this option not funcional and requiring you to upgrade this operator" default="false"/>
+		<preference name="ngsi_tenant" type="text" label="Tenant" description="Tenant/service to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol. Maximum length is 50 characters. If empty, the default tenant will be used" default=""/>
+        <preference name="ngsi_service_path" type="text" label="Service path" description="Scope/path to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol separated by &quot;/&quot; slashes. Maximum length is 50 characters. If empty, the default service path will be used: /" default="/"/>
+        <preference name="entity_types" type="text" label="NGSI entity types" description="A comma separated list of entity types to use for filtering entities from the Orion Context broker. This field cannot be empty." default=""/>
+        <preference name="entity_id_pattern" type="text" label="Entity Id Filter" description="Id parttern of the entities to monitorize on the Orion Context Broker server" default=".*"/>
+    </preferences>
+    <wiring/>
+    <contents src="index.html" useplatformstyle="true"/>
+    <rendering width="6" height="28"/>
+</widget>
