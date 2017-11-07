@@ -22,6 +22,7 @@
         <preference name="ngsi_tenant" type="text" label="NGSI tenant/service" description="Tenant/service to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol. Maximum length is 50 characters. If empty, the default tenant will be used" default="service"/>
         <preference name="ngsi_service_path" type="text" label="NGSI scope" description="Scope/path to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol separated by &quot;/&quot; slashes. Maximum length is 50 characters. If empty, the default service path will be used: /" default="/"/>
         <preference name="attribute" type="text" label="Attribute" description="Attribute of the entity to query about." default="temperature" />
+        <preference name="lastn" type="number" label="Number of entries" description="Set the number of entries to retrieve." default="100" />
         <preference name="debug_mode" type="boolean" label="Debug Mode" description="Activate debug mode" default="false"/>
     </preferences>
     <wiring>
