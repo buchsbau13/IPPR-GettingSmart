@@ -40,7 +40,7 @@ else:
    print '                VALUE_TYPE = Type of value, can be int or float'
    print '                VALUE_START = Initial value which will be randomly increased/decreased'
    print
-   print '        Example: python .\SendRandMeasurements.py test-data.txt'
+   print '        Example: python '+COMMAND+' .\\test-data.txt'
    print
    sys.exit(2)
 
@@ -70,6 +70,8 @@ else:
 f.close()
 
 # Read the file with sensor data
+if FILE_NAME.startswith("./") or FILE_NAME.startswith(".\\"):
+    FILE_NAME = FILE_NAME[2:]
 with open('./'+FILE_NAME,'r+') as sd:
     lines = sd.readlines()
 data = [line.replace(" ","").strip().split(",") for line in lines]

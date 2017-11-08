@@ -8,5 +8,5 @@ Python 2.7 and the python module 'requests' (install using pip)
 >>Execution<<
 'SendRandMeasurements.py':
 
-python .\SendRandMeasurements.py test-sensor-data.txt
-(you can replace 'test-sensor-data.txt' with your own file)
+python .\SendRandMeasurements.py .\test-data.txt
+(you can replace 'test-data.txt' with your own file)

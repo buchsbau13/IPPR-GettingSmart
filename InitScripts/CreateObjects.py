@@ -33,7 +33,7 @@ else:
     print '        FILE_NAME = Name of the file containing service/entity/device data'
     print '          in JSON format (must be in current directory)'
     print
-    print '        Example: python .\CreateObjects.py ent Lamp_1.txt'
+    print '        Example: python '+COMMAND+' ent .\\Lamp_1.txt'
     print
     sys.exit(2)
 
@@ -79,6 +79,8 @@ else:
     HEADERS_SHOW = {'content-type': 'application/json' , 'X-Auth-Token' : TOKEN_SHOW, 'Fiware-Service' : IDAS_FIWARE_SERVICE, 'Fiware-ServicePath' : IDAS_FIWARE_SERVICEPATH}
 
 # Load the object data file
+if FILE_NAME.startswith("./") or FILE_NAME.startswith(".\\"):
+    FILE_NAME = FILE_NAME[2:]
 with open('./'+FILE_NAME,'r+') as od:
     PAYLOAD = od.read()
     

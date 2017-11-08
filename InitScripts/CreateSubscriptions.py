@@ -37,7 +37,7 @@ else:
     print '                ENTITY_TYPE = Type of the entity'
     print '                ATTRIBUTE = Attribute that should be monitored by the subscription, e.g. temperature'
     print
-    print '        Example: python .\CreateSubscriptions.py subscriptions.txt'
+    print '        Example: python '+COMMAND+' .\\subscriptions.txt'
     print
     sys.exit(2)
 
@@ -68,6 +68,8 @@ CB_URL = "http://"+CB_HOST+":"+CB_PORT
 SERVER_URL = "http://"+CYG_HOST+":"+CYG_PORT+"/notify"
 
 # Read the file with subscription data
+if FILE_NAME.startswith("./") or FILE_NAME.startswith(".\\"):
+    FILE_NAME = FILE_NAME[2:]
 with open('./'+FILE_NAME,'r+') as sd:
     lines = sd.readlines()
 data = [line.replace(" ","").strip().split(",") for line in lines]

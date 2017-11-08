@@ -41,7 +41,7 @@ else:
    print '        The file with the coordinates must contain one or more lines in the geo:point format:'
    print '        <LAT>,<LON>'
    print
-   print '        Example: python .\SendCoordList.py Loc_Bus_1 apimobile l test-coords.txt'
+   print '        Example: python '+COMMAND+' Loc_Bus_1 apimobile l .\\test-coords.txt'
    print
    sys.exit(2)
 
@@ -68,6 +68,8 @@ else:
 f.close()
 
 # Read the file with coordinates
+if FILE_NAME.startswith("./") or FILE_NAME.startswith(".\\"):
+    FILE_NAME = FILE_NAME[2:]
 with open('./'+FILE_NAME,'r+') as cd:
     lines = cd.readlines()
 data = [line.replace(" ","").strip() for line in lines]
