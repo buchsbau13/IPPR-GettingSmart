@@ -1,0 +1,3 @@
+Temp_Lamp_1,t,float,13.2
+Temp_Lamp_2,t,float,12.5
+Temp_Lamp_3,t,float,14.8
