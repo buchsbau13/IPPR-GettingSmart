@@ -89,6 +89,8 @@
             icon = internalUrl('images/iconLamp.png')
         } else if (icon == 'bus') {
             icon = internalUrl('images/iconBus.png')
+        } else if (icon == 'tram') {
+            icon = internalUrl('images/iconTram.png')
         }
     };
 

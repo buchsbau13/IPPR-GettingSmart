@@ -1,0 +1,3 @@
+Temp_Lamp_1,t,int,13
+Temp_Lamp_2,t,int,12
+Temp_Lamp_3,t,int,14
