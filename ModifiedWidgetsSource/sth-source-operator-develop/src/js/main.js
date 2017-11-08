@@ -35,7 +35,6 @@
     // PRIVATE
     // =========================================================================
 
-    var HLIMIT = 10 /* days */ * 24 /* hours */ * 60 /* mins */ * 60 /* seconds */;
     var entity = 'entity';
     var entity_type = 'entity_type';
 
@@ -68,9 +67,10 @@
             request_headers['FIWARE-ServicePath'] = '/';
         }
 
-        var today = new Date();
-        var from = new Date(today - (10 /* days */ * 24 /* hours */ * 60 /* mins */ * 60 /* segs */ * 1000 /* miliseconds */));
+        // var today = new Date();
+        // var from = new Date(today - (10 /* days */ * 24 /* hours */ * 60 /* mins */ * 60 /* segs */ * 1000 /* miliseconds */));
         // var to = today;
+        var hlimit = mp.prefs.get('lastn');
         var attribute = mp.prefs.get('attribute');
 
         var url = new URL('v1/contextEntities/type/' + entity_type + '/id/' + entity + '/attributes/' + attribute, server);
@@ -79,8 +79,8 @@
             method: "GET",
             requestHeaders: request_headers,
             parameters: {
-                lastN: HLIMIT,
-                dateFrom: from.toISOString()/* ,
+                lastN: hlimit/* ,
+                dateFrom: from.toISOString(),
                 dateTo: to.toISOString()*/
             },
             onSuccess: function (response) {
