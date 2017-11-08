@@ -1,5 +1,3 @@
-Temp_Lamp_1,apistatic,t,float,13.2
-Humid_Lamp_1,apistatic,h,int,67
 Temp_Bus_1,apimobile,t,float,11.6
 Humid_Bus_1,apimobile,h,int,70
 Temp_Tram_1,apimobile,t,float,10.4
