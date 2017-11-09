@@ -16,12 +16,17 @@
         <preference name="attribute" label="Attribute" description="Name of the entity attribute" default="temperature"
                     type="text"/>
         <preference name="unit" label="Unit" description="Unit of the attribute" default="ºC" type="text"/>
+        <preference name="valueType" label="Value type" description="Type of the attribute value" default="int" type="list">
+            <option label="int" value="int"/>
+            <option label="float" value="float"/>
+            <option label="string" value="string"/>
+        </preference>
     </preferences>
     <wiring>
         <outputendpoint name="output" type="text" label="Output"
                         description="Transformed Attribute from the received entity" friendcode="output"/>
         <inputendpoint name="entityInput" type="text" label="Entity"
-                       description="Received entity will be transform to a Attribute" friendcode="entity"/>
+                       description="Received entity will be transformed into an Attribute" friendcode="entity"/>
     </wiring>
     <scripts>
         <script src="js/main.js"/>
