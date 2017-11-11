@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="trend-chart-generator" version="0.3.2">
+    <details>
+        <title>Trend Chart Generator</title>
+        <authors>Álvaro Arranz</authors>
+        <email>aarranz@fi.upm.es</email>
+        <image>images/catalogue.png</image>
+        <smartphoneimage></smartphoneimage>
+        <description>Generates data models for trending charts</description>
+        <longdescription>DESCRIPTION.md</longdescription>
+        <changelog>doc/changelog.md</changelog>
+        <doc>doc/index.md</doc>
+        <license>Apache2</license>
+        <homepage>https://github.com/Wirecloud/agile-dashboards</homepage>
+        <issuetracker>https://github.com/Wirecloud/agile-dashboards/issues</issuetracker>
+    </details>
+
+    <preferences>
+        <preference name="title" type="text" label="Chart Title" description="Title used for the chart" default=""/>
+        <preference name="max" type="text" label="Maximum value" description="Maximum value to display in the chart. If empty, the max value is automatically calculated" default=""/>
+    </preferences>
+
+    <wiring>
+        <inputendpoint name="data-serie" label="Data Serie" description="Data series" type="text" friendcode="data-serie" />
+        <inputendpoint name="timestamps" label="Timestamp List" description="Data timestamps" type="text" friendcode="timestamp-list" />
+        <outputendpoint name="chart-options" label="Chart Data Model" description="Chart options" type="text" friendcode="highchart-options" />
+    </wiring>
+
+    <scripts>
+        <script src="js/main.js"/>
+    </scripts>
+
+</operator>
