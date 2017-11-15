@@ -89,12 +89,10 @@
                 }
 
                 var data = JSON.parse(response.responseText).contextResponses[0].contextElement.attributes[0].values;
-                if (mp.prefs.get('debug_mode')) {
-                    mp.operator.log("Entity: " + entity + ", Type: " + entity_type + ", Attribute: " + attribute + ", " + data.reduce(
-                        function (acc, val) {return acc + ' ' + val.attrValue;}, "Values: "), MashupPlatform.log.INFO);
-                }
                 mp.wiring.pushEvent("values", data.map(function (entry) {return Number(entry.attrValue);}));
+                mp.operator.log(data.map(function (entry) {return Number(entry.attrValue);}), mp.log.INFO);
                 mp.wiring.pushEvent("timestamps", data.map(function (entry) {return (new Date(entry.recvTime)).getTime();}));
+                mp.operator.log(data.map(function (entry) {return (new Date(entry.recvTime)).getTime();}), mp.log.INFO);
             },
             onFailure: function (response) {
                 throw new Error('Unexpected response from STH');

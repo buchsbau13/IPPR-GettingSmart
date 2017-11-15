@@ -6,6 +6,8 @@
  * Licensed under the Apache2 license.
  */
 
+/* globals MashupPlatform */
+
 (function () {
 
     "use strict";
@@ -93,12 +95,12 @@
                     year: '%b'
                 },
                 title: {
-                    text: getMetadataVerbose(timestamps)
+                    text: MashupPlatform.prefs.get('xaxis')
                 }
             },
             yAxis: {
                 title: {
-                    text: xAxisUnit
+                    text: MashupPlatform.prefs.get('yaxis')
                 }
             },
             tooltip: {
@@ -125,6 +127,7 @@
             options.yAxis.max = parseInt(max, 10);
         }
         MashupPlatform.wiring.pushEvent("chart-options", options);
+        MashupPlatform.operator.log(options, MashupPlatform.log.INFO);
     };
 
     var timestampCallback = function timestampCallback (data) {
