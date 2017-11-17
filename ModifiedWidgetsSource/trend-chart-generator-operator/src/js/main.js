@@ -44,11 +44,11 @@
 
         if (!Array.isArray(values[0])) {
             //Single series
-            series.push ({name: getMetadataVerbose(values), data: build_serie(values)});
+            series.push({name: getMetadataVerbose(values), data: build_serie(values)});
             xAxisUnit = getMetadataVerbose(values);
         } else {
             //Multiple series
-            values.forEach (function (serie) {
+            values.forEach(function (serie) {
                 series.push({name: getMetadataVerbose(serie), data: build_serie(serie)});
                 xAxisUnit = getMetadataTag(serie);
             });
@@ -57,7 +57,7 @@
         plot();
     };
 
-    var dataHandler = function dataHandler (point) {
+    var dataHandler = function dataHandler(point) {
         var filterBy = point.originalStamp;
         var meta = timestamps.metadata;
         return [{type: meta.filterAttributeType || "eq", value: filterBy, attr: meta.filterAttribute}];
@@ -115,7 +115,8 @@
                     }
                 }
             },
-            series: series
+            series: series,
+            colors: colors()
         };
 
         if (timestamps.metadata && timestamps.metadata.filterAttribute) {
@@ -127,16 +128,29 @@
             options.yAxis.max = parseInt(max, 10);
         }
         MashupPlatform.wiring.pushEvent("chart-options", options);
-        MashupPlatform.operator.log(options, MashupPlatform.log.INFO);
     };
 
-    var timestampCallback = function timestampCallback (data) {
+    var timestampCallback = function timestampCallback(data) {
         timestamps = data;
         build_series();
     };
-    var dataserieCallback = function dataserieCallback (data) {
+    var dataserieCallback = function dataserieCallback(data) {
         values = data;
         build_series();
+    };
+
+    var colors = function colorsGenerator() {
+        var color = MashupPlatform.prefs.get('color').trim().toLowerCase();
+        var colors = [];
+        if (color === "red") {
+            colors.push("#581845", "#FF5733", "#C70039", "#900C3F");
+        }
+        if (color === "blue") {
+            colors.push("#154360", "#3498db", "#1f618d", "#1a5276");
+        } else {
+            colors.push("#145a32", "#58d68d", "#27ae60", "#1e8449");
+        }
+        return colors;
     };
 
     //Callback for the endpoints

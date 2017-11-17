@@ -23,6 +23,7 @@
                     default=""/>
         <preference name="xaxis" type="text" label="X-Axis Label" description="Label of the X-Axis"/>
         <preference name="yaxis" type="text" label="Y-Axis Label" description="Label of the Y-Axis"/>
+        <preference name="color" type="text" label="Color" description="Color of the chart"/>
     </preferences>
 
     <wiring>
