@@ -16,5 +16,5 @@
     </preferences>
     <wiring/>
     <contents src="index.html" useplatformstyle="true"/>
-    <rendering width="6" height="28"/>
+    <rendering height="400px" width="33%"/>
 </widget>

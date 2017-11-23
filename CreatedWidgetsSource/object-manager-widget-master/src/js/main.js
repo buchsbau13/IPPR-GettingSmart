@@ -14,83 +14,133 @@
  * limitations under the License.
  */
 
- //global MashupPlatform, StyledElements
+ /* globals MashupPlatform, StyledElements */
 
 (function () {
 
     "use strict";
 
-    var page = document.createElement("div");
-
     var init = function init() {
+        var data = {};
+        
+        clearPage(document.body);
+        
+        var page = document.createElement("div");
         document.body.appendChild(page);
 
-        // Show "home screen"
-        showHomePage();
+        // Value for element initialization
+        var emptyElement = "-------";
+
+        // Read values from settings
+        var requestHeaders = {};
+
+        if (MashupPlatform.prefs.get('orion') === "" ||
+        MashupPlatform.prefs.get('idas') === "" || MashupPlatform.prefs.get('cygnus') === "") {
+            var hl = createHeadline(page, "Server information incomplete! Server URLs in settings must not be empty!");
+            hl.style = "color:red";
+            createButton(page, "Reload", init);
+            
+            return;
+        }
+
+        var orion = new URL(MashupPlatform.prefs.get('orion'));
+        var idas = new URL(MashupPlatform.prefs.get('idas'));
+        var cygnus = new URL(MashupPlatform.prefs.get('cygnus'));
+
+        if (orion.pathname[orion.pathname.length - 1] !== "/") {
+            orion.pathname += "/";
+        }
+
+        if (idas.pathname[idas.pathname.length - 1] !== "/") {
+            idas.pathname += "/";
+        }
+
+        // Option "use_user_fiware_token" potentially problematic to implement, currently not available
+
+        if (MashupPlatform.prefs.get('ngsi_tenant').trim() === '') {
+            data.error = "Please enter the tenant/service information in the settings!"
+        }
+
+        data.emptyElement = emptyElement;
+        data.orion = orion;
+        data.idas = idas;
+        data.cygnus = cygnus;
+        data.requestHeaders = requestHeaders;
+
+        // Fetch service and entity data from servers and show home screen
+        getServiceData(data, function (servData) {
+            getEntityData(servData, function (entData) {
+                showHomePage(page, entData);
+            });
+        });
     };
 
-    var showHomePage = function showHomePage(func) {
+    var showHomePage = function showHomePage(context, data) {
         var dropdownServices, dropdownEntTypes, dropdownEntities;
-        // Static values for testing
-        var listSrv = ["/static", "/mobile"];
-        var listTypes = ["static", "mobile"];
-        var listEnt = ["Lamp_1"];
-        var serviceData = {
-            "count": 2,
-            "services": [
-                {
-                    "apikey": "apistatic",
-                    "service": "graziot",
-                    "service_path": "/static",
-                    "token": "token2",
-                    "cbroker": "http://127.0.0.1:1026",
-                    "entity_type": "static",
-                    "resource": "/iot/d"
-                },
-                {
-                    "apikey": "apimobile",
-                    "service": "graziot",
-                    "service_path": "/mobile",
-                    "token": "token2",
-                    "cbroker": "http://127.0.0.1:1026",
-                    "entity_type": "mobile",
-                    "resource": "/iot/d"
-                }
-            ]
-        };
+        var services = [];
+        var types = [];
+        var entities = [];
 
-        clearPage();
+        if (data.services && data.services.length > 0) {
+            data.services.forEach(function (serv) {
+                services.push(serv.apikey);
+                types.push(serv.entity_type);
+            });
+        } else {
+            services.push(data.emptyElement);
+            types.push(data.emptyElement);
+        }
 
-        createHeadline(page, "[Services]");
-        addNewLine(page);
-        createLabel(page, "Service Path:");
-        dropdownServices = createDropdown(page, listSrv);
-        createButton(page, "Add", function () { testMessage("TODO: Add a new service"); });
-        createButton(page, "Edit", function () { editServicePage(serviceData, dropdownServices.options[dropdownServices.selectedIndex].text); });
-        createButton(page, "Delete", function () { delObjectPage("service", dropdownServices.options[dropdownServices.selectedIndex].text); });
-        addNewLine(page);
-        addNewLine(page);
-        addNewLine(page);
+        if (data.entities && data.entities.length > 0) {
+            data.entities.forEach(function (ent) {
+                entities.push({"id": ent.id, "type": ent.type});
+            });
+        } else {
+            entities.push({"id": data.emptyElement, "type": data.emptyElement});
+        }
 
-        createHeadline(page, "[Entities]");
-        addNewLine(page);
-        createLabel(page, "Filter by Type:");
-        dropdownEntTypes = createDropdown(page, listTypes, function () { testChangeEntities(dropdownEntTypes, dropdownEntities); });
-        addNewLine(page);
-        addNewLine(page);
-        createLabel(page, "Entity ID:");
-        dropdownEntities = createDropdown(page, listEnt);
-        createButton(page, "Add", function () { testMessage("TODO: Add a new entity"); });
-        createButton(page, "Edit", function () { testMessage("TODO: Edit entity '" + dropdownEntities.options[dropdownEntities.selectedIndex].text + "'"); });
-        createButton(page, "Delete", function () { delObjectPage("entity", dropdownEntities.options[dropdownEntities.selectedIndex].text); });
+        clearPage(context);
 
-        // Prevent type error for optional function parameter
-        try {
-            func();
-        } catch (e) {}
+        createHeadline(context, "[Services]");
+        addNewLine(context);
+        createLabel(context, "API Key:");
+        dropdownServices = createDropdown(context, services);
+        createButton(context, "Add", function () { testMessage(context, "TODO: addServicePage<br>Selection: '" +
+            dropdownServices.options[dropdownServices.selectedIndex].text + "'", "blue"); });
+        createButton(context, "Edit", function () { testMessage(context, "TODO: editServicePage<br>Selection: '" +
+            dropdownServices.options[dropdownServices.selectedIndex].text + "'", "blue"); });
+        createButton(context, "Delete", function () { testMessage(context, "TODO: delServicePage<br>Selection: '" +
+            dropdownServices.options[dropdownServices.selectedIndex].text + "'", "blue"); });
+        addNewLine(context);
+        addNewLine(context);
+        addNewLine(context);
+
+        createHeadline(context, "[Entities]");
+        addNewLine(context);
+        createLabel(context, "Filter by Type:");
+        dropdownEntTypes = createDropdown(context, types, function () {
+            changeEntList(dropdownEntTypes, dropdownEntities, entities, data); });
+        addNewLine(context);
+        addNewLine(context);
+        createLabel(context, "Entity ID:");
+        dropdownEntities = createDropdown(context, [data.emptyElement]);
+        createButton(context, "Add", function () { testMessage(context, "TODO: addEntityPage<br>Selection: '" +
+            dropdownEntities.options[dropdownEntities.selectedIndex].text + "'", "blue"); });
+        createButton(context, "Edit", function () { testMessage(context, "TODO: editEntityPage<br>Selection: '" +
+            dropdownEntities.options[dropdownEntities.selectedIndex].text + "'", "blue"); });
+        createButton(context, "Delete", function () { testMessage(context, "TODO: delEntityPage<br>Selection: '" +
+            dropdownEntities.options[dropdownEntities.selectedIndex].text + "'", "blue"); });
+
+        // Fill entity ID dropdown with correct entity data
+        changeEntList(dropdownEntTypes, dropdownEntities, entities, data);
+        
+        // In case of error, display error message
+        if (data.error) {
+            testMessage(context, data.error, "red");
+        }
     };
 
-    var editServicePage = function editServicePage(data, selection) {
+    var editServicePage = function editServicePage(context, data, selection) {
         var serv;
         data.services.forEach(function (entry) {
             if (entry.service_path == selection) {
@@ -98,36 +148,37 @@
             }
         });
 
-        clearPage();
+        clearPage(context);
 
         // Code for testing
-        createHeadline(page, "Edit service '" + selection + "'");
-        addNewLine(page);
-        createLabel(page, "Current values:");
-        addNewLine(page);
-        addNewLine(page);
-        createLabel(page, JSON.stringify(serv));
-        addNewLine(page);
-        addNewLine(page);
-        createButton(page, "Back", showHomePage);
+        createHeadline(context, "Edit service '" + selection + "'");
+        addNewLine(context);
+        createLabel(context, "Current values:");
+        addNewLine(context);
+        addNewLine(context);
+        createLabel(context, JSON.stringify(serv));
+        addNewLine(context);
+        addNewLine(context);
+        createButton(context, "Back", showHomePage);
     };
 
-    var delObjectPage = function delObjectPage(objType, selection) {
-        clearPage();
+    var delObjectPage = function delObjectPage(context, objType, selection) {
+        clearPage(context);
 
         // Code for testing
-        createHeadline(page, "Delete " + objType + " '" + selection + "'");
-        addNewLine(page);
-        createLabel(page, "Do you really want to delete " + objType + " '" + selection + "'?");
-        addNewLine(page);
-        addNewLine(page);
-        createButton(page, "Delete", function () { showHomePage(function () { testMessage(">> The " + objType + " '" + selection + "' has been successfully deleted! <<"); }); });
-        createButton(page, "Back", showHomePage);
+        createHeadline(context, "Delete " + objType + " '" + selection + "'");
+        addNewLine(context);
+        createLabel(context, "Do you really want to delete " + objType + " '" + selection + "'?");
+        addNewLine(context);
+        addNewLine(context);
+        createButton(context, "Delete", function () { showHomePage(function () {
+            testMessage(context, ">> The " + objType + " '" + selection + "' has been successfully deleted! <<", "green"); }); });
+        createButton(context, "Back", showHomePage);
     };
 
-    var clearPage = function clearPage() {
-        while (page.firstChild) {
-            page.removeChild(page.firstChild);
+    var clearPage = function clearPage(context) {
+        while (context.firstChild) {
+            context.removeChild(context.firstChild);
         }
     };
 
@@ -177,29 +228,107 @@
         return button;
     };
 
-    // Function for testing
-    var testMessage = function testMessage(text) {
-        if (document.getElementById("testmsg")) {
-            page.removeChild(document.getElementById("testmsg"));
+    var getServiceData = function getServiceData(data, callbackFunc) {
+        var url = new URL('iot/services', data.idas);
+        var headers = {};
+
+        if (MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['X-FIWARE-OAuth-Token'] = 'true';
+            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
         }
 
-        var hl = document.createElement("h3");
-        hl.innerHTML = text;
-        hl.id = "testmsg";
-        page.appendChild(hl);
+        headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
+
+        headers['FIWARE-ServicePath'] = "/*";
+
+        MashupPlatform.http.makeRequest(url, {
+            method: "GET",
+            contentType: "application/json",
+            requestHeaders: headers,
+            onSuccess: function (response) {
+                data.services = JSON.parse(response.responseText).services;
+                callbackFunc(data);
+            },
+            onFailure: function (response) {
+                if (response.status.toString().startsWith("5")) {
+                    data.error = ">> Connection error. Please check your server settings! <<";
+                } else {
+                    data.error = ">> " + response.statusText + " <<";
+                }
+
+                callbackFunc(data);
+            },
+            onException: function (resp, except) {
+                MashupPlatform.widget.log(except);
+                data.error = ">> " + except + " <<";
+                callbackFunc(data);
+            }
+        });
+    };
+
+    var getEntityData = function getEntityData(data, callbackFunc) {
+        var url = new URL('v2/entities', data.orion);
+        var headers = {};
+
+        if (MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['X-FIWARE-OAuth-Token'] = 'true';
+            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        }
+
+        headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
+
+        MashupPlatform.http.makeRequest(url, {
+            method: "GET",
+            requestHeaders: headers,
+            onSuccess: function (response) {
+                data.entities = JSON.parse(response.responseText);
+                callbackFunc(data);
+            },
+            onFailure: function (response) {
+                if (response.status.toString().startsWith("5")) {
+                    data.error = ">> Connection error. Please check your server settings! <<";
+                } else {
+                    data.error = ">> " + response.statusText + " <<";
+                    MashupPlatform.widget.log(response);
+                }
+
+                callbackFunc(data);
+            },
+            onException: function (resp, except) {
+                MashupPlatform.widget.log(except);
+                data.error = ">> " + except + " <<";
+                callbackFunc(data);
+            }
+        });
+    };
+
+    var changeEntList = function changeEntList(typeDropdown, entityDropdown, entities, data) {
+        while (entityDropdown.firstChild) {
+            entityDropdown.removeChild(entityDropdown.firstChild);
+        }
+        var selection = typeDropdown.options[typeDropdown.selectedIndex].text;
+        entities.forEach(function (ent) {
+            if (ent.type == selection) {
+                entityDropdown.options.add(new Option(ent.id));
+            }
+        });
+        
+        if (entityDropdown.options.length === 0) {
+            entityDropdown.options.add(new Option(data.emptyElement));
+        }
     };
 
     // Function for testing
-    var testChangeEntities = function testChangeEntities(types, entities) {
-        while (entities.firstChild) {
-            entities.removeChild(entities.firstChild);
+    var testMessage = function testMessage(context, text, color) {
+        if (document.getElementById("testmsg")) {
+            context.removeChild(document.getElementById("testmsg"));
         }
-        if (types.options[types.selectedIndex].text == "mobile") {
-            entities.options.add(new Option("Bus_1"));
-            entities.options.add(new Option("Tram_1"));
-        } else {
-            entities.options.add(new Option("Lamp_1"));
-        }
+
+        var hl = createHeadline(context, text);
+        hl.id = "testmsg";
+        hl.style = "color:" + color;
     };
 
     window.addEventListener("DOMContentLoaded", init, false);
