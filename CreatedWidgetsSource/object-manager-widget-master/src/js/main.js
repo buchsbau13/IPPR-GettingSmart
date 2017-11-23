@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
- /* globals MashupPlatform, StyledElements */
+ /* global MashupPlatform, StyledElements */
 
 (function () {
 
@@ -22,14 +22,11 @@
 
     var init = function init() {
         var data = {};
-        
+
         clearPage(document.body);
-        
+
         var page = document.createElement("div");
         document.body.appendChild(page);
-
-        // Value for element initialization
-        var emptyElement = "-------";
 
         // Read values from settings
         var requestHeaders = {};
@@ -39,7 +36,7 @@
             var hl = createHeadline(page, "Server information incomplete! Server URLs in settings must not be empty!");
             hl.style = "color:red";
             createButton(page, "Reload", init);
-            
+
             return;
         }
 
@@ -58,10 +55,12 @@
         // Option "use_user_fiware_token" potentially problematic to implement, currently not available
 
         if (MashupPlatform.prefs.get('ngsi_tenant').trim() === '') {
-            data.error = "Please enter the tenant/service information in the settings!"
+            data.error = "Please enter the tenant/service information in the settings!";
         }
 
-        data.emptyElement = emptyElement;
+        data.emptyElement = "-------";
+        data.resource = "/iot/d";
+        data.token = "token2";
         data.orion = orion;
         data.idas = idas;
         data.cygnus = cygnus;
@@ -105,12 +104,25 @@
         addNewLine(context);
         createLabel(context, "API Key:");
         dropdownServices = createDropdown(context, services);
-        createButton(context, "Add", function () { testMessage(context, "TODO: addServicePage<br>Selection: '" +
-            dropdownServices.options[dropdownServices.selectedIndex].text + "'", "blue"); });
-        createButton(context, "Edit", function () { testMessage(context, "TODO: editServicePage<br>Selection: '" +
-            dropdownServices.options[dropdownServices.selectedIndex].text + "'", "blue"); });
-        createButton(context, "Delete", function () { testMessage(context, "TODO: delServicePage<br>Selection: '" +
-            dropdownServices.options[dropdownServices.selectedIndex].text + "'", "blue"); });
+        createButton(context, "Add", function () {
+            data.newService = {};
+            showServicePage(context, data);
+        });
+        createButton(context, "Edit", function () {
+            // if no service available, cancel action
+            if (dropdownServices.options[dropdownServices.selectedIndex].text != data.emptyElement) {
+                data.currentService = getService(dropdownServices.options[dropdownServices.selectedIndex].text, data);
+                data.newService = getService(dropdownServices.options[dropdownServices.selectedIndex].text, data);
+                showServicePage(context, data);
+            }
+        });
+        createButton(context, "Delete", function () {
+            // if no service available, cancel action
+            if (dropdownServices.options[dropdownServices.selectedIndex].text != data.emptyElement) {
+                data.currentService = getService(dropdownServices.options[dropdownServices.selectedIndex].text, data);
+                delServicePage(context, data);
+            }
+        });
         addNewLine(context);
         addNewLine(context);
         addNewLine(context);
@@ -133,47 +145,97 @@
 
         // Fill entity ID dropdown with correct entity data
         changeEntList(dropdownEntTypes, dropdownEntities, entities, data);
-        
+
         // In case of error, display error message
         if (data.error) {
             testMessage(context, data.error, "red");
+            data.error = null;
+        }
+
+        // Show message if available
+        if (data.message) {
+            testMessage(context, data.message, "green");
+            data.message = null;
         }
     };
 
-    var editServicePage = function editServicePage(context, data, selection) {
-        var serv;
-        data.services.forEach(function (entry) {
-            if (entry.service_path == selection) {
-                serv = entry;
+    var showServicePage = function showServicePage(context, data) {
+        clearPage(context);
+
+        if (data.currentService) {
+            createHeadline(context, "Edit service '" + data.currentService.apikey + "'");
+        } else {
+            createHeadline(context, "Add new service");
+        }
+
+        addNewLine(context);
+        createLabel(context, "API key:");
+        var apikey = createInput(context, "text");
+        addNewLine(context);
+        createLabel(context, "Service path:");
+        var servicePath = createInput(context, "text");
+        addNewLine(context);
+        createLabel(context, "Entity type:");
+        var entType = createInput(context, "text");
+        addNewLine(context);
+        addNewLine(context);
+        createButton(context, "Save", function () {
+            if (!data.currentService) {
+                data.newService.subservice = servicePath.value;
+                data.newService.apikey = apikey.value;
+            }
+
+            data.newService.entity_type = entType.value;
+
+            if (data.currentService) {
+                updateService(data, function (updateData) {
+                    getServiceData(updateData, function (servData) {
+                        getEntityData(servData, function (entData) {
+                            showHomePage(context, entData);
+                        });
+                    });
+                });
+            } else {
+                addService(data, function (addData) {
+                    getServiceData(addData, function (servData) {
+                        getEntityData(servData, function (entData) {
+                            showHomePage(context, entData);
+                        });
+                    });
+                });
             }
         });
+        createButton(context, "Back", init);
 
-        clearPage(context);
-
-        // Code for testing
-        createHeadline(context, "Edit service '" + selection + "'");
-        addNewLine(context);
-        createLabel(context, "Current values:");
-        addNewLine(context);
-        addNewLine(context);
-        createLabel(context, JSON.stringify(serv));
-        addNewLine(context);
-        addNewLine(context);
-        createButton(context, "Back", showHomePage);
+        if (data.currentService) {
+            apikey.value = data.currentService.apikey;
+            servicePath.value = data.currentService.subservice;
+            entType.value = data.currentService.entity_type;
+            apikey.disabled = "disabled"; // API key only displayed for information purposes, cannot be changed
+            servicePath.disabled = "disabled"; // service path only displayed for information purposes, cannot be changed
+        } else {
+            servicePath.value = "/";
+        }
     };
 
-    var delObjectPage = function delObjectPage(context, objType, selection) {
+    var delServicePage = function delServicePage(context, data) {
         clearPage(context);
 
-        // Code for testing
-        createHeadline(context, "Delete " + objType + " '" + selection + "'");
+        createHeadline(context, "Delete service '" + data.currentService.apikey + "'");
         addNewLine(context);
-        createLabel(context, "Do you really want to delete " + objType + " '" + selection + "'?");
+        createLabel(context, "Do you really want to delete service '" + data.currentService.apikey + "'?");
         addNewLine(context);
         addNewLine(context);
-        createButton(context, "Delete", function () { showHomePage(function () {
-            testMessage(context, ">> The " + objType + " '" + selection + "' has been successfully deleted! <<", "green"); }); });
-        createButton(context, "Back", showHomePage);
+        createButton(context, "Delete", function () {
+            deleteService(data, function (delData) {
+                getServiceData(delData, function (servData) {
+                    getEntityData(servData, function (entData) {
+                        showHomePage(context, entData);
+                    });
+                });
+            });
+        });
+        createButton(context, "Back", init);
     };
 
     var clearPage = function clearPage(context) {
@@ -216,6 +278,14 @@
         context.appendChild(label);
 
         return label;
+    };
+
+    var createInput = function createInput(context, type) {
+        var input = document.createElement("input");
+        input.type = type;
+        context.appendChild(input);
+
+        return input;
     };
 
     var createButton = function createButton(context, text, func) {
@@ -262,6 +332,164 @@
             onException: function (resp, except) {
                 MashupPlatform.widget.log(except);
                 data.error = ">> " + except + " <<";
+                callbackFunc(data);
+            }
+        });
+    };
+
+    var getService = function getService(apikey, data) {
+        var service;
+        data.services.forEach(function (serv) {
+            if (serv.apikey == apikey) {
+                service = serv;
+            }
+        });
+
+        return service;
+    };
+
+    var addService = function addService(data, callbackFunc) {
+        var url = new URL('iot/services', data.idas);
+        var headers = {};
+        var payload = {"services": []};
+
+        if (MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['X-FIWARE-OAuth-Token'] = 'true';
+            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        }
+
+        headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
+        headers['FIWARE-ServicePath'] = data.newService.subservice;
+
+        payload.services.push({
+            "apikey": data.newService.apikey,
+            "token": data.token,
+            "cbroker": MashupPlatform.prefs.get('orion'),
+            "entity_type": data.newService.entity_type,
+            "resource": data.resource
+        });
+
+        MashupPlatform.http.makeRequest(url, {
+            method: "POST",
+            postBody: JSON.stringify(payload),
+            contentType: "application/json",
+            requestHeaders: headers,
+            onSuccess: function (response) {
+                data.newService = null;
+                data.message = "Service created successfully!";
+                callbackFunc(data);
+            },
+            onFailure: function (response) {
+                if (response.status.toString().startsWith("5")) {
+                    data.error = ">> Connection error. Please check your server settings! <<";
+                } else {
+                    data.error = ">> " + response.statusText + " <<";
+                }
+
+                data.newService = null;
+                callbackFunc(data);
+            },
+            onException: function (resp, except) {
+                MashupPlatform.widget.log(except);
+                data.error = ">> " + except + " <<";
+                data.newService = null;
+                callbackFunc(data);
+            }
+        });
+    };
+
+    var updateService = function updateService(data, callbackFunc) {
+        var url = new URL('iot/services', data.idas);
+        var headers = {};
+        var params = {};
+
+        if (MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['X-FIWARE-OAuth-Token'] = 'true';
+            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        }
+
+        headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
+        headers['FIWARE-ServicePath'] = data.currentService.subservice;
+
+        params.apikey = data.currentService.apikey;
+        params.resource = data.currentService.resource;
+
+        MashupPlatform.http.makeRequest(url, {
+            method: "PUT",
+            postBody: JSON.stringify(data.newService),
+            parameters: params,
+            contentType: "application/json",
+            requestHeaders: headers,
+            onSuccess: function (response) {
+                data.currentService = null;
+                data.newService = null;
+                data.message = "Service updated successfully!";
+                callbackFunc(data);
+            },
+            onFailure: function (response) {
+                if (response.status.toString().startsWith("5")) {
+                    data.error = ">> Connection error. Please check your server settings! <<";
+                } else {
+                    data.error = ">> " + response.statusText + " <<";
+                }
+
+                data.currentService = null;
+                data.newService = null;
+                callbackFunc(data);
+            },
+            onException: function (resp, except) {
+                MashupPlatform.widget.log(except);
+                data.error = ">> " + except + " <<";
+                data.currentService = null;
+                data.newService = null;
+                callbackFunc(data);
+            }
+        });
+    };
+
+    var deleteService = function deleteService(data, callbackFunc) {
+        var url = new URL('iot/services', data.idas);
+        var headers = {};
+        var params = {};
+
+        if (MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['X-FIWARE-OAuth-Token'] = 'true';
+            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        }
+
+        headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
+        headers['FIWARE-ServicePath'] = data.currentService.subservice;
+
+        params.apikey = data.currentService.apikey;
+        params.resource = data.currentService.resource;
+
+        MashupPlatform.http.makeRequest(url, {
+            method: "DELETE",
+            parameters: params,
+            contentType: "application/json",
+            requestHeaders: headers,
+            onSuccess: function (response) {
+                data.currentService = null;
+                data.message = "Service deleted successfully!";
+                callbackFunc(data);
+            },
+            onFailure: function (response) {
+                if (response.status.toString().startsWith("5")) {
+                    data.error = ">> Connection error. Please check your server settings! <<";
+                } else {
+                    data.error = ">> " + response.statusText + " <<";
+                }
+
+                data.currentService = null;
+                callbackFunc(data);
+            },
+            onException: function (resp, except) {
+                MashupPlatform.widget.log(except);
+                data.error = ">> " + except + " <<";
+                data.currentService = null;
                 callbackFunc(data);
             }
         });
@@ -314,7 +542,7 @@
                 entityDropdown.options.add(new Option(ent.id));
             }
         });
-        
+
         if (entityDropdown.options.length === 0) {
             entityDropdown.options.add(new Option(data.emptyElement));
         }
@@ -330,6 +558,10 @@
         hl.id = "testmsg";
         hl.style = "color:" + color;
     };
+
+    MashupPlatform.prefs.registerCallback(function (new_values) {
+        init();
+    }.bind(this));
 
     window.addEventListener("DOMContentLoaded", init, false);
 

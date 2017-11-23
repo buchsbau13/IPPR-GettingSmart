@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="object-manager" version="0.1">
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="object-manager" version="0.2">
     <details>
         <title>Object Manager</title>
         <authors>Michael Janusch</authors>
@@ -15,5 +15,5 @@
         <preference name="ngsi_tenant" type="text" label="Tenant" description="Tenant/service to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol. Maximum length is 50 characters. If empty, the default tenant will be used" default="service"/>
     </preferences>
     <contents src="index.html" useplatformstyle="true"/>
-    <rendering height="400px" width="33%"/>
+    <rendering height="400px" width="400px"/>
 </widget>

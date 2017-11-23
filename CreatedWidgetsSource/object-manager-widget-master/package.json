@@ -1,7 +1,7 @@
 {
   "vendor": "CoNWeT",
   "name": "object-manager",
-  "version": "0.1",
+  "version": "0.2",
   "description": "Introspect and update attributes of entitites stored in a Orion Context Broker Server",
   "devDependencies": {
     "grunt": "^0.4.5",
