@@ -28,43 +28,36 @@
         var page = document.createElement("div");
         document.body.appendChild(page);
 
-        // Read values from settings
-        var requestHeaders = {};
-
-        if (MashupPlatform.prefs.get('orion') === "" ||
-        MashupPlatform.prefs.get('idas') === "" || MashupPlatform.prefs.get('cygnus') === "") {
-            var hl = createHeadline(page, "Server information incomplete! Server URLs in settings must not be empty!");
-            hl.style = "color:red";
-            createButton(page, "Reload", init);
-
-            return;
-        }
-
-        var orion = new URL(MashupPlatform.prefs.get('orion'));
-        var idas = new URL(MashupPlatform.prefs.get('idas'));
-        var cygnus = new URL(MashupPlatform.prefs.get('cygnus'));
-
-        if (orion.pathname[orion.pathname.length - 1] !== "/") {
-            orion.pathname += "/";
-        }
-
-        if (idas.pathname[idas.pathname.length - 1] !== "/") {
-            idas.pathname += "/";
-        }
-
-        // Option "use_user_fiware_token" potentially problematic to implement, currently not available
-
-        if (MashupPlatform.prefs.get('ngsi_tenant').trim() === '') {
-            data.error = "Please enter the tenant/service information in the settings!";
-        }
-
         data.emptyElement = "-------";
         data.resource = "/iot/d";
         data.token = "token2";
-        data.orion = orion;
-        data.idas = idas;
-        data.cygnus = cygnus;
-        data.requestHeaders = requestHeaders;
+        data.disabled = false;
+
+        try {
+            data.orion = new URL(MashupPlatform.prefs.get('orion'));
+            data.idas = new URL(MashupPlatform.prefs.get('idas'));
+            data.cygnus = new URL(MashupPlatform.prefs.get('cygnus'));
+
+            if (data.orion.pathname[data.orion.pathname.length - 1] !== "/") {
+                data.orion.pathname += "/";
+            }
+
+            if (data.idas.pathname[data.idas.pathname.length - 1] !== "/") {
+                data.idas.pathname += "/";
+            }
+        } catch (e) {
+            data.error = "Invalid server information detected! Please check your server URLs in the settings!";
+            data.disabled = true;
+            showHomePage(page, data);
+            return;
+        }
+
+        if (MashupPlatform.prefs.get('ngsi_tenant').trim() === '') {
+            data.error = "Please enter the tenant/service information in the settings!";
+            data.disabled = true;
+            showHomePage(page, data);
+            return;
+        }
 
         // Fetch service and entity data from servers and show home screen
         getServiceData(data, function (servData) {
@@ -104,11 +97,11 @@
         addNewLine(context);
         createLabel(context, "API Key:");
         dropdownServices = createDropdown(context, services);
-        createButton(context, "Add", function () {
+        var addServBtn = createButton(context, "Add", function () {
             data.newService = {};
             showServicePage(context, data);
         });
-        createButton(context, "Edit", function () {
+        var editServBtn = createButton(context, "Edit", function () {
             // if no service available, cancel action
             if (dropdownServices.options[dropdownServices.selectedIndex].text != data.emptyElement) {
                 data.currentService = getService(dropdownServices.options[dropdownServices.selectedIndex].text, data);
@@ -116,7 +109,7 @@
                 showServicePage(context, data);
             }
         });
-        createButton(context, "Delete", function () {
+        var delServBtn = createButton(context, "Delete", function () {
             // if no service available, cancel action
             if (dropdownServices.options[dropdownServices.selectedIndex].text != data.emptyElement) {
                 data.currentService = getService(dropdownServices.options[dropdownServices.selectedIndex].text, data);
@@ -136,15 +129,26 @@
         addNewLine(context);
         createLabel(context, "Entity ID:");
         dropdownEntities = createDropdown(context, [data.emptyElement]);
-        createButton(context, "Add", function () { testMessage(context, "TODO: addEntityPage<br>Selection: '" +
+        var addEntBtn = createButton(context, "Add", function () { testMessage(context, "TODO: addEntityPage<br>Selection: '" +
             dropdownEntities.options[dropdownEntities.selectedIndex].text + "'", "blue"); });
-        createButton(context, "Edit", function () { testMessage(context, "TODO: editEntityPage<br>Selection: '" +
+        var editEntBtn = createButton(context, "Edit", function () { testMessage(context, "TODO: editEntityPage<br>Selection: '" +
             dropdownEntities.options[dropdownEntities.selectedIndex].text + "'", "blue"); });
-        createButton(context, "Delete", function () { testMessage(context, "TODO: delEntityPage<br>Selection: '" +
+        var delEntBtn = createButton(context, "Delete", function () { testMessage(context, "TODO: delEntityPage<br>Selection: '" +
             dropdownEntities.options[dropdownEntities.selectedIndex].text + "'", "blue"); });
 
         // Fill entity ID dropdown with correct entity data
         changeEntList(dropdownEntTypes, dropdownEntities, entities, data);
+
+        if (data.disabled) {
+            addServBtn.disabled = true;
+            editServBtn.disabled = true;
+            delServBtn.disabled = true;
+            addEntBtn.disabled = true;
+            editEntBtn.disabled = true;
+            delEntBtn.disabled = true;
+
+            data.disabled = false;
+        }
 
         // In case of error, display error message
         if (data.error) {
@@ -323,6 +327,7 @@
             onFailure: function (response) {
                 if (response.status.toString().startsWith("5")) {
                     data.error = ">> Connection error. Please check your server settings! <<";
+                    data.disabled = true;
                 } else {
                     data.error = ">> " + response.statusText + " <<";
                 }
@@ -365,7 +370,7 @@
         payload.services.push({
             "apikey": data.newService.apikey,
             "token": data.token,
-            "cbroker": MashupPlatform.prefs.get('orion'),
+            "cbroker": data.orion.pathname,
             "entity_type": data.newService.entity_type,
             "resource": data.resource
         });
@@ -383,6 +388,7 @@
             onFailure: function (response) {
                 if (response.status.toString().startsWith("5")) {
                     data.error = ">> Connection error. Please check your server settings! <<";
+                    data.disabled = true;
                 } else {
                     data.error = ">> " + response.statusText + " <<";
                 }
@@ -431,6 +437,7 @@
             onFailure: function (response) {
                 if (response.status.toString().startsWith("5")) {
                     data.error = ">> Connection error. Please check your server settings! <<";
+                    data.disabled = true;
                 } else {
                     data.error = ">> " + response.statusText + " <<";
                 }
@@ -479,6 +486,7 @@
             onFailure: function (response) {
                 if (response.status.toString().startsWith("5")) {
                     data.error = ">> Connection error. Please check your server settings! <<";
+                    data.disabled = true;
                 } else {
                     data.error = ">> " + response.statusText + " <<";
                 }
@@ -517,6 +525,8 @@
             onFailure: function (response) {
                 if (response.status.toString().startsWith("5")) {
                     data.error = ">> Connection error. Please check your server settings! <<";
+                    data.services = null;
+                    data.disabled = true;
                 } else {
                     data.error = ">> " + response.statusText + " <<";
                     MashupPlatform.widget.log(response);

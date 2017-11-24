@@ -7,9 +7,9 @@
         <description>Add, edit and delete services, entities and devices</description>
     </details>
     <preferences>
-        <preference name="orion" type="text" label="Context Broker Server" description="Context broker server" default="http://orion:1026/"/>
-        <preference name="idas" type="text" label="IoT Agent Server" description="IoT agent server (using administration port)" default="http://idas:4041/"/>
-        <preference name="cygnus" type="text" label="STH Connector Server" description="STH connector server" default="http://cygnus:5050/"/>
+        <preference name="orion" type="text" label="Context broker server" description="Context broker server" default="http://orion:1026/"/>
+        <preference name="idas" type="text" label="IoT agent server" description="IoT agent server (using administration port)" default="http://idas:4041/"/>
+        <preference name="cygnus" type="text" label="STH connector server" description="STH connector server" default="http://cygnus:5050/"/>
         <preference name="use_user_fiware_token" type="boolean" label="Use the FIWARE credentials of the user" description="Use the FIWARE credentials of the user logged into WireCloud. Take into account this option cannot be enabled if you want to use this widget in a public workspace as anonoymous users doesn't have a valid FIWARE auth token. As an alternative, you can make use of the &quot;Use the FIWARE credentials of the workspace owner&quot; preference." default="false"/>
         <preference name="use_owner_credentials" type="boolean" label="Use the FIWARE credentials of the workspace owner" description="Use the FIWARE credentials of the owner of the workspace. This preference takes preference over &quot;Use the FIWARE credentials of the user&quot;. This feature is available on WireCloud 0.7.0+ in a experimental basis, future versions of WireCloud can change the way to use it making this option not funcional and requiring you to upgrade this operator" default="false"/>
         <preference name="ngsi_tenant" type="text" label="Tenant" description="Tenant/service to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol. Maximum length is 50 characters. If empty, the default tenant will be used" default="service"/>
