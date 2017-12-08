@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="io-test" version="1.0.0">
+    <details>
+        <title>I/O test</title>
+        <authors>Michael Janusch</authors>
+        <image>images/catalogue.png</image>
+        <description>Widget for testing the wiring input/output</description>
+    </details>
+    <wiring>
+        <inputendpoint name="input" type="text" label="Input" description="Input data to show in text area" friendcode="input"/>
+        <outputendpoint name="output" type="text" label="Output" description="Output created from text area" friendcode="output"/>
+    </wiring>
+    <contents src="index.html" useplatformstyle="true"/>
+    <rendering height="400px" width="400px"/>
+</widget>
