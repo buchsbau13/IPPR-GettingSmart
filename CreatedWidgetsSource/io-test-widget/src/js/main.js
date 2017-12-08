@@ -21,6 +21,10 @@
     "use strict";
 
     MashupPlatform.wiring.registerCallback("input", function (data) {
+        if (MashupPlatform.prefs.get('auto_forward')) {
+            MashupPlatform.wiring.pushEvent("output", data);
+        }
+
         init(data);
     });
 
