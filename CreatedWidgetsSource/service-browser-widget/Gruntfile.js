@@ -41,7 +41,7 @@ module.exports = function (grunt) {
             widget: {
                 options: {
                     mode: 'zip',
-                    archive: 'build/<%= pkg.vendor %>_<%= pkg.name %>_<%= pkg.version %>-dev.wgt'
+                    archive: 'dist/<%= pkg.vendor %>_<%= pkg.name %>_<%= pkg.version %>.wgt'
                 },
                 files: [
                     {
@@ -52,8 +52,8 @@ module.exports = function (grunt) {
                             'doc/**/*',
                             'images/**/*',
                             'DESCRIPTION.md',
-                            'config.xml',
-                            'index.html'
+                            'index.html',
+                            'config.xml'
                         ]
                     },
                     {
