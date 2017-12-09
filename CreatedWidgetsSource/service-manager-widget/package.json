@@ -1,6 +1,6 @@
 {
   "vendor": "CoNWeT",
-  "name": "service-browser-widget",
+  "name": "service-manager-widget",
   "version": "1.0.0",
   "description": "This repository contains a WireCloud widget. This package.json file is used only for installing the node dependencies",
   "devDependencies": {

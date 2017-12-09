@@ -1,0 +1,12 @@
+{
+  "id": "DE",
+  "type": "friendly_names",
+  "entity_id": "ID",
+  "entity_type": "Typ",
+  "name": "Name",
+  "description": "Beschreibung",
+  "address": "Adresse",
+  "temperature": "Temperatur",
+  "humidity": "Luftfeuchtigkeit",
+  "location": "Position"
+}

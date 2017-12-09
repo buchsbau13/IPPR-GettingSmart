@@ -49,7 +49,15 @@
 
         btnSend.type = "button";
         btnSend.innerHTML = "Send";
-        btnSend.onclick = function () { MashupPlatform.wiring.pushEvent("output", textArea.value); };
+        btnSend.onclick = function () {
+            var output;
+            if (textArea.value) {
+                output = textArea.value;
+            } else {
+                output = "{}";
+            }
+            MashupPlatform.wiring.pushEvent("output", output);
+        };
 
         page.appendChild(textArea);
         page.appendChild(document.createElement("br"));

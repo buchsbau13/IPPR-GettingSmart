@@ -27,7 +27,13 @@
     });
 
     MashupPlatform.wiring.registerCallback("addService", function (service) {
-        var payload = JSON.parse(service);
+        var payload;
+        try {
+            payload = JSON.parse(service);
+        } catch (e) {
+            payload = null;
+        }
+
         var url = createURL('iot/services');
         var headers = {};
 
@@ -37,11 +43,23 @@
             headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
         }
 
-        if (!payload.services) {
+        if (!payload || !payload.services) {
             getServices(function (data) {
                 data.statusAdd = {};
                 data.statusAdd.state = "exception";
                 data.statusAdd.message = "Unexpected input received!";
+                data.inputExample = {
+                    "services": [
+                        {
+                            "apikey": "example_apikey",
+                            "token": "token2",
+                            "cbroker": "http://example:1026",
+                            "entity_type": "example_entity_type",
+                            "resource": "/iot/example",
+                            "subservice": "/example"
+                        }
+                    ]
+                };
                 MashupPlatform.wiring.pushEvent("serviceOutput", JSON.stringify(data));
             });
             return;
@@ -49,6 +67,8 @@
 
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
         headers['FIWARE-ServicePath'] = payload.services[0].subservice;
+
+        delete payload.services[0].subservice;
 
         MashupPlatform.http.makeRequest(url, {
             method: "POST",
@@ -84,7 +104,13 @@
     });
 
     MashupPlatform.wiring.registerCallback("editService", function (service) {
-        var payload = JSON.parse(service);
+        var payload;
+        try {
+            payload = JSON.parse(service);
+        } catch (e) {
+            payload = null;
+        }
+
         var url = createURL('iot/services');
         var headers = {};
         var params = {};
@@ -95,11 +121,19 @@
             headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
         }
 
-        if (!payload.apikey) {
+        if (!payload || !payload.apikey) {
             getServices(function (data) {
                 data.statusEdit = {};
                 data.statusEdit.state = "exception";
                 data.statusEdit.message = "Unexpected input received!";
+                data.inputExample = {
+                    "apikey": "example_apikey",
+                    "token": "token2",
+                    "cbroker": "http://example:1026",
+                    "entity_type": "example_entity_type",
+                    "resource": "/iot/example",
+                    "subservice": "/example"
+                };
                 MashupPlatform.wiring.pushEvent("serviceOutput", JSON.stringify(data));
             });
             return;
@@ -107,6 +141,8 @@
 
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
         headers['FIWARE-ServicePath'] = payload.subservice;
+
+        delete payload.subservice;
 
         params.apikey = payload.apikey;
         params.resource = payload.resource;
@@ -146,7 +182,13 @@
     });
 
     MashupPlatform.wiring.registerCallback("delService", function (service) {
-        var service = JSON.parse(service);
+        var payload;
+        try {
+            payload = JSON.parse(service);
+        } catch (e) {
+            payload = null;
+        }
+
         var url = createURL('iot/services');
         var headers = {};
         var params = {};
@@ -157,21 +199,26 @@
             headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
         }
 
-        if (!service.apikey) {
+        if (!payload || !payload.apikey) {
             getServices(function (data) {
                 data.statusDel = {};
                 data.statusDel.state = "exception";
                 data.statusDel.message = "Unexpected input received!";
+                data.inputExample = {
+                    "apikey": "example_apikey",
+                    "resource": "/iot/example",
+                    "subservice": "/example"
+                };
                 MashupPlatform.wiring.pushEvent("serviceOutput", JSON.stringify(data));
             });
             return;
         }
 
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
-        headers['FIWARE-ServicePath'] = service.subservice;
+        headers['FIWARE-ServicePath'] = payload.subservice;
 
-        params.apikey = service.apikey;
-        params.resource = service.resource;
+        params.apikey = payload.apikey;
+        params.resource = payload.resource;
 
         MashupPlatform.http.makeRequest(url, {
             method: "DELETE",
@@ -182,7 +229,7 @@
                 getServices(function (data) {
                     data.statusDel = {};
                     data.statusDel.state = "success";
-                    data.statusDel.message = "Service '" + service.apikey + "' successfully deleted!"
+                    data.statusDel.message = "Service '" + payload.apikey + "' successfully deleted!"
                     MashupPlatform.wiring.pushEvent("serviceOutput", JSON.stringify(data));
                 });
             },
