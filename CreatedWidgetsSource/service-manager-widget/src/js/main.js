@@ -132,14 +132,12 @@
     var newService = function newService(input) {
         var data = JSON.parse(input);
         if (this.addServiceAction) {
-            // TODO: Error handling
             this.addServiceAction = false;
             initOperator.call(this);
             var service = {"services": []};
             service.services.push(data);
             this.addServiceOutput.pushEvent(JSON.stringify(service));
         } else if (this.editServiceAction) {
-            // TODO: Error handling
             this.editServiceAction = false;
             initOperator.call(this);
             this.editServiceOutput.pushEvent(input);
@@ -156,8 +154,14 @@
                     data = JSON.parse(this.input);
                 }
                 if (data && data.statusGet.state == "success") {
+                    var loopCount = 0;
                     var list = [];
-                    for (var entry = 0; entry < data.count; entry++) {
+
+                    for (var entry = (page - 1) * options.pageSize; entry < data.count; entry++) {
+                        if (loopCount >= options.pageSize) {
+                            break;
+                        }
+
                         list.push({
                             "apikey": data.services[entry].apikey,
                             "resource": data.services[entry].resource,
@@ -165,6 +169,8 @@
                             "service": data.services[entry].service,
                             "subservice": data.services[entry].subservice
                         });
+
+                        loopCount++;
                     }
 
                     if (data.statusAdd && data.statusAdd.state != "success") {
