@@ -1,3 +1,9 @@
+## v1.1.0 (2016-12-12)
+
+- Added initial support for editing entities
+- Added initial support for creating new entities
+- Based on `json-editor` v1.0
+
 ## v1.0.2
 
 - Add support for the `Fiware-ServicePath` used by the tenant/service feature

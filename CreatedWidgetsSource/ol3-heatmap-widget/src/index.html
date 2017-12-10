@@ -8,7 +8,13 @@
         <title>OpenLayers 3 example</title>
     </head>
     <body>
+        <div class="floating-panel">
+            <label><input id="heatmap" type="checkbox" name="checkbox" value="heatmap" checked>Heatmap</label>
+            <label><input id="static" type="checkbox" name="checkbox" value="static" checked>Statische Sensoren</label>
+            <label><input id="mobile" type="checkbox" name="checkbox" value="mobile" checked>Mobile Sensoren</label>
+        </div>
         <div id="map" class="map"></div>
+        <div id="button" class="se-btn"><i class="fa fa-bars" aria-hidden="true"></i></span></div>
     </body>
     <script type="text/javascript" src="js/ol3-map-widget.js"></script>
     <script type="text/javascript" src="js/main.js"></script>

@@ -24,8 +24,14 @@
     var widget = new Widget('body', '#incoming-modal');
     widget.init();
 
-    MashupPlatform.wiring.registerCallback('entities', (entities) => {
-        widget.addHeatmap(entities);
-        MashupPlatform.widget.log(entities, MashupPlatform.log.INFO);
+    MashupPlatform.wiring.registerCallback('poiInput', (poi_info) => {
+        if (typeof poi_info === "string") {
+            poi_info = JSON.parse(poi_info);
+        }
+        if (!Array.isArray(poi_info)) {
+            poi_info = [poi_info];
+        }
+        poi_info.forEach(widget.registerPoI, widget);
+        poi_info.forEach(widget.addHeatmap, widget);
     });
 })();

@@ -144,13 +144,6 @@
     };
 
     Widget.prototype.init = function init() {
-        document.getElementById('button').addEventListener('click', function (event) {
-            if (this.layers_widget == null) {
-                this.layers_widget = MashupPlatform.mashup.addWidget('CoNWeT/layer-selector/0.3', {refposition: event.target.getBoundingClientRect()});
-                this.layers_widget.outputs.layerInfoOutput.connect(MashupPlatform.widget.inputs.layerInfo);
-            }
-        });
-
         var initialLayer = CORE_LAYERS.WIKIMEDIA;
         var initialCenter = MashupPlatform.prefs.get("initialCenter").split(",").map(Number);
         if (initialCenter.length != 2 || !Number.isFinite(initialCenter[0]) || !Number.isFinite(initialCenter[0])) {
@@ -248,7 +241,7 @@
                     anchorYUnits: 'fraction',
                     opacity: 1,
                     src: poi_info.icon,
-                    scale: 1
+                    scale: 1.5
                 })),
                 style: poi_info.style
             });
