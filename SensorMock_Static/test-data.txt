@@ -1,6 +1,2 @@
-Temp_Lamp_1,t,float,13.2
-Temp_Lamp_2,t,float,12.5
-Temp_Lamp_3,t,float,14.8
-Humid_Lamp_1,h,int,70
-Humid_Lamp_2,h,int,69
-Humid_Lamp_3,h,int,71
+Temp_Lamp_1,t,float,4.2
+Humid_Lamp_1,h,int,63

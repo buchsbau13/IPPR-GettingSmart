@@ -1,0 +1,12 @@
+{
+  "id": "EN",
+  "type": "friendly_names",
+  "entity_id": { "value": "ID" },
+  "entity_type": { "value": "Type" },
+  "name": { "value": "Name" },
+  "description": { "value": "Description" },
+  "address": { "value": "Address" },
+  "temperature": { "value": "Temperature" },
+  "humidity": { "value": "Humidity" },
+  "location": { "value": "Location" }
+}

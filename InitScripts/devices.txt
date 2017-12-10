@@ -9,17 +9,17 @@
         {
           "object_id": "t",
           "name": "temperature",
-          "type": "float"
+          "type": "Float"
         },
         {
           "object_id": "ti",
           "name": "temp_sensor_info",
-          "type": "string"
+          "type": "Text"
         },
         {
           "object_id": "ts",
           "name": "temp_sensor_status",
-          "type": "string"
+          "type": "Text"
         }
       ]
     },
@@ -32,17 +32,17 @@
         {
           "object_id": "h",
           "name": "humidity",
-          "type": "int"
+          "type": "Int"
         },
         {
           "object_id": "hi",
           "name": "humid_sensor_info",
-          "type": "string"
+          "type": "Text"
         },
         {
           "object_id": "hs",
           "name": "humid_sensor_status",
-          "type": "string"
+          "type": "Text"
         }
       ]
     },
@@ -55,17 +55,17 @@
         {
           "object_id": "t",
           "name": "temperature",
-          "type": "float"
+          "type": "Float"
         },
         {
           "object_id": "ti",
           "name": "temp_sensor_info",
-          "type": "string"
+          "type": "Text"
         },
         {
           "object_id": "ts",
           "name": "temp_sensor_status",
-          "type": "string"
+          "type": "Text"
         }
       ]
     },
@@ -83,12 +83,12 @@
         {
           "object_id": "hi",
           "name": "humid_sensor_info",
-          "type": "string"
+          "type": "Text"
         },
         {
           "object_id": "hs",
           "name": "humid_sensor_status",
-          "type": "string"
+          "type": "Text"
         }
       ]
     },
@@ -106,12 +106,12 @@
         {
           "object_id": "li",
           "name": "loc_sensor_info",
-          "type": "string"
+          "type": "Text"
         },
         {
           "object_id": "ls",
           "name": "loc_sensor_status",
-          "type": "string"
+          "type": "Text"
         }
       ]
     },
@@ -124,17 +124,17 @@
         {
           "object_id": "t",
           "name": "temperature",
-          "type": "float"
+          "type": "Float"
         },
         {
           "object_id": "ti",
           "name": "temp_sensor_info",
-          "type": "string"
+          "type": "Text"
         },
         {
           "object_id": "ts",
           "name": "temp_sensor_status",
-          "type": "string"
+          "type": "Text"
         }
       ]
     },
@@ -147,17 +147,17 @@
         {
           "object_id": "h",
           "name": "humidity",
-          "type": "int"
+          "type": "Int"
         },
         {
           "object_id": "hi",
           "name": "humid_sensor_info",
-          "type": "string"
+          "type": "Text"
         },
         {
           "object_id": "hs",
           "name": "humid_sensor_status",
-          "type": "string"
+          "type": "Text"
         }
       ]
     },
@@ -175,12 +175,12 @@
         {
           "object_id": "li",
           "name": "loc_sensor_info",
-          "type": "string"
+          "type": "Text"
         },
         {
           "object_id": "ls",
           "name": "loc_sensor_status",
-          "type": "string"
+          "type": "Text"
         }
       ]
     }

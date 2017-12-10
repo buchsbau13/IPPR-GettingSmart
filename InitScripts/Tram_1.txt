@@ -3,12 +3,10 @@
   "type": "mobile",
   "name":
     {
-      "type": "string",
       "value": "Strassenbahn 1"
     },
   "description":
     {
-      "type": "string",
       "value": "Strassenbahn Linie 7"            
     }
 }
