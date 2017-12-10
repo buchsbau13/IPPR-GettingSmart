@@ -19,6 +19,7 @@
       <preference name="settings_entity" label="Friendly name entity" description="Name of the entity containing friendly names for the PoI attributes" default="" type="text"/>
       <preference name="attributes" label="Attributes to display" description="Comma seperated list of attributes that should be displayed in the PoI info window" default="" type="text"/>
       <preference name="comp_attributes" label="Composite attributes" description="For attributes containing multiple subattributes, choose the subattribute(s) to display in the info window. Comma seperated list of key-value pairs (format: attribute=subattr_1&amp;subattr_2)." default="address=streetAddress" type="text"/>
+      <preference name="unit_attributes" label="Unit values" description="Unit values for the corresponding sensors. Comma seperated list of key-value pairs (format: sensor=unit_attr)." default="temperature=temp_sensor_unit" type="text"/>
   </preferences>
   <wiring>
     <outputendpoint name="poiOutput" type="text" label="Modified PoI" description="PoI with modified info window" friendcode="poioutput"/>

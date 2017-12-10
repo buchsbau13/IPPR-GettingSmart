@@ -23,6 +23,7 @@
     var friendlyEnt, orionWidget, entityInput, output;
     var displayAttrs = [];
     var compAttributes = {};
+    var unitAttributes = {};
 
     MashupPlatform.wiring.registerCallback("poiInput", function (poi) {
         sendOuput(JSON.parse(poi));
@@ -45,10 +46,26 @@
                 var pair = entry.split(new RegExp('=\\s*'));
                 if (pair.length == 2) {
                     compAttributes[pair[0]] = pair[1];
+                } else {
+                    compAttributes = {};
                 }
             });
         } else {
             compAttributes = {};
+        }
+
+        if (MashupPlatform.prefs.get('unit_attributes')) {
+            var keyValueList = MashupPlatform.prefs.get('unit_attributes').split(new RegExp(',\\s*'));
+            keyValueList.forEach(function (entry) {
+                var pair = entry.split(new RegExp('=\\s*'));
+                if (pair.length == 2) {
+                    unitAttributes[pair[0]] = pair[1];
+                } else {
+                    unitAttributes = {};
+                }
+            });
+        } else {
+            unitAttributes = {};
         }
 
         if (MashupPlatform.prefs.get('settings_entity')) {
@@ -110,6 +127,8 @@
                             vals.push(poi.data[attr][entry]);
                         });
                         value = vals.join(", ");
+                    } else if (unitAttributes && unitAttributes[attr]) {
+                        value = String(round(poi.data[attr], 2)) + " " + poi.data[unitAttributes[attr]];
                     }
 
                     if (friendlyEnt && friendlyEnt[attr]) {
@@ -133,6 +152,10 @@
 
         return infoWindow;
     };
+
+    var round = function round(value, decimals) {
+        return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+    }
 
     init();
 })();
