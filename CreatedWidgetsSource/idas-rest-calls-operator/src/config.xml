@@ -19,10 +19,10 @@
     <inputendpoint name="addService" type="text" label="Add service" description="Add a new service, returns list of available services" friendcode="addservice"/>
     <inputendpoint name="editService" type="text" label="Edit service" description="Edit an existing service, returns list of available services" friendcode="editservice"/>
     <inputendpoint name="delService" type="text" label="Delete service" description="Delete an existing service, returns list of available services" friendcode="delservice"/>
-    <inputendpoint name="getDevices" type="text" label="Fetch devices" description="Retrieve the list of available devices" friendcode="getdevices"/>
-    <inputendpoint name="addDevice" type="text" label="Add device [TODO]" description="Add a new device, returns list of available devices" friendcode="adddevice"/>
-    <inputendpoint name="editDevice" type="text" label="Edit device [TODO]" description="Edit an existing device, returns list of available devices" friendcode="editdevice"/>
-    <inputendpoint name="delDevice" type="text" label="Delete device [TODO]" description="Delete an existing device, returns list of available devices" friendcode="deldevice"/>
+    <inputendpoint name="getDevices" type="text" label="Fetch devices" description="Retrieve the list of available devices. If the input data contains the id and subservice attribute, only the corresponding device is retrieved." friendcode="getdevices"/>
+    <inputendpoint name="addDevice" type="text" label="Add device" description="Add a new device, returns list of all devices of the same entity" friendcode="adddevice"/>
+    <inputendpoint name="editDevice" type="text" label="Edit device" description="Edit an existing device, returns list of all devices of the same entity" friendcode="editdevice"/>
+    <inputendpoint name="delDevice" type="text" label="Delete device" description="Delete an existing device, returns list of all devices of the same entity" friendcode="deldevice"/>
     <outputendpoint name="serviceOutput" type="text" label="Service output" description=" Service output" friendcode="serviceoutput"/>
     <outputendpoint name="deviceOutput" type="text" label="Device output" description="Device output" friendcode="deviceoutput"/>
   </wiring>

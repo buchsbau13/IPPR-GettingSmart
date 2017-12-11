@@ -15,7 +15,7 @@
         <preference name="ngsi_tenant" type="text" label="NGSI tenant/service" description="Tenant/service to use when connecting to the server. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol. Maximum length is 50 characters. If empty, the default tenant will be used" default="service"/>
     </preferences>
   <wiring>
-    <inputendpoint name="getEntities" type="text" label="Fetch entities" description="Retrieve the list of available entities. If the input data contains the type and/or ID attribute, only the corresponding entities are retrieved." friendcode="getentities"/>
+    <inputendpoint name="getEntities" type="text" label="Fetch entities" description="Retrieve the list of available entities. If the input data contains the type and/or id attribute, only the corresponding entities are retrieved." friendcode="getentities"/>
     <inputendpoint name="addEntity" type="text" label="Add entitiy [TODO]" description="Add a new entity, returns list of all entities of the same type" friendcode="addentity"/>
     <inputendpoint name="editEntity" type="text" label="Edit entitiy [TODO]" description="Edit an existing entity, returns list of all entities of the same type" friendcode="editentity"/>
     <inputendpoint name="delEntity" type="text" label="Delete entitiy [TODO]" description="Delete an existing entity, returns list of all entities of the same type" friendcode="delentity"/>
