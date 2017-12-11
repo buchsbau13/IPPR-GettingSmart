@@ -20,13 +20,20 @@
 
     "use strict";
 
-    var friendlyEnt, orionWidget, entityInput, output;
+    var friendlyEnt;
     var displayAttrs = [];
     var compAttributes = {};
     var unitAttributes = {};
 
     MashupPlatform.wiring.registerCallback("poiInput", function (poi) {
         sendOuput(JSON.parse(poi));
+    });
+
+    MashupPlatform.wiring.registerCallback("friendlyEntInput", function (entity) {
+        friendlyEnt = JSON.parse(entity);
+        if (friendlyEnt instanceof Array) {
+            friendlyEnt = friendlyEnt[0];
+        }
     });
 
     MashupPlatform.prefs.registerCallback(function () {
@@ -67,46 +74,11 @@
         } else {
             unitAttributes = {};
         }
-
-        if (MashupPlatform.prefs.get('settings_entity')) {
-            getFriendlyEntity(MashupPlatform.prefs.get('settings_entity'));
-        } else {
-            friendlyEnt = {};
-        }
-    };
-
-    var initWidget = function initWidget() {
-        orionWidget = MashupPlatform.mashup.addOperator('CoNWeT/orion-rest-calls/1.0', {
-            "preferences": {
-                "ngsi_server": {"value": MashupPlatform.prefs.get("ngsi_server")},
-                "use_user_fiware_token": {"value": MashupPlatform.prefs.get("use_user_fiware_token")},
-                "use_owner_credentials": {"value": MashupPlatform.prefs.get("use_owner_credentials")},
-                "ngsi_tenant": {"value": MashupPlatform.prefs.get("ngsi_tenant")}
-            }
-        });
-        orionWidget.addEventListener('remove', function () { orionWidget = null; });
-
-        entityInput = MashupPlatform.operator.createInputEndpoint(function (input) {
-            input = JSON.parse(input);
-            if (input.entities) {
-                friendlyEnt = input.entities[0];
-            }
-            orionWidget.remove();
-        });
-        output = MashupPlatform.operator.createOutputEndpoint();
-
-        entityInput.connect(orionWidget.outputs.entityOutput);
-        output.connect(orionWidget.inputs.getEntities);
     };
 
     var sendOuput = function sendOutput(poi) {
         poi.infoWindow = buildInfoWindow(poi);
         MashupPlatform.wiring.pushEvent("poiOutput", JSON.stringify(poi));
-    };
-
-    var getFriendlyEntity = function getFriendlyEntity(name) {
-        initWidget();
-        output.pushEvent(JSON.stringify({"id": name}));
     };
 
     var buildInfoWindow = function buildInfoWindow(poi) {
@@ -127,17 +99,17 @@
                             vals.push(poi.data[attr][entry]);
                         });
                         value = vals.join(", ");
-                    } else if (unitAttributes && unitAttributes[attr]) {
+                    } else if (unitAttributes && unitAttributes[attr] && !isNaN(parseFloat(poi.data[attr]))) {
                         value = String(round(poi.data[attr], 2)) + " " + poi.data[unitAttributes[attr]];
                     }
 
                     if (friendlyEnt && friendlyEnt[attr]) {
                         if (attr == "id") {
-                            name = friendlyEnt.entity_id.value;
+                            name = friendlyEnt.entity_id;
                         } else if (attr == "type") {
-                            name = friendlyEnt.entity_type.value;
+                            name = friendlyEnt.entity_type;
                         } else {
-                            name = friendlyEnt[attr].value;
+                            name = friendlyEnt[attr];
                         }
                     }
 

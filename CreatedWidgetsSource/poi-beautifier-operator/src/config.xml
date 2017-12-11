@@ -8,21 +8,14 @@
     <license>Apache License 2.0</license>
     <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
   </details>
-  <requirements>
-      <feature name="DashboardManagement"/>
-  </requirements>
   <preferences>
-      <preference name="ngsi_server" type="text" label="Context broker URL" description="URL of the context broker" default="http://orion:1026"/>
-      <preference name="use_user_fiware_token" type="boolean" label="Use the FIWARE credentials of the user" description="Use the FIWARE credentials of the user logged into WireCloud. Take into account this option cannot be enabled if you want to use this widget in a public workspace as anonoymous users doesn't have a valid FIWARE auth token" default="false"/>
-      <preference name="use_owner_credentials" type="boolean" label="Use the FIWARE credentials of the workspace owner" description="Use the FIWARE credentials of the owner of the workspace. This preference takes preference over &quot;Use the FIWARE credentials of the user&quot;. This feature is available on WireCloud 0.7.0+ in a experimental basis, future versions of WireCloud can change the way to use it making this option not funcional and requiring you to upgrade this operator" default="false"/>
-      <preference name="ngsi_tenant" type="text" label="NGSI tenant/service" description="Tenant/service to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol. Maximum length is 50 characters. If empty, the default tenant will be used" default="service"/>
-      <preference name="settings_entity" label="Friendly name entity" description="Name of the entity containing friendly names for the PoI attributes" default="" type="text"/>
-      <preference name="attributes" label="Attributes to display" description="Comma seperated list of attributes that should be displayed in the PoI info window" default="" type="text"/>
+      <preference name="attributes" label="Attributes to display" description="Comma seperated list of attributes that should be displayed in the PoI info window" default="id,type" type="text"/>
       <preference name="comp_attributes" label="Composite attributes" description="For attributes containing multiple subattributes, choose the subattribute(s) to display in the info window. Comma seperated list of key-value pairs (format: attribute=subattr_1&amp;subattr_2)." default="address=streetAddress" type="text"/>
       <preference name="unit_attributes" label="Unit values" description="Unit values for the corresponding sensors. Comma seperated list of key-value pairs (format: sensor=unit_attr)." default="temperature=temp_sensor_unit" type="text"/>
   </preferences>
   <wiring>
     <outputendpoint name="poiOutput" type="text" label="Modified PoI" description="PoI with modified info window" friendcode="poioutput"/>
+    <inputendpoint name="friendlyEntInput" type="text" label="Friendly name entity" description="Entity containing the friendly names for PoI attributes. For displaying PoI ID and type, the friendly name entity must contain the attributes &quot;entity_id&quot; and &quot;entity_type&quot;." friendcode="friendlyentinput"/>
     <inputendpoint name="poiInput" type="text" label="Original PoI" description="Original PoI" friendcode="poiinput"/>
   </wiring>
   <scripts>
