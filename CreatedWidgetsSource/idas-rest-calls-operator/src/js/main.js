@@ -519,6 +519,7 @@
         var data = {};
         var url = createURL('iot/services');
         var headers = {};
+        var params = {};
 
         if (MashupPlatform.prefs.get('use_owner_credentials')) {
             headers['X-FIWARE-OAuth-Token'] = 'true';
@@ -529,8 +530,11 @@
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
         headers['FIWARE-ServicePath'] = "/*";
 
+        params.limit = "1000";
+
         MashupPlatform.http.makeRequest(url, {
             method: "GET",
+            parameters: params,
             contentType: "application/json",
             requestHeaders: headers,
             onSuccess: function (response) {
@@ -570,10 +574,12 @@
             } else {
                 url = createURL('iot/devices');
                 headers['FIWARE-ServicePath'] = ""; // Empty service path, as '/*' is not recognized for some reason
+                params.limit = "1000"; // Default limit of 20 is too small, as there is no possibility (as of yet) to filter by entity ID
             }
         } catch (e) {
             url = createURL('iot/devices');
             headers['FIWARE-ServicePath'] = ""; // Empty service path, as '/*' is not recognized for some reason
+            params.limit = "1000"; // Default limit of 20 is too small, as there is no possibility (as of yet) to filter by entity ID
         }
 
         if (MashupPlatform.prefs.get('use_owner_credentials')) {
@@ -584,8 +590,6 @@
 
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
 
-        params.limit = "1000"; // Default limit of 20 is too small, as there is no possibility (as of yet) to filter by entity ID
-
         MashupPlatform.http.makeRequest(url, {
             method: "GET",
             parameters: params,
@@ -593,6 +597,9 @@
             requestHeaders: headers,
             onSuccess: function (response) {
                 data = JSON.parse(response.responseText);
+                if (!data.devices) {
+                    data = {"devices": [data]};
+                }
                 data.statusGet = {};
                 data.statusGet.state = "success";
                 data.statusGet.message = "Devices successfully received!"
