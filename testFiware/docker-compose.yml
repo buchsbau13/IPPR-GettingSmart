@@ -128,6 +128,18 @@ services:
           ipv4_address: 172.20.128.8
     links:
         - postgres:postgres
+
+  ngsi-proxy:
+    image: januschm/ngsi-proxy:latest
+    hostname: ngsi-proxy
+    container_name: ngsi-proxy
+    networks:
+        static-network:
+          ipv4_address: 172.20.128.9
+    expose:
+        - "3000"
+    ports:
+        - "3000:3000"
  
 networks:
   static-network:
