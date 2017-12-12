@@ -1,12 +1,9 @@
 version: '2'
 services:
   mongodb:
-      image: mongo:latest
+      image: mongo:3.4
       hostname: mongodb
       container_name: mongodb
-      networks:
-        static-network:
-          ipv4_address: 172.20.128.1
       expose:
           - "27017"
       ports:
@@ -17,9 +14,6 @@ services:
       image: fiware/orion:latest
       hostname: orion
       container_name: orion
-      networks:
-        static-network:
-          ipv4_address: 172.20.128.2
       links:
           - mongodb
       expose:
@@ -32,9 +26,6 @@ services:
       image: telefonicaiot/fiware-cygnus
       hostname: cygnus
       container_name: cygnus
-      networks:
-        static-network:
-          ipv4_address: 172.20.128.3
       links:
           - mongodb:iot-mongo
       expose:
@@ -50,9 +41,6 @@ services:
       image: fiware/sth-comet
       hostname: comet
       container_name: comet
-      networks:
-        static-network:
-          ipv4_address: 172.20.128.4
       links:
           - mongodb
       expose:
@@ -66,9 +54,6 @@ services:
       image: fiware/iotagent-ul:latest
       hostname: idas
       container_name: idas
-      networks:
-        static-network:
-          ipv4_address: 172.20.128.5
       links:
           - orion
           - mongodb:mongo
@@ -78,15 +63,12 @@ services:
       ports:
           - "7896:7896"
           - "4041:4041"
-   
+
   nginx:
     restart: always
     image: nginx:latest
     hostname: nginx
     container_name: nginx
-    networks:
-        static-network:
-          ipv4_address: 172.20.128.6
     ports:
         - "80:80"
     volumes:
@@ -101,9 +83,6 @@ services:
     image: postgres:latest
     hostname: postgres
     container_name: postgres
-    networks:
-        static-network:
-          ipv4_address: 172.20.128.7
     volumes_from:
         - data
     ports:
@@ -123,27 +102,5 @@ services:
     image: fiware/wirecloud:latest-composable
     hostname: wirecloud
     container_name: wirecloud
-    networks:
-        static-network:
-          ipv4_address: 172.20.128.8
     links:
         - postgres:postgres
-
-  ngsi-proxy:
-    image: januschm/ngsi-proxy:latest
-    hostname: ngsi-proxy
-    container_name: ngsi-proxy
-    networks:
-        static-network:
-          ipv4_address: 172.20.128.9
-    expose:
-        - "3000"
-    ports:
-        - "3000:3000"
- 
-networks:
-  static-network:
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16
-          ip_range: 172.20.0.0/24
