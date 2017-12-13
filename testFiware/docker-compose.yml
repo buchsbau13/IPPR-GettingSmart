@@ -1,106 +1,140 @@
 version: '2'
 services:
-  mongodb:
-      image: mongo:3.4
-      hostname: mongodb
-      container_name: mongodb
-      expose:
-          - "27017"
-      ports:
-          - "27017:27017"
-      command: --smallfiles
+    mongodb:
+        image: mongo:3.4
+        hostname: mongodb
+        container_name: mongodb
+        networks:
+            - main
+        expose:
+            - "27017"
+        ports:
+            - "27017:27017"
+        command: --smallfiles
 
-  orion:
-      image: fiware/orion:latest
-      hostname: orion
-      container_name: orion
-      links:
-          - mongodb
-      expose:
-          - "1026"
-      ports:
-          - "1026:1026"
-      command: -dbhost mongodb
+    orion:
+        image: fiware/orion:latest
+        hostname: orion
+        container_name: orion
+        networks:
+            - main
+        links:
+            - mongodb
+        expose:
+            - "1026"
+        ports:
+            - "1026:1026"
+        command: -dbhost mongodb
 
-  cygnus:
-      image: telefonicaiot/fiware-cygnus
-      hostname: cygnus
-      container_name: cygnus
-      links:
-          - mongodb:iot-mongo
-      expose:
-          - "8081"
-          - "5050"
-      ports:
-          - "8081:8081"
-          - "5050:5050"
-      volumes:
-          - "./cygnus_config/agent.conf:/opt/apache-flume/conf/agent.conf:ro"
+    cygnus:
+        image: telefonicaiot/fiware-cygnus
+        hostname: cygnus
+        container_name: cygnus
+        networks:
+            - main
+        links:
+            - mongodb:iot-mongo
+        expose:
+            - "8081"
+            - "5050"
+        ports:
+            - "8081:8081"
+            - "5050:5050"
+        volumes:
+            - "./cygnus_config/agent.conf:/opt/apache-flume/conf/agent.conf:ro"
 
-  comet:
-      image: fiware/sth-comet
-      hostname: comet
-      container_name: comet
-      links:
-          - mongodb
-      expose:
-          - "8666"
-      ports:
-          - "8666:8666"
-      volumes: 
-          - "./comet_config/config.js:/opt/sth/config.js:ro"
+    comet:
+        image: fiware/sth-comet
+        hostname: comet
+        container_name: comet
+        networks:
+            - main
+        links:
+            - mongodb
+        expose:
+            - "8666"
+        ports:
+            - "8666:8666"
+        volumes: 
+            - "./comet_config/config.js:/opt/sth/config.js:ro"
 
-  idas:
-      image: fiware/iotagent-ul:latest
-      hostname: idas
-      container_name: idas
-      links:
-          - orion
-          - mongodb:mongo
-      expose:
-          - "7896"
-          - "4041"
-      ports:
-          - "7896:7896"
-          - "4041:4041"
+    idas:
+        image: fiware/iotagent-ul:latest
+        hostname: idas
+        container_name: idas
+        networks:
+            - main
+        links:
+            - orion
+            - mongodb:mongo
+        expose:
+            - "7896"
+            - "4041"
+        ports:
+            - "7896:7896"
+            - "4041:4041"
 
-  nginx:
-    restart: always
-    image: nginx:latest
-    hostname: nginx
-    container_name: nginx
-    ports:
-        - "80:80"
-    volumes:
-        - ./nginx_config/nginx.conf:/etc/nginx/nginx.conf:ro
-    volumes_from:
-        - wirecloud
-    links:
-        - wirecloud:wirecloud
+    nginx:
+        restart: on-failure
+        image: nginx:latest
+        hostname: nginx
+        container_name: nginx
+        networks:
+            - main
+        ports:
+            - "80:80"
+        volumes:
+            - ./nginx_config/nginx.conf:/etc/nginx/nginx.conf:ro
+        volumes_from:
+            - wirecloud
+        links:
+            - wirecloud:wirecloud
 
-  postgres:
-    restart: always
-    image: postgres:latest
-    hostname: postgres
-    container_name: postgres
-    volumes_from:
-        - data
-    ports:
-        - "5432:5432"
+    postgres:
+        restart: on-failure
+        image: postgres:latest
+        hostname: postgres
+        container_name: postgres
+        networks:
+            - main
+        volumes_from:
+            - data
+        ports:
+            - "5432:5432"
 
-  data:
-    restart: always
-    image: postgres:latest
-    hostname: data
-    container_name: data
-    volumes:
-        - /var/lib/postgresql
-    command: /bin/true
+    data:
+        restart: on-failure
+        image: postgres:latest
+        hostname: data
+        container_name: data
+        networks:
+            - main
+        volumes:
+            - /var/lib/postgresql
+        command: /bin/true
 
-  wirecloud:
-    restart: always
-    image: fiware/wirecloud:latest-composable
-    hostname: wirecloud
-    container_name: wirecloud
-    links:
-        - postgres:postgres
+    wirecloud:
+        restart: on-failure
+        image: fiware/wirecloud:latest-composable
+        hostname: wirecloud
+        container_name: wirecloud
+        networks:
+            - main
+        links:
+            - postgres:postgres
+
+    ngsi-proxy:
+        restart: on-failure
+        image: januschm/ngsi-proxy:latest
+        hostname: ngsi-proxy
+        container_name: ngsi-proxy
+        networks:
+            - proxy
+        expose:
+            - "3000"
+        ports:
+            - "3000:3000"
+
+networks:
+    main:
+    proxy:
