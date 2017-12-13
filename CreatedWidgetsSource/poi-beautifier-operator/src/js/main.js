@@ -28,15 +28,18 @@
     MashupPlatform.wiring.registerCallback("poiInput", function (poi) {
         // If friendly names entity should be used, wait until the entity is available (at most two seconds)
         if (MashupPlatform.wiring.hasInputConnections("friendlyEntInput")) {
-            for (var count = 0; count < 20; count++) {
-                if (friendlyEnt) {
-                    break;
-                }
-                setTimeout(function () {}, 100);
-            }
+            (function loop(count) {
+                setTimeout(function () {
+                    if (friendlyEnt || count == 0) {
+                        sendOuput(JSON.parse(poi));
+                    } else if (--count > 0) {
+                        loop(count);
+                    }
+                }, 200)
+            })(10);
+        } else {
+            sendOuput(JSON.parse(poi));
         }
-
-        sendOuput(JSON.parse(poi));
     });
 
     MashupPlatform.wiring.registerCallback("friendlyEntInput", function (entity) {
