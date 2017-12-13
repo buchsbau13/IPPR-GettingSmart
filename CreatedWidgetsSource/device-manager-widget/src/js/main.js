@@ -33,9 +33,11 @@
 
         MashupPlatform.prefs.registerCallback(function (newValues) {
             if (MashupPlatform.prefs.get('allow_add')) {
+                this.showButton.style("right", "50px");
                 this.addButton.show();
             } else {
                 this.addButton.hide();
+                this.showButton.style("right", "5px");
             }
 
             initOperator.call(this);
@@ -110,9 +112,11 @@
         this.layout.center.appendChild(this.addButton);
 
         if (MashupPlatform.prefs.get('allow_add')) {
+            this.showButton.style("right", "50px");
             this.addButton.show();
         } else {
             this.addButton.hide();
+            this.showButton.style("right", "5px");
         }
 
         initOperator.call(this);

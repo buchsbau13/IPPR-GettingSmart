@@ -93,7 +93,7 @@
         {
           "object_id": "h",
           "name": "humidity",
-          "type": "int"
+          "type": "Int"
         },
         {
           "object_id": "hi",
