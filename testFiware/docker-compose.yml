@@ -4,8 +4,6 @@ services:
         image: mongo:3.4
         hostname: mongodb
         container_name: mongodb
-        networks:
-            - main
         expose:
             - "27017"
         ports:
@@ -16,8 +14,6 @@ services:
         image: fiware/orion:latest
         hostname: orion
         container_name: orion
-        networks:
-            - main
         links:
             - mongodb
         expose:
@@ -30,8 +26,6 @@ services:
         image: telefonicaiot/fiware-cygnus
         hostname: cygnus
         container_name: cygnus
-        networks:
-            - main
         links:
             - mongodb:iot-mongo
         expose:
@@ -47,8 +41,6 @@ services:
         image: fiware/sth-comet
         hostname: comet
         container_name: comet
-        networks:
-            - main
         links:
             - mongodb
         expose:
@@ -62,8 +54,6 @@ services:
         image: fiware/iotagent-ul:latest
         hostname: idas
         container_name: idas
-        networks:
-            - main
         links:
             - orion
             - mongodb:mongo
@@ -79,8 +69,6 @@ services:
         image: nginx:latest
         hostname: nginx
         container_name: nginx
-        networks:
-            - main
         ports:
             - "80:80"
         volumes:
@@ -95,8 +83,6 @@ services:
         image: postgres:latest
         hostname: postgres
         container_name: postgres
-        networks:
-            - main
         volumes_from:
             - data
         ports:
@@ -107,8 +93,6 @@ services:
         image: postgres:latest
         hostname: data
         container_name: data
-        networks:
-            - main
         volumes:
             - /var/lib/postgresql
         command: /bin/true
@@ -118,8 +102,6 @@ services:
         image: fiware/wirecloud:latest-composable
         hostname: wirecloud
         container_name: wirecloud
-        networks:
-            - main
         links:
             - postgres:postgres
 
@@ -128,13 +110,7 @@ services:
         image: januschm/ngsi-proxy:latest
         hostname: ngsi-proxy
         container_name: ngsi-proxy
-        networks:
-            - proxy
         expose:
             - "3000"
         ports:
             - "3000:3000"
-
-networks:
-    main:
-    proxy:
