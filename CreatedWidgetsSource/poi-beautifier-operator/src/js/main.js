@@ -26,6 +26,16 @@
     var unitAttributes = {};
 
     MashupPlatform.wiring.registerCallback("poiInput", function (poi) {
+        // If friendly names entity should be used, wait until the entity is available (at most two seconds)
+        if (MashupPlatform.wiring.hasInputConnections("friendlyEntInput")) {
+            for (var count = 0; count < 20; count++) {
+                if (friendlyEnt) {
+                    break;
+                }
+                setTimeout(function () {}, 100);
+            }
+        }
+
         sendOuput(JSON.parse(poi));
     });
 
@@ -96,17 +106,22 @@
                         var attrs = compAttributes[attr].split(new RegExp('&\\s*'));
                         var vals = [];
                         attrs.forEach(function (entry) {
-                            vals.push(poi.data[attr][entry]);
+                            if (poi.data[attr][entry]) {
+                                vals.push(poi.data[attr][entry]);
+                            }
                         });
-                        value = vals.join(", ");
-                    } else if (unitAttributes && unitAttributes[attr] && !isNaN(parseFloat(poi.data[attr]))) {
-                        value = String(round(poi.data[attr], 2)) + " " + poi.data[unitAttributes[attr]];
+                        if (vals.length > 0) {
+                            value = vals.join(", ");
+                        }
+                    } else if (unitAttributes && unitAttributes[attr] && !isNaN(parseFloat(poi.data[attr])) &&
+                        poi.data[unitAttributes[attr]]) {
+                        value = String(round(poi.data[attr], 1)) + " " + poi.data[unitAttributes[attr]];
                     }
 
                     if (friendlyEnt && friendlyEnt[attr]) {
-                        if (attr == "id") {
+                        if (attr == "id" && friendlyEnt.entity_id) {
                             name = friendlyEnt.entity_id;
-                        } else if (attr == "type") {
+                        } else if (attr == "type" && friendlyEnt.entity_type) {
                             name = friendlyEnt.entity_type;
                         } else {
                             name = friendlyEnt[attr];
