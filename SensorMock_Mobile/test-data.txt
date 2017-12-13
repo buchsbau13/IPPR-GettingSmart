@@ -1,4 +1,0 @@
-Temp_Bus_1,apimobile,t,float,11.6
-Humid_Bus_1,apimobile,h,int,70
-Temp_Tram_1,apimobile,t,float,10.4
-Humid_Tram_1,apimobile,h,int,72
