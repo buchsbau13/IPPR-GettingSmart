@@ -1,7 +1,5 @@
-1) Install nodejs + npm
-2) Install ngsi-proxy by executing "sudo npm install -g ngsi-proxy"
-3) Start ngsi-proxy via script or by executing "ngsi-proxy &"
+The ngsi-proxy is started with the rest of the infrastructure using the docker-compose file.
 
 For using the NGSI proxy locally when using the Docker infrastructure:
-1) Find out Docker host IP (Default interface: docker0)
-2) In Wirecloud, use "http://<docker-host-ip>/3000" as URl for the NGSI proxy
+1) Find out Docker host IP (Default interface: "docker0" on Linux, "vEthernet (Standardswitch)" on Windows)
+2) In Wirecloud, use "http://<docker-host-ip>/3000" as URl for the NGSI proxy. On Linux, additional firewall configurations might be necessary.
