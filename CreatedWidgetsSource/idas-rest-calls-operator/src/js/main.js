@@ -320,6 +320,7 @@
             onSuccess: function (response) {
                 getDevices(null, function (data) {
                     data.devices = getDevicesByEnt(data.devices, payload.devices[0].entity_name);
+                    data.count = data.devices.length;
                     data.statusAdd = {};
                     data.statusAdd.state = "success";
                     data.statusAdd.message = "Device '" + payload.devices[0].device_id + "' successfully created!"
@@ -329,6 +330,7 @@
             onFailure: function (response) {
                 getDevices(null, function (data) {
                     data.devices = getDevicesByEnt(data.devices, payload.devices[0].entity_name);
+                    data.count = data.devices.length;
                     data.statusAdd = {};
                     data.statusAdd.state = "failure";
                     data.statusAdd.message = "Error " + response.status + ": " + response.statusText;
@@ -339,6 +341,7 @@
                 MashupPlatform.operator.log(except);
                 getDevices(null, function (data) {
                     data.devices = getDevicesByEnt(data.devices, payload.devices[0].entity_name);
+                    data.count = data.devices.length;
                     data.statusAdd = {};
                     data.statusAdd.state = "exception";
                     data.statusAdd.message = except;
@@ -403,6 +406,7 @@
             onSuccess: function (response) {
                 getDevices(null, function (data) {
                     data.devices = getDevicesByEnt(data.devices, payload.entity_name);
+                    data.count = data.devices.length;
                     data.statusEdit = {};
                     data.statusEdit.state = "success";
                     data.statusEdit.message = "Device '" + payload.device_id + "' successfully updated!"
@@ -412,6 +416,7 @@
             onFailure: function (response) {
                 getDevices(null, function (data) {
                     data.devices = getDevicesByEnt(data.devices, payload.entity_name);
+                    data.count = data.devices.length;
                     data.statusEdit = {};
                     data.statusEdit.state = "failure";
                     data.statusEdit.message = "Error " + response.status + ": " + response.statusText;
@@ -422,6 +427,7 @@
                 MashupPlatform.operator.log(except);
                 getDevices(null, function (data) {
                     data.devices = getDevicesByEnt(data.devices, payload.entity_name);
+                    data.count = data.devices.length;
                     data.statusEdit = {};
                     data.statusEdit.state = "exception";
                     data.statusEdit.message = except;
@@ -474,6 +480,7 @@
             onSuccess: function (response) {
                 getDevices(null, function (data) {
                     data.devices = getDevicesByEnt(data.devices, payload.entity_name);
+                    data.count = data.devices.length;
                     data.statusDel = {};
                     data.statusDel.state = "success";
                     data.statusDel.message = "Device '" + payload.device_id + "' successfully deleted!"
@@ -483,6 +490,7 @@
             onFailure: function (response) {
                 getDevices(null, function (data) {
                     data.devices = getDevicesByEnt(data.devices, payload.entity_name);
+                    data.count = data.devices.length;
                     data.statusDel = {};
                     data.statusDel.state = "failure";
                     data.statusDel.message = "Error " + response.status + ": " + response.statusText;
@@ -493,6 +501,7 @@
                 MashupPlatform.operator.log(except);
                 getDevices(null, function (data) {
                     data.devices = getDevicesByEnt(data.devices, payload.entity_name);
+                    data.count = data.devices.length;
                     data.statusDel = {};
                     data.statusDel.state = "exception";
                     data.statusDel.message = except;
@@ -561,13 +570,13 @@
     };
 
     var getDevices = function getDevices(input, callbackFunc) {
-        var url;
+        var url,info;
         var data = {};
         var headers = {};
         var params = {};
 
         try {
-            var info = JSON.parse(input);
+            info = JSON.parse(input);
             if (info.id && info.subservice) {
                 url = createURL('iot/devices/' + info.id);
                 headers['FIWARE-ServicePath'] = info.subservice;
@@ -599,6 +608,10 @@
                 data = JSON.parse(response.responseText);
                 if (!data.devices) {
                     data = {"devices": [data]};
+                }
+                if (info && info.entity_name) {
+                    data.devices = getDevicesByEnt(data.devices, info.entity_name);
+                    data.count = data.devices.length;
                 }
                 data.statusGet = {};
                 data.statusGet.state = "success";

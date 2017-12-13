@@ -3,7 +3,13 @@
     position:absolute;
 }
 
-.add-service-button {
+.show-devices-button {
+    position: absolute;
+    bottom: 2px;
+    right: 50px;
+}
+
+.add-device-button {
     position: absolute;
     bottom: 2px;
     right: 5px;

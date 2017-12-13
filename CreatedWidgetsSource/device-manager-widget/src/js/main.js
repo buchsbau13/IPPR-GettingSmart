@@ -20,7 +20,7 @@
 
     "use strict";
 
-    var ServiceManager = function ServiceManager() {
+    var DeviceManager = function DeviceManager() {
         this.layout = null;
         this.table = null;
         this.input = null;
@@ -39,11 +39,19 @@
             }
 
             initOperator.call(this);
-            this.getServiceOutput.pushEvent(null);
+            this.getDeviceOutput.pushEvent(null);
+        }.bind(this));
+
+        MashupPlatform.wiring.registerCallback("filterByID", function (input) {
+            var data = JSON.parse(input);
+            if (data.entity_name) {
+                initOperator.call(this);
+                this.getDeviceOutput.pushEvent(input);
+            }
         }.bind(this));
     };
 
-    ServiceManager.prototype.init = function init() {
+    DeviceManager.prototype.init = function init() {
         this.layout = new StyledElements.VerticalLayout();
         createSource.call(this);
         createTable.call(this);
@@ -51,37 +59,52 @@
         this.layout.insertInto(document.body);
         this.layout.repaint();
 
-        this.serviceInput = MashupPlatform.widget.createInputEndpoint(receiveServices.bind(this));
-        this.getServiceOutput = MashupPlatform.widget.createOutputEndpoint();
-        this.addServiceOutput = MashupPlatform.widget.createOutputEndpoint();
-        this.editServiceOutput = MashupPlatform.widget.createOutputEndpoint();
-        this.delServiceOutput = MashupPlatform.widget.createOutputEndpoint();
+        this.deviceInput = MashupPlatform.widget.createInputEndpoint(receiveDevices.bind(this));
+        this.getDeviceOutput = MashupPlatform.widget.createOutputEndpoint();
+        this.addDeviceOutput = MashupPlatform.widget.createOutputEndpoint();
+        this.editDeviceOutput = MashupPlatform.widget.createOutputEndpoint();
+        this.delDeviceOutput = MashupPlatform.widget.createOutputEndpoint();
+
+        this.showButton = new StyledElements.Button({
+            class: "se-btn-circle show-devices-button z-depth-3",
+            text: "Show all"
+        });
+
+        this.showButton.addEventListener('click', function () {
+            initOperator.call(this);
+            this.getDeviceOutput.pushEvent(null);
+        }.bind(this));
+        this.layout.center.appendChild(this.showButton);
 
         this.addButton = new StyledElements.Button({
-            class: "se-btn-circle add-service-button z-depth-3",
+            class: "se-btn-circle add-device-button z-depth-3",
             iconClass: "icon-plus",
         });
 
         this.editorConfigOutput = MashupPlatform.widget.createOutputEndpoint();
         this.templateOutput = MashupPlatform.widget.createOutputEndpoint();
-        this.newServiceInput = MashupPlatform.widget.createInputEndpoint(newService.bind(this));
+        this.newDeviceInput = MashupPlatform.widget.createInputEndpoint(newDevice.bind(this));
         this.addButton.addEventListener('click', function () {
-            this.addServiceAction = true;
-            this.editServiceAction = false;
+            this.addDeviceAction = true;
+            this.editDeviceAction = false;
             initEditorWidget.call(this, this.addButton);
             this.editorConfigOutput.pushEvent({
                 "readonly": [
-                    ["token"],
-                    ["cbroker"]
+                    ["subservice"]
                 ]
             });
             this.templateOutput.pushEvent(JSON.stringify({
-                "apikey": "",
-                "token": "token2",
-                "cbroker": MashupPlatform.prefs.get('ngsi_server'),
+                "device_id": "",
+                "entity_name": "",
                 "entity_type": "",
-                "resource": "",
-                "subservice": "/"
+                "attributes": [
+                    {
+                        "object_id": "",
+                        "name": "",
+                        "type": "Text"
+                    }
+                ],
+                "subservice": MashupPlatform.prefs.get("ngsi_service_path")
             }));
         }.bind(this));
         this.layout.center.appendChild(this.addButton);
@@ -93,7 +116,7 @@
         }
 
         initOperator.call(this);
-        this.getServiceOutput.pushEvent(null);
+        this.getDeviceOutput.pushEvent(null);
     };
 
     var initOperator = function initOperator() {
@@ -107,11 +130,11 @@
         });
         this.idasWidget.addEventListener('remove', function () { this.idasWidget = null; }.bind(this));
 
-        this.serviceInput.connect(this.idasWidget.outputs.serviceOutput);
-        this.getServiceOutput.connect(this.idasWidget.inputs.getServices);
-        this.addServiceOutput.connect(this.idasWidget.inputs.addService);
-        this.editServiceOutput.connect(this.idasWidget.inputs.editService);
-        this.delServiceOutput.connect(this.idasWidget.inputs.delService);
+        this.deviceInput.connect(this.idasWidget.outputs.deviceOutput);
+        this.getDeviceOutput.connect(this.idasWidget.inputs.getDevices);
+        this.addDeviceOutput.connect(this.idasWidget.inputs.addDevice);
+        this.editDeviceOutput.connect(this.idasWidget.inputs.editDevice);
+        this.delDeviceOutput.connect(this.idasWidget.inputs.delDevice);
     };
 
     var initEditorWidget = function initEditorWidget(button) {
@@ -120,27 +143,27 @@
 
         this.editorConfigOutput.connect(this.editorWidget.inputs.configure);
         this.templateOutput.connect(this.editorWidget.inputs.input);
-        this.newServiceInput.connect(this.editorWidget.outputs.output);
+        this.newDeviceInput.connect(this.editorWidget.outputs.output);
     };
 
-    var receiveServices = function receiveServices(input) {
+    var receiveDevices = function receiveDevices(input) {
         this.input = input;
         this.source.goToFirst();
         this.idasWidget.remove();
     };
 
-    var newService = function newService(input) {
+    var newDevice = function newDevice(input) {
         var data = JSON.parse(input);
-        if (this.addServiceAction) {
-            this.addServiceAction = false;
+        if (this.addDeviceAction) {
+            this.addDeviceAction = false;
             initOperator.call(this);
-            var service = {"services": []};
-            service.services.push(data);
-            this.addServiceOutput.pushEvent(JSON.stringify(service));
-        } else if (this.editServiceAction) {
-            this.editServiceAction = false;
+            var device = {"devices": []};
+            device.devices.push(data);
+            this.addDeviceOutput.pushEvent(JSON.stringify(device));
+        } else if (this.editDeviceAction) {
+            this.editDeviceAction = false;
             initOperator.call(this);
-            this.editServiceOutput.pushEvent(input);
+            this.editDeviceOutput.pushEvent(input);
         }
         this.editorWidget.remove();
     };
@@ -163,11 +186,11 @@
                         }
 
                         list.push({
-                            "apikey": data.services[entry].apikey,
-                            "resource": data.services[entry].resource,
-                            "entity_type": data.services[entry].entity_type,
-                            "service": data.services[entry].service,
-                            "subservice": data.services[entry].subservice
+                            "device_id": data.devices[entry].device_id,
+                            "entity_name": data.devices[entry].entity_name,
+                            "entity_type": data.devices[entry].entity_type,
+                            "attributes": data.devices[entry].attributes,
+                            "subservice": MashupPlatform.prefs.get("ngsi_service_path")
                         });
 
                         loopCount++;
@@ -197,13 +220,19 @@
         }.bind(this));
     };
 
+    var listBuilder = function listBuilder(row) {
+        var attrList = row.attributes.map(function (attr) {
+            return attr.name;
+        });
+        return attrList.join(', ');
+    };
+
     var createTable = function createTable() {
         var fields = [
-            {field: 'apikey', label: 'API key', sortable: false},
-            {field: 'resource', label: 'Resource', sortable: false},
+            {field: 'device_id', label: 'Device ID', sortable: false},
+            {field: 'entity_name', label: 'Entity ID', sortable: false},
             {field: 'entity_type', label: 'Entity type', sortable: false},
-            {field: 'service', label: 'Tenant', sortable: false},
-            {field: 'subservice', label: 'Service path', sortable: false}
+            {field: 'attributes', label: 'Attributes', width: '50%', sortable: false, contentBuilder: listBuilder}
         ];
 
         if (MashupPlatform.prefs.get('allow_edit') || MashupPlatform.prefs.get('allow_delete')) {
@@ -218,14 +247,14 @@
                     if (MashupPlatform.prefs.get('allow_edit')) {
                         button = new StyledElements.Button({'iconClass': 'fa fa-pencil', 'title': 'Edit'});
                         button.addEventListener('click', function () {
-                            this.editServiceAction = true;
-                            this.addServiceAction = false;
+                            this.editDeviceAction = true;
+                            this.addDeviceAction = false;
                             initEditorWidget.call(this, button);
                             this.editorConfigOutput.pushEvent({
                                 "readonly": [
-                                    ["apikey"],
-                                    ["resource"],
-                                    ["service"],
+                                    ["device_id"],
+                                    ["entity_name"],
+                                    ["entity_type"],
                                     ["subservice"]
                                 ]
                             });
@@ -238,7 +267,7 @@
                         button = new StyledElements.Button({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
                         button.addEventListener('click', function () {
                             initOperator.call(this);
-                            this.delServiceOutput.pushEvent(JSON.stringify(entry));
+                            this.delDeviceOutput.pushEvent(JSON.stringify(entry));
                         }.bind(this));
                         content.appendChild(button);
                     }
@@ -260,6 +289,6 @@
         MashupPlatform.wiring.pushEvent('selection', JSON.stringify(row));
     };
 
-    var widget = new ServiceManager();
+    var widget = new DeviceManager();
     window.addEventListener("DOMContentLoaded", widget.init.bind(widget), false);
 })();
