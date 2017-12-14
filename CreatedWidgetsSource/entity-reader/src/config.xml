@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="ippr" name="entity-reader"
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="entity-reader"
           version="0.1">
     <details>
         <title>Entity Reader</title>
@@ -7,8 +7,8 @@
         <image>images/catalogue.png</image>
         <description>Read a specific attribute from an entity</description>
         <longdescription>DESCRIPTION.md</longdescription>
-        <license>AGPLv3+ w/linking exception</license>
-        <licenseurl>http://www.gnu.org/licenses/agpl-3.0.html</licenseurl>
+        <license>Apache License 2.0</license>
+        <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
         <doc>doc/userguide.md</doc>
         <changelog>doc/changelog.md</changelog>
     </details>

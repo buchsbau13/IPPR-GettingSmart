@@ -124,7 +124,7 @@
     };
 
     var initOperator = function initOperator() {
-        this.idasWidget = MashupPlatform.mashup.addOperator('CoNWeT/idas-rest-calls/1.0', {
+        this.idasWidget = MashupPlatform.mashup.addOperator('FH-JOANNEUM/idas-rest-calls/1.0', {
             "preferences": {
                 "idas_server": {"value": MashupPlatform.prefs.get("idas_server")},
                 "use_user_fiware_token": {"value": MashupPlatform.prefs.get("use_user_fiware_token")},

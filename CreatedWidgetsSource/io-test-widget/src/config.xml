@@ -1,10 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="io-test" version="1.0">
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="io-test" version="1.0">
     <details>
         <title>I/O test</title>
         <authors>Michael Janusch</authors>
         <image>images/catalogue.png</image>
         <description>Widget for testing the wiring input/output</description>
+        <license>Apache License 2.0</license>
+        <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
     </details>
     <preferences>
         <preference name="auto_forward" type="boolean" label="Forward input data to output endpoint" description="Automatically forward the unchanged input data to the output endpoint" default="false"/>
