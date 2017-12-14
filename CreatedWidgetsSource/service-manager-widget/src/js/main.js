@@ -97,21 +97,23 @@
     };
 
     var initOperator = function initOperator() {
-        this.idasWidget = MashupPlatform.mashup.addOperator('FH-JOANNEUM/idas-rest-calls/1.0', {
-            "preferences": {
-                "idas_server": {"value": MashupPlatform.prefs.get("idas_server")},
-                "use_user_fiware_token": {"value": MashupPlatform.prefs.get("use_user_fiware_token")},
-                "use_owner_credentials": {"value": MashupPlatform.prefs.get("use_owner_credentials")},
-                "ngsi_tenant": {"value": MashupPlatform.prefs.get("ngsi_tenant")}
-            }
-        });
-        this.idasWidget.addEventListener('remove', function () { this.idasWidget = null; }.bind(this));
+        if (!this.idasWidget) {
+            this.idasWidget = MashupPlatform.mashup.addOperator('FH-JOANNEUM/idas-rest-calls/1.0', {
+                "preferences": {
+                    "idas_server": {"value": MashupPlatform.prefs.get("idas_server")},
+                    "use_user_fiware_token": {"value": MashupPlatform.prefs.get("use_user_fiware_token")},
+                    "use_owner_credentials": {"value": MashupPlatform.prefs.get("use_owner_credentials")},
+                    "ngsi_tenant": {"value": MashupPlatform.prefs.get("ngsi_tenant")}
+                }
+            });
+            this.idasWidget.addEventListener('remove', function () { this.idasWidget = null; }.bind(this));
 
-        this.serviceInput.connect(this.idasWidget.outputs.serviceOutput);
-        this.getServiceOutput.connect(this.idasWidget.inputs.getServices);
-        this.addServiceOutput.connect(this.idasWidget.inputs.addService);
-        this.editServiceOutput.connect(this.idasWidget.inputs.editService);
-        this.delServiceOutput.connect(this.idasWidget.inputs.delService);
+            this.serviceInput.connect(this.idasWidget.outputs.serviceOutput);
+            this.getServiceOutput.connect(this.idasWidget.inputs.getServices);
+            this.addServiceOutput.connect(this.idasWidget.inputs.addService);
+            this.editServiceOutput.connect(this.idasWidget.inputs.editService);
+            this.delServiceOutput.connect(this.idasWidget.inputs.delService);
+        }
     };
 
     var initEditorWidget = function initEditorWidget(button) {
@@ -126,7 +128,9 @@
     var receiveServices = function receiveServices(input) {
         this.input = input;
         this.source.goToFirst();
-        this.idasWidget.remove();
+        if (this.idasWidget) {
+            this.idasWidget.remove();
+        }
     };
 
     var newService = function newService(input) {

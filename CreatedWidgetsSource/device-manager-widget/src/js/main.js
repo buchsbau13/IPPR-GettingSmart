@@ -124,21 +124,23 @@
     };
 
     var initOperator = function initOperator() {
-        this.idasWidget = MashupPlatform.mashup.addOperator('FH-JOANNEUM/idas-rest-calls/1.0', {
-            "preferences": {
-                "idas_server": {"value": MashupPlatform.prefs.get("idas_server")},
-                "use_user_fiware_token": {"value": MashupPlatform.prefs.get("use_user_fiware_token")},
-                "use_owner_credentials": {"value": MashupPlatform.prefs.get("use_owner_credentials")},
-                "ngsi_tenant": {"value": MashupPlatform.prefs.get("ngsi_tenant")}
-            }
-        });
-        this.idasWidget.addEventListener('remove', function () { this.idasWidget = null; }.bind(this));
+        if (!this.idasWidget) {
+            this.idasWidget = MashupPlatform.mashup.addOperator('FH-JOANNEUM/idas-rest-calls/1.0', {
+                "preferences": {
+                    "idas_server": {"value": MashupPlatform.prefs.get("idas_server")},
+                    "use_user_fiware_token": {"value": MashupPlatform.prefs.get("use_user_fiware_token")},
+                    "use_owner_credentials": {"value": MashupPlatform.prefs.get("use_owner_credentials")},
+                    "ngsi_tenant": {"value": MashupPlatform.prefs.get("ngsi_tenant")}
+                }
+            });
+            this.idasWidget.addEventListener('remove', function () { this.idasWidget = null; }.bind(this));
 
-        this.deviceInput.connect(this.idasWidget.outputs.deviceOutput);
-        this.getDeviceOutput.connect(this.idasWidget.inputs.getDevices);
-        this.addDeviceOutput.connect(this.idasWidget.inputs.addDevice);
-        this.editDeviceOutput.connect(this.idasWidget.inputs.editDevice);
-        this.delDeviceOutput.connect(this.idasWidget.inputs.delDevice);
+            this.deviceInput.connect(this.idasWidget.outputs.deviceOutput);
+            this.getDeviceOutput.connect(this.idasWidget.inputs.getDevices);
+            this.addDeviceOutput.connect(this.idasWidget.inputs.addDevice);
+            this.editDeviceOutput.connect(this.idasWidget.inputs.editDevice);
+            this.delDeviceOutput.connect(this.idasWidget.inputs.delDevice);
+        }
     };
 
     var initEditorWidget = function initEditorWidget(button) {
@@ -153,7 +155,9 @@
     var receiveDevices = function receiveDevices(input) {
         this.input = input;
         this.source.goToFirst();
-        this.idasWidget.remove();
+        if (this.idasWidget) {
+            this.idasWidget.remove();
+        }
     };
 
     var newDevice = function newDevice(input) {
