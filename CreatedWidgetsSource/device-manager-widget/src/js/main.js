@@ -24,7 +24,7 @@
         this.layout = null;
         this.table = null;
         this.input = null;
-        this.filter = false;
+        this.filter = null;
 
         MashupPlatform.widget.context.registerCallback(function (newValues) {
             if (this.layout && ("heightInPixels" in newValues || "widthInPixels" in newValues)) {
@@ -41,22 +41,22 @@
                 this.showButton.style("right", "5px");
             }
 
-            this.filter = false;
+            this.filter = null;
             initOperator.call(this);
-            this.getDeviceOutput.pushEvent(JSON.stringify({"subservice": MashupPlatform.prefs.get("ngsi_service_path")}));
+            this.getDeviceOutput.pushEvent(null);
         }.bind(this));
 
         MashupPlatform.wiring.registerCallback("filterByEnt", function (input) {
             var data = JSON.parse(input);
-            if (data.id && data.type && data.subservice) {
-                this.filter = true;
-                MashupPlatform.prefs.set("ngsi_service_path", data.subservice);
-                initOperator.call(this);
-                this.getDeviceOutput.pushEvent(JSON.stringify({
+            if (data.id && data.type && data.subservice && data.service) {
+                this.filter = {
                     "entity_name": data.id,
-                    "entity_type": data.type,
-                    "subservice": data.subservice
-                }));
+                    "entity_type": data.type
+                };
+                MashupPlatform.prefs.set("ngsi_service_path", data.subservice);
+                MashupPlatform.prefs.set("ngsi_tenant", data.service);
+                initOperator.call(this);
+                this.getDeviceOutput.pushEvent(JSON.stringify(this.filter));
             }
         }.bind(this));
     };
@@ -81,9 +81,9 @@
         });
 
         this.showButton.addEventListener('click', function () {
-            this.filter = false;
+            this.filter = null;
             initOperator.call(this);
-            this.getDeviceOutput.pushEvent(JSON.stringify({"subservice": MashupPlatform.prefs.get("ngsi_service_path")}));
+            this.getDeviceOutput.pushEvent(null);
         }.bind(this));
         this.layout.center.appendChild(this.showButton);
 
@@ -96,26 +96,29 @@
         this.templateOutput = MashupPlatform.widget.createOutputEndpoint();
         this.newDeviceInput = MashupPlatform.widget.createInputEndpoint(newDevice.bind(this));
         this.addButton.addEventListener('click', function () {
+            var nameValue = "";
+            var typeValue = "";
+            if (this.filter && this.filter.entity_name && this.filter.entity_type) {
+                nameValue = this.filter.entity_name;
+                typeValue = this.filter.entity_type;
+            }
             this.addDeviceAction = true;
             this.editDeviceAction = false;
             initEditorWidget.call(this, this.addButton);
             this.editorConfigOutput.pushEvent({
-                "readonly": [
-                    ["subservice"]
-                ]
+                "readonly": []
             });
             this.templateOutput.pushEvent(JSON.stringify({
                 "device_id": "",
-                "entity_name": "",
-                "entity_type": "",
+                "entity_name": nameValue,
+                "entity_type": typeValue,
                 "attributes": [
                     {
                         "object_id": "",
                         "name": "",
                         "type": "Text"
                     }
-                ],
-                "subservice": MashupPlatform.prefs.get("ngsi_service_path")
+                ]
             }));
         }.bind(this));
         this.layout.center.appendChild(this.addButton);
@@ -129,7 +132,7 @@
         }
 
         initOperator.call(this);
-        this.getDeviceOutput.pushEvent(JSON.stringify({"subservice": MashupPlatform.prefs.get("ngsi_service_path")}));
+        this.getDeviceOutput.pushEvent(null);
     };
 
     var initOperator = function initOperator() {
@@ -139,7 +142,8 @@
                     "idas_server": {"value": MashupPlatform.prefs.get("idas_server")},
                     "use_user_fiware_token": {"value": MashupPlatform.prefs.get("use_user_fiware_token")},
                     "use_owner_credentials": {"value": MashupPlatform.prefs.get("use_owner_credentials")},
-                    "ngsi_tenant": {"value": MashupPlatform.prefs.get("ngsi_tenant")}
+                    "ngsi_tenant": {"value": MashupPlatform.prefs.get("ngsi_tenant")},
+                    "ngsi_service_path": {"value": MashupPlatform.prefs.get("ngsi_service_path")}
                 }
             });
             this.idasWidget.addEventListener('remove', function () { this.idasWidget = null; }.bind(this));
@@ -190,7 +194,7 @@
             'pageSize': 30,
             'requestFunc': function (page, options, onSuccess, onError) {
                 var data;
-                if (this.input !== null) {
+                if (this.input) {
                     data = JSON.parse(this.input);
                 }
                 if (data && data.statusGet.state == "success") {
@@ -206,8 +210,7 @@
                             "device_id": data.devices[entry].device_id,
                             "entity_name": data.devices[entry].entity_name,
                             "entity_type": data.devices[entry].entity_type,
-                            "attributes": data.devices[entry].attributes,
-                            "subservice": MashupPlatform.prefs.get("ngsi_service_path")
+                            "attributes": data.devices[entry].attributes
                         });
 
                         loopCount++;
@@ -221,9 +224,11 @@
                         MashupPlatform.widget.log(data.statusDel.message);
                     }
 
-                    if (this.filter && list) {
-                        this.filter = false;
-                        sendSelection(list[0]);
+                    if (this.filter && list.length > 0) {
+                        var dev = JSON.parse(JSON.stringify(list[0]));
+                        dev.subservice = MashupPlatform.prefs.get("ngsi_service_path");
+                        dev.service = MashupPlatform.prefs.get("ngsi_tenant");
+                        sendSelection(dev);
                     }
 
                     onSuccess(list, {resources: list, total_count: data.count, current_page: page});
@@ -254,7 +259,7 @@
             {field: 'device_id', label: 'Device ID', sortable: false},
             {field: 'entity_name', label: 'Entity ID', sortable: false},
             {field: 'entity_type', label: 'Entity type', sortable: false},
-            {field: 'attributes', label: 'Attributes', width: '50%', sortable: false, contentBuilder: listBuilder}
+            {field: 'attributes', label: 'Attributes', width: '40%', sortable: false, contentBuilder: listBuilder}
         ];
 
         if (MashupPlatform.prefs.get('allow_edit') || MashupPlatform.prefs.get('allow_delete')) {
@@ -276,8 +281,7 @@
                                 "readonly": [
                                     ["device_id"],
                                     ["entity_name"],
-                                    ["entity_type"],
-                                    ["subservice"]
+                                    ["entity_type"]
                                 ]
                             });
                             this.templateOutput.pushEvent(JSON.stringify(entry));
@@ -301,7 +305,12 @@
         }
 
         this.table = new StyledElements.ModelTable(fields, {id: 'name', pageSize: 30, source: this.source, 'class': 'table-striped'});
-        this.table.addEventListener("click", sendSelection);
+        this.table.addEventListener("click", function (dev) {
+            var device = JSON.parse(JSON.stringify(dev));
+            device.subservice = MashupPlatform.prefs.get("ngsi_service_path");
+            device.service = MashupPlatform.prefs.get("ngsi_tenant");
+            sendSelection(device);
+        });
         this.table.reload();
         this.layout.center.clear();
         this.layout.center.appendChild(this.table);

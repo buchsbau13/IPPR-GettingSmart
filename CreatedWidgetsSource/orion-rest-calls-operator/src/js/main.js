@@ -64,6 +64,7 @@
         var params = {"type": payload.type};
 
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
+        headers['FIWARE-ServicePath'] = MashupPlatform.prefs.get('ngsi_service_path');
 
         MashupPlatform.http.makeRequest(url, {
             method: "POST",
@@ -136,6 +137,7 @@
         var params = {"type": payload.type};
 
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
+        headers['FIWARE-ServicePath'] = MashupPlatform.prefs.get('ngsi_service_path');
 
         var entID = payload.id;
         delete payload.id;
@@ -209,6 +211,7 @@
         var params = {"type": payload.type};
 
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
+        headers['FIWARE-ServicePath'] = MashupPlatform.prefs.get('ngsi_service_path');
 
         MashupPlatform.http.makeRequest(url, {
             method: "DELETE",
@@ -298,6 +301,7 @@
         }
 
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
+        headers['FIWARE-ServicePath'] = MashupPlatform.prefs.get('ngsi_service_path');
 
         params.limit = "1000";
 
@@ -306,11 +310,16 @@
             parameters: params,
             requestHeaders: headers,
             onSuccess: function (response) {
-                var resp = JSON.parse(response.responseText);
-                if (resp instanceof Array) {
-                    data = {"entities": resp};
-                } else {
-                    data = {"entities": [resp]};
+                var resp;
+                try {
+                    resp = JSON.parse(response.responseText);
+                    if (resp instanceof Array) {
+                        data = {"entities": resp};
+                    } else {
+                        data = {"entities": [resp]};
+                    }
+                } catch (e) {
+                    data = {"entities": []};
                 }
                 data.statusGet = {};
                 data.statusGet.state = "success";
@@ -359,6 +368,7 @@
         }
 
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
+        headers['FIWARE-ServicePath'] = MashupPlatform.prefs.get('ngsi_service_path');
 
         MashupPlatform.http.makeRequest(url, {
             method: "GET",
