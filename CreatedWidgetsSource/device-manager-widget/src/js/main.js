@@ -24,6 +24,7 @@
         this.layout = null;
         this.table = null;
         this.input = null;
+        this.filter = false;
 
         MashupPlatform.widget.context.registerCallback(function (newValues) {
             if (this.layout && ("heightInPixels" in newValues || "widthInPixels" in newValues)) {
@@ -40,15 +41,22 @@
                 this.showButton.style("right", "5px");
             }
 
+            this.filter = false;
             initOperator.call(this);
-            this.getDeviceOutput.pushEvent(null);
+            this.getDeviceOutput.pushEvent(JSON.stringify({"subservice": MashupPlatform.prefs.get("ngsi_service_path")}));
         }.bind(this));
 
-        MashupPlatform.wiring.registerCallback("filterByID", function (input) {
+        MashupPlatform.wiring.registerCallback("filterByEnt", function (input) {
             var data = JSON.parse(input);
-            if (data.entity_name) {
+            if (data.id && data.type && data.subservice) {
+                this.filter = true;
+                MashupPlatform.prefs.set("ngsi_service_path", data.subservice);
                 initOperator.call(this);
-                this.getDeviceOutput.pushEvent(input);
+                this.getDeviceOutput.pushEvent(JSON.stringify({
+                    "entity_name": data.id,
+                    "entity_type": data.type,
+                    "subservice": data.subservice
+                }));
             }
         }.bind(this));
     };
@@ -73,8 +81,9 @@
         });
 
         this.showButton.addEventListener('click', function () {
+            this.filter = false;
             initOperator.call(this);
-            this.getDeviceOutput.pushEvent(null);
+            this.getDeviceOutput.pushEvent(JSON.stringify({"subservice": MashupPlatform.prefs.get("ngsi_service_path")}));
         }.bind(this));
         this.layout.center.appendChild(this.showButton);
 
@@ -120,7 +129,7 @@
         }
 
         initOperator.call(this);
-        this.getDeviceOutput.pushEvent(null);
+        this.getDeviceOutput.pushEvent(JSON.stringify({"subservice": MashupPlatform.prefs.get("ngsi_service_path")}));
     };
 
     var initOperator = function initOperator() {
@@ -212,6 +221,11 @@
                         MashupPlatform.widget.log(data.statusDel.message);
                     }
 
+                    if (this.filter && list) {
+                        this.filter = false;
+                        sendSelection(list[0]);
+                    }
+
                     onSuccess(list, {resources: list, total_count: data.count, current_page: page});
                 } else if (data && data.statusGet.state != "success") {
                     onError(data.statusGet.message);
@@ -287,14 +301,14 @@
         }
 
         this.table = new StyledElements.ModelTable(fields, {id: 'name', pageSize: 30, source: this.source, 'class': 'table-striped'});
-        this.table.addEventListener("click", onRowClick);
+        this.table.addEventListener("click", sendSelection);
         this.table.reload();
         this.layout.center.clear();
         this.layout.center.appendChild(this.table);
     };
 
-    var onRowClick = function onRowClick(row) {
-        MashupPlatform.wiring.pushEvent('selection', JSON.stringify(row));
+    var sendSelection = function sendSelection(data) {
+        MashupPlatform.wiring.pushEvent('selection', JSON.stringify(data));
     };
 
     var widget = new DeviceManager();

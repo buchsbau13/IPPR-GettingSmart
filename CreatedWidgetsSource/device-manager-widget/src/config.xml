@@ -26,7 +26,7 @@
     </preferences>
 
     <wiring>
-        <inputendpoint name="filterByID" type="text" label="Filter by entity ID" description="Show only devices containing the supplied entity ID" friendcode="filterbyid"/>
+        <inputendpoint name="filterByEnt" type="text" label="Filter by entity" description="Show only devices containing the supplied entity ID, type and service path" friendcode="filterbyent"/>
         <outputendpoint name="selection" label="Selection" description="Selection" type="text"/>
     </wiring>
 

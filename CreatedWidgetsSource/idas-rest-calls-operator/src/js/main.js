@@ -577,8 +577,13 @@
 
         try {
             info = JSON.parse(input);
-            if (info.id && info.subservice) {
-                url = createURL('iot/devices/' + info.id);
+            if (info.subservice) {
+                if (info.id) {
+                    url = createURL('iot/devices/' + info.id);
+                } else {
+                    url = createURL('iot/devices');
+                    params.limit = "1000"; // Default limit of 20 is too small, as there is no possibility (as of yet) to filter by entity ID
+                }
                 headers['FIWARE-ServicePath'] = info.subservice;
             } else {
                 url = createURL('iot/devices');
@@ -609,8 +614,8 @@
                 if (!data.devices) {
                     data = {"devices": [data]};
                 }
-                if (info && info.entity_name) {
-                    data.devices = getDevicesByEnt(data.devices, info.entity_name);
+                if (info && !info.id && info.entity_name && info.entity_type) {
+                    data.devices = getDevicesByEnt(data.devices, info.entity_name, info.entity_type);
                     data.count = data.devices.length;
                 }
                 data.statusGet = {};
@@ -634,10 +639,10 @@
         });
     };
 
-    var getDevicesByEnt = function getDevicesByEnt(devices, entityID) {
+    var getDevicesByEnt = function getDevicesByEnt(devices, entityID, entityType) {
         var filteredDev = [];
         devices.forEach(function (dev) {
-            if (dev.entity_name == entityID) {
+            if (dev.entity_name == entityID && dev.entity_type === entityType) {
                 filteredDev.push(dev);
             }
         });
