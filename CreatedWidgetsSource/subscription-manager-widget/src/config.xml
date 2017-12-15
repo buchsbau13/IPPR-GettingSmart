@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="entity-manager" version="1.0">
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="subscription-manager" version="1.0">
     <details>
-        <title>Entity manager</title>
+        <title>Subscription manager</title>
         <image>images/catalogue.png</image>
-        <description>Manage available entities on a given ORION context broker</description>
+        <description>Manage available subscriptions on a given ORION context broker</description>
         <authors>Michael Janusch</authors>
         <license>Apache License 2.0</license>
         <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
@@ -15,18 +15,19 @@
     </requirements>
 
     <preferences>
-        <preference name="ngsi_server" type="text" label="Context broker URL" description="URL of the context broker server for managing entities" default="http://orion:1026/"/>
+        <preference name="ngsi_server" type="text" label="Context broker URL" description="URL of the context broker server for managing subscriptions" default="http://orion:1026/"/>
+        <preference name="cygnus_server" type="text" label="STH connector URL" description="URL of the STH connector server for receiving subscription notifications" default="http://cygnus:5050/notify"/>
         <preference name="use_user_fiware_token" type="boolean" label="Use the FIWARE credentials of the user" description="Use the FIWARE credentials of the user logged into WireCloud. Take into account this option cannot be enabled if you want to use this widget in a public workspace as anonoymous users doesn't have a valid FIWARE auth token" default="false"/>
         <preference name="use_owner_credentials" type="boolean" label="Use the FIWARE credentials of the workspace owner" description="Use the FIWARE credentials of the owner of the workspace. This preference takes preference over &quot;Use the FIWARE credentials of the user&quot;. This feature is available on WireCloud 0.7.0+ in a experimental basis, future versions of WireCloud can change the way to use it making this option not funcional and requiring you to upgrade this operator" default="false"/>
         <preference name="ngsi_tenant" type="text" label="NGSI tenant/service" description="Tenant/service to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol. Maximum length is 50 characters. If empty, the default tenant will be used" default="service"/>
         <preference name="ngsi_service_path" type="text" label="Service path" description="Scope/path to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol separated by &quot;/&quot; slashes. Maximum length is 50 characters. If empty, the default service path will be used: /" default="/"/>
-        <preference name="allow_add" type="boolean" label="Allow add" description="Allow users to add entities" default="true"/>
-        <preference name="allow_edit" type="boolean" label="Allow edit" description="Allow users to edit entities" default="true"/>
-        <preference name="allow_delete" type="boolean" label="Allow delete" description="Allow users to remove entities" default="true"/>
+        <preference name="allow_add" type="boolean" label="Allow add" description="Allow users to add subscriptions" default="true"/>
+        <preference name="allow_edit" type="boolean" label="Allow edit" description="Allow users to edit subscriptions" default="true"/>
+        <preference name="allow_delete" type="boolean" label="Allow delete" description="Allow users to remove subscriptions" default="true"/>
     </preferences>
 
     <wiring>
-        <inputendpoint name="filterByType" type="text" label="Filter by type" description="Show only entities of the supplied entity type, service path and tenant" friendcode="filterbytype"/>
+        <inputendpoint name="filterByDev" type="text" label="Filter by device" description="Show only subscriptions containing the supplied entity ID and type, device attributes, service path and tenant" friendcode="filterbydev"/>
         <outputendpoint name="selection" label="Selection" description="Selection" type="text"/>
     </wiring>
 

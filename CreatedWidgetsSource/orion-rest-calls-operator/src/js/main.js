@@ -144,7 +144,7 @@
         delete payload.type;
 
         MashupPlatform.http.makeRequest(url, {
-            method: "POST",
+            method: "PUT",
             postBody: JSON.stringify(payload),
             parameters: params,
             contentType: "application/json",
@@ -252,15 +252,286 @@
     });
 
     MashupPlatform.wiring.registerCallback("addSubscription", function (subscr) {
-        // TODO
+        var payload;
+        try {
+            payload = JSON.parse(subscr);
+        } catch (e) {
+            payload = null;
+        }
+
+        var url = createURL('v2/subscriptions');
+        var headers = {};
+
+        if (MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['X-FIWARE-OAuth-Token'] = 'true';
+            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        }
+
+        if (!payload || !payload.subject || !payload.notification) {
+            getSubscriptions(null, function (data) {
+                data.statusAdd = {};
+                data.statusAdd.state = "exception";
+                data.statusAdd.message = "Unexpected input received!";
+                data.inputExample = {
+                    "description": "example_description",
+                    "subject": {
+                        "entities": [
+                            {
+                                "id": "example_id",
+                                "type": "example_type"
+                            }
+                        ],
+                        "condition": {
+                            "attrs": [
+                                "example_attribute"
+                            ]
+                        }
+                    },
+                    "notification": {
+                        "http": {
+                            "url": "http://example:5050/notify"
+                        },
+                        "attrs": [
+                            "example_attribute"
+                        ]
+                    },
+                    "throttling": 5
+                };
+                MashupPlatform.wiring.pushEvent("subOutput", JSON.stringify(data));
+            });
+            return;
+        }
+
+        var params = {
+            "entity_name": payload.subject.entities[0].id,
+            "entity_type": payload.subject.entities[0].type,
+            "attributes": payload.subject.condition.attrs,
+        };
+
+        headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
+        headers['FIWARE-ServicePath'] = MashupPlatform.prefs.get('ngsi_service_path');
+
+        MashupPlatform.http.makeRequest(url, {
+            method: "POST",
+            postBody: JSON.stringify(payload),
+            contentType: "application/json",
+            requestHeaders: headers,
+            onSuccess: function (response) {
+                getSubscriptions(JSON.stringify(params), function (data) {
+                    data.statusAdd = {};
+                    data.statusAdd.state = "success";
+                    data.statusAdd.message = "Subscription successfully created!"
+                    MashupPlatform.wiring.pushEvent("subOutput", JSON.stringify(data));
+                });
+            },
+            onFailure: function (response) {
+                getSubscriptions(JSON.stringify(params), function (data) {
+                    data.statusAdd = {};
+                    data.statusAdd.state = "failure";
+                    data.statusAdd.message = "Error " + response.status + ": " + response.statusText;
+                    MashupPlatform.wiring.pushEvent("subOutput", JSON.stringify(data));
+                });
+            },
+            onException: function (resp, except) {
+                MashupPlatform.operator.log(except);
+                getSubscriptions(JSON.stringify(params), function (data) {
+                    data.statusAdd = {};
+                    data.statusAdd.state = "exception";
+                    data.statusAdd.message = except;
+                    MashupPlatform.wiring.pushEvent("subOutput", JSON.stringify(data));
+                });
+            }
+        });
     });
 
     MashupPlatform.wiring.registerCallback("editSubscription", function (subscr) {
-        // TODO
+        var payload;
+        try {
+            payload = JSON.parse(subscr);
+        } catch (e) {
+            payload = null;
+        }
+
+        var headers = {};
+
+        if (MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['X-FIWARE-OAuth-Token'] = 'true';
+            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        }
+
+        if (!payload || !payload.id) {
+            getSubscriptions(null, function (data) {
+                data.statusEdit = {};
+                data.statusEdit.state = "exception";
+                data.statusEdit.message = "Unexpected input received!";
+                data.inputExample = {
+                    "id": "example_id",
+                    "description": "example_description",
+                    "subject": {
+                        "entities": [
+                            {
+                                "id": "example_id",
+                                "type": "example_type"
+                            }
+                        ],
+                        "condition": {
+                            "attrs": [
+                                "example_attribute"
+                            ]
+                        }
+                    },
+                    "notification": {
+                        "http": {
+                            "url": "http://example:5050/notify"
+                        },
+                        "attrs": [
+                            "example_attribute"
+                        ]
+                    },
+                    "throttling": 5
+                };
+                MashupPlatform.wiring.pushEvent("subOutput", JSON.stringify(data));
+            });
+            return;
+        }
+
+        var url = createURL('v2/subscriptions/' + payload.id);
+        var params = {};
+        if (payload.subject && payload.subject.entities && payload.subject.entities[0].id &&
+            payload.subject.entities[0].type && payload.subject.condition && payload.subject.condition.attrs) {
+            params = {
+                "entity_name": payload.subject.entities[0].id,
+                "entity_type": payload.subject.entities[0].type,
+                "attributes": payload.subject.condition.attrs,
+            };
+        }
+
+        headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
+        headers['FIWARE-ServicePath'] = MashupPlatform.prefs.get('ngsi_service_path');
+
+        var subID = payload.id;
+        delete payload.id;
+
+        MashupPlatform.http.makeRequest(url, {
+            method: "PATCH",
+            postBody: JSON.stringify(payload),
+            contentType: "application/json",
+            requestHeaders: headers,
+            onSuccess: function (response) {
+                getSubscriptions(JSON.stringify(params), function (data) {
+                    data.statusEdit = {};
+                    data.statusEdit.state = "success";
+                    data.statusEdit.message = "Subscription '" + subID + "' successfully updated!"
+                    MashupPlatform.wiring.pushEvent("subOutput", JSON.stringify(data));
+                });
+            },
+            onFailure: function (response) {
+                getSubscriptions(JSON.stringify(params), function (data) {
+                    data.statusEdit = {};
+                    data.statusEdit.state = "failure";
+                    data.statusEdit.message = "Error " + response.status + ": " + response.statusText;
+                    MashupPlatform.wiring.pushEvent("subOutput", JSON.stringify(data));
+                });
+            },
+            onException: function (resp, except) {
+                MashupPlatform.operator.log(except);
+                getSubscriptions(JSON.stringify(params), function (data) {
+                    data.statusEdit = {};
+                    data.statusEdit.state = "exception";
+                    data.statusEdit.message = except;
+                    MashupPlatform.wiring.pushEvent("subOutput", JSON.stringify(data));
+                });
+            }
+        });
     });
 
     MashupPlatform.wiring.registerCallback("delSubscription", function (subscr) {
-        // TODO
+        var payload;
+        try {
+            payload = JSON.parse(subscr);
+        } catch (e) {
+            payload = null;
+        }
+
+        var headers = {};
+
+        if (MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['X-FIWARE-OAuth-Token'] = 'true';
+            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        }
+
+        if (!payload || !payload.id) {
+            getSubscriptions(null, function (data) {
+                data.statusDel = {};
+                data.statusDel.state = "exception";
+                data.statusDel.message = "Unexpected input received!";
+                data.inputExample = {
+                    "id": "example_id",
+                    "subject": {
+                        "entities": [
+                            {
+                                "id": "example_id",
+                                "type": "example_type"
+                            }
+                        ],
+                        "condition": {
+                            "attrs": [
+                                "example_attribute"
+                            ]
+                        }
+                    }
+                };
+                MashupPlatform.wiring.pushEvent("subOutput", JSON.stringify(data));
+            });
+            return;
+        }
+
+        var url = createURL('v2/subscriptions/' + payload.id);
+        var params = {};
+        if (payload.subject && payload.subject.entities && payload.subject.entities[0].id &&
+            payload.subject.entities[0].type && payload.subject.condition && payload.subject.condition.attrs) {
+            params = {
+                "entity_name": payload.subject.entities[0].id,
+                "entity_type": payload.subject.entities[0].type,
+                "attributes": payload.subject.condition.attrs,
+            };
+        }
+
+        headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
+        headers['FIWARE-ServicePath'] = MashupPlatform.prefs.get('ngsi_service_path');
+
+        MashupPlatform.http.makeRequest(url, {
+            method: "DELETE",
+            requestHeaders: headers,
+            onSuccess: function (response) {
+                getSubscriptions(JSON.stringify(params), function (data) {
+                    data.statusDel = {};
+                    data.statusDel.state = "success";
+                    data.statusDel.message = "Entity '" + payload.id + "' successfully deleted!"
+                    MashupPlatform.wiring.pushEvent("subOutput", JSON.stringify(data));
+                });
+            },
+            onFailure: function (response) {
+                getSubscriptions(JSON.stringify(params), function (data) {
+                    data.statusDel = {};
+                    data.statusDel.state = "failure";
+                    data.statusDel.message = "Error " + response.status + ": " + response.statusText;
+                    MashupPlatform.wiring.pushEvent("subOutput", JSON.stringify(data));
+                });
+            },
+            onException: function (resp, except) {
+                MashupPlatform.operator.log(except);
+                getSubscriptions(JSON.stringify(params), function (data) {
+                    data.statusDel = {};
+                    data.statusDel.state = "exception";
+                    data.statusDel.message = except;
+                    MashupPlatform.wiring.pushEvent("subOutput", JSON.stringify(data));
+                });
+            }
+        });
     });
 
     var createURL = function createURL(path) {
@@ -314,13 +585,14 @@
                 try {
                     resp = JSON.parse(response.responseText);
                     if (resp instanceof Array) {
-                        data = {"entities": resp};
+                        data.entities = resp;
                     } else {
-                        data = {"entities": [resp]};
+                        data.entities = [resp];
                     }
                 } catch (e) {
-                    data = {"entities": []};
+                    data.entities = [];
                 }
+                data.count = data.entities.length;
                 data.statusGet = {};
                 data.statusGet.state = "success";
                 data.statusGet.message = "Entities successfully received!"
@@ -375,12 +647,22 @@
             parameters: params,
             requestHeaders: headers,
             onSuccess: function (response) {
-                var resp = JSON.parse(response.responseText);
-                if (resp instanceof Array) {
-                    data = {"subscriptions": resp};
-                } else {
-                    data = {"subscriptions": [resp]};
+                var resp;
+                try {
+                    resp = JSON.parse(response.responseText);
+                    if (resp instanceof Array) {
+                        data.subscriptions = resp;
+                    } else {
+                        data.subscriptions = [resp];
+                    }
+                    if (info && !info.id && info.entity_name && info.entity_type && info.attributes) {
+                        data.subscriptions = getSubscriptionsByDev(data.subscriptions, info.entity_name,
+                            info.entity_type, getAttrNames(info.attributes));
+                    }
+                } catch (e) {
+                    data.subscriptions = [];
                 }
+                data.count = data.subscriptions.length;
                 data.statusGet = {};
                 data.statusGet.state = "success";
                 data.statusGet.message = "Subscriptions successfully received!"
@@ -400,5 +682,38 @@
                 callbackFunc(data);
             }
         });
+    };
+
+    var getAttrNames = function getAttrNames(attributes) {
+        return attributes.map(function (attr) {
+            if (attr.name) {
+                return attr.name;
+            } else {
+                return attr;
+            }
+        });
+    };
+
+    var getSubscriptionsByDev = function getSubscriptionsByDev(subscriptions, entityID, entityType, attrNames) {
+        var filteredSub = [];
+
+        subscriptions.forEach(function (sub) {
+            var entMatch = false;
+            var attrMatch = false;
+            sub.subject.entities.forEach(function (ent) {
+                if (ent.id === entityID && ent.type === entityType) {
+                    entMatch = true;
+                }
+            });
+            sub.subject.condition.attrs.forEach(function (attr) {
+                if (attrNames.indexOf(attr) >= 0) {
+                    attrMatch = true;
+                }
+            });
+            if (entMatch && attrMatch) {
+                filteredSub.push(sub);
+            }
+        });
+        return filteredSub;
     };
 })();

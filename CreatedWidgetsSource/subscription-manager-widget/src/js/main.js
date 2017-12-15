@@ -20,7 +20,7 @@
 
     "use strict";
 
-    var EntityManager = function EntityManager() {
+    var SubscriptionManager = function SubscriptionManager() {
         this.layout = null;
         this.table = null;
         this.input = null;
@@ -43,22 +43,25 @@
 
             this.filter = null;
             initOperator.call(this);
-            this.getEntityOutput.pushEvent(null);
+            this.getSubOutput.pushEvent(null);
         }.bind(this));
 
-        MashupPlatform.wiring.registerCallback("filterByType", function (input) {
+        MashupPlatform.wiring.registerCallback("filterByDev", function (input) {
             var data = JSON.parse(input);
-            if (data.entity_type && data.subservice && data.service) {
-                this.filter = {"type": data.entity_type};
+            if (data.entity_name && data.entity_type && data.subservice && data.service) {
+                this.filter = {
+                    "entity_name": data.entity_name,
+                    "entity_type": data.entity_type
+                };
                 MashupPlatform.prefs.set("ngsi_service_path", data.subservice);
                 MashupPlatform.prefs.set("ngsi_tenant", data.service);
                 initOperator.call(this);
-                this.getEntityOutput.pushEvent(JSON.stringify(this.filter));
+                this.getSubOutput.pushEvent(JSON.stringify(this.filter));
             }
         }.bind(this));
     };
 
-    EntityManager.prototype.init = function init() {
+    SubscriptionManager.prototype.init = function init() {
         this.layout = new StyledElements.VerticalLayout();
         createSource.call(this);
         createTable.call(this);
@@ -66,50 +69,69 @@
         this.layout.insertInto(document.body);
         this.layout.repaint();
 
-        this.entityInput = MashupPlatform.widget.createInputEndpoint(receiveEntities.bind(this));
-        this.getEntityOutput = MashupPlatform.widget.createOutputEndpoint();
-        this.addEntityOutput = MashupPlatform.widget.createOutputEndpoint();
-        this.editEntityOutput = MashupPlatform.widget.createOutputEndpoint();
-        this.delEntityOutput = MashupPlatform.widget.createOutputEndpoint();
+        this.subInput = MashupPlatform.widget.createInputEndpoint(receiveSubs.bind(this));
+        this.getSubOutput = MashupPlatform.widget.createOutputEndpoint();
+        this.addSubOutput = MashupPlatform.widget.createOutputEndpoint();
+        this.editSubOutput = MashupPlatform.widget.createOutputEndpoint();
+        this.delSubOutput = MashupPlatform.widget.createOutputEndpoint();
 
         this.showButton = new StyledElements.Button({
-            class: "se-btn-circle show-entities-button z-depth-3",
+            class: "se-btn-circle show-subs-button z-depth-3",
             text: "Show all"
         });
 
         this.showButton.addEventListener('click', function () {
             this.filter = null;
             initOperator.call(this);
-            this.getEntityOutput.pushEvent(null);
+            this.getSubOutput.pushEvent(null);
         }.bind(this));
         this.layout.center.appendChild(this.showButton);
 
         this.addButton = new StyledElements.Button({
-            class: "se-btn-circle add-entity-button z-depth-3",
+            class: "se-btn-circle add-sub-button z-depth-3",
             iconClass: "icon-plus",
         });
 
         this.editorConfigOutput = MashupPlatform.widget.createOutputEndpoint();
         this.templateOutput = MashupPlatform.widget.createOutputEndpoint();
-        this.newEntityInput = MashupPlatform.widget.createInputEndpoint(newEntity.bind(this));
+        this.newSubInput = MashupPlatform.widget.createInputEndpoint(newSub.bind(this));
         this.addButton.addEventListener('click', function () {
+            var nameValue = "";
             var typeValue = "";
-            if (this.filter && this.filter.type) {
-                typeValue = this.filter.type;
+            if (this.filter && this.filter.entity_name && this.filter.entity_type) {
+                nameValue = this.filter.entity_name;
+                typeValue = this.filter.entity_type;
             }
-            this.addEntityAction = true;
-            this.editEntityAction = false;
+            this.addSubAction = true;
+            this.editSubAction = false;
             initEditorWidget.call(this, this.addButton);
             this.editorConfigOutput.pushEvent({
                 "readonly": []
             });
             this.templateOutput.pushEvent(JSON.stringify({
-                "id": "",
-                "type": typeValue,
-                "example_attribute": {
-                    "value": "",
-                    "type": "Text"
-                }
+                "description": "",
+                "subject": {
+                    "entities": [
+                        {
+                            "id": nameValue,
+                            "type": typeValue
+                        }
+                    ],
+                    "condition": {
+                        "attrs": [
+                            ""
+                        ]
+                    }
+                },
+                "notification": {
+                    "http": {
+                        "url": MashupPlatform.prefs.get("cygnus_server")
+                    },
+                    "attrs": [
+                        ""
+                    ]
+                },
+                "throttling": 5
             }));
         }.bind(this));
         this.layout.center.appendChild(this.addButton);
@@ -123,7 +145,7 @@
         }
 
         initOperator.call(this);
-        this.getEntityOutput.pushEvent(null);
+        this.getSubOutput.pushEvent(null);
     };
 
     var initOperator = function initOperator() {
@@ -139,11 +161,11 @@
             });
             this.orionWidget.addEventListener('remove', function () { this.orionWidget = null; }.bind(this));
 
-            this.entityInput.connect(this.orionWidget.outputs.entityOutput);
-            this.getEntityOutput.connect(this.orionWidget.inputs.getEntities);
-            this.addEntityOutput.connect(this.orionWidget.inputs.addEntity);
-            this.editEntityOutput.connect(this.orionWidget.inputs.editEntity);
-            this.delEntityOutput.connect(this.orionWidget.inputs.delEntity);
+            this.subInput.connect(this.orionWidget.outputs.subOutput);
+            this.getSubOutput.connect(this.orionWidget.inputs.getSubscriptions);
+            this.addSubOutput.connect(this.orionWidget.inputs.addSubscription);
+            this.editSubOutput.connect(this.orionWidget.inputs.editSubscription);
+            this.delSubOutput.connect(this.orionWidget.inputs.delSubscription);
         }
     };
 
@@ -153,10 +175,10 @@
 
         this.editorConfigOutput.connect(this.editorWidget.inputs.configure);
         this.templateOutput.connect(this.editorWidget.inputs.input);
-        this.newEntityInput.connect(this.editorWidget.outputs.output);
+        this.newSubInput.connect(this.editorWidget.outputs.output);
     };
 
-    var receiveEntities = function receiveEntities(input) {
+    var receiveSubs = function receiveSubs(input) {
         this.input = input;
         this.source.goToFirst();
         if (this.orionWidget) {
@@ -164,15 +186,15 @@
         }
     };
 
-    var newEntity = function newEntity(input) {
-        if (this.addEntityAction) {
-            this.addEntityAction = false;
+    var newSub = function newSub(input) {
+        if (this.addSubAction) {
+            this.addSubAction = false;
             initOperator.call(this);
-            this.addEntityOutput.pushEvent(input);
-        } else if (this.editEntityAction) {
-            this.editEntityAction = false;
+            this.addSubOutput.pushEvent(input);
+        } else if (this.editSubAction) {
+            this.editSubAction = false;
             initOperator.call(this);
-            this.editEntityOutput.pushEvent(input);
+            this.editSubOutput.pushEvent(input);
         }
         this.editorWidget.remove();
     };
@@ -195,9 +217,11 @@
                         }
 
                         list.push({
-                            "id": data.entities[entry].id,
-                            "type": data.entities[entry].type,
-                            "entity": data.entities[entry]
+                            "id": data.subscriptions[entry].id,
+                            "description": data.subscriptions[entry].description,
+                            "entities": data.subscriptions[entry].subject.entities,
+                            "condition_attrs": data.subscriptions[entry].subject.condition.attrs,
+                            "subscription": data.subscriptions[entry]
                         });
 
                         loopCount++;
@@ -212,10 +236,10 @@
                     }
 
                     if (this.filter && list.length > 0) {
-                        var ent = JSON.parse(JSON.stringify(list[0].entity));
-                        ent.subservice = MashupPlatform.prefs.get("ngsi_service_path");
-                        ent.service = MashupPlatform.prefs.get("ngsi_tenant");
-                        sendSelection(ent);
+                        var sub = JSON.parse(JSON.stringify(list[0].subscription));
+                        sub.subservice = MashupPlatform.prefs.get("ngsi_service_path");
+                        sub.service = MashupPlatform.prefs.get("ngsi_tenant");
+                        sendSelection(sub);
                     }
 
                     onSuccess(list, {resources: list, total_count: data.count, current_page: page});
@@ -234,26 +258,27 @@
         }.bind(this));
     };
 
-    var getAttributeList = function getAttributeList(data) {
-        var keys = [];
-        for (var key in data) {
-            if (key !== "id" && key !== "type") {
-                keys.push(key);
+    var listBuilder = function listBuilder(data) {
+        var list = data.map(function (entry) {
+            if (entry.id && entry.type) {
+                return entry.id + " (" + entry.type + ")";
+            } else {
+                return entry;
             }
-        }
-        return keys;
-    };
-
-    var listBuilder = function listBuilder(row) {
-        var list = getAttributeList(row.entity);
+        });
         return list.join(', ');
     };
 
     var createTable = function createTable() {
         var fields = [
-            {field: 'id', label: 'Entity ID', sortable: false},
-            {field: 'type', label: 'Entity type', sortable: false},
-            {field: 'attributes', label: 'Attributes', width: '40%', sortable: false, contentBuilder: listBuilder}
+            {field: 'id', label: 'Subscription ID', sortable: false},
+            {field: 'description', label: 'Description', sortable: false},
+            {field: 'entities', label: 'Entities', sortable: false, contentBuilder: function (row) {
+                return listBuilder(row.entities);
+            }},
+            {field: 'condition_attrs', label: 'Monitored attributes', sortable: false, contentBuilder: function (row) {
+                return listBuilder(row.condition_attrs);
+            }},
         ];
 
         if (MashupPlatform.prefs.get('allow_edit') || MashupPlatform.prefs.get('allow_delete')) {
@@ -268,16 +293,15 @@
                     if (MashupPlatform.prefs.get('allow_edit')) {
                         button = new StyledElements.Button({'iconClass': 'fa fa-pencil', 'title': 'Edit'});
                         button.addEventListener('click', function () {
-                            this.editEntityAction = true;
-                            this.addEntityAction = false;
+                            this.editSubAction = true;
+                            this.addSubAction = false;
                             initEditorWidget.call(this, button);
                             this.editorConfigOutput.pushEvent({
                                 "readonly": [
-                                    ["id"],
-                                    ["type"]
+                                    ["id"]
                                 ]
                             });
-                            this.templateOutput.pushEvent(JSON.stringify(entry.entity));
+                            this.templateOutput.pushEvent(JSON.stringify(entry.subscription));
                         }.bind(this));
                         content.appendChild(button);
                     }
@@ -286,7 +310,7 @@
                         button = new StyledElements.Button({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
                         button.addEventListener('click', function () {
                             initOperator.call(this);
-                            this.delEntityOutput.pushEvent(JSON.stringify(entry));
+                            this.delSubOutput.pushEvent(JSON.stringify(entry.subscription));
                         }.bind(this));
                         content.appendChild(button);
                     }
@@ -298,11 +322,11 @@
         }
 
         this.table = new StyledElements.ModelTable(fields, {id: 'name', pageSize: 30, source: this.source, 'class': 'table-striped'});
-        this.table.addEventListener("click", function (ent) {
-            var entity = JSON.parse(JSON.stringify(ent.entity));
-            entity.subservice = MashupPlatform.prefs.get("ngsi_service_path");
-            entity.service = MashupPlatform.prefs.get("ngsi_tenant");
-            sendSelection(entity);
+        this.table.addEventListener("click", function (entry) {
+            var subscr = JSON.parse(JSON.stringify(entry.subscription));
+            subscr.subservice = MashupPlatform.prefs.get("ngsi_service_path");
+            subscr.service = MashupPlatform.prefs.get("ngsi_tenant");
+            sendSelection(subscr);
         });
         this.table.reload();
         this.layout.center.clear();
@@ -313,6 +337,6 @@
         MashupPlatform.wiring.pushEvent('selection', JSON.stringify(data));
     };
 
-    var widget = new EntityManager();
+    var widget = new SubscriptionManager();
     window.addEventListener("DOMContentLoaded", widget.init.bind(widget), false);
 })();

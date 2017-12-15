@@ -21,9 +21,9 @@
     <inputendpoint name="editEntity" type="text" label="Edit entitiy" description="Edit an existing entity, returns list of all entities of the same type" friendcode="editentity"/>
     <inputendpoint name="delEntity" type="text" label="Delete entitiy" description="Delete an existing entity, returns list of all entities of the same type" friendcode="delentity"/>
     <inputendpoint name="getSubscriptions" type="text" label="Fetch subscriptions" description="Retrieve the list of available subscriptions. If the input data contains the id attribute, only the corresponding subscription is retrieved." friendcode="getsubscriptions"/>
-    <inputendpoint name="addSubscription" type="text" label="Add subscription [TODO]" description="Add a new subscription, returns list of available subscriptions" friendcode="addsubscription"/>
-    <inputendpoint name="editSubscription" type="text" label="Edit subscription [TODO]" description="Edit an existing subscription, returns list of available subscriptions" friendcode="editsubscription"/>
-    <inputendpoint name="delSubscription" type="text" label="Delete subscription [TODO]" description="Delete an existing subscription, returns list of available subscriptions" friendcode="delsubscription"/>
+    <inputendpoint name="addSubscription" type="text" label="Add subscription" description="Add a new subscription, returns list of available subscriptions" friendcode="addsubscription"/>
+    <inputendpoint name="editSubscription" type="text" label="Edit subscription" description="Edit an existing subscription, returns list of available subscriptions" friendcode="editsubscription"/>
+    <inputendpoint name="delSubscription" type="text" label="Delete subscription" description="Delete an existing subscription, returns list of available subscriptions" friendcode="delsubscription"/>
     <outputendpoint name="entityOutput" type="text" label="Entity output" description="Entity output" friendcode="entityoutput"/>
     <outputendpoint name="subOutput" type="text" label="Subscription output" description="Subscription output" friendcode="suboutput"/>
   </wiring>

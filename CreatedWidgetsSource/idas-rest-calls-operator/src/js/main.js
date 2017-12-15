@@ -297,6 +297,11 @@
             return;
         }
 
+        var params = {
+            "entity_name": payload.devices[0].entity_name,
+            "entity_type": payload.devices[0].entity_type
+        };
+
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
         headers['FIWARE-ServicePath'] = MashupPlatform.prefs.get('ngsi_service_path');
 
@@ -306,10 +311,7 @@
             contentType: "application/json",
             requestHeaders: headers,
             onSuccess: function (response) {
-                getDevices(null, function (data) {
-                    data.devices = getDevicesByEnt(data.devices, payload.devices[0].entity_name,
-                        payload.devices[0].entity_type);
-                    data.count = data.devices.length;
+                getDevices(JSON.stringify(params), function (data) {
                     data.statusAdd = {};
                     data.statusAdd.state = "success";
                     data.statusAdd.message = "Device '" + payload.devices[0].device_id + "' successfully created!"
@@ -317,10 +319,7 @@
                 });
             },
             onFailure: function (response) {
-                getDevices(null, function (data) {
-                    data.devices = getDevicesByEnt(data.devices, payload.devices[0].entity_name,
-                        payload.devices[0].entity_type);
-                    data.count = data.devices.length;
+                getDevices(JSON.stringify(params), function (data) {
                     data.statusAdd = {};
                     data.statusAdd.state = "failure";
                     data.statusAdd.message = "Error " + response.status + ": " + response.statusText;
@@ -329,10 +328,7 @@
             },
             onException: function (resp, except) {
                 MashupPlatform.operator.log(except);
-                getDevices(null, function (data) {
-                    data.devices = getDevicesByEnt(data.devices, payload.devices[0].entity_name,
-                        payload.devices[0].entity_type);
-                    data.count = data.devices.length;
+                getDevices(JSON.stringify(params), function (data) {
                     data.statusAdd = {};
                     data.statusAdd.state = "exception";
                     data.statusAdd.message = except;
@@ -381,6 +377,10 @@
         }
 
         var url = createURL('iot/devices/' + payload.device_id);
+        var params = {
+            "entity_name": payload.entity_name,
+            "entity_type": payload.entity_type
+        };
 
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
         headers['FIWARE-ServicePath'] = MashupPlatform.prefs.get('ngsi_service_path');
@@ -391,9 +391,7 @@
             contentType: "application/json",
             requestHeaders: headers,
             onSuccess: function (response) {
-                getDevices(null, function (data) {
-                    data.devices = getDevicesByEnt(data.devices, payload.entity_name, payload.entity_type);
-                    data.count = data.devices.length;
+                getDevices(JSON.stringify(params), function (data) {
                     data.statusEdit = {};
                     data.statusEdit.state = "success";
                     data.statusEdit.message = "Device '" + payload.device_id + "' successfully updated!"
@@ -401,9 +399,7 @@
                 });
             },
             onFailure: function (response) {
-                getDevices(null, function (data) {
-                    data.devices = getDevicesByEnt(data.devices, payload.entity_name, payload.entity_type);
-                    data.count = data.devices.length;
+                getDevices(JSON.stringify(params), function (data) {
                     data.statusEdit = {};
                     data.statusEdit.state = "failure";
                     data.statusEdit.message = "Error " + response.status + ": " + response.statusText;
@@ -412,9 +408,7 @@
             },
             onException: function (resp, except) {
                 MashupPlatform.operator.log(except);
-                getDevices(null, function (data) {
-                    data.devices = getDevicesByEnt(data.devices, payload.entity_name, payload.entity_type);
-                    data.count = data.devices.length;
+                getDevices(JSON.stringify(params), function (data) {
                     data.statusEdit = {};
                     data.statusEdit.state = "exception";
                     data.statusEdit.message = except;
@@ -440,14 +434,15 @@
             headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
         }
 
-        if (!payload || !payload.device_id || !payload.entity_name) {
+        if (!payload || !payload.device_id || !payload.entity_name || !payload.entity_type) {
             getDevices(null, function (data) {
                 data.statusDel = {};
                 data.statusDel.state = "exception";
                 data.statusDel.message = "Unexpected input received!";
                 data.inputExample = {
                     "device_id": "example_device_id",
-                    "entity_name": "example_entity_name"
+                    "entity_name": "example_entity_name",
+                    "entity_type": "example_entity_type"
                 };
                 MashupPlatform.wiring.pushEvent("deviceOutput", JSON.stringify(data));
             });
@@ -455,6 +450,10 @@
         }
 
         var url = createURL('iot/devices/' + payload.device_id);
+        var params = {
+            "entity_name": payload.entity_name,
+            "entity_type": payload.entity_type
+        };
 
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
         headers['FIWARE-ServicePath'] = MashupPlatform.prefs.get('ngsi_service_path');
@@ -464,9 +463,7 @@
             contentType: "application/json",
             requestHeaders: headers,
             onSuccess: function (response) {
-                getDevices(null, function (data) {
-                    data.devices = getDevicesByEnt(data.devices, payload.entity_name, payload.entity_type);
-                    data.count = data.devices.length;
+                getDevices(JSON.stringify(params), function (data) {
                     data.statusDel = {};
                     data.statusDel.state = "success";
                     data.statusDel.message = "Device '" + payload.device_id + "' successfully deleted!"
@@ -474,9 +471,7 @@
                 });
             },
             onFailure: function (response) {
-                getDevices(null, function (data) {
-                    data.devices = getDevicesByEnt(data.devices, payload.entity_name, payload.entity_type);
-                    data.count = data.devices.length;
+                getDevices(JSON.stringify(params), function (data) {
                     data.statusDel = {};
                     data.statusDel.state = "failure";
                     data.statusDel.message = "Error " + response.status + ": " + response.statusText;
@@ -485,9 +480,7 @@
             },
             onException: function (resp, except) {
                 MashupPlatform.operator.log(except);
-                getDevices(null, function (data) {
-                    data.devices = getDevicesByEnt(data.devices, payload.entity_name, payload.entity_type);
-                    data.count = data.devices.length;
+                getDevices(JSON.stringify(params), function (data) {
                     data.statusDel = {};
                     data.statusDel.state = "exception";
                     data.statusDel.message = except;
@@ -533,7 +526,12 @@
             contentType: "application/json",
             requestHeaders: headers,
             onSuccess: function (response) {
-                data = JSON.parse(response.responseText);
+                try {
+                    data = JSON.parse(response.responseText);
+                } catch (e) {
+                    data.services = [];
+                }
+                data.count = data.services.length;
                 data.statusGet = {};
                 data.statusGet.state = "success";
                 data.statusGet.message = "Services successfully received!"
@@ -589,14 +587,18 @@
             contentType: "application/json",
             requestHeaders: headers,
             onSuccess: function (response) {
-                data = JSON.parse(response.responseText);
-                if (!data.devices) {
-                    data = {"devices": [data]};
+                try {
+                    data = JSON.parse(response.responseText);
+                    if (!data.devices) {
+                        data.devices = [data];
+                    }
+                    if (info && !info.id && info.entity_name && info.entity_type) {
+                        data.devices = getDevicesByEnt(data.devices, info.entity_name, info.entity_type);
+                    }
+                } catch (e) {
+                    data.devices = [];
                 }
-                if (info && !info.id && info.entity_name && info.entity_type) {
-                    data.devices = getDevicesByEnt(data.devices, info.entity_name, info.entity_type);
-                    data.count = data.devices.length;
-                }
+                data.count = data.devices.length;
                 data.statusGet = {};
                 data.statusGet.state = "success";
                 data.statusGet.message = "Devices successfully received!"
