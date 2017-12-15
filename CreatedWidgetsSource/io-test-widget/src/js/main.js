@@ -25,12 +25,17 @@
             MashupPlatform.wiring.pushEvent("output", data);
         }
 
-        init(data);
+        if (data !== "[object Event]") {
+            MashupPlatform.widget.getVariable('textAreaSave').set(data);
+        }
+
+        init();
     });
 
-    var init = function init(data) {
+    var init = function init() {
         clearPage(document.body);
 
+        var textAreaSave = MashupPlatform.widget.getVariable('textAreaSave');
         var page = document.createElement("div");
         var textArea = document.createElement("textarea");
         var btnSend = document.createElement("button");
@@ -38,12 +43,12 @@
         textArea.rows = 20;
         textArea.cols = 50;
 
-        if (data && data != "[object Event]") {
+        if (textAreaSave.get()) {
             try {
-                var json = JSON.parse(data);
+                var json = JSON.parse(textAreaSave.get());
                 textArea.value = JSON.stringify(json, undefined, 2);
             } catch (e) {
-                textArea.value = data;
+                textArea.value = textAreaSave.get();
             }
         }
 
@@ -53,6 +58,7 @@
             var output;
             if (textArea.value) {
                 output = textArea.value;
+                textAreaSave.set(output);
             } else {
                 output = "{}";
             }

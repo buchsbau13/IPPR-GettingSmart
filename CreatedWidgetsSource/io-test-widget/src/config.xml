@@ -11,6 +11,9 @@
     <preferences>
         <preference name="auto_forward" type="boolean" label="Forward input data to output endpoint" description="Automatically forward the unchanged input data to the output endpoint" default="false"/>
     </preferences>
+    <persistentvariables>
+        <variable name="textAreaSave" type="text"/>
+    </persistentvariables>
     <wiring>
         <inputendpoint name="input" type="text" label="Input" description="Input data to show in text area" friendcode="input"/>
         <outputendpoint name="output" type="text" label="Output" description="Output created from text area" friendcode="output"/>
