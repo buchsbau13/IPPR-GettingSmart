@@ -48,8 +48,11 @@
 
         MashupPlatform.wiring.registerCallback("filterByType", function (input) {
             var data = JSON.parse(input);
-            if (data.entity_type && data.subservice && data.service) {
-                this.filter = {"type": data.entity_type};
+            if (data.subservice && data.service) {
+                this.filter = {"type": " "};
+                if (data.entity_type) {
+                    this.filter.type = data.entity_type;
+                }
                 MashupPlatform.prefs.set("ngsi_service_path", data.subservice);
                 MashupPlatform.prefs.set("ngsi_tenant", data.service);
                 initOperator.call(this);
@@ -94,7 +97,7 @@
         this.newEntityInput = MashupPlatform.widget.createInputEndpoint(newEntity.bind(this));
         this.addButton.addEventListener('click', function () {
             var typeValue = "";
-            if (this.filter && this.filter.type) {
+            if (this.filter && this.filter.type && this.filter.type !== " ") {
                 typeValue = this.filter.type;
             }
             this.addEntityAction = true;
@@ -211,10 +214,18 @@
                         MashupPlatform.widget.log(data.statusDel.message);
                     }
 
-                    if (this.filter && list.length > 0) {
-                        var ent = JSON.parse(JSON.stringify(list[0].entity));
-                        ent.subservice = MashupPlatform.prefs.get("ngsi_service_path");
-                        ent.service = MashupPlatform.prefs.get("ngsi_tenant");
+                    if (MashupPlatform.prefs.get("auto_forward")) {
+                        var ent;
+                        if (list.length > 0) {
+                            ent = JSON.parse(JSON.stringify(list[0].entity));
+                            ent.subservice = MashupPlatform.prefs.get("ngsi_service_path");
+                            ent.service = MashupPlatform.prefs.get("ngsi_tenant");
+                        } else {
+                            ent = {
+                                "subservice": MashupPlatform.prefs.get("ngsi_service_path"),
+                                "service": MashupPlatform.prefs.get("ngsi_tenant")
+                            };
+                        }
                         sendSelection(ent);
                     }
 

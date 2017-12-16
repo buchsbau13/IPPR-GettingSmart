@@ -99,7 +99,7 @@
 
     var initOperator = function initOperator() {
         if (!this.idasWidget) {
-            this.idasWidget = MashupPlatform.mashup.addOperator('FH-JOANNEUM/idas-rest-calls/1.0', {
+            this.idasWidget = MashupPlatform.mashup.addOperator(MashupPlatform.prefs.get('idas_operator'), {
                 "preferences": {
                     "idas_server": {"value": MashupPlatform.prefs.get("idas_server")},
                     "use_user_fiware_token": {"value": MashupPlatform.prefs.get("use_user_fiware_token")},
@@ -189,6 +189,18 @@
                         MashupPlatform.widget.log(data.statusEdit.message);
                     } else if (data.statusDel && data.statusDel.state != "success") {
                         MashupPlatform.widget.log(data.statusDel.message);
+                    }
+
+                    if (MashupPlatform.prefs.get("auto_forward")) {
+                        if (list.length > 0) {
+                            sendSelection(list[0]);
+                        } else {
+                            var srv = {
+                                "service": MashupPlatform.prefs.get("ngsi_tenant"),
+                                "subservice": "/"
+                            };
+                            sendSelection(srv);
+                        }
                     }
 
                     onSuccess(list, {resources: list, total_count: data.count, current_page: page});

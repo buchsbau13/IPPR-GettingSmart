@@ -48,11 +48,17 @@
 
         MashupPlatform.wiring.registerCallback("filterByDev", function (input) {
             var data = JSON.parse(input);
-            if (data.entity_name && data.entity_type && data.subservice && data.service) {
+            if (data.subservice && data.service) {
                 this.filter = {
-                    "entity_name": data.entity_name,
-                    "entity_type": data.entity_type
+                    "entity_name": " ",
+                    "entity_type": " ",
+                    "attributes": [" "]
                 };
+                if (data.entity_name && data.entity_type && data.attributes) {
+                    this.filter.entity_name = data.entity_name;
+                    this.filter.entity_type = data.entity_type;
+                    this.filter.attributes = data.attributes;
+                }
                 MashupPlatform.prefs.set("ngsi_service_path", data.subservice);
                 MashupPlatform.prefs.set("ngsi_tenant", data.service);
                 initOperator.call(this);
@@ -98,7 +104,8 @@
         this.addButton.addEventListener('click', function () {
             var nameValue = "";
             var typeValue = "";
-            if (this.filter && this.filter.entity_name && this.filter.entity_type) {
+            if (this.filter && this.filter.entity_name && this.filter.entity_type && this.filter.entity_name !== " " &&
+                this.filter.entity_type !== " ") {
                 nameValue = this.filter.entity_name;
                 typeValue = this.filter.entity_type;
             }
@@ -235,10 +242,18 @@
                         MashupPlatform.widget.log(data.statusDel.message);
                     }
 
-                    if (this.filter && list.length > 0) {
-                        var sub = JSON.parse(JSON.stringify(list[0].subscription));
-                        sub.subservice = MashupPlatform.prefs.get("ngsi_service_path");
-                        sub.service = MashupPlatform.prefs.get("ngsi_tenant");
+                    if (MashupPlatform.prefs.get("auto_forward")) {
+                        var sub;
+                        if (list.length > 0) {
+                            sub = JSON.parse(JSON.stringify(list[0].subscription));
+                            sub.subservice = MashupPlatform.prefs.get("ngsi_service_path");
+                            sub.service = MashupPlatform.prefs.get("ngsi_tenant");
+                        } else {
+                            sub = {
+                                "subservice": MashupPlatform.prefs.get("ngsi_service_path"),
+                                "service": MashupPlatform.prefs.get("ngsi_tenant")
+                            };
+                        }
                         sendSelection(sub);
                     }
 
