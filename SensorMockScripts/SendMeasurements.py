@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
 # 
@@ -22,6 +23,7 @@ import io
 import sys
 import time
 import random
+import codecs
 
 CONFIG_FILE = "./config.ini"
 
@@ -38,8 +40,8 @@ else:
    print '          Where DEV_ID = Device ID of your sensor'
    print '                API_KEY = API key for the service used with this device'
    print '                MEASUREMENT_TYPE = Alias for type of measurement, e.g. t for temperature'
-   print '                VALUE_TYPE = Type of value, can be int or float'
-   print '                VALUE_START = Initial value which will be randomly increased/decreased'
+   print '                VALUE_TYPE = Type of value, can be int, float or string'
+   print '                VALUE_START = Initial value which will be randomly increased/decreased (or sent unchanged, if value is a string)'
    print
    print '        Example: python '+COMMAND+' .\\test-data.txt'
    print
@@ -60,24 +62,21 @@ FIWARE_SERVICEPATH=config.get('idas', 'fiware_service_path')
 IDAS_AAA=config.get('idas', 'OAuth')
 if IDAS_AAA == "yes":
    TOKEN=config.get('user', 'token')
-   TOKEN_SHOW=TOKEN[1:5]+"**********************************************************************"+TOKEN[-5:]
 else:
    TOKEN="NULL"
-   TOKEN_SHOW="NULL"
 
 f.close()
 
 # Read the file with sensor data
 if FILE_NAME.startswith("./") or FILE_NAME.startswith(".\\"):
     FILE_NAME = FILE_NAME[2:]
-with open('./'+FILE_NAME,'r+') as sd:
+with codecs.open('./'+FILE_NAME,'r+','utf-8') as sd:
     lines = sd.readlines()
 data = [line.replace(" ","").strip().split(",") for line in lines]
 
 sd.close()
 
-HEADERS = {'content-type': 'text/plain' , 'X-Auth-Token' : TOKEN, 'Fiware-Service' : FIWARE_SERVICE, 'Fiware-ServicePath' : FIWARE_SERVICEPATH }
-HEADERS_SHOW = {'content-type': 'text/plain' , 'X-Auth-Token' : TOKEN_SHOW, 'Fiware-Service' : FIWARE_SERVICE, 'Fiware-ServicePath' : FIWARE_SERVICEPATH}
+HEADERS = {'content-type': 'text/plain; charset=utf-8' , 'X-Auth-Token' : TOKEN, 'Fiware-Service' : FIWARE_SERVICE, 'Fiware-ServicePath' : FIWARE_SERVICEPATH }
 
 try:
    while True:
@@ -95,17 +94,24 @@ try:
          VALUE = VALUE_START
          if VALUE_TYPE == "int":
             VALUE = int(VALUE) + random.randint(-2, 2)
-         else:
+         elif VALUE_TYPE == "float":
             VALUE = float(VALUE) + random.uniform(-2.0, 2.0)
-         dataset[4] = str(VALUE)
 
-         PAYLOAD = MEASUREMENT_TYPE+'|'+str(VALUE)
+         dataset[4] = VALUE
+
+         if VALUE_TYPE == "string":
+            PAYLOAD = MEASUREMENT_TYPE+'|'+VALUE.encode('utf-8').decode('utf-8')
+         else:
+            PAYLOAD = MEASUREMENT_TYPE+'|'+str(VALUE)
 
          print
          print "* SENDING MEASUREMENT OF SENSOR '"+SENSOR_ID+"'"
          print "* Sensor Data: "+PAYLOAD
-         r = requests.post(URL, data=PAYLOAD, headers=HEADERS)
+         r = requests.post(URL, data=PAYLOAD.encode('utf-8'), headers=HEADERS)
          print "* Status Code: "+str(r.status_code)
+         
+      if VALUE_TYPE == "string":
+         break
 
       time.sleep(5)
 except KeyboardInterrupt:

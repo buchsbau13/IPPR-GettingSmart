@@ -6,9 +6,9 @@ Python 2.7 and the python module 'requests' (install using pip)
 2) Change the [contextbroker] and [idas] sections in the config.ini according to your FIWARE setup
 
 >>Execution<<
-'SendRandMeasurements.py':
+'SendMeasurements.py':
 
-python .\SendRandMeasurements.py .\test-data.txt
+python .\SendMeasurements.py .\test-data.txt
 (you can replace 'test-data.txt' with your own file)
 
 'SendCoordList.py':

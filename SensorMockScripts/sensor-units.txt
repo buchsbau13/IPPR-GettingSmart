@@ -1,0 +1,6 @@
+Temp_Lamp_1,apistatic,tu,string,°C
+Humid_Lamp_1,apistatic,hu,string,%
+Temp_Tram_1,apimobile,tu,string,°C
+Humid_Tram_1,apimobile,hu,string,%
+Temp_Bus_1,apimobile,tu,string,°C
+Humid_Bus_1,apimobile,hu,string,%
