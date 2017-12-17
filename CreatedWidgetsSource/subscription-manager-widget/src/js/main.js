@@ -157,7 +157,7 @@
 
     var initOperator = function initOperator() {
         if (!this.orionWidget) {
-            this.orionWidget = MashupPlatform.mashup.addOperator('FH-JOANNEUM/orion-rest-calls/1.0', {
+            this.orionWidget = MashupPlatform.mashup.addOperator(MashupPlatform.prefs.get("orion_operator"), {
                 "preferences": {
                     "ngsi_server": {"value": MashupPlatform.prefs.get("ngsi_server")},
                     "use_user_fiware_token": {"value": MashupPlatform.prefs.get("use_user_fiware_token")},
