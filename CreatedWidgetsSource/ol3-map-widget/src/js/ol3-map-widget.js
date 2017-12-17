@@ -4,12 +4,15 @@
 
     "use strict";
 
+    var map;
+
     var internalUrl = function internalUrl(data) {
         var url = document.createElement("a");
         url.setAttribute('href', data);
         return url.href;
     };
 
+    // Get Layer Information (basemap.at)
     var layerInfo = function layerInfo(method, url, done) {
         var xhr = new XMLHttpRequest();
         xhr.open(method, url);
@@ -126,7 +129,7 @@
         var layerSource = new ol.source.Vector({});
         var layer = new ol.layer.Vector({source: layerSource, style: DEFAULT_MARKER});
         layer.set('name', layerName);
-        return layer;
+        map.addLayer(layer);
     };
 
     var createEmptyHeatmap = function createEmptyHeatmap(heatmapName) {
@@ -138,6 +141,22 @@
         });
         heatmapLayer.set('name', heatmapName);
         return heatmapLayer;
+    };
+
+    var createCheckbox = function createCheckbox(value, label) {
+        var container = document.getElementById("floating-panel");
+        var checkbox = document.createElement('input');
+        checkbox.type = "checkbox";
+        checkbox.name = value;
+        checkbox.value = value;
+        checkbox.id = value;
+        checkbox.checked = true;
+
+        var checkboxLabel = document.createElement('label');
+        checkboxLabel.appendChild(checkbox);
+        checkboxLabel.appendChild(document.createTextNode(label));
+
+        container.appendChild(checkboxLabel);
     };
 
     var toggleLayer = function toggleLayer(checkboxId, layerName, map) {
@@ -166,15 +185,13 @@
             initialCenter = [0, 0];
         }
 
-        this.map = new ol.Map({
+        map = new ol.Map({
             target: document.getElementById('map'),
             view: new ol.View({
                 center: ol.proj.transform(initialCenter, 'EPSG:4326', 'EPSG:3857'),
                 zoom: parseInt(MashupPlatform.prefs.get('initialZoom'), 10)
             })
         });
-
-        var map = this.map;
 
         layerInfo('GET', 'https://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml', function (err, res) {
             var result = new ol.format.WMTSCapabilities().read(res);
@@ -191,20 +208,31 @@
         });
 
         var heatmapLayer = createEmptyHeatmap('heatmap');
-        var staticLayer = createEmptyLayer('static');
-        var mobileLayer = createEmptyLayer('mobile');
+        map.addLayer(heatmapLayer);
+        toggleLayer('heatmap', 'heatmap', map);
 
-        this.map.addLayer(heatmapLayer);
-        this.map.addLayer(staticLayer);
-        this.map.addLayer(mobileLayer);
-
-        toggleLayer('heatmap', 'heatmap', this.map);
-        toggleLayer('static', 'static', this.map);
-        toggleLayer('mobile', 'mobile', this.map);
+        try {
+            var layerTypes = JSON.parse(MashupPlatform.prefs.get("layerTypes"));
+        } catch(err) {
+            MashupPlatform.widget.log(err, MashupPlatform.log.INFO);
+        }
+        if (layerTypes != null) {
+            for (var key in layerTypes) {
+                if (layerTypes.hasOwnProperty(key)) {
+                    createEmptyLayer(key);
+                    createCheckbox(key, layerTypes[key]);
+                    toggleLayer(key, key, map);
+                }
+            }
+        } else {
+            createEmptyLayer("default");
+            createCheckbox("default", "Default Layer");
+            toggleLayer("default", "default", map);
+        }
 
         // display popup on click
-        this.map.on('click', function (event) {
-            var feature = this.map.forEachFeatureAtPixel(event.pixel,
+        map.on('click', function (event) {
+            var feature = map.forEachFeatureAtPixel(event.pixel,
                 function (feature, layer) {
                     if (layer.get('name') != 'heatmap') {
                         return feature;
@@ -222,7 +250,7 @@
         }.bind(this));
 
         // change mouse cursor when over marker
-        this.map.on('pointermove', function (event) {
+        map.on('pointermove', function (event) {
             if (event.dragging) {
                 if (this.popover != null) {
                     this.popover.hide();
@@ -230,9 +258,9 @@
                 }
                 return;
             }
-            var pixel = this.map.getEventPixel(event.originalEvent);
-            var hit = this.map.hasFeatureAtPixel(pixel);
-            this.map.getTarget().style.cursor = hit ? 'pointer' : '';
+            var pixel = map.getEventPixel(event.originalEvent);
+            var hit = map.hasFeatureAtPixel(pixel);
+            map.getTarget().style.cursor = hit ? 'pointer' : '';
         }.bind(this));
     };
 
@@ -241,7 +269,11 @@
         var poiType = poiData.type;
         MashupPlatform.widget.log(poiType, MashupPlatform.log.INFO);
 
-        var layer = getLayerByName(poiType, this.map);
+        var layer = getLayerByName(poiType, map);
+        if (layer == null) {
+            layer = getLayerByName("default", map)
+        }
+
         var iconFeature, style;
         iconFeature = layer.getSource().getFeatureById(poi_info.id);
 
@@ -299,7 +331,7 @@
     };
 
     Widget.prototype.addHeatmap = function addHeatmap(poi_info) {
-        var heatmapLayer = getLayerByName('heatmap', this.map);
+        var heatmapLayer = getLayerByName('heatmap', map);
         var heatmapFeature;
         heatmapFeature = heatmapLayer.getSource().getFeatureById(poi_info.id);
 
@@ -361,8 +393,8 @@
             var marker_coordinates, marker_position, marker_image, marker_style, refpos;
 
             marker_coordinates = ol.extent.getCenter(feature.getGeometry().getExtent());
-            marker_position = this.map.getPixelFromCoordinate(marker_coordinates);
-            marker_style = feature.getStyle(this.map.getView().getResolution());
+            marker_position = map.getPixelFromCoordinate(marker_coordinates);
+            marker_style = feature.getStyle(map.getView().getResolution());
             marker_image = marker_style.getImage();
             if (marker_image != null) {
                 var marker_scale = marker_image.getScale();
