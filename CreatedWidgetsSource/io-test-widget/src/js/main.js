@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
- /* global MashupPlatform */
+ /* global MashupPlatform, StyledElements */
 
 (function () {
 
@@ -36,12 +36,21 @@
         clearPage(document.body);
 
         var textAreaSave = MashupPlatform.widget.getVariable('textAreaSave');
-        var page = document.createElement("div");
-        var textArea = document.createElement("textarea");
-        var btnSend = document.createElement("button");
+        var layout = new StyledElements.VerticalLayout();
+        var textArea = new StyledElements.TextArea({
+            class: "textarea",
+            cols: 50,
+            rows: 20
+        });
+        var btnSend = new StyledElements.Button({
+            class: "se-btn-circle send-button z-depth-3",
+            text: "Send"
+        });
 
-        textArea.rows = 20;
-        textArea.cols = 50;
+        layout.center.addClassName('layout');
+        layout.center.appendChild(textArea);
+        layout.insertInto(document.body);
+        layout.repaint();
 
         if (textAreaSave.get()) {
             try {
@@ -52,9 +61,7 @@
             }
         }
 
-        btnSend.type = "button";
-        btnSend.innerHTML = "Send";
-        btnSend.onclick = function () {
+        btnSend.addEventListener('click', function () {
             var output;
             if (textArea.value) {
                 output = textArea.value;
@@ -63,13 +70,8 @@
                 output = "{}";
             }
             MashupPlatform.wiring.pushEvent("output", output);
-        };
-
-        page.appendChild(textArea);
-        page.appendChild(document.createElement("br"));
-        page.appendChild(btnSend);
-
-        document.body.appendChild(page);
+        });
+        layout.center.appendChild(btnSend);
     };
 
     var clearPage = function clearPage(context) {
@@ -79,5 +81,4 @@
     };
 
     window.addEventListener("DOMContentLoaded", init, false);
-
 })();

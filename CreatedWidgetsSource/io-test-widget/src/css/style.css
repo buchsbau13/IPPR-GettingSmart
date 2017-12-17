@@ -1,27 +1,13 @@
-.styled_form td > .styled_select {
-    width: 100%;
+.layout {
+    text-align: center;
 }
 
-.div_spaced {
-    margin: 10px 10px 10px 10px;
+.textarea {
+    width: 95%;
+    height: 20em;
 }
 
-.hidden {
-    display: none;
-}
-
-body {
-  padding: 30px;
-}
-
-div {
-  margin: auto;
-  text-align: center;
-  max-height: 700px;
-  max-width: 700px;
-}
-
-button {
-  margin: 6px;
-  display: inline-block;
+.send-button {
+    margin: 0 auto;
+    display: table;
 }
