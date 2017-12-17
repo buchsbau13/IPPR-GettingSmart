@@ -1,0 +1,25 @@
+{
+  "services": [
+    {
+      "apikey": "apistatic",
+      "token": "token2",
+      "cbroker": "http://orion:1026",
+      "entity_type": "static",
+      "resource": "/iot/d"
+    },
+    {
+      "apikey": "apimobile",
+      "token": "token2",
+      "cbroker": "http://orion:1026",
+      "entity_type": "mobile",
+      "resource": "/iot/d"
+    },
+    {
+      "apikey": "settings",
+      "token": "token2",
+      "cbroker": "http://orion:1026",
+      "entity_type": "friendly_names",
+      "resource": "/iot/d"
+    }
+  ]
+}

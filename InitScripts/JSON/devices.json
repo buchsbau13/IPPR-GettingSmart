@@ -1,0 +1,218 @@
+{
+  "devices": [
+    {
+      "device_id": "Temp_Lamp_1",
+      "entity_name": "Lamp_1",
+      "entity_type": "static",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "t",
+          "name": "temperature",
+          "type": "Float"
+        },
+        {
+          "object_id": "ti",
+          "name": "temp_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "ts",
+          "name": "temp_sensor_status",
+          "type": "Text"
+        },
+        {
+          "object_id": "tu",
+          "name": "temp_sensor_unit",
+          "type": "Text"
+        }
+      ]
+    },
+    {
+      "device_id": "Humid_Lamp_1",
+      "entity_name": "Lamp_1",
+      "entity_type": "static",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "h",
+          "name": "humidity",
+          "type": "Int"
+        },
+        {
+          "object_id": "hi",
+          "name": "humid_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "hs",
+          "name": "humid_sensor_status",
+          "type": "Text"
+        },
+        {
+          "object_id": "hu",
+          "name": "humid_sensor_unit",
+          "type": "Text"
+        }
+      ]
+    },
+    {
+      "device_id": "Temp_Bus_1",
+      "entity_name": "Bus_1",
+      "entity_type": "mobile",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "t",
+          "name": "temperature",
+          "type": "Float"
+        },
+        {
+          "object_id": "ti",
+          "name": "temp_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "ts",
+          "name": "temp_sensor_status",
+          "type": "Text"
+        },
+        {
+          "object_id": "tu",
+          "name": "temp_sensor_unit",
+          "type": "Text"
+        }
+      ]
+    },
+    {
+      "device_id": "Humid_Bus_1",
+      "entity_name": "Bus_1",
+      "entity_type": "mobile",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "h",
+          "name": "humidity",
+          "type": "Int"
+        },
+        {
+          "object_id": "hi",
+          "name": "humid_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "hs",
+          "name": "humid_sensor_status",
+          "type": "Text"
+        },
+        {
+          "object_id": "hu",
+          "name": "humid_sensor_unit",
+          "type": "Text"
+        }
+      ]
+    },
+    {
+      "device_id": "Loc_Bus_1",
+      "entity_name": "Bus_1",
+      "entity_type": "mobile",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "l",
+          "name": "location",
+          "type": "geo:point"
+        },
+        {
+          "object_id": "li",
+          "name": "loc_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "ls",
+          "name": "loc_sensor_status",
+          "type": "Text"
+        }
+      ]
+    },
+    {
+      "device_id": "Temp_Tram_1",
+      "entity_name": "Tram_1",
+      "entity_type": "mobile",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "t",
+          "name": "temperature",
+          "type": "Float"
+        },
+        {
+          "object_id": "ti",
+          "name": "temp_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "ts",
+          "name": "temp_sensor_status",
+          "type": "Text"
+        },
+        {
+          "object_id": "tu",
+          "name": "temp_sensor_unit",
+          "type": "Text"
+        }
+      ]
+    },
+    {
+      "device_id": "Humid_Tram_1",
+      "entity_name": "Tram_1",
+      "entity_type": "mobile",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "h",
+          "name": "humidity",
+          "type": "Int"
+        },
+        {
+          "object_id": "hi",
+          "name": "humid_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "hs",
+          "name": "humid_sensor_status",
+          "type": "Text"
+        },
+        {
+          "object_id": "hu",
+          "name": "humid_sensor_unit",
+          "type": "Text"
+        }
+      ]
+    },
+    {
+      "device_id": "Loc_Tram_1",
+      "entity_name": "Tram_1",
+      "entity_type": "mobile",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "l",
+          "name": "location",
+          "type": "geo:point"
+        },
+        {
+          "object_id": "li",
+          "name": "loc_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "ls",
+          "name": "loc_sensor_status",
+          "type": "Text"
+        }
+      ]
+    }
+  ]
+}

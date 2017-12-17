@@ -1,0 +1,80 @@
+{
+  "entities": [
+    {
+      "id": "Lamp_1",
+      "type": "static",
+      "name":
+        {
+          "value": "Laterne 1"
+        },
+      "description":
+        {
+          "value": "Laterne Niesenbergergasse"            
+        },
+      "location":
+        {
+          "type": "geo:point",
+          "value": "47.069389,15.421638"
+        },
+      "address":
+        {
+          "type": "PostalAddress",
+          "value":
+            {
+              "streetAddress": "Niesenbergergasse 51",
+              "addressRegion": "Styria",
+              "addressLocality": "Graz",
+              "postalCode": "8020"
+            }
+        }
+    },
+    {
+      "id": "Tram_1",
+      "type": "mobile",
+      "name":
+        {
+          "value": "Strassenbahn 1"
+        },
+      "description":
+        {
+          "value": "Strassenbahn Linie 7"            
+        }
+    },
+    {
+      "id": "Bus_1",
+      "type": "mobile",
+      "name":
+        {
+          "value": "Bus 1"
+        },
+      "description":
+        {
+          "value": "Bus Linie 63"            
+        }
+    },
+    {
+      "id": "DE",
+      "type": "friendly_names",
+      "entity_id": { "value": "ID" },
+      "entity_type": { "value": "Typ" },
+      "name": { "value": "Name" },
+      "description": { "value": "Beschreibung" },
+      "address": { "value": "Adresse" },
+      "temperature": { "value": "Temperatur" },
+      "humidity": { "value": "Luftfeuchtigkeit" },
+      "location": { "value": "Position" }
+    },
+    {
+      "id": "EN",
+      "type": "friendly_names",
+      "entity_id": { "value": "ID" },
+      "entity_type": { "value": "Type" },
+      "name": { "value": "Name" },
+      "description": { "value": "Description" },
+      "address": { "value": "Address" },
+      "temperature": { "value": "Temperature" },
+      "humidity": { "value": "Humidity" },
+      "location": { "value": "Location" }
+    }
+  ]
+}
