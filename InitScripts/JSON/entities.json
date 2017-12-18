@@ -26,6 +26,14 @@
               "addressLocality": "Graz",
               "postalCode": "8020"
             }
+        },
+      "temp_sensor_unit":
+        {
+          "value": "°C"
+        },
+      "humid_sensor_unit":
+        {
+          "value": "%"
         }
     },
     {
@@ -38,6 +46,14 @@
       "description":
         {
           "value": "Strassenbahn Linie 7"            
+        },
+      "temp_sensor_unit":
+        {
+          "value": "°C"
+        },
+      "humid_sensor_unit":
+        {
+          "value": "%"
         }
     },
     {
@@ -50,6 +66,14 @@
       "description":
         {
           "value": "Bus Linie 63"            
+        },
+      "temp_sensor_unit":
+        {
+          "value": "°C"
+        },
+      "humid_sensor_unit":
+        {
+          "value": "%"
         }
     },
     {

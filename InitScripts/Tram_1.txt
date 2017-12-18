@@ -8,5 +8,13 @@
   "description":
     {
       "value": "Strassenbahn Linie 7"            
+    },
+  "temp_sensor_unit":
+    {
+      "value": "°C"
+    },
+  "humid_sensor_unit":
+    {
+      "value": "%"
     }
 }

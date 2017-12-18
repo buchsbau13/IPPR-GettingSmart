@@ -20,11 +20,6 @@
           "object_id": "ts",
           "name": "temp_sensor_status",
           "type": "Text"
-        },
-        {
-          "object_id": "tu",
-          "name": "temp_sensor_unit",
-          "type": "Text"
         }
       ]
     },
@@ -47,11 +42,6 @@
         {
           "object_id": "hs",
           "name": "humid_sensor_status",
-          "type": "Text"
-        },
-        {
-          "object_id": "hu",
-          "name": "humid_sensor_unit",
           "type": "Text"
         }
       ]
@@ -76,11 +66,6 @@
           "object_id": "ts",
           "name": "temp_sensor_status",
           "type": "Text"
-        },
-        {
-          "object_id": "tu",
-          "name": "temp_sensor_unit",
-          "type": "Text"
         }
       ]
     },
@@ -103,11 +88,6 @@
         {
           "object_id": "hs",
           "name": "humid_sensor_status",
-          "type": "Text"
-        },
-        {
-          "object_id": "hu",
-          "name": "humid_sensor_unit",
           "type": "Text"
         }
       ]
@@ -155,11 +135,6 @@
           "object_id": "ts",
           "name": "temp_sensor_status",
           "type": "Text"
-        },
-        {
-          "object_id": "tu",
-          "name": "temp_sensor_unit",
-          "type": "Text"
         }
       ]
     },
@@ -182,11 +157,6 @@
         {
           "object_id": "hs",
           "name": "humid_sensor_status",
-          "type": "Text"
-        },
-        {
-          "object_id": "hu",
-          "name": "humid_sensor_unit",
           "type": "Text"
         }
       ]

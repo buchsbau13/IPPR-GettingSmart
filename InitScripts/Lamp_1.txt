@@ -24,5 +24,13 @@
           "addressLocality": "Graz",
           "postalCode": "8020"
         }
+    },
+  "temp_sensor_unit":
+    {
+      "value": "°C"
+    },
+  "humid_sensor_unit":
+    {
+      "value": "%"
     }
 }
