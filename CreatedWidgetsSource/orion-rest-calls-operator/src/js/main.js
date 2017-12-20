@@ -218,7 +218,7 @@
             parameters: params,
             requestHeaders: headers,
             onSuccess: function (response) {
-                getEntities(JSON.stringify(params), function (data) {
+                getEntities(null, function (data) {
                     data.statusDel = {};
                     data.statusDel.state = "success";
                     data.statusDel.message = "Entity '" + payload.id + "' successfully deleted!"
@@ -226,7 +226,7 @@
                 });
             },
             onFailure: function (response) {
-                getEntities(JSON.stringify(params), function (data) {
+                getEntities(null, function (data) {
                     data.statusDel = {};
                     data.statusDel.state = "failure";
                     data.statusDel.message = "Error " + response.status + ": " + response.statusText;
@@ -235,7 +235,7 @@
             },
             onException: function (resp, except) {
                 MashupPlatform.operator.log(except);
-                getEntities(JSON.stringify(params), function (data) {
+                getEntities(null, function (data) {
                     data.statusDel = {};
                     data.statusDel.state = "exception";
                     data.statusDel.message = except;
@@ -490,15 +490,6 @@
         }
 
         var url = createURL('v2/subscriptions/' + payload.id);
-        var params = {};
-        if (payload.subject && payload.subject.entities && payload.subject.entities[0].id &&
-            payload.subject.entities[0].type && payload.subject.condition && payload.subject.condition.attrs) {
-            params = {
-                "entity_name": payload.subject.entities[0].id,
-                "entity_type": payload.subject.entities[0].type,
-                "attributes": payload.subject.condition.attrs,
-            };
-        }
 
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
         headers['FIWARE-ServicePath'] = MashupPlatform.prefs.get('ngsi_service_path');
@@ -507,7 +498,7 @@
             method: "DELETE",
             requestHeaders: headers,
             onSuccess: function (response) {
-                getSubscriptions(JSON.stringify(params), function (data) {
+                getSubscriptions(null, function (data) {
                     data.statusDel = {};
                     data.statusDel.state = "success";
                     data.statusDel.message = "Entity '" + payload.id + "' successfully deleted!"
@@ -515,7 +506,7 @@
                 });
             },
             onFailure: function (response) {
-                getSubscriptions(JSON.stringify(params), function (data) {
+                getSubscriptions(null, function (data) {
                     data.statusDel = {};
                     data.statusDel.state = "failure";
                     data.statusDel.message = "Error " + response.status + ": " + response.statusText;
@@ -524,7 +515,7 @@
             },
             onException: function (resp, except) {
                 MashupPlatform.operator.log(except);
-                getSubscriptions(JSON.stringify(params), function (data) {
+                getSubscriptions(null, function (data) {
                     data.statusDel = {};
                     data.statusDel.state = "exception";
                     data.statusDel.message = except;

@@ -450,10 +450,6 @@
         }
 
         var url = createURL('iot/devices/' + payload.device_id);
-        var params = {
-            "entity_name": payload.entity_name,
-            "entity_type": payload.entity_type
-        };
 
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
         headers['FIWARE-ServicePath'] = MashupPlatform.prefs.get('ngsi_service_path');
@@ -463,7 +459,7 @@
             contentType: "application/json",
             requestHeaders: headers,
             onSuccess: function (response) {
-                getDevices(JSON.stringify(params), function (data) {
+                getDevices(null, function (data) {
                     data.statusDel = {};
                     data.statusDel.state = "success";
                     data.statusDel.message = "Device '" + payload.device_id + "' successfully deleted!"
@@ -471,7 +467,7 @@
                 });
             },
             onFailure: function (response) {
-                getDevices(JSON.stringify(params), function (data) {
+                getDevices(null, function (data) {
                     data.statusDel = {};
                     data.statusDel.state = "failure";
                     data.statusDel.message = "Error " + response.status + ": " + response.statusText;
@@ -480,7 +476,7 @@
             },
             onException: function (resp, except) {
                 MashupPlatform.operator.log(except);
-                getDevices(JSON.stringify(params), function (data) {
+                getDevices(null, function (data) {
                     data.statusDel = {};
                     data.statusDel.state = "exception";
                     data.statusDel.message = except;

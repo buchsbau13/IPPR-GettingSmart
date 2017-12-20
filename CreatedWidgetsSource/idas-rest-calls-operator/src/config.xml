@@ -23,7 +23,7 @@
     <inputendpoint name="getDevices" type="text" label="Fetch devices" description="Retrieve the list of available devices. If the input data contains the subservice as well as device ID or entity ID and type attribute, only the corresponding devices are retrieved." friendcode="getdevices"/>
     <inputendpoint name="addDevice" type="text" label="Add device" description="Add a new device, returns list of all devices of the same entity" friendcode="adddevice"/>
     <inputendpoint name="editDevice" type="text" label="Edit device" description="Edit an existing device, returns list of all devices of the same entity" friendcode="editdevice"/>
-    <inputendpoint name="delDevice" type="text" label="Delete device" description="Delete an existing device, returns list of all devices of the same entity" friendcode="deldevice"/>
+    <inputendpoint name="delDevice" type="text" label="Delete device" description="Delete an existing device, returns list of available devices" friendcode="deldevice"/>
     <outputendpoint name="serviceOutput" type="text" label="Service output" description=" Service output" friendcode="serviceoutput"/>
     <outputendpoint name="deviceOutput" type="text" label="Device output" description="Device output" friendcode="deviceoutput"/>
   </wiring>
