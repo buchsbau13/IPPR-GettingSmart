@@ -34,9 +34,11 @@
 
         MashupPlatform.prefs.registerCallback(function (newValues) {
             if (MashupPlatform.prefs.get('allow_add')) {
+                this.reloadButton.style("right", "50px");
                 this.addButton.show();
             } else {
                 this.addButton.hide();
+                this.reloadButton.style("right", "5px");
             }
 
             initOperator.call(this);
@@ -57,6 +59,17 @@
         this.addServiceOutput = MashupPlatform.widget.createOutputEndpoint();
         this.editServiceOutput = MashupPlatform.widget.createOutputEndpoint();
         this.delServiceOutput = MashupPlatform.widget.createOutputEndpoint();
+
+        this.reloadButton = new StyledElements.Button({
+            class: "se-btn-circle reload-button z-depth-3",
+            iconClass: "fa fa-refresh"
+        });
+
+        this.reloadButton.addEventListener('click', function () {
+            initOperator.call(this);
+            this.getServiceOutput.pushEvent(null);
+        }.bind(this));
+        this.layout.center.appendChild(this.reloadButton);
 
         this.addButton = new StyledElements.Button({
             class: "se-btn-circle add-service-button z-depth-3",
@@ -88,9 +101,11 @@
         this.layout.center.appendChild(this.addButton);
 
         if (MashupPlatform.prefs.get('allow_add')) {
+            this.reloadButton.style("right", "50px");
             this.addButton.show();
         } else {
             this.addButton.hide();
+            this.reloadButton.style("right", "5px");
         }
 
         initOperator.call(this);
