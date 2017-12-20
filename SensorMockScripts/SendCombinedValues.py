@@ -27,21 +27,21 @@ CONFIG_FILE = "./config.ini"
 NUM_ARG=len(sys.argv)
 COMMAND=sys.argv[0] 
 
-if NUM_ARG==5:
+if NUM_ARG==4:
    SENSOR_ID=sys.argv[1]
    API_KEY=sys.argv[2]
-   LOC_ALIAS=sys.argv[3]
-   FILE_NAME=sys.argv[4]
+   FILE_NAME=sys.argv[3]
 else:
-   print 'Usage: '+COMMAND+' [DEV_ID] [API_KEY] [LOC_ALIAS] [FILE_NAME]'
+   print 'Usage: '+COMMAND+' [DEV_ID] [API_KEY] [FILE_NAME]'
    print '  Where DEV_ID = Device ID of your sensor'
    print '        API_KEY = API key for the service used with this device'
-   print '        LOC_ALIAS = Alias for the location attribute, e.g. l'
-   print '        FILE_NAME = Name of the file containing coordinates (must be in current directory)'
-   print '        The file with the coordinates must contain one or more lines in the geo:point format:'
-   print '        <LAT>,<LON>'
+   print '        FILE_NAME = Name of the file containing values to send (must be in current directory)'
+   print '        The file with the values must contain one or more lines in the following format:'
+   print '        <ALIAS_1>|<VALUE_1>|<ALIAS_2>|<VALUE_2> etc.'
+   print '          Where ALIAS_x = Alias for type of measurement, e.g. t for temperature'
+   print '                VALUE_x = Value of the corresponding measurement'
    print
-   print '        Example: python '+COMMAND+' Loc_Bus_1 apimobile l .\\test-coords.txt'
+   print '        Example: python '+COMMAND+' Dev_Bus_1 apimobile .\\bus_1-values.txt'
    print
    sys.exit(2)
 
@@ -83,10 +83,10 @@ try:
       print
       print ">> Press CTRL-C at any time to exit <<"
       for dataset in data:
-         PAYLOAD = LOC_ALIAS+'|'+dataset
+         PAYLOAD = dataset
 
          print
-         print "* SENDING COORDINATES OF SENSOR '"+SENSOR_ID+"'"
+         print "* SENDING VALUES OF SENSOR '"+SENSOR_ID+"'"
          print "* Payload: "+PAYLOAD
          r = requests.post(URL, data=PAYLOAD, headers=HEADERS)
          print "* Status Code: "+str(r.status_code)

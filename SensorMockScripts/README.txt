@@ -16,3 +16,8 @@ python .\SendMeasurements.py .\test-data.txt
 python .\SendCoordList.py Loc_Bus_1 apimobile l .\test-coords.txt
 (replace 'Loc_Bus_1' (sensor id), 'apimobile' (api key) and 'l' (alias for location attribute)
  with appropriate values from your setup, you can replace 'test-coords.txt' with your own file)
+
+'SendCombinedValues.py':
+
+python .\SendCombinedValues.py Dev_Bus_1 apimobile .\bus_1-values.txt
+(you can replace 'bus_1-values.txt' with your own file)

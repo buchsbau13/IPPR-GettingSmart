@@ -1,7 +1,7 @@
 {
   "devices": [
     {
-      "device_id": "Temp_Lamp_1",
+      "device_id": "Dev_Lamp_1",
       "entity_name": "Lamp_1",
       "entity_type": "static",
       "timezone": "Europe/Vienna",
@@ -20,15 +20,7 @@
           "object_id": "ts",
           "name": "temp_sensor_status",
           "type": "Text"
-        }
-      ]
-    },
-    {
-      "device_id": "Humid_Lamp_1",
-      "entity_name": "Lamp_1",
-      "entity_type": "static",
-      "timezone": "Europe/Vienna",
-      "attributes": [
+        },
         {
           "object_id": "h",
           "name": "humidity",
@@ -47,7 +39,7 @@
       ]
     },
     {
-      "device_id": "Temp_Bus_1",
+      "device_id": "Dev_Bus_1",
       "entity_name": "Bus_1",
       "entity_type": "mobile",
       "timezone": "Europe/Vienna",
@@ -66,15 +58,7 @@
           "object_id": "ts",
           "name": "temp_sensor_status",
           "type": "Text"
-        }
-      ]
-    },
-    {
-      "device_id": "Humid_Bus_1",
-      "entity_name": "Bus_1",
-      "entity_type": "mobile",
-      "timezone": "Europe/Vienna",
-      "attributes": [
+        },
         {
           "object_id": "h",
           "name": "humidity",
@@ -89,15 +73,7 @@
           "object_id": "hs",
           "name": "humid_sensor_status",
           "type": "Text"
-        }
-      ]
-    },
-    {
-      "device_id": "Loc_Bus_1",
-      "entity_name": "Bus_1",
-      "entity_type": "mobile",
-      "timezone": "Europe/Vienna",
-      "attributes": [
+        },
         {
           "object_id": "l",
           "name": "location",
@@ -116,7 +92,7 @@
       ]
     },
     {
-      "device_id": "Temp_Tram_1",
+      "device_id": "Dev_Tram_1",
       "entity_name": "Tram_1",
       "entity_type": "mobile",
       "timezone": "Europe/Vienna",
@@ -135,15 +111,7 @@
           "object_id": "ts",
           "name": "temp_sensor_status",
           "type": "Text"
-        }
-      ]
-    },
-    {
-      "device_id": "Humid_Tram_1",
-      "entity_name": "Tram_1",
-      "entity_type": "mobile",
-      "timezone": "Europe/Vienna",
-      "attributes": [
+        },
         {
           "object_id": "h",
           "name": "humidity",
@@ -158,15 +126,7 @@
           "object_id": "hs",
           "name": "humid_sensor_status",
           "type": "Text"
-        }
-      ]
-    },
-    {
-      "device_id": "Loc_Tram_1",
-      "entity_name": "Tram_1",
-      "entity_type": "mobile",
-      "timezone": "Europe/Vienna",
-      "attributes": [
+        },
         {
           "object_id": "l",
           "name": "location",
