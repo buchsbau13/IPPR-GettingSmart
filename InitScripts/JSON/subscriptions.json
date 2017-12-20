@@ -20,7 +20,8 @@
         },
         "attrs": [
           "temperature"
-        ]
+        ],
+        "attrsFormat": "legacy"
       },
       "throttling": 3
     },
@@ -44,7 +45,8 @@
         },
         "attrs": [
           "humidity"
-        ]
+        ],
+        "attrsFormat": "legacy"
       },
       "throttling": 3
     },
@@ -68,7 +70,8 @@
         },
         "attrs": [
           "temperature"
-        ]
+        ],
+        "attrsFormat": "legacy"
       },
       "throttling": 3
     },
@@ -92,7 +95,8 @@
         },
         "attrs": [
           "humidity"
-        ]
+        ],
+        "attrsFormat": "legacy"
       },
       "throttling": 3
     },
@@ -116,7 +120,8 @@
         },
         "attrs": [
           "location"
-        ]
+        ],
+        "attrsFormat": "legacy"
       },
       "throttling": 3
     },
@@ -140,7 +145,8 @@
         },
         "attrs": [
           "temperature"
-        ]
+        ],
+        "attrsFormat": "legacy"
       },
       "throttling": 3
     },
@@ -164,7 +170,8 @@
         },
         "attrs": [
           "humidity"
-        ]
+        ],
+        "attrsFormat": "legacy"
       },
       "throttling": 3
     },
@@ -188,7 +195,8 @@
         },
         "attrs": [
           "location"
-        ]
+        ],
+        "attrsFormat": "legacy"
       },
       "throttling": 3
     }

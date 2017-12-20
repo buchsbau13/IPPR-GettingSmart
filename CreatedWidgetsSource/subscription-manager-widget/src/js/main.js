@@ -136,7 +136,8 @@
                     },
                     "attrs": [
                         ""
-                    ]
+                    ],
+                    "attrsFormat": "legacy"
                 },
                 "throttling": 5
             }));
