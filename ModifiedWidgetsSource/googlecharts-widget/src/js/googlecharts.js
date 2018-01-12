@@ -81,7 +81,8 @@ window.Widget = (function () {
             "motionchart",
             "orgchart",
             "table",
-            "treemap"
+            "treemap",
+            "calendar"
         ];
 
         //For more info, show the Google Loader Developer's Guide: https://developers.google.com/loader/
@@ -139,10 +140,10 @@ window.Widget = (function () {
     var drawgraph = function drawgraph(graph, rawdata, ops) {
         var data = google.visualization.arrayToDataTable(rawdata);
 
-        if (this.type == "Gauge" && this.unit && this.unit !== undefined) {
-            var pattern = "#'" + this.unit + "'";
-            var formatter = new google.visualization.NumberFormat(
-                {pattern: pattern});
+        if (this.unit && this.unit !== undefined) {
+            var pattern = "#,#0.0'" + this.unit + "'";
+            var formatter = new google.visualization.NumberFormat({
+                pattern: pattern});
             formatter.format(data, 1); // Apply formatter to second column
         }
 
@@ -290,6 +291,7 @@ window.Widget = (function () {
             this.data = graphInfo.data;
             this.unit = graphInfo.unit;
             this.lastData = graphInfo.data;
+            this.options = graphInfo.options;
             this.updateGraph();
             // this.repaintGraph();
             MashupPlatform.widget.log(Messages.UpdatedCreated, MashupPlatform.log.INFO);

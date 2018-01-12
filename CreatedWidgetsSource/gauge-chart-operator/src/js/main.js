@@ -22,7 +22,7 @@
         var chart = {};
         var chartData = [];
 
-        rounded = Math.round(parseFloat((entity[attribute])));
+        rounded = Math.round(parseFloat(entity[attribute]) * 10) / 10;
         label = ['Label', 'Value'];
         value = [attribute, rounded];
 
