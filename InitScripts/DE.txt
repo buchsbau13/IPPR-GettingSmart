@@ -7,6 +7,12 @@
   "description": { "value": "Beschreibung" },
   "address": { "value": "Adresse" },
   "temperature": { "value": "Temperatur" },
+  "temp_sensor_info": { "value": "Sensor-Info [Temperatur]" },
+  "temp_sensor_status": { "value": "Sensor-Status [Temperatur]" },
   "humidity": { "value": "Luftfeuchtigkeit" },
-  "location": { "value": "Position" }
+  "humid_sensor_info": { "value": "Sensor-Info [Luftfeuchtigkeit]" },
+  "humid_sensor_status": { "value": "Sensor-Status [Luftfeuchtigkeit]" },
+  "location": { "value": "Position" },
+  "loc_sensor_info": { "value": "Sensor-Info [Position]" },
+  "loc_sensor_status": { "value": "Sensor-Status [Position]" }
 }
