@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="poi-info" version="1.0">
+    <details>
+        <title>PoI info</title>
+        <authors>Michael Janusch</authors>
+        <image>images/catalogue.png</image>
+        <description>Widget for displaying PoI information</description>
+        <license>Apache License 2.0</license>
+        <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
+    </details>
+    <persistentvariables>
+        <variable name="poiSave" type="text"/>
+    </persistentvariables>
+    <wiring>
+        <inputendpoint name="poi" type="text" label="PoI" description="PoI data" friendcode="poi"/>
+    </wiring>
+    <contents src="index.html" useplatformstyle="true"/>
+    <rendering height="500px" width="33%"/>
+</widget>

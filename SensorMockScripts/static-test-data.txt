@@ -1,2 +1,6 @@
-Temp_Lamp_1,apistatic,t,float,4.2
-Humid_Lamp_1,apistatic,h,int,63
+Dev_Lamp_1,apistatic,t,float,4.2
+Dev_Lamp_1,apistatic,h,int,63
+Dev_Lamp_1,apistatic,ti,string,testinfo
+Dev_Lamp_1,apistatic,ts,string,active
+Dev_Lamp_1,apistatic,hi,string,testinfo
+Dev_Lamp_1,apistatic,hs,string,active
