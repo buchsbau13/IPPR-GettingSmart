@@ -9,7 +9,14 @@
     </head>
     <body>
         <div id="floating-panel" class="floating-panel">
-            <label><input id="heatmap" type="checkbox" name="checkbox" value="heatmap" checked>Heatmap</label>
+            <div id="heatmap-settings" style="display: none;">
+                <form>
+                    <label>Radius</label>
+                    <input id="radius" type="range" min="1" max="50" step="1" value="20"/>
+                    <label>Blur</label>
+                    <input id="blur" type="range" min="1" max="50" step="1" value="5"/>
+                </form>
+            </div>
         </div>
         <div id="map" class="map"></div>
         <div id="button" class="se-btn"><i class="fa fa-bars" aria-hidden="true"></i></span></div>

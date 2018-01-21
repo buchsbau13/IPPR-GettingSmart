@@ -32,6 +32,13 @@
             poi_info = [poi_info];
         }
         poi_info.forEach(widget.registerPoI, widget);
-        poi_info.forEach(widget.addHeatmap, widget);
+    });
+
+    MashupPlatform.wiring.registerCallback('heatmapData', (heatmapData) => {
+        if (heatmapData && typeof heatmapData === "string") {
+            heatmapData = JSON.parse(heatmapData);
+        }
+
+        widget.addHistoricHeatmap(heatmapData);
     });
 })();

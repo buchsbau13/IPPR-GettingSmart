@@ -133,11 +133,25 @@
     };
 
     var createEmptyHeatmap = function createEmptyHeatmap(heatmapName) {
+        document.getElementById('heatmap-settings').style.display = 'block';
+        var blur = document.getElementById('blur');
+        var radius = document.getElementById('radius');
+
+        blur.addEventListener('input', function () {
+            var heatmap = getLayerByName("heatmap", map);
+            heatmap.setBlur(parseInt(blur.value, 10));
+        });
+
+        radius.addEventListener('input', function () {
+            var heatmap = getLayerByName("heatmap", map);
+            heatmap.setRadius(parseInt(radius.value, 10));
+        });
+
         var mapSource = new ol.source.Vector();
         var heatmapLayer = new ol.layer.Heatmap({
             source: mapSource,
-            radius: 25,
-            blur: 20
+            radius: parseInt(radius.value, 10),
+            blur: parseInt(blur.value, 10)
         });
         heatmapLayer.set('name', heatmapName);
         return heatmapLayer;
@@ -165,10 +179,25 @@
             var layer = getLayerByName(layerName, map);
             if (this.checked) {
                 layer.setVisible(true);
+                if (layerName === 'heatmap') {
+                    document.getElementById('heatmap-settings').style.display = 'block';
+                }
             } else {
                 layer.setVisible(false);
+                if (layerName === 'heatmap') {
+                    document.getElementById('heatmap-settings').style.display = 'none';
+                }
             }
         });
+    };
+
+    var calculateHeatmapWeight = function calculateHeatmapWeight(attributeValue) {
+        var maxValue = MashupPlatform.prefs.get("maxValue");
+        if (maxValue === null || maxValue === undefined) {
+            maxValue = 100;
+        }
+        var heatmapWeight = (attributeValue / maxValue).toFixed(2);
+        return heatmapWeight;
     };
 
     // Create the default Marker style
@@ -198,8 +227,9 @@
             var resultContents = result.Contents;
             var layerArray = resultContents.Layer;
             var baseLayers = createLayers(result, layerArray);
+            var geolandBasemap = "geolandbasemap";
 
-            map.getLayers().insertAt(0, baseLayers["geolandbasemap"]);
+            map.getLayers().insertAt(0, baseLayers[geolandBasemap]);
             createLayerOptions(layerArray, map, baseLayers);
 
             if (err) {
@@ -207,13 +237,9 @@
             }
         });
 
-        var heatmapLayer = createEmptyHeatmap('heatmap');
-        map.addLayer(heatmapLayer);
-        toggleLayer('heatmap', 'heatmap', map);
-
         try {
             var layerTypes = JSON.parse(MashupPlatform.prefs.get("layerTypes"));
-        } catch(err) {
+        } catch (err) {
             MashupPlatform.widget.log(err, MashupPlatform.log.INFO);
         }
         if (layerTypes != null) {
@@ -233,10 +259,9 @@
         // display popup on click
         map.on('click', function (event) {
             var feature = map.forEachFeatureAtPixel(event.pixel,
-                function (feature, layer) {
-                    if (layer.get('name') != 'heatmap') {
-                        return feature;
-                    }
+                function (feature) {
+                    return feature;
+
                 });
 
             if (feature != null && feature !== this.selected_feature) {
@@ -330,45 +355,47 @@
         iconFeature.setStyle(style);
     };
 
-    Widget.prototype.addHeatmap = function addHeatmap(poi_info) {
+    Widget.prototype.addHistoricHeatmap = function addHistoricHeatmap(poi_info) {
         var heatmapLayer = getLayerByName('heatmap', map);
-        var heatmapFeature;
-        heatmapFeature = heatmapLayer.getSource().getFeatureById(poi_info.id);
-
-        if (heatmapFeature == null) {
-            heatmapFeature = new ol.Feature();
-            heatmapFeature.setId(poi_info.id);
-            heatmapLayer.getSource().addFeature(heatmapFeature);
+        var id = poi_info.id;
+        var poiSetIdentifier = poi_info.poiSetIdentifier;
+        var currentValue = poi_info.currentValue;
+        if (currentValue === null || currentValue === undefined) {
+            var heatmapAttribute = MashupPlatform.prefs.get("heatmapAttribute");
+            currentValue = poi_info.data[heatmapAttribute];
         }
 
-        heatmapFeature.set('data', poi_info.data);
-        heatmapFeature.set('title', poi_info.title);
+        if (!heatmapLayer) {
+            heatmapLayer = createEmptyHeatmap('heatmap');
+            createCheckbox("heatmap", "Heatmap");
+            map.getLayers().insertAt(1, heatmapLayer);
+            toggleLayer('heatmap', 'heatmap', map);
+        }
+
+        var oldFeatures = heatmapLayer.getSource().getFeatures();
+
+        for (var i = 0; i < oldFeatures.length; i++) {
+            var featureName = oldFeatures[i].get('name');
+            var featurePoiSetIdentifier = oldFeatures[i].get('identifier');
+            if (featureName === id.toString() && featurePoiSetIdentifier !== poiSetIdentifier) {
+                heatmapLayer.getSource().removeFeature(oldFeatures[i]);
+            } else if (featureName === id.toString() && featurePoiSetIdentifier === undefined) {
+                heatmapLayer.getSource().removeFeature(oldFeatures[i]);
+            }
+        }
+
+        var heatmapFeature = new ol.Feature();
+        heatmapFeature.set('name', id);
+        heatmapFeature.set('identifier', poiSetIdentifier);
         heatmapFeature.set('content', poi_info.infoWindow);
-        if ('location' in poi_info) {
-            var geometry = this.geojsonparser.readGeometry(poi_info.location).transform('EPSG:4326', 'EPSG:3857');
-            heatmapFeature.setGeometry(new ol.geom.Point(geometry.getExtent()));
-        } else {
-            heatmapFeature.setGeometry(
-                new ol.geom.Point(
-                    ol.proj.transform([poi_info.currentLocation.lng, poi_info.currentLocation.lat], 'EPSG:4326', 'EPSG:3857')
-                )
-            );
-        }
+        heatmapFeature.setGeometry(
+            new ol.geom.Point(
+                ol.proj.transform([poi_info.currentLocation.lng, poi_info.currentLocation.lat], 'EPSG:4326', 'EPSG:3857')
+            )
+        );
+        heatmapFeature.set('weight', calculateHeatmapWeight(currentValue));
 
-        var mapData = poi_info.data;
-        var temperature = mapData['temperature'];
-
-        if (temperature <= 0) {
-            heatmapFeature.set('weight', 0.2);
-        } else if (temperature > 0 && temperature <= 10) {
-            heatmapFeature.set('weight', 0.4);
-        } else if (temperature > 10 && temperature <= 20) {
-            heatmapFeature.set('weight', 0.6)
-        } else if (temperature > 20 && temperature <= 30) {
-            heatmapFeature.set('weight', 0.8)
-        } else {
-            heatmapFeature.set('weight', 1)
-        }
+        heatmapLayer.getSource().addFeature(heatmapFeature);
     };
 
     Widget.prototype.center_popup_menu = function center_popup_menu(feature) {
@@ -395,8 +422,8 @@
             marker_coordinates = ol.extent.getCenter(feature.getGeometry().getExtent());
             marker_position = map.getPixelFromCoordinate(marker_coordinates);
             marker_style = feature.getStyle(map.getView().getResolution());
-            marker_image = marker_style.getImage();
-            if (marker_image != null) {
+            if (marker_style != null) {
+                marker_image = marker_style.getImage();
                 var marker_scale = marker_image.getScale();
                 var marker_size = marker_image.getSize().map(function (value) {
                     return value * marker_scale;

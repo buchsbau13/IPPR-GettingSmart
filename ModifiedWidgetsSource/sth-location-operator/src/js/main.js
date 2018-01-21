@@ -25,8 +25,20 @@
     // PUBLIC
     // =========================================================================
 
+    var timestamps, dataseries, initialAttribute;
+
     var STHSource = function STHSource() {
+        mp.wiring.registerCallback("timestamps", function (timestampsArray) {
+            timestamps = timestampsArray;
+        });
+        mp.wiring.registerCallback("dataserie", function (dataserieArray) {
+            dataseries = dataserieArray;
+        });
+        mp.wiring.registerCallback("attribute", function (attribute) {
+            initialAttribute = attribute;
+        });
         mp.wiring.registerCallback("entity", function (entityString) {
+            mp.operator.log(JSON.parse(entityString), mp.log.INFO);
             requestData(entityString);
         });
     };
@@ -39,6 +51,11 @@
     var entity_type = 'entity_type';
 
     var requestData = function requestData(entityString) {
+        // Check for data
+        if (timestamps.length === 0 || dataseries === 0 || !entityString) {
+            return;
+        }
+
         if (entityString) {
             var entity_data = JSON.parse(entityString);
             if (entity_data.id != '') {
@@ -67,11 +84,11 @@
             request_headers['FIWARE-ServicePath'] = '/';
         }
 
-        // var today = new Date();
-        // var from = new Date(today - (10 /* days */ * 24 /* hours */ * 60 /* mins */ * 60 /* segs */ * 1000 /* miliseconds */));
-        // var to = today;
-        var hlimit = mp.prefs.get('lastn');
+        var hlimit = timestamps.length;
         var attribute = mp.prefs.get('attribute');
+        var dateFrom = new Date(Math.min.apply(Math, timestamps));
+        var dateTo = new Date(Math.max.apply(Math, timestamps));
+        dateTo = dateTo.setMilliseconds(dateTo.getMilliseconds() + 1);
 
         var url = new URL('v1/contextEntities/type/' + entity_type + '/id/' + entity + '/attributes/' + attribute, server);
 
@@ -79,22 +96,33 @@
             method: "GET",
             requestHeaders: request_headers,
             parameters: {
-                lastN: hlimit/* ,
-                dateFrom: from.toISOString(),
-                dateTo: to.toISOString()*/
+                hLimit: hlimit,
+                hOffset: 0,
+                dateFrom: dateFrom,
+                dateTo: dateTo
             },
             onSuccess: function (response) {
                 if (response.status !== 200) {
                     throw new Error('Unexpected response from STH');
                 }
 
-                var data = JSON.parse(response.responseText).contextResponses[0].contextElement.attributes[0].values;
-                mp.wiring.pushEvent("values", data.map(function (entry) {return Number(entry.attrValue);}));
-                mp.operator.log(data.map(function (entry) {return Number(entry.attrValue);}), mp.log.INFO);
-                mp.wiring.pushEvent("timestamps", data.map(function (entry) {return (new Date(entry.recvTime)).getTime();}));
-                mp.operator.log(data.map(function (entry) {return (new Date(entry.recvTime)).getTime();}), mp.log.INFO);
-                mp.wiring.pushEvent("outputEntity", entityString);
-                mp.wiring.pushEvent("attribute", attribute);
+                var responseData = JSON.parse(response.responseText).contextResponses[0].contextElement.attributes[0].values;
+                var data = {};
+                data.entityId = entity_data.id;
+                data.entity = entityString;
+                data.attribute = initialAttribute;
+                data.timestamps = timestamps;
+                data.dataseries = dataseries;
+                data.dataseriesLocation = responseData.map(function (entry) {
+                    return entry.attrValue;
+                });
+
+                if (data.dataseries.length !== data.dataseriesLocation.length) {
+                    return;
+                }
+
+                mp.operator.log(data, mp.log.INFO);
+                mp.wiring.pushEvent("data", JSON.stringify(data));
             },
             onFailure: function (response) {
                 throw new Error('Unexpected response from STH');
