@@ -14,9 +14,6 @@
     <persistentvariables>
         <variable name="timestampSave" type="text"/>
     </persistentvariables>
-    <preferences>
-        <preference name="tz_offset" type="text" label="Timezone offset" description="Timezone offset to UTC in hours" default="+1"/>
-    </preferences>
     <wiring>
         <outputendpoint name="timestamps" type="text" label="Timestamps" description="Start and end timestamps" friendcode="timestamps"/>
     </wiring>

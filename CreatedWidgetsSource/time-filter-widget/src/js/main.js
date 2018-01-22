@@ -28,9 +28,9 @@
         var today = (new Date()).toISOString().slice(0, 10);
 
         var startLabel = document.createElement('label');
-        startLabel.innerHTML = "From:";
+        startLabel.innerHTML = "From:&nbsp;";
         var endLabel = document.createElement('label');
-        endLabel.innerHTML = "Until:";
+        endLabel.innerHTML = "Until:&nbsp;";
         var startDate = document.createElement('input');
         startDate.type = "date";
         startDate.value = today;
@@ -91,9 +91,17 @@
     };
 
     var sendData = function sendData(startDate, startTime, endDate, endTime) {
+        var offsetString;
         var ts = {};
         var saveData = {};
         var timestampSave = MashupPlatform.widget.getVariable('timestampSave');
+
+        var offset = Math.round((new Date()).getTimezoneOffset() * -1 / 60);
+        if (offset >= 0) {
+            offsetString = "+" + offset.toString();
+        } else {
+            offsetString = offset.toString();
+        }
 
         saveData.startDate = startDate;
         saveData.startTime = startTime;
@@ -101,8 +109,8 @@
         saveData.endTime = endTime;
         timestampSave.set(JSON.stringify(saveData));
 
-        ts.start = Date.parse((new Date(startDate + " " + startTime + " UTC" + MashupPlatform.prefs.get('tz_offset'))).toISOString());
-        ts.end = Date.parse((new Date(endDate + " " + endTime + " UTC" + MashupPlatform.prefs.get('tz_offset'))).toISOString());
+        ts.start = Date.parse((new Date(startDate + " " + startTime + " UTC" + offsetString)).toISOString());
+        ts.end = Date.parse((new Date(endDate + " " + endTime + " UTC" + offsetString)).toISOString());
 
         MashupPlatform.wiring.pushEvent("timestamps", JSON.stringify(ts));
     };
