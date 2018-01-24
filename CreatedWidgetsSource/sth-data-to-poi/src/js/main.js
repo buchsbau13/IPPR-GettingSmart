@@ -33,7 +33,7 @@
         var timestamps = data.timestamps;
         var dataseries = data.dataseries;
         var dataseriesLocation = data.dataseriesLocation;
-        var entity = data.entity;
+        var entity = JSON.parse(data.entity);
         var attribute = data.attribute;
         var poiSetIdentifier = new Date().getTime();
 
@@ -46,13 +46,18 @@
             };
 
             var infoWindow = "<div>";
+            infoWindow += '<span style="font-size:12px;"><b>Id: </b>' + id + '</span><br />';
             infoWindow += '<span style="font-size:12px;"><b>' + attribute + ": </b>" + dataseries[i] + "</span><br />";
+            infoWindow += '<span style="font-size:12px;"><b>Location: </b>' + dataseriesLocation[i] + '</span><br />';
             infoWindow += "</div>";
+
+            var updatedEntity = entity;
+            updatedEntity[attribute] = dataseries[i];
 
             var poi = {
                 id: id,
                 tooltip: id,
-                data: JSON.parse(entity),
+                data: updatedEntity,
                 infoWindow: infoWindow,
                 currentLocation: coordinates,
                 currentValue: dataseries[i],
