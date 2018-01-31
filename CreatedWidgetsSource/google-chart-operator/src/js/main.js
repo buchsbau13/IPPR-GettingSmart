@@ -6,8 +6,14 @@
 
     var timestamps = null; // Chart timestamps (X axis)
     var values = null; // Chart data series (Y axis)
+    var unit = null;
 
     var generateData = function generateData() {
+        // Check if all the required data is there
+        if (values === null || values.length === 0 || timestamps == null || timestamps.length === 0 || (unit == null && MashupPlatform.prefs.get('unit') === "")) {
+            return;
+        }
+
         var label;
         var chart = {};
         var chartData = [];
@@ -15,11 +21,8 @@
         var xAxis = MashupPlatform.prefs.get('xaxis');
         var yAxis = MashupPlatform.prefs.get('yaxis');
         var title = MashupPlatform.prefs.get('title');
-        var unit = MashupPlatform.prefs.get('unit');
-
-        // Check if theres data
-        if (values === null || values.length === 0 || timestamps == null || timestamps.length === 0) {
-            return;
+        if (!unit) {
+            unit = MashupPlatform.prefs.get('unit');
         }
 
         label = [xAxis, yAxis];
@@ -37,6 +40,11 @@
 
         MashupPlatform.wiring.pushEvent("chart", JSON.stringify(chart));
         MashupPlatform.operator.log(JSON.stringify(chart), MashupPlatform.log.INFO);
+
+        // set back fields to null
+        timestamps = null;
+        values = null;
+        unit = null;
     };
 
     var setChartOptions = function setChartOptions(title, xAxis, yAxis) {
@@ -92,6 +100,11 @@
 
     };
 
+    var unitCallback = function unitCallback(data) {
+        unit = data;
+        generateData();
+    };
+
     var timestampCallback = function timestampCallback(data) {
         timestamps = data;
         generateData();
@@ -104,4 +117,5 @@
     // Callback for the endpoints
     MashupPlatform.wiring.registerCallback("timestamps", timestampCallback);
     MashupPlatform.wiring.registerCallback("data-serie", dataserieCallback);
+    MashupPlatform.wiring.registerCallback("unit", unitCallback);
 })();

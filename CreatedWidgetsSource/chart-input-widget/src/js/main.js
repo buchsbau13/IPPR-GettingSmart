@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* global MashupPlatform, StyledElements, NGSI */
+/* global $, moment, MashupPlatform, StyledElements, NGSI */
 
 (function () {
 
@@ -73,8 +73,13 @@
                 }],
                 required: true
             },
-            "value": {
-                label: 'Attribute Value',
+            "unit": {
+                label: 'Attribute Unit',
+                type: 'text',
+                required: true
+            },
+            "datetime": {
+                label: 'Date Range',
                 type: 'text',
                 required: true
             }
@@ -82,19 +87,34 @@
         form = new StyledElements.Form(fields, {cancelButton: false});
         form.addEventListener("submit", updateEntity);
         form.fieldInterfaces.entity.inputElement.addEventListener('change', onEntityChange);
-        form.fieldInterfaces.attribute.inputElement.addEventListener('change', onAttributeChange);
-        layout.getCenterContainer().appendChild(form);
+        form.fieldInterfaces.attribute.inputElement.addEventListener('change', removeMessageBar);
+        form.fieldInterfaces.datetime.inputElement.addEventListener('change', removeMessageBar);
+        form.fieldInterfaces.unit.inputElement.addEventListener('change', removeMessageBar);
 
+        moment.locale('de-at');
+        $(form.fieldInterfaces.datetime.inputElement.inputElement).daterangepicker({
+            timePicker: true,
+            timePicker24Hour: true,
+            timeZone: null,
+            timePickerIncrement: 5,
+            locale: {
+                format: 'LLL'
+            }
+        });
+
+        layout.getCenterContainer().appendChild(form);
         layout.insertInto(document.body);
 
-        //Create the error div
+        // Create the error div
         error = document.createElement('div');
         error.setAttribute('class', 'alert alert-danger div_spaced');
+        error.setAttribute('id', error);
         layout.getCenterContainer().appendChild(error);
 
-        //Create the warn div
+        // Create the warn div
         info = document.createElement('div');
         info.setAttribute('class', 'alert alert-success div_spaced');
+        info.setAttribute('id', "info");
         layout.getCenterContainer().appendChild(info);
 
         hiddeStautsDivs();
@@ -122,6 +142,11 @@
     };
 
     var onEntityChange = function onEntityChange(select) {
+        var attributesFilter = MashupPlatform.prefs.get('attributes').trim();
+        if (attributesFilter !== "") {
+            attributesFilter = attributesFilter.split(new RegExp(',\\s*'));
+        }
+
         var attribute_values = currentData[select.getValue()];
 
         if (attribute_values == null) {
@@ -129,6 +154,9 @@
         }
 
         var attributes = Object.keys(attribute_values);
+        attributes = attributes.filter(function (e) {
+            return this.indexOf(e) >= 0;
+        }, attributesFilter);
         var old_attribute = form.fieldInterfaces.attribute.inputElement.getValue();
         var entries = [];
 
@@ -143,15 +171,7 @@
         if (attributes.indexOf(old_attribute) !== -1) {
             form.fieldInterfaces.attribute.inputElement.setValue(old_attribute);
         }
-        onAttributeChange(form.fieldInterfaces.attribute.inputElement);
-    };
-
-    var onAttributeChange = function onAttributeChange(select) {
-        var entity = form.fieldInterfaces.entity.inputElement.getValue();
-        var attribute_values = currentData[entity];
-        var attribute = form.fieldInterfaces.attribute.inputElement.getValue();
-
-        form.fieldInterfaces.value.inputElement.setValue(attribute_values[attribute]);
+        removeMessageBar();
     };
 
     var doQuery = function doQuery() {
@@ -168,9 +188,7 @@
             id.type = type;
         }
 
-        ngsi.query([
-                id
-            ],
+        ngsi.query([id],
             null,
             {
                 flat: true,
@@ -204,38 +222,20 @@
         form.disable();
         hiddeStautsDivs();
 
-        var attributes =  [{
-                'name': data.attribute,
-                'contextValue': data.value
-            }];
+        var entityId = data.entity;
+        var dateParts = data.datetime.split(" - ");
 
-        if ('TimeInstant' in currentData[data.entity]) {
-            attributes.push({
-                'name': 'TimeInstant',
-                'contextValue': (new Date()).toISOString()
-            });
-        }
+        var output = {};
+        output.entity = currentData[entityId];
+        output.attribute = data.attribute;
+        output.unit = data.unit;
+        output.startDate = moment.utc(dateParts[0], 'LLL', 'de').toISOString();
+        output.endDate = moment.utc(dateParts[1], 'LLL', 'de').toISOString();
 
-        ngsi.updateAttributes([
-                {
-                    'entity': {'id': data.entity},
-                    'attributes': attributes
-                }
-            ], {
-                onSuccess: onUpdateAttributesSuccess,
-                onFailure: onUpdateAttributesFail
-            }
-        );
-    };
+        MashupPlatform.wiring.pushEvent('outputData', JSON.stringify(output));
+        MashupPlatform.widget.log(output, MashupPlatform.log.INFO);
 
-    var onUpdateAttributesFail = function onUpdateAttributesFail(e) {
         form.enable();
-        fail('Fail updating Attribute: ' + e);
-    };
-
-    var onUpdateAttributesSuccess = function onUpdateAttributesSuccess() {
-        form.enable();
-        complete('Attribute updated correctly');
     };
 
     MashupPlatform.prefs.registerCallback(function (new_values) {
@@ -252,6 +252,23 @@
         }
     }.bind(this));
 
-    window.addEventListener("DOMContentLoaded", init, false);
+    MashupPlatform.wiring.registerCallback("message", function (messageString) {
+        var message = JSON.parse(messageString);
+        if (message.type === "error") {
+            fail(message.text);
+        } else {
+            complete(message.text);
+        }
+    });
 
+    var removeMessageBar = function removeMessageBar() {
+        if (error) {
+            error.classList.add('hidden');
+        }
+        if (info) {
+            info.classList.add('hidden');
+        }
+    };
+
+    window.addEventListener("DOMContentLoaded", init, false);
 })();
