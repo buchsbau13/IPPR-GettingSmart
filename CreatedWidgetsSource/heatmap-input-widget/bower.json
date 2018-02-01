@@ -1,0 +1,32 @@
+{
+  "name": "ngsientityprovider",
+  "dependencies": {
+    "moment": "^2.20.1",
+    "bootstrap-css": "^3.3.7",
+    "jQuery": "^3.3.1",
+    "ion.rangeSlider": "ionrangeslider#^2.2.0"
+  },
+  "devDependencies": {},
+  "exportsOverride": {
+    "bootstrap-css": {
+      "js": "js/*.js",
+      "css": "css/*.css",
+      "fonts": "fonts/*",
+      "img": [
+        "img/*.png",
+        "img/*.jpg"
+      ]
+    },
+    "jQuery": {
+      "js": "dist/jquery.min.js"
+    },
+    "moment": {
+      "js": "min/*.js",
+      "locale": "locale/*.js"
+    },
+    "ion.rangeSlider": {
+      "js": "js/ion.rangeSlider.min.js",
+      "css": "css/*.css"
+    }
+  }
+}
