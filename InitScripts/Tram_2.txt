@@ -1,0 +1,20 @@
+{
+  "id": "Tram_2",
+  "type": "mobile",
+  "name":
+    {
+      "value": "Strassenbahn 2"
+    },
+  "description":
+    {
+      "value": "Strassenbahn Linie 6"
+    },
+  "temp_sensor_unit":
+    {
+      "value": "°C"
+    },
+  "humid_sensor_unit":
+    {
+      "value": "%"
+    }
+}

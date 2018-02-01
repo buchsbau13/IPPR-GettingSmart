@@ -1,0 +1,20 @@
+{
+  "id": "Bus_2",
+  "type": "mobile",
+  "name":
+    {
+      "value": "Bus 2"
+    },
+  "description":
+    {
+      "value": "Bus Linie 35"
+    },
+  "temp_sensor_unit":
+    {
+      "value": "°C"
+    },
+  "humid_sensor_unit":
+    {
+      "value": "%"
+    }
+}
