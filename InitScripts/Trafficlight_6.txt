@@ -1,0 +1,36 @@
+{
+  "id": "Trafficlight_6",
+  "type": "static",
+  "name":
+    {
+      "value": "Ampel 6"
+    },
+  "description":
+    {
+      "value": "Ampel Neue Stiftingtalstraße, Aspasiagasse"            
+    },
+  "location":
+    {
+      "type": "geo:point",
+      "value": "47.084242,15.470033"
+    },
+  "address":
+    {
+      "type": "PostalAddress",
+      "value":
+        {
+          "streetAddress": "Neue Stiftingtalstraße",
+          "addressRegion": "Styria",
+          "addressLocality": "Graz",
+          "postalCode": "8010"
+        }
+    },
+  "temp_sensor_unit":
+    {
+      "value": "°C"
+    },
+  "humid_sensor_unit":
+    {
+      "value": "%"
+    }
+}

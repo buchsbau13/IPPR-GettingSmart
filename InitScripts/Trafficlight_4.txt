@@ -1,0 +1,36 @@
+{
+  "id": "Trafficlight_4",
+  "type": "static",
+  "name":
+    {
+      "value": "Ampel 4"
+    },
+  "description":
+    {
+      "value": "Ampel Riesstraße, Neue Stiftingtalstraße"            
+    },
+  "location":
+    {
+      "type": "geo:point",
+      "value": "47.079206,15.468575"
+    },
+  "address":
+    {
+      "type": "PostalAddress",
+      "value":
+        {
+          "streetAddress": "Riesstraße",
+          "addressRegion": "Styria",
+          "addressLocality": "Graz",
+          "postalCode": "8010"
+        }
+    },
+  "temp_sensor_unit":
+    {
+      "value": "°C"
+    },
+  "humid_sensor_unit":
+    {
+      "value": "%"
+    }
+}

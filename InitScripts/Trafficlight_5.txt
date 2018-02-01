@@ -1,0 +1,36 @@
+{
+  "id": "Trafficlight_5",
+  "type": "static",
+  "name":
+    {
+      "value": "Ampel 5"
+    },
+  "description":
+    {
+      "value": "Ampel Ragnitzstraße"            
+    },
+  "location":
+    {
+      "type": "geo:point",
+      "value": "47.078504,15.476574"
+    },
+  "address":
+    {
+      "type": "PostalAddress",
+      "value":
+        {
+          "streetAddress": "Ragnitzstraße",
+          "addressRegion": "Styria",
+          "addressLocality": "Graz",
+          "postalCode": "8010"
+        }
+    },
+  "temp_sensor_unit":
+    {
+      "value": "°C"
+    },
+  "humid_sensor_unit":
+    {
+      "value": "%"
+    }
+}

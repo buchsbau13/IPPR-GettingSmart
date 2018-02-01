@@ -1,0 +1,36 @@
+{
+  "id": "Trafficlight_1",
+  "type": "static",
+  "name":
+    {
+      "value": "Ampel 1"
+    },
+  "description":
+    {
+      "value": "Ampel Elisabethstraße, Hugo-Wolf-Gasse, Lichtenfelsgasse"            
+    },
+  "location":
+    {
+      "type": "geo:point",
+      "value": "47.074488,15.450101"
+    },
+  "address":
+    {
+      "type": "PostalAddress",
+      "value":
+        {
+          "streetAddress": "Elisabethstraße",
+          "addressRegion": "Styria",
+          "addressLocality": "Graz",
+          "postalCode": "8010"
+        }
+    },
+  "temp_sensor_unit":
+    {
+      "value": "°C"
+    },
+  "humid_sensor_unit":
+    {
+      "value": "%"
+    }
+}
