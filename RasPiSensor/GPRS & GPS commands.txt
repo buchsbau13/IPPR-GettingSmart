@@ -1,0 +1,35 @@
+---------------GPRS---------------
+AT+SAPBR=3,1,"APN","webapn.at" -> Set APN (yesss!)
+AT+SAPBR=1,1 -> Apply settings
+(AT+SAPBR=2,1) -> Test for IP address
+
+<<GET>>
+AT+HTTPINIT -> Initialize HTTP session
+AT+HTTPPARA="CID",1 -> Set context ID
+AT+HTTPPARA="USERDATA","Fiware-Service: graziot\r\nFiware-ServicePath: /" -> Set FIWARE headers
+AT+HTTPPARA="URL","http://160.85.2.61:1026/v2/entities?id=Bus_1" -> Set URL
+AT+HTTPACTION=0 -> Send HTTP request
+AT+HTTPREAD -> Read HTTP response
+AT+HTTPTERM -> Close HTTP session
+
+<<POST>>
+AT+HTTPINIT -> Initialize HTTP session
+AT+HTTPPARA="CID",1 -> Set context ID
+AT+HTTPPARA="CONTENT","text/plain" -> Set content-type header
+AT+HTTPPARA="USERDATA","Fiware-Service: graziot\r\nFiware-ServicePath: /" -> Set FIWARE headers
+AT+HTTPPARA="URL","http://160.85.2.61:7896/iot/d?k=apimobile&i=Dev_RasPi" -> Set URL
+AT+HTTPDATA=<PAYLOAD_SIZE>,10000 -> Set payload size and timeout
+
+!!! Wait for "DOWNLOAD" before writing data, then wait for timeout to end !!!
+
+(AT+HTTPSSL=1) -> Activate HTTPS (if necessary)
+AT+HTTPACTION=1 -> Send HTTP request
+AT+HTTPREAD -> Read HTTP response
+AT+HTTPTERM -> Close HTTP session
+
+---------------GPS---------------
+(AT+CGNSTST=0) -> Disable UART output of GPS data to console
+AT+CGNSPWR=1 -> Power up GPS module
+
+AT+CGPSSTATUS? -> Get GPS status (should be "Location 3D Fix")
+AT+CGNSINF -> Read GPS data (latitude and longitude at forth and fifth fields)
