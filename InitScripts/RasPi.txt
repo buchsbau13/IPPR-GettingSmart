@@ -1,0 +1,24 @@
+{
+  "id": "RasPi",
+  "type": "mobile",
+  "name":
+    {
+      "value": "Raspberry Pi 3"
+    },
+  "description":
+    {
+      "value": "Raspberry Pi 3 with air quality/temperature/humidity sensors"            
+    },
+  "temp_sensor_unit":
+    {
+      "value": "°C"
+    },
+  "humid_sensor_unit":
+    {
+      "value": "%"
+    },
+  "air_sensor_unit":
+    {
+      "value": "μg/m³"
+    }
+}

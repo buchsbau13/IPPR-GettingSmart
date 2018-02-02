@@ -22,3 +22,8 @@ Tram_1,mobile,location
 Tram_2,mobile,temperature
 Tram_2,mobile,humidity
 Tram_2,mobile,location
+RasPi,mobile,temperature
+RasPi,mobile,humidity
+RasPi,mobile,pm2_5
+RasPi,mobile,pm10
+RasPi,mobile,location
