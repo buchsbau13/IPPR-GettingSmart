@@ -148,7 +148,7 @@
         });
 
         var mapSource = new ol.source.Vector();
-        var heatmapLayer = new ol.layer.Heatmap({
+        var heatmapLayer = new ol.layer.Colormap({
             source: mapSource,
             radius: parseInt(radius.value, 10),
             blur: parseInt(blur.value, 10)

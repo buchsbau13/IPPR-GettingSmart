@@ -1,16 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="sth-location-operator" version="1.1">
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="sth-location-operator" version="1.1.5">
     <details>
         <title>STH location operator</title>
         <homepage>https://github.com/wirecloud-fiware/sth-source</homepage>
         <authors>Buchsbaum Julia</authors>
         <image>images/catalogue.png</image>
         <description>Retrieve historical data for attribute location</description>
-        <longdescription>DESCRIPTION.md</longdescription>
         <license>Apache License 2.0</license>
         <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
-        <doc>doc/userguide.md</doc>
-        <changelog>doc/changelog.md</changelog>
     </details>
     <requirements>
         <feature name="NGSI"/>
@@ -22,14 +19,10 @@
         <preference name="attribute" type="text" label="Attribute" description="Attribute of the entity to query about." default="location" />
     </preferences>
     <wiring>
-        <inputendpoint name="dataserie" label="Values" description="Data series" type="text" />
-        <inputendpoint name="timestamps" label="Timestamps" description="Data timestamps" type="text" />
-        <inputendpoint name="entity" type="text" label="Entity" description="Entity information to use for retrieving the historical information" />
-        <inputendpoint name="attribute" type="text" label ="Attribute" description="Attribute for which the STH data was retrieved"></inputendpoint>
-        <outputendpoint name="data" type="text" label="Data" description="Data" />
+        <inputendpoint name="inputData" type="text" label="Input Data" description="Data that is used for retrieving the historical information" />
+        <outputendpoint name="outputData" type="text" label="Output Data" description="Output Data" />
     </wiring>
     <scripts>
         <script src="js/main.js"/>
     </scripts>
-
 </operator>

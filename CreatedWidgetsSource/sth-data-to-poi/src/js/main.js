@@ -21,11 +21,11 @@
     "use strict";
 
     MashupPlatform.wiring.registerCallback("sthData", function (data) {
-        if (data && typeof data === "string") {
+        if (data) {
             try {
                 data = JSON.parse(data);
             } catch (err) {
-                MashupPlatform.operator.log("Please provide a string with a valid JSON format as Input. Error Message: " + (err));
+                MashupPlatform.operator.log("Invalid Input Data. Error: " + (err));
             }
         }
 
@@ -38,12 +38,14 @@
         var poiSetIdentifier = new Date().getTime();
 
         for (var i = 0; i < timestamps.length; i++) {
-            var locationParts = dataseriesLocation[i].split(new RegExp(',\\s*'));
-            var coordinates = {
-                system: "WGS84",
-                lng: parseFloat(locationParts[1]),
-                lat: parseFloat(locationParts[0])
-            };
+            if (dataseriesLocation[i]) {
+                var locationParts = dataseriesLocation[i].split(new RegExp(',\\s*'));
+                var coordinates = {
+                    system: "WGS84",
+                    lng: parseFloat(locationParts[1]),
+                    lat: parseFloat(locationParts[0])
+                };
+            }
 
             var infoWindow = "<div>";
             infoWindow += '<span style="font-size:12px;"><b>Id: </b>' + id + '</span><br />';
@@ -64,7 +66,6 @@
                 poiSetIdentifier: poiSetIdentifier
             };
 
-            MashupPlatform.operator.log(poi, MashupPlatform.log.INFO);
             MashupPlatform.wiring.pushEvent("poiOutput", JSON.stringify(poi));
         }
     });

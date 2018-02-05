@@ -20,51 +20,32 @@
 
     "use strict";
 
-
     // =========================================================================
     // PUBLIC
     // =========================================================================
 
-    var timestamps, dataseries, initialAttribute;
-
     var STHSource = function STHSource() {
-        mp.wiring.registerCallback("timestamps", function (timestampsArray) {
-            timestamps = timestampsArray;
-        });
-        mp.wiring.registerCallback("dataserie", function (dataserieArray) {
-            dataseries = dataserieArray;
-        });
-        mp.wiring.registerCallback("attribute", function (attribute) {
-            initialAttribute = attribute;
-        });
-        mp.wiring.registerCallback("entity", function (entityString) {
-            mp.operator.log(JSON.parse(entityString), mp.log.INFO);
-            requestData(entityString);
-        });
+        mp.wiring.registerCallback("inputData", function (inputData) {
+            if (inputData) {
+                try {
+                    var currentData = JSON.parse(inputData);
+                    requestData(currentData);
+                } catch (err) {
+                    MashupPlatform.operator.log("Invalid Input Data!" + err)
+                }
+            }
+        })
     };
 
     // =========================================================================
     // PRIVATE
     // =========================================================================
 
-    var entity = 'entity';
-    var entity_type = 'entity_type';
-
-    var requestData = function requestData(entityString) {
-        // Check for data
-        if (timestamps.length === 0 || dataseries === 0 || !entityString) {
-            return;
-        }
-
-        if (entityString) {
-            var entity_data = JSON.parse(entityString);
-            if (entity_data.id != '') {
-                entity = entity_data.id;
-            }
-            if (entity_data.type != '') {
-                entity_type = entity_data.type;
-            }
-        }
+    var requestData = function requestData(currentData) {
+        var entity = JSON.parse(currentData.entity);
+        var initialAttribute = currentData.attribute;
+        var timestamps = currentData.timestamps;
+        var dataseries = currentData.dataseries;
 
         var server = new URL(mp.prefs.get('sth_server'));
         if (server.pathname[server.pathname.length - 1] !== "/") {
@@ -86,11 +67,11 @@
 
         var hlimit = timestamps.length;
         var attribute = mp.prefs.get('attribute');
-        var dateFrom = new Date(Math.min.apply(Math, timestamps));
+        var dateFrom = new Date(Math.min.apply(Math, timestamps)).toISOString();
         var dateTo = new Date(Math.max.apply(Math, timestamps));
-        dateTo = dateTo.setMilliseconds(dateTo.getMilliseconds() + 1);
+        dateTo = new Date(dateTo.setMilliseconds(dateTo.getMilliseconds() + 1)).toISOString();
 
-        var url = new URL('v1/contextEntities/type/' + entity_type + '/id/' + entity + '/attributes/' + attribute, server);
+        var url = new URL('v1/contextEntities/type/' + entity.type + '/id/' + entity.id + '/attributes/' + attribute, server);
 
         mp.http.makeRequest(url, {
             method: "GET",
@@ -107,22 +88,36 @@
                 }
 
                 var responseData = JSON.parse(response.responseText).contextResponses[0].contextElement.attributes[0].values;
-                var data = {};
-                data.entityId = entity_data.id;
-                data.entity = entityString;
-                data.attribute = initialAttribute;
-                data.timestamps = timestamps;
-                data.dataseries = dataseries;
-                data.dataseriesLocation = responseData.map(function (entry) {
+                var dateseriesLocation = responseData.map(function (entry) {
                     return entry.attrValue;
                 });
 
-                if (data.dataseries.length !== data.dataseriesLocation.length) {
-                    return;
+                if (dataseries.length !== 0 && timestamps.length !== 0) {
+                    var data = {};
+                    data.entityId = entity.id;
+                    data.entity = JSON.stringify(entity);
+                    data.attribute = initialAttribute;
+                    data.timestamps = timestamps;
+                    data.dataseries = dataseries;
+
+                    if (dateseriesLocation && dateseriesLocation.length !== 0) {
+                        data.dataseriesLocation = dateseriesLocation;
+                    } else if (dateseriesLocation && dateseriesLocation.length === 0) {
+                        // use current location
+                        if (entity.location) {
+                            data.dataseriesLocation = Array(dataseries.length).fill(entity.location);
+                        }
+                    } else {
+                        mp.operator.log("No Locations found for Entity: " + entity.id, mp.log.INFO);
+                    }
+
+                    mp.wiring.pushEvent("outputData", JSON.stringify(data));
+                    mp.operator.log("Location data retrieved successfully for Entity: " + entity.id, mp.log.INFO);
+                } else {
+                    mp.operator.log("Input Data empty for Entity: " + entity.id, mp.log.INFO);
                 }
 
-                mp.operator.log(data, mp.log.INFO);
-                mp.wiring.pushEvent("data", JSON.stringify(data));
+
             },
             onFailure: function (response) {
                 throw new Error('Unexpected response from STH');

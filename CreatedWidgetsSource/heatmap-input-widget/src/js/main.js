@@ -84,7 +84,8 @@
 
         moment.locale('de-at');
         var beginMoment = moment.utc("2018-01-01");
-        var endMoment = moment.utc(new Date());
+        var endMoment = new Date();
+        endMoment = moment.utc(endMoment.setHours(endMoment.getHours() + 1));
 
         form.fieldInterfaces.from.inputElement.setValue(moment.utc(beginMoment).format("LLL"));
         form.fieldInterfaces.to.inputElement.setValue(moment.utc(endMoment).format("LLL"));
@@ -198,17 +199,16 @@
     }.bind(this));
 
     var onInputChange = function onInputChange() {
-        MashupPlatform.wiring.pushEvent('entities', JSON.stringify(currentData));
-        MashupPlatform.widget.log(currentData, MashupPlatform.log.INFO);
-
         MashupPlatform.wiring.pushEvent('attribute', form.fieldInterfaces.attribute.inputElement.getValue());
-        MashupPlatform.widget.log(form.fieldInterfaces.attribute.inputElement.getValue(), MashupPlatform.log.INFO);
+        MashupPlatform.wiring.pushEvent('dateFrom', moment.utc(form.fieldInterfaces.from.inputElement.getValue(), 'LLL', 'de').toISOString());
+        MashupPlatform.wiring.pushEvent('dateTo', moment.utc(form.fieldInterfaces.to.inputElement.getValue(), 'LLL', 'de').toISOString());
+        MashupPlatform.wiring.pushEvent('entities', JSON.stringify(currentData));
 
-        MashupPlatform.wiring.pushEvent('dateFrom', form.fieldInterfaces.from.inputElement.getValue());
-        MashupPlatform.widget.log("FROM: " + form.fieldInterfaces.from.inputElement.getValue(), MashupPlatform.log.INFO);
-
-        MashupPlatform.wiring.pushEvent('dateTo', form.fieldInterfaces.to.inputElement.getValue());
-        MashupPlatform.widget.log("TO: " + form.fieldInterfaces.to.inputElement.getValue(), MashupPlatform.log.INFO);
+        MashupPlatform.widget.log(
+            "Data will be retrieved for Attribute: " + form.fieldInterfaces.attribute.inputElement.getValue() +
+            " from " + form.fieldInterfaces.from.inputElement.getValue() +
+            " to " + form.fieldInterfaces.to.inputElement.getValue(),
+            MashupPlatform.log.INFO);
     };
 
     window.addEventListener("DOMContentLoaded", init, false);

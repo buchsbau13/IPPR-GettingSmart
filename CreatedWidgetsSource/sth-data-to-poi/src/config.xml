@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="sth-Data-To-Poi" version="1.1.0">
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="sth-data-to-poi" version="1.1.1">
   <details>
     <title>STH Data to POIs</title>
     <authors>Buchsbaum Julia</authors>
     <image>images/catalogue.png</image>
-    <description>Convert STH Source Data to POIs.</description>
+    <description>Convert STH Source Data to PoIs.</description>
     <license>Apache License 2.0</license>
     <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
   </details>

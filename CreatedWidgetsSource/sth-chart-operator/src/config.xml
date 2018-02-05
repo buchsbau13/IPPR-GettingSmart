@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="sth-chart-operator" version="1.1">
+    <details>
+        <title>STH Chart Source</title>
+        <authors>Buchsbaum Julia</authors>
+        <image>images/catalogue.png</image>
+        <description>Retrieve historical data for Google Charts</description>
+        <license>Apache License 2.0</license>
+        <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
+    </details>
+    <requirements>
+        <feature name="NGSI"/>
+    </requirements>
+    <preferences>
+        <preference name="sth_server" type="text" label="STH server URL" description="URL of the STH server to use for retrieving entity information" default="http://sth.lab.fiware.org:8666/STH"/>
+        <preference name="ngsi_tenant" type="text" label="NGSI tenant/service" description="Tenant/service to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol. Maximum length is 50 characters. If empty, the default tenant will be used" default="service"/>
+        <preference name="ngsi_service_path" type="text" label="NGSI scope" description="Scope/path to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol separated by &quot;/&quot; slashes. Maximum length is 50 characters. If empty, the default service path will be used: /" default="/"/>
+    </preferences>
+    <wiring>
+        <inputendpoint name="inputWidgetData" type="text" label="Input Widget Data" description="Input Widget Data" friendcode="inputWidgetData"/>
+        <outputendpoint name="values" type="text" label="Values" description="Values" friendcode="data-serie"/>
+        <outputendpoint name="timestamps" type="text" label="Timestamps" description="Value timestamps" friendcode="timestamp-list"/>
+        <outputendpoint name="message" type="text" label="Message" description="Message" />
+        <outputendpoint name="unit" type="text" label="Unit" description="Unit for Formatting" />
+    </wiring>
+    <scripts>
+        <script src="js/main.js"/>
+    </scripts>
+</operator>

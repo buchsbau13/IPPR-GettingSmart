@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM"
+          name="sth-multi-input-source-operator" version="1.0.3">
+    <details>
+        <title>STH Multi Input Source</title>
+        <authors>Buchsbaum Julia</authors>
+        <image>images/catalogue.png</image>
+        <description>Retrieve historical data for multiple entities</description>
+        <license>Apache License 2.0</license>
+        <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
+    </details>
+    <requirements>
+        <feature name="NGSI"/>
+    </requirements>
+    <preferences>
+        <preference name="sth_server" type="text" label="STH server URL"
+                    description="URL of the STH server to use for retrieving entity information"
+                    default="http://sth.lab.fiware.org:8666/STH"/>
+        <preference name="ngsi_tenant" type="text" label="NGSI tenant/service"
+                    description="Tenant/service to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol. Maximum length is 50 characters. If empty, the default tenant will be used"
+                    default="service"/>
+        <preference name="ngsi_service_path" type="text" label="NGSI scope"
+                    description="Scope/path to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol separated by &quot;/&quot; slashes. Maximum length is 50 characters. If empty, the default service path will be used: /"
+                    default="/"/>
+    </preferences>
+    <wiring>
+        <inputendpoint name="entities" type="text" label="Entities" description="Entities"/>
+        <inputendpoint name="attribute" type="text" label="Attribute" description="Attribute"/>
+        <inputendpoint name="dateFrom" type="text" label="Date From" description="dateFrom"/>
+        <inputendpoint name="dateTo" type="text" label="Date To" description="dateTo"/>
+        <outputendpoint name="outputData" type="text" label="Output Data" description="Output Data"/>
+        <outputendpoint name="clear" type="text" label="Clear Map" description="Clear Map"/>
+    </wiring>
+    <scripts>
+        <script src="js/main.js"/>
+    </scripts>
+</operator>
