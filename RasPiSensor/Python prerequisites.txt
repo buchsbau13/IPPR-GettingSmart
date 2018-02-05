@@ -1,0 +1,1 @@
+-> Install package pySerial (pip install pyserial)

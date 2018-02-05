@@ -24,7 +24,7 @@ AT+HTTPDATA=<PAYLOAD_SIZE>,10000 -> Set payload size and timeout
 
 (AT+HTTPSSL=1) -> Activate HTTPS (if necessary)
 AT+HTTPACTION=1 -> Send HTTP request
-AT+HTTPREAD -> Read HTTP response
+(AT+HTTPREAD) -> Read HTTP response
 AT+HTTPTERM -> Close HTTP session
 
 ---------------GPS---------------

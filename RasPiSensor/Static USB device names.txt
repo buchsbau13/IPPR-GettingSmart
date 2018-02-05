@@ -1,0 +1,7 @@
+-> Bind USB2Serial devices to static device names
+Create file "99-usb-serial.rules" in /etc/udev/rules.d and add the following two lines:
+
+SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", SYMLINK+="ttyGSMGPS"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", SYMLINK+="ttyAir"
+
+(ttyGSMGPS -> Waveshare GSM/GPRS/GNSS HAT, ttyAir -> Bluelover Nova PM Sensor)
