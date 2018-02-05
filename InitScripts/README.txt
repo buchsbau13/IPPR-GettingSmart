@@ -8,12 +8,13 @@ Python 2.7 and the python module 'requests' (install using pip)
 >>Execution<<
 'CreateObjects.py':
 
-python .\CreateObjects.py ent Lamp_1.txt
-(replace 'ent' with the type of object you want to create ('ent' for entity, 'srv' for service or
- 'dev' for device), replace 'Lamp_1.txt' with the name of the file
- containing the corresponding payload in json format)
+python .\CreateObjects.py ent Bus_1.txt
+(Replace 'ent' with the type of object you want to create ('ent' for entity, 'srv' for service or
+ 'dev' for device), replace 'Bus_1.txt' with the name of the file containing the corresponding payload
+ in json format. NOTE: entities must be created using individual files, whereas multiple services and
+ devices can be created using a single file)
  
 'CreateSubscriptions.py':
  
 python .\CreateSubscriptions.py subscriptions.txt
-(you can replace 'subscriptions.txt' with your own file)
+(You can replace 'subscriptions.txt' with your own file)

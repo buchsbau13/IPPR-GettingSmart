@@ -439,6 +439,79 @@
           "type": "Text"
         }
       ]
+    },
+    {
+      "device_id": "Dev_RasPi",
+      "entity_name": "RasPi",
+      "entity_type": "mobile",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "t",
+          "name": "temperature",
+          "type": "Float"
+        },
+        {
+          "object_id": "ti",
+          "name": "temp_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "ts",
+          "name": "temp_sensor_status",
+          "type": "Text"
+        },
+        {
+          "object_id": "h",
+          "name": "humidity",
+          "type": "Int"
+        },
+        {
+          "object_id": "hi",
+          "name": "humid_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "hs",
+          "name": "humid_sensor_status",
+          "type": "Text"
+        },
+        {
+          "object_id": "a1",
+          "name": "pm2_5",
+          "type": "Float"
+        },
+        {
+          "object_id": "a2",
+          "name": "pm10",
+          "type": "Float"
+        },
+        {
+          "object_id": "ai",
+          "name": "air_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "as",
+          "name": "air_sensor_status",
+          "type": "Text"
+        },
+        {
+          "object_id": "l",
+          "name": "location",
+          "type": "geo:point"
+        },
+        {
+          "object_id": "li",
+          "name": "loc_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "ls",
+          "name": "loc_sensor_status",
+          "type": "Text"
+        }
+      ]
     }
   ]
 }

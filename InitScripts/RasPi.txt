@@ -7,7 +7,7 @@
     },
   "description":
     {
-      "value": "Raspberry Pi 3 with air quality/temperature/humidity sensors"            
+      "value": "Raspberry Pi 3 with air quality/temperature/humidity sensors"
     },
   "temp_sensor_unit":
     {

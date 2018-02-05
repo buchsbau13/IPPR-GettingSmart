@@ -255,6 +255,30 @@
       }
     },
     {
+      "id": "RasPi",
+      "type": "mobile",
+      "name":
+        {
+          "value": "Raspberry Pi 3"
+        },
+      "description":
+        {
+          "value": "Raspberry Pi 3 with air quality/temperature/humidity sensors"
+        },
+      "temp_sensor_unit":
+        {
+          "value": "°C"
+        },
+      "humid_sensor_unit":
+        {
+          "value": "%"
+        },
+      "air_sensor_unit":
+        {
+          "value": "μg/m³"
+        }
+    },
+    {
       "id": "DE",
       "type": "friendly_names",
       "entity_id": { "value": "ID" },
@@ -268,6 +292,10 @@
       "humidity": { "value": "Luftfeuchtigkeit" },
       "humid_sensor_info": { "value": "Sensor-Info [Luftfeuchtigkeit]" },
       "humid_sensor_status": { "value": "Sensor-Status [Luftfeuchtigkeit]" },
+      "pm2_5": { "value": "Feinstaub [PM2.5]" },
+      "pm10": { "value": "Feinstaub [PM10]" },
+      "air_sensor_info": { "value": "Sensor-Info [Feinstaub]" },
+      "air_sensor_status": { "value": "Sensor-Status [Feinstaub]" },
       "location": { "value": "Position" },
       "loc_sensor_info": { "value": "Sensor-Info [Position]" },
       "loc_sensor_status": { "value": "Sensor-Status [Position]" }
@@ -286,6 +314,10 @@
       "humidity": { "value": "Humidity" },
       "humid_sensor_info": { "value": "Sensor info [humidity]" },
       "humid_sensor_status": { "value": "Sensor status [humidity]" },
+      "pm2_5": { "value": "Particulate matter [PM2.5]" },
+      "pm10": { "value": "Particulate matter [PM10]" },
+      "air_sensor_info": { "value": "Sensor info [particulate matter]" },
+      "air_sensor_status": { "value": "Sensor status [particulate matter]" },
       "location": { "value": "Location" },
       "loc_sensor_info": { "value": "Sensor info [location]" },
       "loc_sensor_status": { "value": "Sensor status [location]" }

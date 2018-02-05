@@ -599,6 +599,131 @@
         "attrsFormat": "legacy"
       },
       "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "RasPi",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "temperature"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "temperature"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "RasPi",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "humidity"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "humidity"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "RasPi",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "pm2_5"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "pm2_5"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "RasPi",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "pm10"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "pm10"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "RasPi",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "location"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "location"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
     }
   ]
 }
