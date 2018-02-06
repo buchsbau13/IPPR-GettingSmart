@@ -13,6 +13,8 @@ FIWARE_HEADERS = "Fiware-Service: graziot\\r\\nFiware-ServicePath: /"
 URL = "http://160.85.2.61:7896/iot/d?k=apimobile&i=Dev_RasPi"
 
 
+serGSMGPS = None
+
 def sendCommand(command, reply, count, timeout):
   resp = ""
   complete = False
@@ -30,8 +32,14 @@ def sendCommand(command, reply, count, timeout):
   return complete
 
 def sigTermExit(signal, frame):
-  serGSMGPS.write("AT+CFUN=1,1\r")
+  try:
+    serGSMGPS.write("AT+CFUN=1,1\r")
+  except AttributeError:
+    pass
   sys.exit("\rSIGTERM received. Exiting...")
+
+# Catch SIGTERM signal for controlled termination
+signal.signal(signal.SIGTERM, sigTermExit)
 
 while True:
   try:
@@ -41,9 +49,6 @@ while True:
     print "!!! At least one serial port busy/not reachable. Restarting... !!!"
     time.sleep(5)
     continue
-
-  # Catch SIGTERM signal for controlled termination
-  signal.signal(signal.SIGTERM, sigTermExit)
 
   print ">>> Hardware preparation <<<"
   print "\n[Resetting modem...]"
