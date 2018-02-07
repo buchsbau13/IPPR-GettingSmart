@@ -32,89 +32,87 @@ def sendCommand(command, reply, count, timeout):
   return complete
 
 def sigTermExit(signal, frame):
-  try:
+  if serGSMGPS is not None:
     serGSMGPS.write("AT+CFUN=1,1\r")
-  except AttributeError:
-    pass
   sys.exit("\rSIGTERM received. Exiting...")
 
 # Catch SIGTERM signal for controlled termination
 signal.signal(signal.SIGTERM, sigTermExit)
 
-while True:
-  try:
-    serGSMGPS = serial.Serial(SERIAL_PORT_GSMGPS, baudrate = 115200, timeout = 5)
-    serAir = serial.Serial(SERIAL_PORT_AIR, baudrate = 9600, timeout = 5)
-  except serial.SerialException:
-    print "!!! At least one serial port busy/not reachable. Restarting... !!!"
-    time.sleep(5)
-    continue
+try:
+  while True:
+    try:
+      serGSMGPS = serial.Serial(SERIAL_PORT_GSMGPS, baudrate = 115200, timeout = 5)
+      serAir = serial.Serial(SERIAL_PORT_AIR, baudrate = 9600, timeout = 5)
+    except serial.SerialException:
+      print "!!! At least one serial port busy/not reachable. Restarting... !!!"
+      time.sleep(5)
+      continue
 
-  print ">>> Hardware preparation <<<"
-  print "\n[Resetting modem...]"
-  success = sendCommand("AT+CFUN=1,1\r", "OK", 3000, 0.01)
-  if not success:
-    print "!!! Modem not responding. Restarting... !!!"
-    time.sleep(5)
-    continue
-  else:
-    print "+++ Modem successfully reset! +++"
-    success = False
+    print ">>> Hardware preparation <<<"
+    print "\n[Resetting modem...]"
+    success = sendCommand("AT+CFUN=1,1\r", "OK", 3000, 0.01)
+    if not success:
+      print "!!! Modem not responding. Restarting... !!!"
+      time.sleep(5)
+      continue
+    else:
+      print "+++ Modem successfully reset! +++"
+      success = False
 
-  print "\n[Checking modem status...]"
-  success = sendCommand("AT+COPS?\r", MOBILE_CARRIER, 3000, 0.01)
-  if not success:
-    print "!!! Modem not responding. Restarting... !!!"
-    time.sleep(5)
-    continue
-  else:
-    print "+++ Modem online! +++"
-    success = False
+    print "\n[Checking modem status...]"
+    success = sendCommand("AT+COPS?\r", MOBILE_CARRIER, 3000, 0.01)
+    if not success:
+      print "!!! Modem not responding. Restarting... !!!"
+      time.sleep(5)
+      continue
+    else:
+      print "+++ Modem online! +++"
+      success = False
 
-  print "\n[Powering up GPS module...]"
-  success = sendCommand("AT+CGNSPWR=1\r", "OK", 100, 0.01)
-  if not success:
-    print "!!! GPS module not responding. Restarting... !!!"
-    time.sleep(5)
-    continue
-  else:
-    print "+++ GPS module active! +++"
-    success = False
+    print "\n[Powering up GPS module...]"
+    success = sendCommand("AT+CGNSPWR=1\r", "OK", 100, 0.01)
+    if not success:
+      print "!!! GPS module not responding. Restarting... !!!"
+      time.sleep(5)
+      continue
+    else:
+      print "+++ GPS module active! +++"
+      success = False
 
-  print "\n>>> GPRS connection setup <<<"
-  print "\n[Setting APN data...]"
-  success = sendCommand("AT+SAPBR=3,1,\"APN\",\"" + APN + "\"\r", "OK", 100, 0.01)
-  if not success:
-    print "!!! APN could not be set. Restarting... !!!"
-    time.sleep(5)
-    continue
-  else:
-    print "+++ APN successfully set! +++"
-    success = False
+    print "\n>>> GPRS connection setup <<<"
+    print "\n[Setting APN data...]"
+    success = sendCommand("AT+SAPBR=3,1,\"APN\",\"" + APN + "\"\r", "OK", 100, 0.01)
+    if not success:
+      print "!!! APN could not be set. Restarting... !!!"
+      time.sleep(5)
+      continue
+    else:
+      print "+++ APN successfully set! +++"
+      success = False
 
-  print "\n[Initialising GPRS connection...]"
-  success = sendCommand("AT+SAPBR=1,1\r", "OK", 3000, 0.01)
-  if not success:
-    print "!!! GPRS connection failed. Restarting... !!!"
-    time.sleep(5)
-    continue
-  else:
-    print "+++ GPRS connection active! +++"
-    success = False
+    print "\n[Initialising GPRS connection...]"
+    success = sendCommand("AT+SAPBR=1,1\r", "OK", 3000, 0.01)
+    if not success:
+      print "!!! GPRS connection failed. Restarting... !!!"
+      time.sleep(5)
+      continue
+    else:
+      print "+++ GPRS connection active! +++"
+      success = False
 
-  print "\n>>> GPS preparation <<<"
-  print "\n[Waiting for 3D location fix...]"
-  success = sendCommand("AT+CGPSSTATUS?\r", "Location 3D Fix", 12000, 0.01)
-  if not success:
-    print "!!! Insufficient satellite reception. Restarting... !!!"
-    time.sleep(5)
-    continue
-  else:
-    print "+++ 3D fix acquired! +++"
-    success = False
+    print "\n>>> GPS preparation <<<"
+    print "\n[Waiting for 3D location fix...]"
+    success = sendCommand("AT+CGPSSTATUS?\r", "Location 3D Fix", 12000, 0.01)
+    if not success:
+      print "!!! Insufficient satellite reception. Restarting... !!!"
+      time.sleep(5)
+      continue
+    else:
+      print "+++ 3D fix acquired! +++"
+      success = False
 
-  print "\n>>> Transmission of values <<<\n"
-  try:
+    print "\n>>> Transmission of values <<<\n"
     while True:
       print "----------------------------------------"
       print "*** Press CTRL-C at any time to exit ***"
@@ -125,21 +123,34 @@ while True:
         time.sleep(5)
         continue
       else:
-        serGSMGPS.write("AT+CGNSINF\r")
-        time.sleep(0.1)
-        locData = serGSMGPS.read(serGSMGPS.inWaiting()).split(',')
-        lat = locData[3]
-        lon = locData[4]
-        print "+++ Latitude: " + str(lat) + " +++"
-        print "+++ Longitude: " + str(lon) + " +++"
-        success = False
+        locData = []
+        for cnt in xrange(0, 10):
+          if len(locData) < 5:
+            serGSMGPS.write("AT+CGNSINF\r")
+            time.sleep(0.1)
+            locData = serGSMGPS.read(serGSMGPS.inWaiting()).split(',')
+            success = False
+          else:
+            success = True
+            break
+        if not success:
+          print "!!! Coordinates could not be parsed. Skipping iteration... !!!"
+          time.sleep(5)
+          continue
+        else:
+          lat = locData[3]
+          lon = locData[4]
+          print "+++ Latitude: " + str(lat) + " +++"
+          print "+++ Longitude: " + str(lon) + " +++"
+          success = False
 
       print "\n[Reading PM2.5 and PM10 values...]"
-      airData="none"
+      airData = "none"
       for cnt in xrange(0, 10):
-        if (ord(airData[0]) != 170) or (ord(airData[1]) != 192):
-          airData = serAir.read(10)
+        if (len(airData) < 10) or (ord(airData[0]) != 170) or (ord(airData[1]) != 192):
           time.sleep(0.1)
+          airData = serAir.read(10)
+          serAir.flushInput()
           success = False
         else:
           success = True
@@ -183,6 +194,9 @@ while True:
         print "!!! Sending values failed. Skipping iteration... !!!"
 
       time.sleep(SENSOR_TIMEOUT)
-  except KeyboardInterrupt:
+except KeyboardInterrupt:
+  if serGSMGPS is not None:
     serGSMGPS.write("AT+CFUN=1,1\r")
-    sys.exit("\rCTRL-C received. Exiting...")
+  sys.exit("\rCTRL-C received. Exiting...")
+except:
+  sys.exit("\r!!! Fatal error detected. Exiting... !!!")
