@@ -71,8 +71,12 @@ services:
         container_name: nginx
         ports:
             - "80:80"
+            - "443:443"
+            - "3003:3003"
         volumes:
             - ./nginx_config/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./nginx_config/graziot_ssl.crt:/etc/nginx/graziot_ssl.crt:ro
+            - ./nginx_config/graziot_ssl.key:/etc/nginx/graziot_ssl.key:ro
         volumes_from:
             - wirecloud
         links:
@@ -102,6 +106,8 @@ services:
         image: fiware/wirecloud:latest-composable
         hostname: wirecloud
         container_name: wirecloud
+        volumes:
+            - ./wirecloud_config/settings.py:/opt/wirecloud_instance/wirecloud_instance/settings.py:ro
         links:
             - postgres:postgres
 
