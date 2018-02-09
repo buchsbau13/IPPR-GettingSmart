@@ -107,7 +107,8 @@ LOGIN_URL = reverse_lazy('login')
 LOGOUT_URL = reverse_lazy('wirecloud.root')
 LOGIN_REDIRECT_URL = reverse_lazy('wirecloud.root')
 
-THEME_ACTIVE = "wirecloud.defaulttheme"
+#THEME_ACTIVE = "wirecloud.defaulttheme"
+THEME_ACTIVE = "graziotthemev2"
 DEFAULT_LANGUAGE = 'browser'
 
 # WGT deployment dirs
@@ -134,6 +135,7 @@ CACHES = {
 
 NOT_PROXY_FOR = ['localhost', '127.0.0.1']
 
+# Additional options (graziot)
 WIRECLOUD_HTTPS_VERIFY = False
 
 FORCE_PROTO = 'https'

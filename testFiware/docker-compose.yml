@@ -107,9 +107,11 @@ services:
         hostname: wirecloud
         container_name: wirecloud
         volumes:
+            - ./wirecloud_config/graziotthemev2/:/opt/wirecloud_instance/graziotthemev2/:ro
             - ./wirecloud_config/settings.py:/opt/wirecloud_instance/wirecloud_instance/settings.py:ro
         links:
             - postgres:postgres
+        command: sh -c "echo yes | python manage.py collectstatic"
 
     ngsi-proxy:
         restart: on-failure
