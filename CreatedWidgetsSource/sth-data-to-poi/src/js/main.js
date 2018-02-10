@@ -54,7 +54,7 @@
             infoWindow += "</div>";
 
             var updatedEntity = entity;
-            updatedEntity[attribute] = dataseries[i];
+            updatedEntity[attribute] = dataseries[i].toString();
 
             var poi = {
                 id: id,
