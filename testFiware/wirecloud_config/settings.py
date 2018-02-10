@@ -136,6 +136,6 @@ CACHES = {
 NOT_PROXY_FOR = ['localhost', '127.0.0.1']
 
 # Additional options (graziot)
-WIRECLOUD_HTTPS_VERIFY = False
+#WIRECLOUD_HTTPS_VERIFY = False
 
 FORCE_PROTO = 'https'
