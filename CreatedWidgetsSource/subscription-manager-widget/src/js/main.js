@@ -178,6 +178,9 @@
     };
 
     var initEditorWidget = function initEditorWidget(button) {
+        if (this.editorWidget) {
+            this.editorWidget.remove();
+        }
         this.editorWidget = MashupPlatform.mashup.addWidget('CoNWeT/json-editor/1.0', {refposition: button.getBoundingClientRect()});
         this.editorWidget.addEventListener('remove', function () { this.editorWidget = null; }.bind(this));
 
