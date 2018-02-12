@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM"
-          name="sth-multi-input-source-operator" version="1.0.3">
+          name="sth-multi-input-source-operator" version="1.0.4">
     <details>
         <title>STH Multi Input Source</title>
         <authors>Buchsbaum Julia</authors>

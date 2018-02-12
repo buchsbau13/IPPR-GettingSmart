@@ -22,6 +22,7 @@
     "use strict";
 
     var widget = new Widget('body', '#incoming-modal');
+    var min, max;
     widget.init();
 
     MashupPlatform.wiring.registerCallback('poiInput', (poi_info) => {
@@ -34,11 +35,31 @@
         poi_info.forEach(widget.registerPoI, widget);
     });
 
+    MashupPlatform.wiring.registerCallback('min', (value) => {
+        if (value) {
+            min = value;
+        }
+    });
+
+    MashupPlatform.wiring.registerCallback('max', (value) => {
+        if (value) {
+            max = value;
+        }
+    });
+
     MashupPlatform.wiring.registerCallback('heatmapData', (heatmapData) => {
         if (heatmapData && typeof heatmapData === "string") {
             heatmapData = JSON.parse(heatmapData);
         }
 
-        widget.addHistoricHeatmap(heatmapData);
+        if (max && min) {
+            widget.addHistoricHeatmap(heatmapData, min, max);
+        }
+    });
+
+    MashupPlatform.wiring.registerCallback('clear', (id) => {
+        if (id) {
+            widget.clearHeatmap(id);
+        }
     });
 })();

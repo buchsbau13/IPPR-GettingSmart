@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="ol3-historic-map"
-        version="1.0.5">
+        version="1.0.7">
     <details>
         <title>OpenLayers Historic Heatmap</title>
         <image>images/catalogue.png</image>
@@ -23,13 +23,13 @@
                     description="Initial zoom level. From 1 to 22, where '1' represents the furthest level and '22' the maximum zoom level."
                     default="14"/>
         <preference name="minzoom" label="Min Zoom" type="text" description="" default="4"/>
-        <preference name="maxValue" label="Max Value for Heatmap PoIs" type="text"
-                    description="Maxium value of Heatmap PoIs to calculate the weight" default="100"/>
     </preferences>
 
     <wiring>
         <inputendpoint name="heatmapData" type="text" label="Heatmap PoIs" description="Heatmap PoIs"/>
         <inputendpoint name="clear" type="text" label="Clear Heatmap" description="Clear Heatmap"/>
+        <inputendpoint name="min" type="text" label="Min Attribute Value" description="Min Attribute Value"/>
+        <inputendpoint name="max" type="text" label="Max Attribute Value" description="Max Attribute Value"/>
     </wiring>
 
     <contents src="index.html" useplatformstyle="true"/>

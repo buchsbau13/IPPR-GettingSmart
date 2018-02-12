@@ -20,14 +20,31 @@
 
     "use strict";
 
-
     // =========================================================================
     // PUBLIC
     // =========================================================================
 
     var STHSource = function STHSource() {
+        var attribute;
+
+        mp.wiring.registerCallback("attribute", function (inputAttribute) {
+            attribute = inputAttribute;
+        });
+
         mp.wiring.registerCallback("entity", function (entityString) {
-            requestData(entityString);
+            if (entityString) {
+                (function loop(count) {
+                    setTimeout(function () {
+                        if (attribute) {
+                            requestData(entityString, attribute);
+                        } else if (--count > 0) {
+                            loop(count);
+                        }
+                    }, 200)
+                })(10);
+            } else {
+                mp.operator.log("Error occured while waiting for Input Data", mp.log.INFO);
+            }
         });
     };
 
@@ -35,10 +52,10 @@
     // PRIVATE
     // =========================================================================
 
-    var entity = 'entity';
-    var entity_type = 'entity_type';
+    var requestData = function requestData(entityString, attribute) {
+        var entity = 'entity';
+        var entity_type = 'entity_type';
 
-    var requestData = function requestData(entityString) {
         if (entityString) {
             var entity_data = JSON.parse(entityString);
             if (entity_data.id != '') {
@@ -68,8 +85,6 @@
         }
 
         var hlimit = mp.prefs.get('lastn');
-        var attribute = mp.prefs.get('attribute');
-
         var url = new URL('v1/contextEntities/type/' + entity_type + '/id/' + entity + '/attributes/' + attribute, server);
 
         mp.http.makeRequest(url, {
@@ -99,6 +114,9 @@
                     outputData.attribute = attribute;
                     mp.wiring.pushEvent("outputData", JSON.stringify(outputData));
                     mp.operator.log(outputData, mp.log.INFO);
+                } else {
+                    mp.operator.log("No Data found for Entity " + entity, mp.log.INFO);
+                    mp.wiring.pushEvent("clear", entity);
                 }
             },
             onFailure: function (response) {

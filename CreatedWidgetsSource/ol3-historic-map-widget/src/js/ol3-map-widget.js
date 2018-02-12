@@ -107,12 +107,19 @@
         return heatmapLayer;
     };
 
-    var calculateHeatmapWeight = function calculateHeatmapWeight(attributeValue) {
-        var maxValue = MashupPlatform.prefs.get("maxValue");
-        if (!maxValue) {
-            maxValue = 100;
+    var calculateHeatmapWeight = function calculateHeatmapWeight(attributeValue, min, max) {
+        min = parseFloat(min);
+        max = parseFloat(max);
+        attributeValue = parseFloat(attributeValue);
+        if (min === 0 && max >= 0) {
+            return (attributeValue / max).toFixed(2).toString();
+        } else if (min > 0 && max >= 0 || min < 0 && max >= 0) {
+            max = max - min;
+            attributeValue = attributeValue - min;
+            return (attributeValue / max).toFixed(2).toString();
+        } else if (min < 0 && max < 0) {
+            MashupPlatform.widget.log("Maximum Value has to be a positive value", MashupPlatform.log.INFO);
         }
-        return (attributeValue / maxValue).toFixed(2);
     };
 
     var Widget = function Widget() {
@@ -182,7 +189,7 @@
         }.bind(this));
     };
 
-    Widget.prototype.addHistoricHeatmap = function addHistoricHeatmap(poi_info) {
+    Widget.prototype.addHistoricHeatmap = function addHistoricHeatmap(poi_info, min, max) {
         var heatmapLayer = getLayerByName('heatmap', map);
         var id = poi_info.id;
         var poiSetIdentifier = poi_info.poiSetIdentifier;
@@ -216,7 +223,7 @@
                 ol.proj.transform([poi_info.currentLocation.lng, poi_info.currentLocation.lat], 'EPSG:4326', 'EPSG:3857')
             )
         );
-        heatmapFeature.set('weight', calculateHeatmapWeight(currentValue));
+        heatmapFeature.set('weight', calculateHeatmapWeight(currentValue, min, max));
         heatmapLayer.getSource().addFeature(heatmapFeature);
     };
 

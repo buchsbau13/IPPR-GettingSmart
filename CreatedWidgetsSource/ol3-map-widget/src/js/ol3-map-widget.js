@@ -191,13 +191,19 @@
         });
     };
 
-    var calculateHeatmapWeight = function calculateHeatmapWeight(attributeValue) {
-        var maxValue = MashupPlatform.prefs.get("maxValue");
-        if (maxValue === null || maxValue === undefined) {
-            maxValue = 100;
+    var calculateHeatmapWeight = function calculateHeatmapWeight(attributeValue, min, max) {
+        min = parseFloat(min);
+        max = parseFloat(max);
+        attributeValue = parseFloat(attributeValue);
+        if (min === 0 && max >= 0) {
+            return (attributeValue / max).toFixed(2).toString();
+        } else if (min > 0 && max >= 0 || min < 0 && max >= 0) {
+            max = max - min;
+            attributeValue = attributeValue - min;
+            return (attributeValue / max).toFixed(2).toString();
+        } else if (min < 0 && max < 0) {
+            MashupPlatform.widget.log("Maximum Value has to be a positive value", MashupPlatform.log.INFO);
         }
-        var heatmapWeight = (attributeValue / maxValue).toFixed(2);
-        return heatmapWeight;
     };
 
     // Create the default Marker style
@@ -355,15 +361,11 @@
         iconFeature.setStyle(style);
     };
 
-    Widget.prototype.addHistoricHeatmap = function addHistoricHeatmap(poi_info) {
+    Widget.prototype.addHistoricHeatmap = function addHistoricHeatmap(poi_info, min, max) {
         var heatmapLayer = getLayerByName('heatmap', map);
         var id = poi_info.id;
         var poiSetIdentifier = poi_info.poiSetIdentifier;
         var currentValue = poi_info.currentValue;
-        if (currentValue === null || currentValue === undefined) {
-            var heatmapAttribute = MashupPlatform.prefs.get("heatmapAttribute");
-            currentValue = poi_info.data[heatmapAttribute];
-        }
 
         if (!heatmapLayer) {
             heatmapLayer = createEmptyHeatmap('heatmap');
@@ -393,9 +395,22 @@
                 ol.proj.transform([poi_info.currentLocation.lng, poi_info.currentLocation.lat], 'EPSG:4326', 'EPSG:3857')
             )
         );
-        heatmapFeature.set('weight', calculateHeatmapWeight(currentValue));
+        heatmapFeature.set('weight', calculateHeatmapWeight(currentValue, min, max));
 
         heatmapLayer.getSource().addFeature(heatmapFeature);
+    };
+
+    Widget.prototype.clearHeatmap = function clearHeatmap(id) {
+        var heatmapLayer = getLayerByName('heatmap', map);
+        if (heatmapLayer) {
+            var features = heatmapLayer.getSource().getFeatures();
+            for (var i = 0; i < features.length; i++) {
+                var featureName = features[i].get('name');
+                if (featureName === id.toString()) {
+                    heatmapLayer.getSource().removeFeature(features[i]);
+                }
+            }
+        }
     };
 
     Widget.prototype.center_popup_menu = function center_popup_menu(feature) {

@@ -60,6 +60,9 @@
     };
 
     var requestData = function requestData() {
+        // Clear Map
+        mp.wiring.pushEvent("clear", "Clear Map");
+
         var server = new URL(mp.prefs.get('sth_server'));
         if (server.pathname[server.pathname.length - 1] !== "/") {
             server.pathname += "/";
@@ -77,6 +80,9 @@
         } else {
             request_headers['FIWARE-ServicePath'] = '/';
         }
+
+        var noDataFound = 0;
+        var dataFound = 0;
 
         Object.keys(entities).forEach(function (key) {
             var entity = entities[key];
@@ -111,23 +117,32 @@
                         outputData.entity = JSON.stringify(entity);
                         outputData.attribute = attribute;
 
+                        dataFound++;
                         mp.wiring.pushEvent("outputData", JSON.stringify(outputData));
-                        mp.operator.log("Data retrieved successfully for Entity " + entity.id , mp.log.INFO);
+                        mp.operator.log("Data retrieved successfully for Entity " + entity.id, mp.log.INFO);
 
-                        // Set global variables to null
-                        entities = null;
-                        attribute = null;
-                        startDate = null;
-                        endDate = null;
+                        if (Object.keys(entities).length === dataFound) {
+                            // Set back global variables to null;
+                            entities = null;
+                            attribute = null;
+                            startDate = null;
+                            endDate = null;
+                        }
+
                     } else {
-                        mp.wiring.pushEvent("clear", "No Data found");
-                        mp.operator.log("No Data found. Map will be cleared", mp.log.INFO);
+                        noDataFound++;
+                        mp.operator.log("No Data found for Entity " + entity.id, mp.log.INFO);
 
-                        // Set global variables to null
-                        entities = null;
-                        attribute = null;
-                        startDate = null;
-                        endDate = null;
+                        if (Object.keys(entities).length === noDataFound) {
+                            mp.wiring.pushEvent("clear", "No Data found");
+                            mp.operator.log("No Data found. Map will be cleared!", mp.log.INFO);
+
+                            // Set back global variables to null;
+                            entities = null;
+                            attribute = null;
+                            startDate = null;
+                            endDate = null;
+                        }
                     }
                 },
                 onFailure: function (response) {

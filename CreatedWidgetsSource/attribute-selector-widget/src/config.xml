@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH JOANNEUM" name="attribute-selector-widget" version="1.0.1">
+    <details>
+        <title>Attribute Selector</title>
+        <authors>Buchsbaum Julia</authors>
+        <image>images/catalogue.png</image>
+    </details>
+    <preferences>
+        <preference name="attributes" type="text" label="Attributes" description="A comma separated list of attributes." default="temperature, humidity"/>
+    </preferences>
+    <wiring>
+        <outputendpoint name="reload" type="text" label="Reload" description="Reload NGSI Source"/>
+        <outputendpoint name="entity" type="text" label="Entity" description="Entity"/>
+        <outputendpoint name="attribute" type="text" label="Attribute" description="Attribute"/>
+        <inputendpoint name="entity" type="text" label="Entity" description="Entity"/>
+    </wiring>
+    <contents src="index.html" useplatformstyle="true"/>
+    <rendering width="6" height="28"/>
+</widget>
