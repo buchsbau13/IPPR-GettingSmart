@@ -49,6 +49,18 @@
         }
     });
 
+    MashupPlatform.wiring.registerCallback("addAttributes", function (attrs) {
+        var attrList = attrs.split(new RegExp(',\\s*'));
+        if (MashupPlatform.prefs.get('attributes')) {
+            displayAttrs = MashupPlatform.prefs.get('attributes').split(new RegExp(',\\s*'));
+        } else {
+            displayAttrs = [];
+        }
+        attrList.forEach(function (attr) {
+            displayAttrs.push(attr);
+        });
+    });
+
     MashupPlatform.prefs.registerCallback(function () {
         init();
     });

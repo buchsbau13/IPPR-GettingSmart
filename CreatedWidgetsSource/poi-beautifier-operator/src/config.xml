@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="poi-beautifier" version="1.1">
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="poi-beautifier" version="1.2">
   <details>
     <title>PoI beautifier</title>
     <authors>Michael Janusch</authors>
@@ -17,6 +17,7 @@
     <outputendpoint name="poiOutput" type="text" label="Modified PoI" description="PoI with modified info window" friendcode="poioutput"/>
     <inputendpoint name="friendlyEntInput" type="text" label="Friendly name entity" description="Entity containing the friendly names for PoI attributes. For displaying PoI ID and type, the friendly name entity must contain the attributes &quot;entity_id&quot; and &quot;entity_type&quot;." friendcode="friendlyentinput"/>
     <inputendpoint name="poiInput" type="text" label="Original PoI" description="Original PoI" friendcode="poiinput"/>
+    <inputendpoint name="addAttributes" type="text" label="Additional attributes" description="Additional attributes (as comma separated values) to display in info window" friendcode="addattributes"/>
   </wiring>
   <scripts>
     <script src="js/main.js"/>
