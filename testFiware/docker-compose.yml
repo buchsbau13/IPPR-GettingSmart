@@ -74,12 +74,20 @@ services:
             - "443:443"
         volumes:
             - ./nginx_config/nginx.conf:/etc/nginx/nginx.conf:ro
-            - ./nginx_config/graziot_ssl.crt:/etc/nginx/graziot_ssl.crt:ro
-            - ./nginx_config/graziot_ssl.key:/etc/nginx/graziot_ssl.key:ro
+            - ./nginx_config/certs/:/etc/nginx/certs/:ro
+            - letsencrypt_www:/var/www/letsencrypt/
         volumes_from:
             - wirecloud
         links:
             - wirecloud:wirecloud
+
+    certbot:
+        image: certbot/certbot:latest
+        hostname: certbot
+        container_name: certbot
+        volumes:
+            - ./nginx_config/certs/:/etc/letsencrypt/
+            - letsencrypt_www:/var/www/letsencrypt/
 
     postgres:
         restart: on-failure
@@ -121,3 +129,6 @@ services:
             - "3000"
         ports:
             - "3000:3000"
+
+volumes:
+    letsencrypt_www: ~

@@ -1,1 +1,0 @@
-Move certificate and private key files (graziot_ssl.crt and graziot_ssl.key) to this folder
