@@ -33,6 +33,8 @@
         // Set preference callbacks:
         MashupPlatform.prefs.registerCallback(handlerPreferences.bind(this));
 
+        MashupPlatform.wiring.registerCallback("reload", handlerPreferences.bind(this));
+
         // Create NGSI conection:
         doInitialSubscription.call(this);
     };
@@ -200,11 +202,6 @@
             doInitialSubscription.call(this);
         }
     };
-
-    MashupPlatform.wiring.registerCallback("reload", function (data) {
-        window.location.reload();
-        MashupPlatform.operator.log(data, MashupPlatform.log.INFO);
-    });
 
     var ngsiSource = new NGSISource();
     window.addEventListener("DOMContentLoaded", ngsiSource.init.bind(ngsiSource), false);
