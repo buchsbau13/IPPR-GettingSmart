@@ -55,6 +55,7 @@
 
             var updatedEntity = entity;
             updatedEntity[attribute] = dataseries[i].toString();
+            updatedEntity.timestamp = new Date(timestamps[i]).toISOString();
 
             var poi = {
                 id: id,
