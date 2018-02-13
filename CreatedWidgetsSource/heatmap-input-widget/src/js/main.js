@@ -83,9 +83,10 @@
         layout.insertInto(document.body);
 
         moment.locale('de-at');
-        var beginMoment = moment.utc("2018-01-01");
+        var beginMoment = new Date();
         var endMoment = new Date();
-        endMoment = moment.utc(endMoment.setHours(endMoment.getHours() + 1));
+        beginMoment = moment.utc(beginMoment.setDate(beginMoment.getDate() - 7));
+        endMoment = moment.utc(endMoment.setHours(endMoment.getHours() + 2));
 
         form.fieldInterfaces.from.inputElement.setValue(moment.utc(beginMoment).format("LLL"));
         form.fieldInterfaces.to.inputElement.setValue(moment.utc(endMoment).format("LLL"));
