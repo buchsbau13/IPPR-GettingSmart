@@ -170,20 +170,26 @@
     };
 
     var doQuery = function doQuery() {
+        var entityIdList = [];
         form.disable();
         hiddeStautsDivs();
 
-        var id = {
-            isPattern: true,
-            id: MashupPlatform.prefs.get('entity_id_pattern')
-        };
-
-        var type = MashupPlatform.prefs.get('entity_types');
-        if (type !== '') {
-            id.type = type;
+        var id_pattern = MashupPlatform.prefs.get('entity_id_pattern');
+        if (id_pattern === '') {
+            id_pattern = '.*';
         }
 
-        ngsi.query([id],
+        var types = MashupPlatform.prefs.get('entity_types').split(new RegExp(',\\s*'));
+        for (var i = 0; i < types.length; i++) {
+            var entityId = {
+                id: id_pattern,
+                type: types[i],
+                isPattern: true
+            };
+            entityIdList.push(entityId);
+        }
+
+        ngsi.query(entityIdList,
             null,
             {
                 flat: true,
