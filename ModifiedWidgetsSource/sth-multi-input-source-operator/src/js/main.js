@@ -92,7 +92,7 @@
                 method: "GET",
                 requestHeaders: request_headers,
                 parameters: {
-                    hLimit: 100,
+                    hLimit: 250,
                     hOffset: 0,
                     dateFrom: startDate,
                     dateTo: endDate
