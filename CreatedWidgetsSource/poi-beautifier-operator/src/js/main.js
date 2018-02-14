@@ -133,6 +133,25 @@
                         value = String(round(poi.data[attr], 1)) + " " + poi.data[unitAttributes[attr]];
                     }
 
+                    if (attr == "timestamp") {
+                        var timestamp = new Date(poi.data[attr]);
+                        value = "yyyy-mm-dd HH:MM:ss";
+                        if (MashupPlatform.prefs.get('timestamp_format')) {
+                            value = MashupPlatform.prefs.get('timestamp_format');
+                        }
+
+                        if (value.includes("yyyy")) {
+                            value = value.replace("yyyy", String(timestamp.getFullYear()));
+                        } else {
+                            value = value.replace("yy", String(timestamp.getFullYear()).slice(-2));
+                        }
+                        value = value.replace("mm", ((timestamp.getMonth() + 1) < 10 ? "0" : "") + (timestamp.getMonth() + 1));
+                        value = value.replace("dd", (timestamp.getDate() < 10 ? "0" : "") + timestamp.getDate());
+                        value = value.replace("HH", (timestamp.getHours() < 10 ? "0" : "") + timestamp.getHours());
+                        value = value.replace("MM", (timestamp.getMinutes() < 10 ? "0" : "") + timestamp.getMinutes());
+                        value = value.replace("ss", (timestamp.getSeconds() < 10 ? "0" : "") + timestamp.getSeconds());
+                    }
+
                     if (friendlyEnt && friendlyEnt[attr]) {
                         if (attr == "id" && friendlyEnt.entity_id) {
                             name = friendlyEnt.entity_id;

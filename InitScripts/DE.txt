@@ -3,6 +3,7 @@
   "type": "friendly_names",
   "entity_id": { "value": "ID" },
   "entity_type": { "value": "Typ" },
+  "timestamp": { "value": "Zeitstempel" },
   "name": { "value": "Name" },
   "description": { "value": "Beschreibung" },
   "address": { "value": "Adresse" },
