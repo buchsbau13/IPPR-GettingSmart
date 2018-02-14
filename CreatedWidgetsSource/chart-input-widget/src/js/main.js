@@ -26,6 +26,7 @@
         currentData,
         error,
         info;
+    var unitAttributes = {};
 
     var create_ngsi_connection = function create_ngsi_connection() {
         var request_headers = {};
@@ -73,11 +74,6 @@
                 }],
                 required: true
             },
-            "unit": {
-                label: 'Attribute Unit',
-                type: 'text',
-                required: true
-            },
             "datetime": {
                 label: 'Date Range',
                 type: 'text',
@@ -89,7 +85,6 @@
         form.fieldInterfaces.entity.inputElement.addEventListener('change', onEntityChange);
         form.fieldInterfaces.attribute.inputElement.addEventListener('change', removeMessageBar);
         form.fieldInterfaces.datetime.inputElement.addEventListener('change', removeMessageBar);
-        form.fieldInterfaces.unit.inputElement.addEventListener('change', removeMessageBar);
 
         moment.locale('de-at');
         $(form.fieldInterfaces.datetime.inputElement.inputElement).daterangepicker({
@@ -196,6 +191,21 @@
                 onFailure: onQueryFail
             }
         );
+
+        // Read unit definitions from settings
+        if (MashupPlatform.prefs.get('unit_attributes')) {
+            var keyValueList = MashupPlatform.prefs.get('unit_attributes').split(new RegExp(',\\s*'));
+            keyValueList.forEach(function (entry) {
+                var pair = entry.split(new RegExp('=\\s*'));
+                if (pair.length == 2) {
+                    unitAttributes[pair[0]] = pair[1];
+                } else {
+                    unitAttributes = {};
+                }
+            });
+        } else {
+            unitAttributes = {};
+        }
     };
 
     var onQuerySuccess = function onQuerySuccess(data) {
@@ -224,13 +234,21 @@
 
         var entityId = data.entity;
         var dateParts = data.datetime.split(" - ");
+        var offset = moment().utcOffset();
 
         var output = {};
         output.entity = currentData[entityId];
         output.attribute = data.attribute;
-        output.unit = data.unit;
-        output.startDate = moment.utc(dateParts[0], 'LLL', 'de').toISOString();
-        output.endDate = moment.utc(dateParts[1], 'LLL', 'de').toISOString();
+
+        // Get unit string from entity data (if available)
+        if (unitAttributes && unitAttributes[data.attribute] && currentData[entityId][unitAttributes[data.attribute]]) {
+            output.unit = currentData[entityId][unitAttributes[data.attribute]];
+        } else {
+            output.unit = "";
+        }
+
+        output.startDate = moment(dateParts[0], 'LLL', 'de').utcOffset(offset).toISOString();
+        output.endDate = moment(dateParts[1], 'LLL', 'de').utcOffset(offset).toISOString();
 
         MashupPlatform.wiring.pushEvent('outputData', JSON.stringify(output));
         MashupPlatform.widget.log(output, MashupPlatform.log.INFO);

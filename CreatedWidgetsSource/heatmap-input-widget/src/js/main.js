@@ -200,9 +200,10 @@
     }.bind(this));
 
     var onInputChange = function onInputChange() {
+        var offset = moment().utcOffset();
         MashupPlatform.wiring.pushEvent('attribute', form.fieldInterfaces.attribute.inputElement.getValue());
-        MashupPlatform.wiring.pushEvent('dateFrom', moment.utc(form.fieldInterfaces.from.inputElement.getValue(), 'LLL', 'de').toISOString());
-        MashupPlatform.wiring.pushEvent('dateTo', moment.utc(form.fieldInterfaces.to.inputElement.getValue(), 'LLL', 'de').toISOString());
+        MashupPlatform.wiring.pushEvent('dateFrom', moment(form.fieldInterfaces.from.inputElement.getValue(), 'LLL', 'de').utcOffset(offset).toISOString());
+        MashupPlatform.wiring.pushEvent('dateTo', moment(form.fieldInterfaces.to.inputElement.getValue(), 'LLL', 'de').utcOffset(offset).toISOString());
         MashupPlatform.wiring.pushEvent('entities', JSON.stringify(currentData));
 
         MashupPlatform.widget.log(
