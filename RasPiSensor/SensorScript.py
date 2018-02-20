@@ -1,14 +1,25 @@
-import serial, time, sys, signal
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import serial, time, sys, signal, Adafruit_DHT
 
 
+# Paths to serial port devices
 SERIAL_PORT_GSMGPS = "/dev/ttyGSMGPS"
 SERIAL_PORT_AIR = "/dev/ttyAir"
 
-SENSOR_TIMEOUT = 5
+# Settings for temperature/humidity sensor
+TEMP_HUMID_TYPE = Adafruit_DHT.DHT22
+TEMP_HUMID_GPIO = 4
 
+# Delay between transmissions of sensor measurements (in seconds)
+SENSOR_TIMEOUT = 15
+
+# Settings for initialising the GPRS module
 MOBILE_CARRIER = "A1"
 APN = "webapn.at"
 
+# Settings for communicating with the FIWARE IoT agent
 FIWARE_HEADERS = "Fiware-Service: graziot\\r\\nFiware-ServicePath: /"
 URL = "http://160.85.2.61:7896/iot/d?k=apimobile&i=Dev_RasPi"
 
@@ -120,7 +131,7 @@ try:
       success = sendCommand("AT+CGPSSTATUS?\r", "Location 3D Fix", 100, 0.01)
       if not success:
         print "!!! Insufficient satellite reception. Skipping iteration... !!!"
-        time.sleep(5)
+        time.sleep(SENSOR_TIMEOUT)
         continue
       else:
         locData = []
@@ -135,7 +146,7 @@ try:
             break
         if not success:
           print "!!! Coordinates could not be parsed. Skipping iteration... !!!"
-          time.sleep(5)
+          time.sleep(SENSOR_TIMEOUT)
           continue
         else:
           lat = locData[3]
@@ -143,6 +154,28 @@ try:
           print "+++ Latitude: " + str(lat) + " +++"
           print "+++ Longitude: " + str(lon) + " +++"
           success = False
+
+      print "\n[Reading temperature and humidity values...]"
+      tempData = None
+      humidData = None
+      for cnt in xrange(0, 30):
+        if humidData is None or tempData is None:
+          humidData, tempData = Adafruit_DHT.read(TEMP_HUMID_TYPE, TEMP_HUMID_GPIO)
+          time.sleep(0.1)
+          success = False
+        else:
+          success = True
+          break
+      if not success:
+        print "!!! Values could not be fetched. Skipping iteration... !!!"
+        time.sleep(SENSOR_TIMEOUT)
+        continue
+      else:
+        humid = "{0:.1f}".format(humidData)
+        temp = "{0:.1f}".format(tempData)
+        print "+++ Temperature: " + temp + " +++"
+        print "+++ Humidity: " + humid + " +++"
+        success = False
 
       print "\n[Reading PM2.5 and PM10 values...]"
       airData = "none"
@@ -157,7 +190,7 @@ try:
           break
       if not success:
         print "!!! Values could not be parsed. Skipping iteration... !!!"
-        time.sleep(5)
+        time.sleep(SENSOR_TIMEOUT)
         continue
       else:
         pm2_5 = float(ord(airData[3]) * 256 + ord(airData[2]))/10
@@ -168,7 +201,7 @@ try:
 
       print "\n[Sending values to server...]"
       reply = ""
-      payload = ("l|%s,%s|a1|%s|a2|%s|t|%s|h|%s" % (str(lat), str(lon), str(pm2_5), str(pm10), str(0), str(0)))
+      payload = ("l|%s,%s|a1|%s|a2|%s|t|%s|h|%s" % (str(lat), str(lon), str(pm2_5), str(pm10), str(temp), str(humid)))
       print "+++ Payload: " + payload + " +++"
       serGSMGPS.write("AT+HTTPINIT\r")
       time.sleep(0.01)
@@ -193,7 +226,8 @@ try:
       else:
         print "!!! Sending values failed. Skipping iteration... !!!"
 
-      time.sleep(SENSOR_TIMEOUT)
+      # Subtract the delay for reading temperature/humidity values 
+      time.sleep(SENSOR_TIMEOUT - 2)
 except KeyboardInterrupt:
   if serGSMGPS is not None:
     serGSMGPS.write("AT+CFUN=1,1\r")
