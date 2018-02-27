@@ -1,6 +1,7 @@
 version: '2'
 services:
     mongodb:
+        restart: on-failure
         image: mongo:latest
         hostname: mongodb
         container_name: mongodb
@@ -11,6 +12,7 @@ services:
         command: --smallfiles
 
     orion:
+        restart: on-failure
         image: fiware/orion:latest
         hostname: orion
         container_name: orion
@@ -23,6 +25,7 @@ services:
         command: -dbhost mongodb
 
     cygnus:
+        restart: on-failure
         image: telefonicaiot/fiware-cygnus
         hostname: cygnus
         container_name: cygnus
@@ -38,6 +41,7 @@ services:
             - "./cygnus_config/agent.conf:/opt/apache-flume/conf/agent.conf:ro"
 
     comet:
+        restart: on-failure
         image: fiware/sth-comet
         hostname: comet
         container_name: comet
@@ -51,6 +55,7 @@ services:
             - "./comet_config/config.js:/opt/sth/config.js:ro"
 
     idas:
+        restart: on-failure
         image: fiware/iotagent-ul:latest
         hostname: idas
         container_name: idas
@@ -118,7 +123,6 @@ services:
             - ./wirecloud_config/settings.py:/opt/wirecloud_instance/wirecloud_instance/settings.py:ro
         links:
             - postgres:postgres
-        command: sh -c "echo yes | python manage.py collectstatic"
 
     ngsi-proxy:
         restart: on-failure
