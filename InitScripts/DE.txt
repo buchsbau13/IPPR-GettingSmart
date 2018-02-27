@@ -19,5 +19,9 @@
   "air_sensor_status": { "value": "Sensor-Status [Feinstaub]" },
   "location": { "value": "Position" },
   "loc_sensor_info": { "value": "Sensor-Info [Position]" },
-  "loc_sensor_status": { "value": "Sensor-Status [Position]" }
+  "loc_sensor_status": { "value": "Sensor-Status [Position]" },
+  "attribute": { "value": "Attribut" },
+  "date_range": { "value": "Zeitraum" },
+  "from_date": { "value": "Von" },
+  "to_date": { "value": "Bis" }
 }

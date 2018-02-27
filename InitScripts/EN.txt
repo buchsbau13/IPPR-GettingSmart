@@ -19,5 +19,9 @@
   "air_sensor_status": { "value": "Sensor status [particulate matter]" },
   "location": { "value": "Location" },
   "loc_sensor_info": { "value": "Sensor info [location]" },
-  "loc_sensor_status": { "value": "Sensor status [location]" }
+  "loc_sensor_status": { "value": "Sensor status [location]" },
+  "attribute": { "value": "Attribute" },
+  "date_range": { "value": "Date range" },
+  "from_date": { "value": "From" },
+  "to_date": { "value": "Until" }
 }

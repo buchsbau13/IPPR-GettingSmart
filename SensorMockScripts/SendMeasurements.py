@@ -113,6 +113,6 @@ try:
       if VALUE_TYPE == "string":
          break
 
-      time.sleep(5)
+      time.sleep(15)
 except KeyboardInterrupt:
    pass

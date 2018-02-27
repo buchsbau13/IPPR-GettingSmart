@@ -91,6 +91,6 @@ try:
          r = requests.post(URL, data=PAYLOAD, headers=HEADERS)
          print "* Status Code: "+str(r.status_code)
 
-         time.sleep(5)
+         time.sleep(15)
 except KeyboardInterrupt:
    pass
