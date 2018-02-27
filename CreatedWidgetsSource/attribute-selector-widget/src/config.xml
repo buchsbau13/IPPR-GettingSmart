@@ -4,6 +4,7 @@
         <title>Attribute Selector</title>
         <authors>Buchsbaum Julia</authors>
         <image>images/catalogue.png</image>
+        <doc>doc/userguide.md</doc>
     </details>
     <preferences>
         <preference name="attributes" type="text" label="Attributes" description="A comma separated list of attributes." default="temperature, humidity"/>
