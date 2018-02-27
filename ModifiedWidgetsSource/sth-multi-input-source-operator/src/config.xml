@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM"
-          name="sth-multi-input-source-operator" version="1.0.5">
+          name="sth-multi-input-source-operator" version="1.0.6">
     <details>
         <title>STH Multi Input Source</title>
         <authors>Buchsbaum Julia</authors>
@@ -24,10 +24,11 @@
                     default="/"/>
     </preferences>
     <wiring>
-        <inputendpoint name="entities" type="text" label="Entities" description="Entities"/>
-        <inputendpoint name="attribute" type="text" label="Attribute" description="Attribute"/>
-        <inputendpoint name="dateFrom" type="text" label="Date From" description="dateFrom"/>
-        <inputendpoint name="dateTo" type="text" label="Date To" description="dateTo"/>
+        <inputendpoint name="entities" type="text" label="Entities" description="Entities for which historic data will be retrieved"/>
+        <inputendpoint name="attribute" type="text" label="Attribute" description="Attribute for which historic data will be retrieved"/>
+        <inputendpoint name="dateFrom" type="text" label="Date From" description="Date From"/>
+        <inputendpoint name="dateTo" type="text" label="Date To" description="Date To"/>
+        <inputendpoint name="maxValues" type="text" label="Max Values" description="Maximum amount of values to retrieve"/>
         <outputendpoint name="outputData" type="text" label="Output Data" description="Output Data"/>
         <outputendpoint name="clear" type="text" label="Clear Map" description="Clear Map"/>
     </wiring>

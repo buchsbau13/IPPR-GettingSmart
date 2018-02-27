@@ -73,12 +73,24 @@
                 label: 'Date To',
                 type: 'text',
                 required: true
+            },
+            "maxValues": {
+                label: 'Max Values Per Entity',
+                type: 'select',
+                initialEntries: [
+                    {value: "250"},
+                    {value: "500"},
+                    {value: "750"},
+                    {value: "1000"}
+                ],
+                required: true
             }
         };
         form = new StyledElements.Form(fields, {cancelButton: false, acceptButton: false});
         form.fieldInterfaces.attribute.inputElement.addEventListener('change', onInputChange);
         form.fieldInterfaces.from.inputElement.addEventListener('change', onInputChange);
         form.fieldInterfaces.to.inputElement.addEventListener('change', onInputChange);
+        form.fieldInterfaces.maxValues.inputElement.addEventListener('change', onInputChange);
         layout.getCenterContainer().appendChild(form);
         layout.insertInto(document.body);
 
@@ -178,6 +190,9 @@
         form.fieldInterfaces.attribute.inputElement.addEntries(entries);
 
         form.enable();
+
+        // Send initial data
+        onInputChange();
     };
 
     var onQueryFail = function onQueryFail(e) {
@@ -205,6 +220,7 @@
         MashupPlatform.wiring.pushEvent('dateFrom', moment(form.fieldInterfaces.from.inputElement.getValue(), 'LLL', 'de').utcOffset(offset).toISOString());
         MashupPlatform.wiring.pushEvent('dateTo', moment(form.fieldInterfaces.to.inputElement.getValue(), 'LLL', 'de').utcOffset(offset).toISOString());
         MashupPlatform.wiring.pushEvent('entities', JSON.stringify(currentData));
+        MashupPlatform.wiring.pushEvent('maxValues', form.fieldInterfaces.maxValues.inputElement.getValue());
 
         MashupPlatform.widget.log(
             "Data will be retrieved for Attribute: " + form.fieldInterfaces.attribute.inputElement.getValue() +

@@ -20,7 +20,7 @@
 
     "use strict";
 
-    var entities, startDate, endDate, attribute;
+    var entities, startDate, endDate, attribute, maxValues;
 
     var STHSource = function STHSource() {
         mp.wiring.registerCallback("attribute", function (attributeString) {
@@ -41,12 +41,18 @@
             }
         });
 
+        mp.wiring.registerCallback("maxValues", function (maxValuesString) {
+            if (maxValuesString !== null && maxValuesString !== undefined) {
+                maxValues = parseInt(maxValuesString);
+            }
+        });
+
         mp.wiring.registerCallback("entities", function (entitiesString) {
             if (entitiesString !== null && entitiesString !== undefined) {
                 entities = JSON.parse(entitiesString);
                 (function loop(count) {
                     setTimeout(function () {
-                        if ((entities && attribute && startDate && endDate) || count === 0) {
+                        if ((entities && attribute && startDate && endDate && maxValues) || count === 0) {
                             requestData();
                         } else if (--count > 0) {
                             loop(count);
@@ -54,7 +60,7 @@
                     }, 200)
                 })(10);
             } else {
-                mp.operator.log("Error occured while waiting for Input Data", mp.log.INFO);
+                mp.operator.log("Error occurred while waiting for Input Data", mp.log.INFO);
             }
         });
     };
@@ -92,7 +98,7 @@
                 method: "GET",
                 requestHeaders: request_headers,
                 parameters: {
-                    hLimit: 250,
+                    hLimit: maxValues,
                     hOffset: 0,
                     dateFrom: startDate,
                     dateTo: endDate
