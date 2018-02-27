@@ -20,23 +20,56 @@
 
     "use strict";
 
-    var layout,
+    var friendlyEnt,
+        layout,
         form;
 
+    MashupPlatform.wiring.registerCallback("friendlyEntInput", function (entity) {
+        var save = MashupPlatform.widget.getVariable('friendlyEntSave');
+        var oldSave = save.get();
+        save.set(entity);
+
+        // If old and new friendly entity are different, reload with new data
+        if (oldSave !== entity) {
+            clearWindow();
+            init();
+        }
+    });
+
+    MashupPlatform.widget.context.registerCallback(function (newValues) {
+        if (layout && ("heightInPixels" in newValues || "widthInPixels" in newValues)) {
+            layout.repaint();
+        }
+    }.bind(this));
+
     var init = function init() {
+        var friendlyEntSave = MashupPlatform.widget.getVariable('friendlyEntSave');
+        if (friendlyEntSave.get()) {
+            friendlyEnt = JSON.parse(friendlyEntSave.get());
+        }
+
         var entries = [];
         var attributes = MashupPlatform.prefs.get('attributes').trim();
         if (attributes) {
             attributes = attributes.split(new RegExp(',\\s*'));
             attributes.forEach(function (element) {
-                entries.push({value: element});
+                if (friendlyEnt && friendlyEnt[element]) {
+                    entries.push({value: element, label: friendlyEnt[element]});
+                } else {
+                    entries.push({value: element});
+                }
             });
+        }
+
+        var attrLabel = "Attribute";
+        if (friendlyEnt && friendlyEnt.attribute) {
+            attrLabel = friendlyEnt.attribute;
         }
 
         layout = new StyledElements.BorderLayout({'class': 'loading'});
         var fields = {
             "attribute": {
-                label: 'Attribute',
+                label: attrLabel,
                 type: 'select',
                 initialEntries: entries,
                 required: true
@@ -49,23 +82,25 @@
         layout.insertInto(document.body);
     };
 
-    MashupPlatform.widget.context.registerCallback(function (newValues) {
-        if (layout && ("heightInPixels" in newValues || "widthInPixels" in newValues)) {
-            layout.repaint();
-        }
-    }.bind(this));
-
     var onInputChange = function onInputChange() {
         MashupPlatform.wiring.pushEvent("reload", "Reload NGSI Source");
         MashupPlatform.widget.log(
             "Reload NGSI Source", MashupPlatform.log.INFO);
     };
 
+    var clearWindow = function clearWindow() {
+        while (document.body.firstChild) {
+            document.body.removeChild(document.body.firstChild);
+        }
+    };
+
     window.addEventListener("DOMContentLoaded", init, false);
 
     MashupPlatform.wiring.registerCallback("entity", function (entity) {
-        MashupPlatform.wiring.pushEvent('attribute', form.fieldInterfaces.attribute.inputElement.getValue());
-        MashupPlatform.wiring.pushEvent('entity', entity);
+        if (form && form.fieldInterfaces) {
+            MashupPlatform.wiring.pushEvent('attribute', form.fieldInterfaces.attribute.inputElement.getValue());
+            MashupPlatform.wiring.pushEvent('entity', entity);
+        }
     });
 
 })();
