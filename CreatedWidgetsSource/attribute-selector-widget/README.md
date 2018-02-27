@@ -1,9 +1,8 @@
 Attribute Selector Widget
 ====================
 
-The Attribute Selector Widget is a widget to select one of a list of defined attributes.
-The widget is designed to allow the selection of one attribute for the STH Multiple Entities Operator. 
-Moreover, the NGSI Source has to provide the input entity for the operator.
+The Attribute Selector Widget is designed to allow the selection of one attribute from a list of attributes for the STH Multiple Entities Operator. 
+Moreover, the NGSI Source has to provide the input entity for the widget.
 
 Build
 -----
