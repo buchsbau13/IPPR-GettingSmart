@@ -1,7 +1,8 @@
 ---------------GPRS---------------
+AT+COPS? -> Test for active cell tower connection (returns mobiel carrier)
 AT+SAPBR=3,1,"APN","webapn.at" -> Set APN (yesss!)
 AT+SAPBR=1,1 -> Apply settings
-(AT+SAPBR=2,1) -> Test for IP address
+AT+SAPBR=2,1 -> Test for IP address
 
 <<GET>>
 AT+HTTPINIT -> Initialize HTTP session
@@ -22,14 +23,17 @@ AT+HTTPDATA=<PAYLOAD_SIZE>,10000 -> Set payload size and timeout
 
 !!! Wait for "DOWNLOAD" before writing data, then wait for timeout to end !!!
 
-(AT+HTTPSSL=1) -> Activate HTTPS (if necessary)
+AT+HTTPSSL=1 -> Activate HTTPS (if necessary)
 AT+HTTPACTION=1 -> Send HTTP request
-(AT+HTTPREAD) -> Read HTTP response
+AT+HTTPREAD -> Read HTTP response
 AT+HTTPTERM -> Close HTTP session
 
 ---------------GPS---------------
-(AT+CGNSTST=0) -> Disable UART output of GPS data to console
+AT+CGNSTST=0 -> Disable UART output of GPS data to console
 AT+CGNSPWR=1 -> Power up GPS module
 
 AT+CGPSSTATUS? -> Get GPS status (should be "Location 3D Fix")
 AT+CGNSINF -> Read GPS data (latitude and longitude at forth and fifth fields)
+
+---------------MISC---------------
+AT+CFUN=1,1 -> Reset module

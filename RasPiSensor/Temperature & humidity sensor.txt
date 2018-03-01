@@ -1,0 +1,2 @@
+Use the instructions at the following site (used sensor -> DHT 22):
+https://tutorials-raspberrypi.com/raspberry-pi-measure-humidity-temperature-dht11-dht22/ 

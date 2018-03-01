@@ -127,6 +127,15 @@ try:
     while True:
       print "----------------------------------------"
       print "*** Press CTRL-C at any time to exit ***"
+      print "\n[Checking GPRS connection...]"
+      offline = sendCommand("AT+SAPBR=2,1\r", "0.0.0.0", 100, 0.01)
+      if offline:
+        print "!!! GPRS connection offline. Restarting... !!!"
+        time.sleep(5)
+        break
+      else:
+        print "+++ GPRS connection online! +++"
+
       print "\n[Fetching current location...]"
       success = sendCommand("AT+CGPSSTATUS?\r", "Location 3D Fix", 100, 0.01)
       if not success:
@@ -232,5 +241,7 @@ except KeyboardInterrupt:
   if serGSMGPS is not None:
     serGSMGPS.write("AT+CFUN=1,1\r")
   sys.exit("\rCTRL-C received. Exiting...")
-except:
-  sys.exit("\r!!! Fatal error detected. Exiting... !!!")
+except serial.SerialException:
+  if serGSMGPS is not None:
+    serGSMGPS.write("AT+CFUN=1,1\r")
+  sys.exit("At least one serial port busy/not reachable. Exiting...")
