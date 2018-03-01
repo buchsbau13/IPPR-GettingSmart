@@ -1,18 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="sth-multiple-entities-source-operator" version="1.0.2">
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="sth-multiple-entities-source-operator" version="1.0.2">
     <details>
         <title>STH Multiple Entities Source</title>
-        <homepage>https://github.com/wirecloud-fiware/sth-source</homepage>
-        <authors>Álvaro Arranz García &lt;aarranz@conwet.com&gt;</authors>
-        <email>aarranz@conwet.com</email>
+        <authors>Buchsbaum Julia, Janusch Michael</authors>
         <image>images/catalogue.png</image>
         <description>Retrieve historical data from a Orion Context Broker through STH</description>
-        <longdescription>DESCRIPTION.md</longdescription>
-        <license>Apache License 2.0</license>
-        <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
         <doc>doc/userguide.md</doc>
-        <changelog>doc/changelog.md</changelog>
-        <issuetracker>https://github.com/wirecloud-fiware/sth-source-operator/issues</issuetracker>
     </details>
     <requirements>
         <feature name="NGSI"/>
