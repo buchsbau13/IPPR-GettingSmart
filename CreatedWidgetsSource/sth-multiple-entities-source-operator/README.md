@@ -1,4 +1,4 @@
-# STH source operator
+# STH Multiple Entities Source Operator
 
 The STH source operator is a WireCloud operator that allows you to retrieve
 historical information about context broker entities through the use of the
