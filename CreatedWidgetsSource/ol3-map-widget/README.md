@@ -1,8 +1,7 @@
 OpenLayers Map Widget
 ======================
 
-Map viewer widget using OpenLayers. It can receive Layers or Point of Interest data and display them
- on the map.
+Map viewer widget using OpenLayers. It can receive Point of Interest data and display them on the map in different ways.
 
 Build
 -----
@@ -39,12 +38,5 @@ If everything goes well, you will find a wgt file in the `dist` folder.
 ## Documentation
 
 Documentation about how to use this widget is available on the
-[User Guide](src/doc/userguide.md). Anyway, you can find general information
-about how to use widgets on the
-[WireCloud's User Guide](https://wirecloud.readthedocs.io/en/stable/user_guide/)
-available on Read the Docs.
-
-## Copyright and License
-
-Copyright (c) 2016 CoNWeT
-Licensed under the MIT license.
+[User Guide](src/doc/userguide.md).
+The widget is based on the OpenLayers Map Widget from WireCloud (https://github.com/Wirecloud/ol3-map-widget)
