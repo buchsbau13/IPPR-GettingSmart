@@ -35,7 +35,8 @@ Settings
   the widget as extra columns.
 - **Unit values:** Comma separated list of attributes and the corresponding unit attribute e.g. temperature=temp_sensor_unit, humidity=humid_sensor_unit
 
-##### Input Endpoints
+Input Endpoints
+--------
 
 - **Message:** This input endpoint can be used to display a info or error message. The message should have the following format. 
 
@@ -46,13 +47,14 @@ Settings
     }
     ```
 
-##### Output Endpoints
+Output Endpoints
+--------
 
 -   **Output Data:** This widget sends an JSON Object with the selected values from the form.
 
     ```json
     {
-        "entity": Object { id: "Trafficlight_2", type: "static", TimeInstant: "2018-02-05T12:29:35.00Z", … },
+        "entity": { "id": "Trafficlight_2", "type": "static", "TimeInstant": "2018-02-05T12:29:35.00Z", "...": "..."},
         "attribute": "humidity",
         "unit": "%",
         "startDate": "2018-03-19T23:00:00.000Z",
