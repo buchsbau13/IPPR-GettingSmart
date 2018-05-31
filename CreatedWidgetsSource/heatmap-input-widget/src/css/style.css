@@ -16,6 +16,11 @@
     left: 10px;
     right: 10px;
     z-index: 5;
-    padding-left: 80px;
-    padding-right: 80px;
+    padding-left: 120px;
+    padding-right: 120px;
+}
+
+.edit-button {
+    position: absolute;
+    right: 8px;
 }

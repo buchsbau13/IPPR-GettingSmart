@@ -25,7 +25,12 @@
         form,
         currentData,
         error,
-        info;
+        info,
+        fromValue,
+        toValue,
+        timeWidget,
+        buttonEdit,
+        timestampInput;
 
     var create_ngsi_connection = function create_ngsi_connection() {
         var request_headers = {};
@@ -64,16 +69,6 @@
                 }],
                 required: true
             },
-            "from": {
-                label: 'Date From',
-                type: 'text',
-                required: true
-            },
-            "to": {
-                label: 'Date To',
-                type: 'text',
-                required: true
-            },
             "maxValues": {
                 label: 'Max Values Per Entity',
                 type: 'select',
@@ -84,24 +79,37 @@
                     {value: "1000"}
                 ],
                 required: true
-            }
+            },
+            "dateRange": {
+                label: 'Date Range',
+                type: 'text',
+                required: true,
+                readOnly: true
+            },
         };
+        buttonEdit = new StyledElements.Button({
+            class: "se-btn-circle z-depth-3 edit-button",
+            text: "Edit date range"
+        });
+        buttonEdit.addEventListener('click', initTimeWidget);
+        timestampInput = MashupPlatform.widget.createInputEndpoint(changeDateRange);
+
         form = new StyledElements.Form(fields, {cancelButton: false, acceptButton: false});
         form.fieldInterfaces.attribute.inputElement.addEventListener('change', onInputChange);
-        form.fieldInterfaces.from.inputElement.addEventListener('change', onInputChange);
-        form.fieldInterfaces.to.inputElement.addEventListener('change', onInputChange);
         form.fieldInterfaces.maxValues.inputElement.addEventListener('change', onInputChange);
         layout.getCenterContainer().appendChild(form);
+        layout.getCenterContainer().appendChild(buttonEdit);
         layout.insertInto(document.body);
 
         moment.locale('de-at');
         var beginMoment = new Date();
         var endMoment = new Date();
-        beginMoment = moment.utc(beginMoment.setDate(beginMoment.getDate() - 7));
-        endMoment = moment.utc(endMoment.setHours(endMoment.getHours() + 2));
+        beginMoment = moment(beginMoment.setDate(beginMoment.getDate() - 7));
+        endMoment = moment(endMoment.setHours(endMoment.getHours() + 2));
 
-        form.fieldInterfaces.from.inputElement.setValue(moment.utc(beginMoment).format("LLL"));
-        form.fieldInterfaces.to.inputElement.setValue(moment.utc(endMoment).format("LLL"));
+        fromValue = moment(beginMoment).format("LLL");
+        toValue = moment(endMoment).format("LLL");
+        form.fieldInterfaces.dateRange.inputElement.setValue(String(fromValue) + " - " + String(toValue));
 
         $("#rangePrimary").ionRangeSlider({
             type: "double",
@@ -110,11 +118,12 @@
             from: moment(beginMoment).format("X"),
             to: moment(endMoment).format("X"),
             prettify: function (num) {
-                return moment.utc(num, "X").format("LLL");
+                return moment(num, "X").format("LLL");
             },
             onFinish: function (data) {
-                form.fieldInterfaces.from.inputElement.setValue(moment.utc(moment.unix(data.from)).format("LLL"));
-                form.fieldInterfaces.to.inputElement.setValue(moment.utc(moment.unix(data.to)).format("LLL"));
+                fromValue = moment(moment.unix(data.from)).format("LLL");
+                toValue = moment(moment.unix(data.to)).format("LLL");
+                onInputChange();
             }
         });
 
@@ -135,6 +144,33 @@
         layout.repaint();
         create_ngsi_connection();
         doQuery();
+    };
+
+    var initTimeWidget = function initTimeWidget() {
+        if (timeWidget) {
+            timeWidget.remove();
+        }
+        timeWidget = MashupPlatform.mashup.addWidget('FH-JOANNEUM/date-range/1.0', {refposition: buttonEdit.getBoundingClientRect()});
+        timeWidget.addEventListener('remove', function () { timeWidget = null; });
+
+        timestampInput.connect(timeWidget.outputs.timestamps);
+    };
+
+    var changeDateRange = function changeDateRange(input) {
+        if (input !== "exit") {
+            var data = JSON.parse(input);
+            fromValue = moment(data.start).format("LLL");
+            toValue = moment(data.end).format("LLL");
+            form.fieldInterfaces.dateRange.inputElement.setValue(String(fromValue) + " - " + String(toValue));
+            $("#rangePrimary").data("ionRangeSlider").update({
+                min: moment(data.start).format("X"),
+                max: moment(data.end).format("X"),
+                from: moment(data.start).format("X"),
+                to: moment(data.end).format("X")
+            });
+            onInputChange();
+        }
+        timeWidget.remove();
     };
 
     var fail = function fail(msg) {
@@ -217,15 +253,15 @@
     var onInputChange = function onInputChange() {
         var offset = moment().utcOffset();
         MashupPlatform.wiring.pushEvent('attribute', form.fieldInterfaces.attribute.inputElement.getValue());
-        MashupPlatform.wiring.pushEvent('dateFrom', moment(form.fieldInterfaces.from.inputElement.getValue(), 'LLL', 'de').utcOffset(offset).toISOString());
-        MashupPlatform.wiring.pushEvent('dateTo', moment(form.fieldInterfaces.to.inputElement.getValue(), 'LLL', 'de').utcOffset(offset).toISOString());
+        MashupPlatform.wiring.pushEvent('dateFrom', moment(fromValue, 'LLL', 'de').utcOffset(offset).toISOString());
+        MashupPlatform.wiring.pushEvent('dateTo', moment(toValue, 'LLL', 'de').utcOffset(offset).toISOString());
         MashupPlatform.wiring.pushEvent('entities', JSON.stringify(currentData));
         MashupPlatform.wiring.pushEvent('maxValues', form.fieldInterfaces.maxValues.inputElement.getValue());
 
         MashupPlatform.widget.log(
             "Data will be retrieved for Attribute: " + form.fieldInterfaces.attribute.inputElement.getValue() +
-            " from " + form.fieldInterfaces.from.inputElement.getValue() +
-            " to " + form.fieldInterfaces.to.inputElement.getValue(),
+            " from " + fromValue +
+            " to " + toValue,
             MashupPlatform.log.INFO);
     };
 
