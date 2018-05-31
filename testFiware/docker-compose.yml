@@ -1,15 +1,76 @@
-version: '2'
+version: '2.1'
 services:
+    mysql:
+        restart: on-failure
+        image: mysql/mysql-server:5.7.21
+        hostname: mysql
+        container_name: mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=idm
+            - MYSQL_ROOT_HOST=172.18.1.100
+        networks:
+            - fiware
+        ports:
+            - "3306:3306"
+        volumes:
+            - mysql_vol:/var/lib/mysql
+
     mongodb:
         restart: on-failure
         image: mongo:latest
         hostname: mongodb
         container_name: mongodb
-        expose:
-            - "27017"
+        networks:
+            - fiware
         ports:
             - "27017:27017"
         command: --smallfiles
+
+    postgres:
+        restart: on-failure
+        image: postgres:latest
+        hostname: postgres
+        container_name: postgres
+        volumes:
+            - postgres_vol:/var/lib/postgresql
+        networks:
+            - fiware
+        ports:
+            - "5432:5432"
+
+    authzforce:
+        restart: on-failure
+        image: fiware/authzforce-ce-server:latest-unstable
+        hostname: authzforce
+        container_name: authzforce
+        networks:
+            - fiware
+        expose:
+            - "8080"
+
+    keyrock:
+        restart: on-failure
+        image: fiware/idm:latest
+        hostname: keyrock
+        container_name: keyrock
+        volumes:
+            - ./keyrock_config/config.js:/opt/fiware-idm/config.js:ro
+            - ./nginx_config/certs/:/opt/fiware-idm/certs/:ro
+        networks:
+            fiware:
+                ipv4_address: 172.18.1.100
+        environment:
+            - DATABASE_HOST=mysql
+        ports:
+            - "5000:5000"
+            - "5005:5005"
+        links:
+            - authzforce
+        healthcheck:
+            test: ["CMD-SHELL", "nc -z -v -w30 mysql 3306"]
+            interval: 5s
+            timeout: 3s
+            retries: 10
 
     orion:
         restart: on-failure
@@ -18,8 +79,8 @@ services:
         container_name: orion
         links:
             - mongodb
-        expose:
-            - "1026"
+        networks:
+            - fiware
         ports:
             - "1026:1026"
         command: -dbhost mongodb
@@ -31,12 +92,11 @@ services:
         container_name: cygnus
         links:
             - mongodb:iot-mongo
+        networks:
+            - fiware
         expose:
             - "8081"
             - "5050"
-        ports:
-            - "8081:8081"
-            - "5050:5050"
         volumes:
             - "./cygnus_config/agent.conf:/opt/apache-flume/conf/agent.conf:ro"
 
@@ -47,8 +107,8 @@ services:
         container_name: comet
         links:
             - mongodb
-        expose:
-            - "8666"
+        networks:
+            - fiware
         ports:
             - "8666:8666"
         volumes: 
@@ -62,9 +122,8 @@ services:
         links:
             - orion
             - mongodb:mongo
-        expose:
-            - "7896"
-            - "4041"
+        networks:
+            - fiware
         ports:
             - "7896:7896"
             - "4041:4041"
@@ -74,9 +133,12 @@ services:
         image: nginx:latest
         hostname: nginx
         container_name: nginx
+        networks:
+            - fiware
         ports:
             - "80:80"
             - "443:443"
+            - "3000:3000"
         volumes:
             - ./nginx_config/nginx.conf:/etc/nginx/nginx.conf:ro
             - ./nginx_config/certs/:/etc/nginx/certs/:ro
@@ -84,7 +146,7 @@ services:
         volumes_from:
             - wirecloud
         links:
-            - wirecloud:wirecloud
+            - wirecloud
 
     certbot:
         image: certbot/certbot:latest
@@ -93,25 +155,8 @@ services:
         volumes:
             - ./nginx_config/certs/:/etc/letsencrypt/
             - letsencrypt_www:/var/www/letsencrypt/
-
-    postgres:
-        restart: on-failure
-        image: postgres:latest
-        hostname: postgres
-        container_name: postgres
-        volumes_from:
-            - data
-        ports:
-            - "5432:5432"
-
-    data:
-        restart: on-failure
-        image: postgres:latest
-        hostname: data
-        container_name: data
-        volumes:
-            - /var/lib/postgresql
-        command: /bin/true
+        networks:
+            - fiware
 
     wirecloud:
         restart: on-failure
@@ -121,18 +166,102 @@ services:
         volumes:
             - ./wirecloud_config/graziotthemev2/:/opt/wirecloud_instance/graziotthemev2/:ro
             - ./wirecloud_config/settings.py:/opt/wirecloud_instance/wirecloud_instance/settings.py:ro
+            - ./wirecloud_config/urls.py:/opt/wirecloud_instance/wirecloud_instance/urls.py:ro
         links:
-            - postgres:postgres
+            - postgres
+            - keyrock
+        networks:
+            - fiware
 
     ngsi-proxy:
         restart: on-failure
-        image: januschm/ngsi-proxy:latest
+        image: fiware/ngsiproxy:latest
         hostname: ngsi-proxy
         container_name: ngsi-proxy
+        environment:
+            - TRUST_PROXY_HEADERS=1
+        networks:
+            - fiware
         expose:
             - "3000"
+
+    pepOrion:
+        restart: on-failure
+        image: januschm/pep-proxy:latest
+        hostname: pepOrion
+        container_name: pepOrion
+        networks:
+            - fiware
         ports:
-            - "3000:3000"
+            - "1027:1027"
+        volumes:
+            - "./pepOrion_config/config.js:/opt/fiware-pep-proxy/config.js:ro"
+        depends_on:
+            authzforce:
+                condition: service_started
+            keyrock:
+                condition: service_healthy
+
+    pepIdasAdmin:
+        restart: on-failure
+        image: januschm/pep-proxy:latest
+        hostname: pepIdasAdmin
+        container_name: pepIdasAdmin
+        networks:
+            - fiware
+        ports:
+            - "4042:4042"
+        volumes:
+            - "./pepIdasAdmin_config/config.js:/opt/fiware-pep-proxy/config.js:ro"
+        depends_on:
+            authzforce:
+                condition: service_started
+            keyrock:
+                condition: service_healthy
+
+    pepIdasSensor:
+        restart: on-failure
+        image: januschm/pep-proxy:latest
+        hostname: pepIdasSensor
+        container_name: pepIdasSensor
+        networks:
+            - fiware
+        ports:
+            - "7897:7897"
+        volumes:
+            - "./pepIdasSensor_config/config.js:/opt/fiware-pep-proxy/config.js:ro"
+        depends_on:
+            authzforce:
+                condition: service_started
+            keyrock:
+                condition: service_healthy
+
+    pepComet:
+        restart: on-failure
+        image: januschm/pep-proxy:latest
+        hostname: pepComet
+        container_name: pepComet
+        networks:
+            - fiware
+        ports:
+            - "8667:8667"
+        volumes:
+            - "./pepComet_config/config.js:/opt/fiware-pep-proxy/config.js:ro"
+        depends_on:
+            authzforce:
+                condition: service_started
+            keyrock:
+                condition: service_healthy
 
 volumes:
     letsencrypt_www: ~
+    postgres_vol: ~
+    mysql_vol: ~
+
+networks:
+    fiware:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 172.18.1.0/24
+                  gateway: 172.18.1.1

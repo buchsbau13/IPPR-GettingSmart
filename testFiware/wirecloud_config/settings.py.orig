@@ -98,8 +98,7 @@ WSGI_APPLICATION = 'wirecloud_instance.wsgi.application'
 
 INSTALLED_APPS += (
     #'django.contrib.sites',
-    #'wirecloud.oauth2provider',
-    'social_django',
+    'wirecloud.oauth2provider',
     'wirecloud.fiware',
 )
 
@@ -126,22 +125,6 @@ CACHES = {
     }
 }
 
-AUTHENTICATION_BACKENDS = (
-    'wirecloud.fiware.social_auth_backend.FIWAREOAuth2',
-)
-
-FIWARE_IDM_SERVER = "http://192.168.1.11:5000"
-SOCIAL_AUTH_FIWARE_KEY = "442438cb-e3ee-47d5-a206-d31e2ecb00ea"
-SOCIAL_AUTH_FIWARE_SECRET = "42cd8770-2021-4a01-a2f5-2b9c05b8f272"
-
-FIWARE_PORTALS = (
-    {
-        "name": "IDM",
-        "url": FIWARE_IDM_SERVER,
-        "logout_path": "/auth/logout?_method=DELETE"
-    },
-)
-
 # Wirecloud autodiscover Wirecloud plugins by default. Uncomment this for settings
 # the list of plugins manually.
 #
@@ -152,8 +135,6 @@ FIWARE_PORTALS = (
 
 NOT_PROXY_FOR = ['localhost', '127.0.0.1']
 
-# Set mode to HTTPS
 FORCE_PROTO = 'https'
 
-# Increase upload file size limit
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10490000
