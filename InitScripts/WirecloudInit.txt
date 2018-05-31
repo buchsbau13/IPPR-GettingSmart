@@ -1,0 +1,3 @@
+docker exec -it wirecloud /docker-entrypoint.sh initdb
+docker exec -it wirecloud /docker-entrypoint.sh createsuperuser (-> not needed when using Keyrock)
+docker exec -it wirecloud sh -c "echo yes | python manage.py collectstatic"
