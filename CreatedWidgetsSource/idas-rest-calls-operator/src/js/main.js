@@ -37,10 +37,13 @@
         var url = createURL('iot/services');
         var headers = {};
 
-        if (MashupPlatform.prefs.get('use_owner_credentials')) {
-            headers['X-FIWARE-OAuth-Token'] = 'true';
-            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
-            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        if (MashupPlatform.prefs.get('use_user_fiware_token') || MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['FIWARE-OAuth-Token'] = 'true';
+            headers['FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+
+            if (MashupPlatform.prefs.get('use_owner_credentials')) {
+                headers['FIWARE-OAuth-Source'] = 'workspaceowner';
+            }
         }
 
         if (!payload || !payload.services || !payload.services[0].apikey || !payload.services[0].token ||
@@ -113,10 +116,13 @@
         var headers = {};
         var params = {};
 
-        if (MashupPlatform.prefs.get('use_owner_credentials')) {
-            headers['X-FIWARE-OAuth-Token'] = 'true';
-            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
-            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        if (MashupPlatform.prefs.get('use_user_fiware_token') || MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['FIWARE-OAuth-Token'] = 'true';
+            headers['FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+
+            if (MashupPlatform.prefs.get('use_owner_credentials')) {
+                headers['FIWARE-OAuth-Source'] = 'workspaceowner';
+            }
         }
 
         if (!payload || !payload.apikey || !payload.resource) {
@@ -188,10 +194,13 @@
         var headers = {};
         var params = {};
 
-        if (MashupPlatform.prefs.get('use_owner_credentials')) {
-            headers['X-FIWARE-OAuth-Token'] = 'true';
-            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
-            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        if (MashupPlatform.prefs.get('use_user_fiware_token') || MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['FIWARE-OAuth-Token'] = 'true';
+            headers['FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+
+            if (MashupPlatform.prefs.get('use_owner_credentials')) {
+                headers['FIWARE-OAuth-Source'] = 'workspaceowner';
+            }
         }
 
         if (!payload || !payload.apikey || !payload.resource) {
@@ -264,10 +273,13 @@
         var url = createURL('iot/devices');
         var headers = {};
 
-        if (MashupPlatform.prefs.get('use_owner_credentials')) {
-            headers['X-FIWARE-OAuth-Token'] = 'true';
-            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
-            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        if (MashupPlatform.prefs.get('use_user_fiware_token') || MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['FIWARE-OAuth-Token'] = 'true';
+            headers['FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+
+            if (MashupPlatform.prefs.get('use_owner_credentials')) {
+                headers['FIWARE-OAuth-Source'] = 'workspaceowner';
+            }
         }
 
         if (!payload || !payload.devices || !payload.devices[0].device_id || !payload.devices[0].entity_name ||
@@ -348,10 +360,13 @@
 
         var headers = {};
 
-        if (MashupPlatform.prefs.get('use_owner_credentials')) {
-            headers['X-FIWARE-OAuth-Token'] = 'true';
-            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
-            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        if (MashupPlatform.prefs.get('use_user_fiware_token') || MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['FIWARE-OAuth-Token'] = 'true';
+            headers['FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+
+            if (MashupPlatform.prefs.get('use_owner_credentials')) {
+                headers['FIWARE-OAuth-Source'] = 'workspaceowner';
+            }
         }
 
         if (!payload || !payload.device_id || !payload.entity_name || !payload.entity_type || !payload.attributes) {
@@ -428,10 +443,13 @@
 
         var headers = {};
 
-        if (MashupPlatform.prefs.get('use_owner_credentials')) {
-            headers['X-FIWARE-OAuth-Token'] = 'true';
-            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
-            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        if (MashupPlatform.prefs.get('use_user_fiware_token') || MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['FIWARE-OAuth-Token'] = 'true';
+            headers['FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+
+            if (MashupPlatform.prefs.get('use_owner_credentials')) {
+                headers['FIWARE-OAuth-Source'] = 'workspaceowner';
+            }
         }
 
         if (!payload || !payload.device_id || !payload.entity_name || !payload.entity_type) {
@@ -505,10 +523,13 @@
         var headers = {};
         var params = {};
 
-        if (MashupPlatform.prefs.get('use_owner_credentials')) {
-            headers['X-FIWARE-OAuth-Token'] = 'true';
-            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
-            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        if (MashupPlatform.prefs.get('use_user_fiware_token') || MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['FIWARE-OAuth-Token'] = 'true';
+            headers['FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+
+            if (MashupPlatform.prefs.get('use_owner_credentials')) {
+                headers['FIWARE-OAuth-Source'] = 'workspaceowner';
+            }
         }
 
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
@@ -568,10 +589,13 @@
             params.limit = "1000"; // Default limit of 20 is too small, as there is no possibility (as of yet) to filter by entity ID
         }
 
-        if (MashupPlatform.prefs.get('use_owner_credentials')) {
-            headers['X-FIWARE-OAuth-Token'] = 'true';
-            headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
-            headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        if (MashupPlatform.prefs.get('use_user_fiware_token') || MashupPlatform.prefs.get('use_owner_credentials')) {
+            headers['FIWARE-OAuth-Token'] = 'true';
+            headers['FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+
+            if (MashupPlatform.prefs.get('use_owner_credentials')) {
+                headers['FIWARE-OAuth-Source'] = 'workspaceowner';
+            }
         }
 
         headers['FIWARE-Service'] = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
