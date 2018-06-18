@@ -1,7 +1,7 @@
 var config = {};
 
 // Used only if https is disabled
-config.pep_port = 4042;
+config.pep_port = 1027;
 
 // Set this var to undefined if you don't want the server to listen on HTTPS
 config.https = {
@@ -18,17 +18,17 @@ config.idm = {
 }
 
 config.app = {
-	host: 'idas',
-	port: '4041',
+	host: 'orion',
+	port: '1026',
 	ssl: false // Use true if the app server listens in https
 }
 
 
 // Credentials obtained when registering PEP Proxy in app_id in Account Portal
 config.pep = {
-	app_id: '',
-	username: '',
-	password: '',
+	app_id: 'a7551fac-ecd1-4c1f-af38-54942451af30',
+	username: 'pep_proxy_29668bb2-d5a9-4505-ba02-5a9a9e613591',
+	password: 'pep_proxy_38f3effb-8ecc-416d-b5d4-0a1b5e896e1e',
 	trusted_apps : []
 }
 

@@ -130,15 +130,17 @@ AUTHENTICATION_BACKENDS = (
     'wirecloud.fiware.social_auth_backend.FIWAREOAuth2',
 )
 
-FIWARE_IDM_SERVER = "http://192.168.1.11:5000"
-SOCIAL_AUTH_FIWARE_KEY = "442438cb-e3ee-47d5-a206-d31e2ecb00ea"
-SOCIAL_AUTH_FIWARE_SECRET = "42cd8770-2021-4a01-a2f5-2b9c05b8f272"
+FIWARE_IDM_SERVER = "http://192.168.1.139:5000"
+#FIWARE_IDM_SERVER = "http://10.31.3.128:5000"
+SOCIAL_AUTH_FIWARE_KEY = "a7551fac-ecd1-4c1f-af38-54942451af30"
+SOCIAL_AUTH_FIWARE_SECRET = "ecbb25bd-8d86-4e9d-b4ab-8d3aaf28749a"
 
 FIWARE_PORTALS = (
     {
         "name": "IDM",
         "url": FIWARE_IDM_SERVER,
-        "logout_path": "/auth/logout?_method=DELETE"
+        "logout_path": "/auth/logout?_method=DELETE",
+        "display": False
     },
 )
 

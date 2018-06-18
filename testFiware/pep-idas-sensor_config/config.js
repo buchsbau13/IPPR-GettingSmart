@@ -26,9 +26,9 @@ config.app = {
 
 // Credentials obtained when registering PEP Proxy in app_id in Account Portal
 config.pep = {
-	app_id: '',
-	username: '',
-	password: '',
+	app_id: '640abc07-1fa7-4aec-b2ab-d070166b6fd7',
+	username: 'pep_proxy_1dae8e3b-1584-4a45-9854-deffe5391110',
+	password: 'pep_proxy_2c8ccefa-e73a-4a4e-9245-283d00f1c794',
 	trusted_apps : []
 }
 
