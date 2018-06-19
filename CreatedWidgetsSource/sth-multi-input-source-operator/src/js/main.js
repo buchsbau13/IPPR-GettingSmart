@@ -75,6 +75,15 @@
         }
         var request_headers = {};
 
+        if (mp.prefs.get('use_user_fiware_token') || mp.prefs.get('use_owner_credentials')) {
+            request_headers['FIWARE-OAuth-Token'] = 'true';
+            request_headers['FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+
+            if (mp.prefs.get('use_owner_credentials')) {
+                request_headers['FIWARE-OAuth-Source'] = 'workspaceowner';
+            }
+        }
+
         var tenant = mp.prefs.get('ngsi_tenant').trim().toLowerCase();
         if (tenant !== '') {
             request_headers['FIWARE-Service'] = tenant;

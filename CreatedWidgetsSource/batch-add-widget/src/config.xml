@@ -26,5 +26,5 @@
         <variable name="textAreaSave" type="text"/>
     </persistentvariables>
     <contents src="index.html" useplatformstyle="true"/>
-    <rendering height="400px" width="33%"/>
+    <rendering height="610px" width="33%"/>
 </widget>

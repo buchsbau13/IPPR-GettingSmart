@@ -35,10 +35,13 @@
     var create_ngsi_connection = function create_ngsi_connection() {
         var request_headers = {};
 
-        if (MashupPlatform.prefs.get('use_owner_credentials')) {
-            request_headers['X-FIWARE-OAuth-Token'] = 'true';
-            request_headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
-            request_headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        if (MashupPlatform.prefs.get('use_user_fiware_token') || MashupPlatform.prefs.get('use_owner_credentials')) {
+            request_headers['FIWARE-OAuth-Token'] = 'true';
+            request_headers['FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+
+            if (MashupPlatform.prefs.get('use_owner_credentials')) {
+                request_headers['FIWARE-OAuth-Source'] = 'workspaceowner';
+            }
         }
 
         var tenant = MashupPlatform.prefs.get('ngsi_tenant').trim();
@@ -150,7 +153,7 @@
         if (timeWidget) {
             timeWidget.remove();
         }
-        timeWidget = MashupPlatform.mashup.addWidget('FH-JOANNEUM/date-range/1.0', {refposition: buttonEdit.getBoundingClientRect()});
+        timeWidget = MashupPlatform.mashup.addWidget(MashupPlatform.prefs.get("date_range_widget"), {refposition: buttonEdit.getBoundingClientRect()});
         timeWidget.addEventListener('remove', function () { timeWidget = null; });
 
         timestampInput.connect(timeWidget.outputs.timestamps);

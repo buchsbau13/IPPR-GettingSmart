@@ -165,7 +165,7 @@
         if (this.editorWidget) {
             this.editorWidget.remove();
         }
-        this.editorWidget = MashupPlatform.mashup.addWidget('CoNWeT/json-editor/1.0', {refposition: button.getBoundingClientRect()});
+        this.editorWidget = MashupPlatform.mashup.addWidget(MashupPlatform.prefs.get("json_editor_widget"), {refposition: button.getBoundingClientRect()});
         this.editorWidget.addEventListener('remove', function () { this.editorWidget = null; }.bind(this));
 
         this.editorConfigOutput.connect(this.editorWidget.inputs.configure);
@@ -182,17 +182,19 @@
     };
 
     var newDevice = function newDevice(input) {
-        var data = JSON.parse(input);
-        if (this.addDeviceAction) {
-            this.addDeviceAction = false;
-            initOperator.call(this);
-            var device = {"devices": []};
-            device.devices.push(data);
-            this.addDeviceOutput.pushEvent(JSON.stringify(device));
-        } else if (this.editDeviceAction) {
-            this.editDeviceAction = false;
-            initOperator.call(this);
-            this.editDeviceOutput.pushEvent(input);
+        if (input !== "exit") {
+            var data = JSON.parse(input);
+            if (this.addDeviceAction) {
+                this.addDeviceAction = false;
+                initOperator.call(this);
+                var device = {"devices": []};
+                device.devices.push(data);
+                this.addDeviceOutput.pushEvent(JSON.stringify(device));
+            } else if (this.editDeviceAction) {
+                this.editDeviceAction = false;
+                initOperator.call(this);
+                this.editDeviceOutput.pushEvent(input);
+            }
         }
         this.editorWidget.remove();
     };

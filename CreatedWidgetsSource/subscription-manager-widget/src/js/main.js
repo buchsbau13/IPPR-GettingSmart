@@ -181,7 +181,7 @@
         if (this.editorWidget) {
             this.editorWidget.remove();
         }
-        this.editorWidget = MashupPlatform.mashup.addWidget('CoNWeT/json-editor/1.0', {refposition: button.getBoundingClientRect()});
+        this.editorWidget = MashupPlatform.mashup.addWidget(MashupPlatform.prefs.get("json_editor_widget"), {refposition: button.getBoundingClientRect()});
         this.editorWidget.addEventListener('remove', function () { this.editorWidget = null; }.bind(this));
 
         this.editorConfigOutput.connect(this.editorWidget.inputs.configure);
@@ -198,14 +198,16 @@
     };
 
     var newSub = function newSub(input) {
-        if (this.addSubAction) {
-            this.addSubAction = false;
-            initOperator.call(this);
-            this.addSubOutput.pushEvent(input);
-        } else if (this.editSubAction) {
-            this.editSubAction = false;
-            initOperator.call(this);
-            this.editSubOutput.pushEvent(input);
+        if (input !== "exit") {
+            if (this.addSubAction) {
+                this.addSubAction = false;
+                initOperator.call(this);
+                this.addSubOutput.pushEvent(input);
+            } else if (this.editSubAction) {
+                this.editSubAction = false;
+                initOperator.call(this);
+                this.editSubOutput.pushEvent(input);
+            }
         }
         this.editorWidget.remove();
     };

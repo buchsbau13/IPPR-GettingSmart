@@ -137,7 +137,7 @@
         if (this.editorWidget) {
             this.editorWidget.remove();
         }
-        this.editorWidget = MashupPlatform.mashup.addWidget('CoNWeT/json-editor/1.0', {refposition: button.getBoundingClientRect()});
+        this.editorWidget = MashupPlatform.mashup.addWidget(MashupPlatform.prefs.get("json_editor_widget"), {refposition: button.getBoundingClientRect()});
         this.editorWidget.addEventListener('remove', function () { this.editorWidget = null; }.bind(this));
 
         this.editorConfigOutput.connect(this.editorWidget.inputs.configure);
@@ -154,21 +154,23 @@
     };
 
     var newService = function newService(input) {
-        var data = JSON.parse(input);
-        if (this.addServiceAction) {
-            this.addServiceAction = false;
-            this.subservice = data.subservice;
-            initOperator.call(this);
-            delete data.subservice;
-            var service = {"services": []};
-            service.services.push(data);
-            this.addServiceOutput.pushEvent(JSON.stringify(service));
-        } else if (this.editServiceAction) {
-            this.editServiceAction = false;
-            this.subservice = data.subservice;
-            initOperator.call(this);
-            delete data.subservice;
-            this.editServiceOutput.pushEvent(JSON.stringify(data));
+        if (input !== "exit") {
+            var data = JSON.parse(input);
+            if (this.addServiceAction) {
+                this.addServiceAction = false;
+                this.subservice = data.subservice;
+                initOperator.call(this);
+                delete data.subservice;
+                var service = {"services": []};
+                service.services.push(data);
+                this.addServiceOutput.pushEvent(JSON.stringify(service));
+            } else if (this.editServiceAction) {
+                this.editServiceAction = false;
+                this.subservice = data.subservice;
+                initOperator.call(this);
+                delete data.subservice;
+                this.editServiceOutput.pushEvent(JSON.stringify(data));
+            }
         }
         this.editorWidget.remove();
     };

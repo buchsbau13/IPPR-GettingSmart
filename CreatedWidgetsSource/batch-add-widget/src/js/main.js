@@ -46,7 +46,7 @@
         this.textArea = new StyledElements.TextArea({
             class: "textarea",
             cols: 50,
-            rows: 20
+            rows: 40
         });
         this.btnSend = new StyledElements.Button({
             class: "se-btn-circle send-button z-depth-3",
