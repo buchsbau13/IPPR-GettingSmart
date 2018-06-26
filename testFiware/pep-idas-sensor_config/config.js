@@ -1,7 +1,7 @@
 var config = {};
 
 // Used only if https is disabled
-config.pep_port = 7897;
+config.pep_port = 7896;
 
 // Set this var to undefined if you don't want the server to listen on HTTPS
 config.https = {
@@ -26,9 +26,9 @@ config.app = {
 
 // Credentials obtained when registering PEP Proxy in app_id in Account Portal
 config.pep = {
-	app_id: '640abc07-1fa7-4aec-b2ab-d070166b6fd7',
-	username: 'pep_proxy_1dae8e3b-1584-4a45-9854-deffe5391110',
-	password: 'pep_proxy_2c8ccefa-e73a-4a4e-9245-283d00f1c794',
+	app_id: '2cc2a752-9c48-41e8-ad52-a5b6cfa9876a',
+	username: 'pep_proxy_681c9d20-a4c4-4155-87ef-8c5350975c45',
+	password: 'pep_proxy_98608cf2-dfce-448e-8088-9f2a8ed644a4',
 	trusted_apps : []
 }
 

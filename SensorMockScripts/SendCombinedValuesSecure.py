@@ -79,8 +79,8 @@ IDAS_PROTO=config.get('idas', 'proto')
 IDAS_HOST=config.get('idas', 'host')
 IDAS_UL20_PORT=config.get('idas', 'ul20port_secure')
 KEYROCK_PROTO=config.get('idm', 'proto')
-KEYROCK_HOST=config.get('idm', 'keyrock_host')
-KEYROCK_PORT=config.get('idm', 'keyrock_port')
+KEYROCK_HOST=config.get('idm', 'host')
+KEYROCK_PORT=config.get('idm', 'port')
 AUTH_HEADER=base64.b64encode((config.get('idm', 'client_id')+':'+config.get('idm', 'client_secret')).encode()).decode('UTF-8')
 TOKEN='invalid_token'
 

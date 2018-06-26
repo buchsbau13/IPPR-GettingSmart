@@ -188,7 +188,7 @@
             attributes = {};
             for (j = 0; j < entry.attributes.length; j++) {
                 attribute = entry.attributes[j];
-                attributes[attribute.name] = attribute.contextValue;
+                attributes[attribute.name] = attribute.value;
             }
             attributes.id = entry.entity.id;
             attributes.type = entry.entity.type;

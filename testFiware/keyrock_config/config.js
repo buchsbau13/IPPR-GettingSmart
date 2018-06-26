@@ -73,13 +73,13 @@ config.external_auth = {
 
 // Email configuration
 config.mail = {
-    host: 'smtp.office365.com',
+    host: 'smtp.gmail.com',
     port: 587,
     auth: {
-      user: 'graziot@outlook.com',
+      user: 'fiwaregraz@gmail.com',
       pass: 'IPPR_aim16'      
     },
-    from: 'graziot@outlook.com'
+    from: 'fiwaregraz@gmail.com'
 }
 
 

@@ -7,36 +7,36 @@ services:
         container_name: mysql
         environment:
             - MYSQL_ROOT_PASSWORD=idm
-            - MYSQL_ROOT_HOST=172.18.1.100
+            - MYSQL_ROOT_HOST=%
         volumes:
             - mysql_vol:/var/lib/mysql
-        networks:
-            - fiware
         ports:
             - "3306:3306"
+        networks:
+            - default
 
     mongodb:
         restart: on-failure
-        image: mongo:latest
+        image: mongo:3.4
         hostname: mongodb
         container_name: mongodb
-        networks:
-            - fiware
         ports:
             - "27017:27017"
         command: --smallfiles
+        networks:
+            - secure
 
     postgres:
         restart: on-failure
-        image: postgres:latest
+        image: postgres:10.4
         hostname: postgres
         container_name: postgres
         volumes:
             - postgres_vol:/var/lib/postgresql
-        networks:
-            - fiware
         ports:
             - "5432:5432"
+        networks:
+            - default
 
     authzforce:
         restart: on-failure
@@ -45,12 +45,10 @@ services:
         container_name: authzforce
         volumes:
             - authzforce_vol:/opt/authzforce-ce-server/data
-        networks:
-            - fiware
         ports:
             - "8080:8080"
-        expose:
-            - "8080"
+        networks:
+            - default
 
     keyrock:
         restart: on-failure
@@ -60,15 +58,12 @@ services:
         volumes:
             - ./keyrock_config/config.js:/opt/fiware-idm/config.js:ro
             - ./nginx_config/certs/:/opt/fiware-idm/certs/:ro
-        networks:
-            fiware:
-                ipv4_address: 172.18.1.100
         environment:
             - DATABASE_HOST=mysql
         ports:
             - "5000:5000"
-        links:
-            - authzforce
+        networks:
+            - default
         healthcheck:
             test: ["CMD-SHELL", "nc -z -v -w 30 mysql 3306"]
             interval: 10s
@@ -77,20 +72,16 @@ services:
 
     orion:
         restart: on-failure
-        image: fiware/orion:latest
+        image: fiware/orion:1.14.0
         hostname: orion
         container_name: orion
-        links:
-            - mongodb
-        networks:
-            - fiware
-        expose:
-            - "1026"
         command: -dbhost mongodb
+        networks:
+            - secure
 
     cygnus:
         restart: on-failure
-        image: telefonicaiot/fiware-cygnus
+        image: telefonicaiot/fiware-cygnus:1.9.0
         hostname: cygnus
         container_name: cygnus
         links:
@@ -98,42 +89,31 @@ services:
         volumes:
             - "./cygnus_config/agent.conf:/opt/apache-flume/conf/agent.conf:ro"
         networks:
-            - fiware
-        expose:
-            - "8081"
-            - "5050"
+            - secure
 
     comet:
         restart: on-failure
-        image: fiware/sth-comet
+        image: fiware/sth-comet:2.3.0
         hostname: comet
         container_name: comet
-        links:
-            - mongodb
         volumes: 
             - "./comet_config/config.js:/opt/sth/config.js:ro"
         networks:
-            - fiware
-        expose:
-            - "8666"
+            - secure
 
     idas:
         restart: on-failure
-        image: fiware/iotagent-ul:latest
+        image: fiware/iotagent-ul:1.6.0
         hostname: idas
         container_name: idas
         links:
-            - orion
             - mongodb:mongo
         networks:
-            - fiware
-        expose:
-            - "7896"
-            - "4041"
+            - secure
 
     nginx:
         restart: on-failure
-        image: nginx:latest
+        image: nginx:1.15.0
         hostname: nginx
         container_name: nginx
         volumes:
@@ -142,28 +122,26 @@ services:
             - letsencrypt_www:/var/www/letsencrypt/
         volumes_from:
             - wirecloud
-        networks:
-            - fiware
         ports:
             - "80:80"
             - "443:443"
             - "3000:3000"
-        links:
-            - wirecloud
+        networks:
+            - default
 
     certbot:
-        image: certbot/certbot:latest
+        image: certbot/certbot:v0.25.1
         hostname: certbot
         container_name: certbot
         volumes:
             - ./nginx_config/certs/:/etc/letsencrypt/
             - letsencrypt_www:/var/www/letsencrypt/
         networks:
-            - fiware
+            - default
 
     wirecloud:
         restart: on-failure
-        image: fiware/wirecloud:latest-composable
+        image: fiware/wirecloud:1.1-composable
         hostname: wirecloud
         container_name: wirecloud
         volumes:
@@ -171,22 +149,17 @@ services:
             - ./wirecloud_config/settings.py:/opt/wirecloud_instance/wirecloud_instance/settings.py:ro
             - ./wirecloud_config/urls.py:/opt/wirecloud_instance/wirecloud_instance/urls.py:ro
         networks:
-            - fiware
-        links:
-            - postgres
-            - keyrock
+            - default
 
     ngsi-proxy:
         restart: on-failure
-        image: fiware/ngsiproxy:latest
+        image: fiware/ngsiproxy:1.1
         hostname: ngsi-proxy
         container_name: ngsi-proxy
         environment:
             - TRUST_PROXY_HEADERS=1
         networks:
-            - fiware
-        expose:
-            - "3000"
+            - default
 
     pep-orion:
         restart: on-failure
@@ -196,12 +169,11 @@ services:
         volumes:
             - "./pep-orion_config/config.js:/opt/fiware-pep-proxy/config.js:ro"
             - "./pep-orion_config/azf.js:/opt/fiware-pep-proxy/lib/azf.js:ro"
-        networks:
-            - fiware
         ports:
-            - "1027:1027"
-        links:
-            - authzforce
+            - "1026:1026"
+        networks:
+            - secure
+            - default
         depends_on:
             keyrock:
                 condition: service_healthy
@@ -214,12 +186,11 @@ services:
         volumes:
             - "./pep-idas-admin_config/config.js:/opt/fiware-pep-proxy/config.js:ro"
             - "./pep-idas-admin_config/azf.js:/opt/fiware-pep-proxy/lib/azf.js:ro"
-        networks:
-            - fiware
         ports:
-            - "4042:4042"
-        links:
-            - authzforce
+            - "4041:4041"
+        networks:
+            - secure
+            - default
         depends_on:
             keyrock:
                 condition: service_healthy
@@ -232,12 +203,11 @@ services:
         volumes:
             - "./pep-idas-sensor_config/config.js:/opt/fiware-pep-proxy/config.js:ro"
             - "./pep-idas-sensor_config/azf.js:/opt/fiware-pep-proxy/lib/azf.js:ro"
-        networks:
-            - fiware
         ports:
-            - "7897:7897"
-        links:
-            - authzforce
+            - "7896:7896"
+        networks:
+            - secure
+            - default
         depends_on:
             keyrock:
                 condition: service_healthy
@@ -250,12 +220,11 @@ services:
         volumes:
             - "./pep-comet_config/config.js:/opt/fiware-pep-proxy/config.js:ro"
             - "./pep-comet_config/azf.js:/opt/fiware-pep-proxy/lib/azf.js:ro"
-        networks:
-            - fiware
         ports:
-            - "8667:8667"
-        links:
-            - authzforce
+            - "8666:8666"
+        networks:
+            - secure
+            - default
         depends_on:
             keyrock:
                 condition: service_healthy
@@ -267,9 +236,5 @@ volumes:
     authzforce_vol: ~
 
 networks:
-    fiware:
-        driver: bridge
-        ipam:
-            config:
-                - subnet: 172.18.1.0/24
-                  gateway: 172.18.1.1
+    secure:
+    default:
