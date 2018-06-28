@@ -1,0 +1,604 @@
+{
+  "subscriptions": [
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Trafficlight_1",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "temperature"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "temperature"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Trafficlight_1",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "humidity"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "humidity"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Trafficlight_2",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "temperature"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "temperature"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Trafficlight_2",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "humidity"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "humidity"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Trafficlight_3",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "temperature"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "temperature"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Trafficlight_3",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "humidity"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "humidity"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Trafficlight_4",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "temperature"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "temperature"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Trafficlight_4",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "humidity"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "humidity"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Trafficlight_5",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "temperature"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "temperature"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Trafficlight_5",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "humidity"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "humidity"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Trafficlight_6",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "temperature"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "temperature"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Trafficlight_6",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "humidity"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "humidity"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Tram_1",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "temperature"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "temperature"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Tram_1",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "humidity"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "humidity"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Tram_1",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "location"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "location"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Tram_2",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "temperature"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "temperature"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Tram_2",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "humidity"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "humidity"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Tram_2",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "location"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "location"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Bus_1",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "temperature"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "temperature"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Bus_1",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "humidity"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "humidity"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Bus_1",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "location"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "location"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Bus_2",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "temperature"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "temperature"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Bus_2",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "humidity"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "humidity"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "Bus_2",
+            "type": "mobile"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "location"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "location"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    }
+  ]
+}
