@@ -77,7 +77,7 @@ config.readfp(io.BytesIO(sample_config))
 
 IDAS_PROTO=config.get('idas', 'proto')
 IDAS_HOST=config.get('idas', 'host')
-IDAS_UL20_PORT=config.get('idas', 'ul20port_secure')
+IDAS_UL20_PORT=config.get('idas', 'ul20port')
 KEYROCK_PROTO=config.get('idm', 'proto')
 KEYROCK_HOST=config.get('idm', 'host')
 KEYROCK_PORT=config.get('idm', 'port')

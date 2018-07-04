@@ -1,0 +1,4 @@
+After Docker has finished initialising all containers, run the following commands from a separate PowerShell window:
+
+docker exec -it wirecloud /docker-entrypoint.sh initdb
+docker exec -it wirecloud sh -c "echo yes | python manage.py collectstatic"

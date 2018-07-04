@@ -28,7 +28,7 @@ config.app = {
 config.pep = {
 	app_id: '2cc2a752-9c48-41e8-ad52-a5b6cfa9876a',
 	username: 'pep_proxy_681c9d20-a4c4-4155-87ef-8c5350975c45',
-	password: 'pep_proxy_98608cf2-dfce-448e-8088-9f2a8ed644a4',
+	password: 'pep_proxy_8043208e-14dd-4b05-9743-a865e1e1de07',
 	trusted_apps : []
 }
 
