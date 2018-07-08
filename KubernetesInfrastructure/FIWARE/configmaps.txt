@@ -1,0 +1,2 @@
+kubectl create configmap cygnus-config --from-file=cygnus_config/agent.conf
+

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cygnus
+spec:
+  selector:
+    matchLabels:
+      run: cygnus
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: cygnus
+    spec:
+      containers:
+      - image: telefonicaiot/fiware-cygnus
+        name: cygnus
+        ports:
+        - containerPort: 8081
+        - containerPort: 5050
+        volumeMounts:
+        - mountPath: /opt/apache-flume/conf/agent.conf
+          name: cygnus-config
+          subPath: agent.conf
+      restartPolicy: Always
+      volumes:
+      - name: cygnus-config
+        configMap:
+          name: cygnus-config

@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: yarn
+  labels:
+    app: yarn
+spec:
+  ports:
+  - port: 8088
+    name: yarn-rm
+  - port: 19888
+    name: yarn-hs
+  clusterIP: None
+  selector:
+     app: yarn
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hadoop-yarn
+spec:
+  selector:
+    matchLabels:
+      app: yarn # has to match .spec.template.metadata.labels
+  serviceName: "yarn"
+  replicas: 1 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: yarn # has to match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: yarn
+        image: bxjulia/yarn-3.1.0:latest
+        env:
+        - name: HADOOP_HOST_NAMENODE
+          value: namenode
+        ports:
+        - containerPort: 8088
+          name: yarn-rm
+        - containerPort: 19888
+          name: yarn-hs
+        volumeMounts:
+        - name: yarn-pv-1
+          mountPath: /hdfs/volume1/yarn
+  volumeClaimTemplates:
+  - metadata:
+      name: yarn-pv-1
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "yarn"
+      resources:
+        requests:
+          storage: 10Gi

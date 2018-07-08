@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: datanode-pv-1
+  labels:
+    type: datanode1
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: datanode1
+  hostPath:
+    path: "/hdfs/volume1/data"

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: yarn-pv-1
+  labels:
+    type: yarn
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: yarn
+  hostPath:
+    path: "/hdfs/volume1/yarn"
