@@ -1,2 +1,4 @@
 kubectl create configmap cygnus-config --from-file=cygnus_config/agent.conf
+kubectl create configmap comet-config --from-file=comet_config/config.js
+kubectl create configmap nginx-config --from-file=nginx_config/nginx.conf
 

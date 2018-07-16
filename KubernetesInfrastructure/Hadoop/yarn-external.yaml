@@ -8,9 +8,11 @@ spec:
   ports:
   - port: 8088
     targetPort: 8088
+    nodePort: 30808    
     name: yarn-rm
   - port: 19888
     targetPort: 19888
+    nodePort: 30198    
     name: yarn-hs
   selector:
     app: yarn

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-wirecloud
+spec:
+  selector:
+    matchLabels:
+      run: nginx-wirecloud
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: nginx-wirecloud
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          name: nginx-config
+          subPath: nginx.conf
+        - mountPath: /var/www/static
+          name: shared-static
+          readOnly: true
+      - name: wirecloud
+        image: fiware/wirecloud:1.1-composable
+        ports:
+        - containerPort: 8000
+        volumeMounts:
+        - mountPath: /var/www/static
+          name: shared-static
+      volumes:
+      - name: shared-static
+        emptyDir: {}
+      - name: nginx-config
+        configMap:
+          name: nginx-config

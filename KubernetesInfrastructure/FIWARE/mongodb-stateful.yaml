@@ -45,4 +45,4 @@ spec:
       storageClassName: "mongo"
       resources:
         requests:
-          storage: 10Gi
+          storage: 50Gi

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comet
+spec:
+  selector:
+    matchLabels:
+      run: comet
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: comet
+    spec:
+      containers:
+      - image: fiware/sth-comet
+        name: comet
+        ports:
+        - containerPort: 8666
+        volumeMounts:
+        - mountPath: /opt/sth/config.js
+          name: comet-config
+          subPath: config.js
+      restartPolicy: Always
+      volumes:
+      - name: comet-config
+        configMap:
+          name: comet-config
