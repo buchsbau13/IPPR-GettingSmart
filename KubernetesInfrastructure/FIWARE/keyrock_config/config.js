@@ -6,11 +6,10 @@ config.port = 5000
 // HTTPS enable
 config.https = {
     enabled: false,
-    cert_file: 'certs/dummy.crt',
-    key_file: 'certs/dummy.key',
-    //cert_file: 'certs/live/graziot.info.tm/fullchain.pem',
-    //key_file: 'certs/live/graziot.info.tm/privkey.pem',
-    port: 5005
+    cert_file: 'certs/idm-2018-cert.pem',
+    key_file: 'certs/idm-2018-key.pem',
+    ca_certs: [],
+    port: 443
 };
 
 // Config email list type to use domain filtering
@@ -39,11 +38,19 @@ config.api = {
     token_lifetime: 60 * 60     // One hour
 }
 
-// Enable authzforce
-config.authzforce = {
-	enabled: true,
-	host: 'authzforce',
-	port: 8080
+// Configure Policy Decision Point (PDP)
+//  - IdM can perform basic policy checks (HTTP verb + path)
+//  - AuthZForce can perform basic policy checks as well as advanced 
+// If authorization level is advanced you can create rules, HTTP verb+resource and XACML advanced. In addition
+// you need to have an instance of authzforce deployed to perform advanced authorization request from a Pep Proxy.
+// If authorization level is basic, only HTTP verb+resource rules can be created
+config.authorization = {
+    level: 'advanced',     // basic|advanced 
+    authzforce: {
+        enabled: true,
+        host: 'authzforce',
+        port: 8080,
+    } 
 }
 
 var database_host = (process.env.DATABASE_HOST) ? process.env.DATABASE_HOST : 'localhost'
@@ -54,7 +61,9 @@ config.database = {
     password: 'idm',             // default: 'idm'
     username: 'root',            // default: 'root'
     database: 'idm',             // default: 'idm'
-    dialect: 'mysql'             // default: 'mysql'
+    dialect: 'mysql',            // default: 'mysql'
+    port: undefined              // default: undefined (which means that the port 
+                                 //          is the default for each dialect)
 };
 
 // External user authentication
@@ -67,7 +76,8 @@ config.external_auth = {
         username: 'db_user',
         password: 'db_pass',
         user_table: 'user',
-        dialect: 'mysql'
+        dialect: 'mysql',
+        port: undefined
     }
 }
 
@@ -79,13 +89,22 @@ config.mail = {
       user: 'fiwaregraz@gmail.com',
       pass: 'IPPR_aim16'      
     },
-    from: 'FIWARE Graz'
+    from: 'fiwaregraz@gmail.com'
 }
+
 
 // Config themes
 config.site = {
     title: 'Identity Manager',
     theme: 'default'
 };
+
+// Config eIDAs Authentication
+config.eidas = {
+    enabled: false,
+    gateway_host: 'localhost',
+    idp_host: 'https://se-eidas.redsara.es/EidasNode/ServiceProvider',
+    metadata_expiration: 60 * 60 * 24 * 365 // One year
+}
 
 module.exports = config;

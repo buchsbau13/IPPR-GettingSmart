@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keyrock
+spec:
+  selector:
+    matchLabels:
+      run: keyrock
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: keyrock
+    spec:
+      containers:
+      - name: keyrock
+        image: fiware/idm:latest
+        env:
+        - name: DATABASE_HOST
+          value: "mysql"
+        ports:
+        - containerPort: 5000
+        volumeMounts:
+        - mountPath: /opt/fiware-idm/config.js
+          name: keyrock-config
+          subPath: config.js
+      restartPolicy: Always
+      volumes:
+      - name: keyrock-config
+        configMap:
+          name: keyrock-config

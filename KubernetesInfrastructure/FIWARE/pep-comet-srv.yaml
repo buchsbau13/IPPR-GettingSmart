@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pep-comet
+  labels:
+    run: pep-comet
+spec:
+  ports:
+  - port: 8666
+    name: fiware-pep-comet
+  selector:
+     run: pep-comet

@@ -1,4 +1,8 @@
-kubectl create configmap cygnus-config --from-file=cygnus_config/agent.conf
-kubectl create configmap comet-config --from-file=comet_config/config.js
-kubectl create configmap nginx-config --from-file=nginx_config/nginx.conf
-
+kubectl create configmap cygnus-config --namespace="fiware-graziot" --from-file=cygnus_config/agent.conf
+kubectl create configmap comet-config --namespace="fiware-graziot" --from-file=comet_config/config.js
+kubectl create configmap nginx-config --namespace="fiware-graziot" --from-file=nginx_config/nginx.conf
+kubectl create configmap keyrock-config --namespace="fiware-graziot" --from-file=keyrock_config/config.js
+kubectl create configmap pep-orion-config --namespace="fiware-graziot" --from-file=pep-orion_config/azf.js --from-file=pep-orion_config/config.js
+kubectl create configmap pep-idas-admin-config --namespace="fiware-graziot" --from-file=pep-idas-admin_config/azf.js --from-file=pep-idas-admin_config/config.js
+kubectl create configmap pep-idas-sensor-config --namespace="fiware-graziot" --from-file=pep-idas-sensor_config/azf.js --from-file=pep-idas-sensor_config/config.js
+kubectl create configmap pep-comet-config --namespace="fiware-graziot" --from-file=pep-comet_config/azf.js --from-file=pep-comet_config/config.js

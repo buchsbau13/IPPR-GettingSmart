@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pep-idas-sensor
+spec:
+  selector:
+    matchLabels:
+      run: pep-idas-sensor
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: pep-idas-sensor
+    spec:
+      containers:
+      - name: pep-idas-sensor
+        image: fiware/pep-proxy:7.0.1
+        ports:
+        - containerPort: 7896
+        volumeMounts:
+        - mountPath: /opt/fiware-pep-proxy/config.js
+          name: pep-idas-sensor-config
+          subPath: config.js
+        - mountPath: /opt/fiware-pep-proxy/lib/azf.js
+          name: pep-idas-sensor-config
+          subPath: azf.js
+      restartPolicy: Always
+      volumes:
+      - name: pep-idas-sensor-config
+        configMap:
+          name: pep-idas-sensor-config
