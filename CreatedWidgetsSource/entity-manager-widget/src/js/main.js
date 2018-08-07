@@ -301,8 +301,11 @@
                     if (MashupPlatform.prefs.get('allow_delete')) {
                         button = new StyledElements.Button({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
                         button.addEventListener('click', function () {
-                            initOperator.call(this);
-                            this.delEntityOutput.pushEvent(JSON.stringify(entry));
+                            var choice = window.confirm("Delete entity with ID \"" + entry.id + "\"?");
+                            if (choice) {
+                                initOperator.call(this);
+                                this.delEntityOutput.pushEvent(JSON.stringify(entry));
+                            }
                         }.bind(this));
                         content.appendChild(button);
                     }

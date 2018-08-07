@@ -279,9 +279,12 @@
                     if (MashupPlatform.prefs.get('allow_delete')) {
                         button = new StyledElements.Button({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
                         button.addEventListener('click', function () {
-                            this.subservice = entry.subservice;
-                            initOperator.call(this);
-                            this.delServiceOutput.pushEvent(JSON.stringify(entry));
+                            var choice = window.confirm("Delete service with API key \"" + entry.apikey + "\"?");
+                            if (choice) {
+                                this.subservice = entry.subservice;
+                                initOperator.call(this);
+                                this.delServiceOutput.pushEvent(JSON.stringify(entry));
+                            }
                         }.bind(this));
                         content.appendChild(button);
                     }

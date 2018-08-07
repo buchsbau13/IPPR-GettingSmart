@@ -20,7 +20,8 @@
 
     "use strict";
 
-    var layout,
+    var friendlyEnt,
+        layout,
         ngsi,
         form,
         currentData,
@@ -31,13 +32,10 @@
     var create_ngsi_connection = function create_ngsi_connection() {
         var request_headers = {};
 
-        if (MashupPlatform.prefs.get('use_user_fiware_token') || MashupPlatform.prefs.get('use_owner_credentials')) {
-            request_headers['FIWARE-OAuth-Token'] = 'true';
-            request_headers['FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
-
-            if (MashupPlatform.prefs.get('use_owner_credentials')) {
-                request_headers['FIWARE-OAuth-Source'] = 'workspaceowner';
-            }
+        if (MashupPlatform.prefs.get('use_owner_credentials')) {
+            request_headers['X-FIWARE-OAuth-Token'] = 'true';
+            request_headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+            request_headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
         }
 
         var tenant = MashupPlatform.prefs.get('ngsi_tenant').trim();
@@ -57,10 +55,24 @@
     };
 
     var init = function init() {
+        var friendlyEntSave = MashupPlatform.widget.getVariable('friendlyEntSave');
+        if (friendlyEntSave.get()) {
+            friendlyEnt = JSON.parse(friendlyEntSave.get());
+        }
+
+        var idLabel = "Entity ID";
+        var attrLabel = "Attribute";
+        var rangeLabel = "Date Range";
+        if (friendlyEnt && friendlyEnt.entity_id && friendlyEnt.attribute && friendlyEnt.date_range) {
+            idLabel = friendlyEnt.entity_id;
+            attrLabel = friendlyEnt.attribute;
+            rangeLabel = friendlyEnt.date_range;
+        }
+
         layout = new StyledElements.BorderLayout({'class': 'loading'});
         var fields = {
             "entity": {
-                label: 'Entity Id',
+                label: idLabel,
                 type: 'select',
                 initialEntries: [{
                     label: "-------------------",
@@ -69,7 +81,7 @@
                 required: true
             },
             "attribute": {
-                label: 'Attribute Name',
+                label: attrLabel,
                 type: 'select',
                 initialEntries: [{
                     label: "-------------------",
@@ -77,16 +89,8 @@
                 }],
                 required: true
             },
-            "maxvalues": {
-                label: 'Max Data Points',
-                type: 'number',
-                min: "1",
-                max: "10000",
-                initialValue: "3000",
-                required: true
-            },
             "datetime": {
-                label: 'Date Range',
+                label: rangeLabel,
                 type: 'text',
                 required: true
             }
@@ -94,7 +98,6 @@
         form = new StyledElements.Form(fields, {cancelButton: false});
         form.addEventListener("submit", updateEntity);
         form.fieldInterfaces.entity.inputElement.addEventListener('change', onEntityChange);
-        form.fieldInterfaces.maxvalues.inputElement.addEventListener('change', removeMessageBar);
         form.fieldInterfaces.attribute.inputElement.addEventListener('change', removeMessageBar);
         form.fieldInterfaces.datetime.inputElement.addEventListener('change', removeMessageBar);
 
@@ -169,7 +172,11 @@
 
         for (var i = 0; i < attributes.length; i++) {
             if (['id', 'type'].indexOf(attributes[i]) === -1) {
-                entries.push({value: attributes[i]});
+                if (friendlyEnt && friendlyEnt[attributes[i]]) {
+                    entries.push({value: attributes[i], label: friendlyEnt[attributes[i]]});
+                } else {
+                    entries.push({value: attributes[i]});
+                }
             }
         }
 
@@ -267,7 +274,6 @@
 
         output.startDate = moment(dateParts[0], 'LLL', 'de').utcOffset(offset).toISOString();
         output.endDate = moment(dateParts[1], 'LLL', 'de').utcOffset(offset).toISOString();
-        output.maxValues = form.fieldInterfaces.maxvalues.inputElement.getValue();
 
         MashupPlatform.wiring.pushEvent('outputData', JSON.stringify(output));
         MashupPlatform.widget.log(output, MashupPlatform.log.INFO);
@@ -296,6 +302,10 @@
         } else {
             complete(message.text);
         }
+    });
+
+    MashupPlatform.wiring.registerCallback("friendlyEntInput", function (entity) {
+        MashupPlatform.widget.getVariable('friendlyEntSave').set(entity);
     });
 
     var removeMessageBar = function removeMessageBar() {

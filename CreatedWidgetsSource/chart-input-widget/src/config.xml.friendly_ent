@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="chart-input-widget" version="1.3">
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="chart-input-widget" version="1.2.3">
     <details>
         <title>Chart Input Widget</title>
         <authors>Buchsbaum Julia</authors>
@@ -21,9 +21,13 @@
         <preference name="attributes" type="text" label="Attributes to display" description="Comma separated list of attributes to display"/>
         <preference name="unit_attributes" label="Unit values" description="Unit values for the corresponding sensors. Comma seperated list of key-value pairs (format: sensor=unit_attr)." default="temperature=temp_sensor_unit" type="text"/>
     </preferences>
+    <persistentvariables>
+        <variable name="friendlyEntSave" type="text"/>
+    </persistentvariables>
     <wiring>
         <outputendpoint name="outputData" type="text" label="Output Data" description="Selected Output" friendcode="outputData"/>
         <inputendpoint name="message" type="text" label="Message" description="Message" friendcode="message"/>
+        <inputendpoint name="friendlyEntInput" type="text" label="Friendly name entity" description="Entity containing the friendly names for the user interface." friendcode="friendlyentinput"/>
     </wiring>
     <contents src="index.html" useplatformstyle="true"/>
     <rendering width="6" height="28"/>

@@ -20,7 +20,7 @@
 
     "use strict";
 
-    var startDate, endDate, attribute, unit;
+    var startDate, endDate, hlimit, attribute, unit;
     var entity = 'entity';
     var entity_type = 'entity_type';
 
@@ -68,7 +68,7 @@
             method: "GET",
             requestHeaders: request_headers,
             parameters: {
-                hLimit: 100,
+                hLimit: hlimit,
                 hOffset: 0,
                 dateFrom: startDate,
                 dateTo: endDate
@@ -116,6 +116,7 @@
         unit = inputData.unit;
         startDate = inputData.startDate;
         endDate = inputData.endDate;
+        hlimit = inputData.maxValues;
         requestData(entityString);
     });
 

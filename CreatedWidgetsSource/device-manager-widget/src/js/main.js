@@ -310,8 +310,11 @@
                     if (MashupPlatform.prefs.get('allow_delete')) {
                         button = new StyledElements.Button({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
                         button.addEventListener('click', function () {
-                            initOperator.call(this);
-                            this.delDeviceOutput.pushEvent(JSON.stringify(entry));
+                            var choice = window.confirm("Delete device with ID \"" + entry.device_id + "\"?");
+                            if (choice) {
+                                initOperator.call(this);
+                                this.delDeviceOutput.pushEvent(JSON.stringify(entry));
+                            }
                         }.bind(this));
                         content.appendChild(button);
                     }
