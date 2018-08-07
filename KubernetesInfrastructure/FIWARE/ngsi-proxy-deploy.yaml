@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ngsi-proxy
+spec:
+  selector:
+    matchLabels:
+      run: ngsi-proxy
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: ngsi-proxy
+    spec:
+      containers:
+      - name: ngsi-proxy
+        image: fiware/ngsiproxy:latest
+        env:
+        - name: PORT
+          value: "30003"
+        - name: TRUST_PROXY_HEADERS
+          value: "1"
+        ports:
+        - containerPort: 30003
+      restartPolicy: Always
