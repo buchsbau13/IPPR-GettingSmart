@@ -1,0 +1,249 @@
+{
+  "entities": [
+    {
+      "id":"Sensor1",
+      "type":"static",
+      "name":{
+        "value":"Sensor 1"
+      },
+      "description":{
+        "value":"Sensor Elisabethstraße, Hugo-Wolf-Gasse, Lichtenfelsgasse"
+      },
+      "location":{
+        "type":"geo:point",
+        "value":"47.074488,15.450101"
+      },
+      "address":{
+        "type":"PostalAddress",
+        "value":{
+          "streetAddress":"Elisabethstraße",
+          "addressRegion":"Styria",
+          "addressLocality":"Graz",
+          "postalCode":"8010"
+        }
+      },
+      "temp_sensor_unit":{
+        "value":"°C"
+      },
+      "humid_sensor_unit":{
+        "value":"%"
+      }, 
+	  "air_sensor_unit":{
+        "value": "μg/m³"
+      }, 
+	  "air_pressure_sensor_unit":{
+	    "value": "hPa"
+	  }
+    },
+    {
+      "id":"Sensor2",
+      "type":"static",
+      "name":{
+        "value":"Sensor 2"
+      },
+      "description":{
+        "value":"Sensor Elisabethstraße, Hartenaugasse"
+      },
+      "location":{
+        "type":"geo:point",
+        "value":"47.076682,15.457922"
+      },
+      "address":{
+        "type":"PostalAddress",
+        "value":{
+          "streetAddress":"Elisabethstraße",
+          "addressRegion":"Styria",
+          "addressLocality":"Graz",
+          "postalCode":"8010"
+        }
+      },
+      "temp_sensor_unit":{
+        "value":"°C"
+      },
+      "humid_sensor_unit":{
+        "value":"%"
+      }, 
+	  "air_sensor_unit":{
+        "value": "μg/m³"
+      }, 
+	  "air_pressure_sensor_unit":{
+	    "value": "hPa"
+	  }
+    },
+    {
+      "id":"Sensor3",
+      "type":"static",
+      "name":{
+        "value":"Sensor 3"
+      },
+      "description":{
+        "value":"Sensor Leechgasse"
+      },
+      "location":{
+        "type":"geo:point",
+        "value":"47.077369,15.455445"
+      },
+      "address":{
+        "type":"PostalAddress",
+        "value":{
+          "streetAddress":"Leechgasse",
+          "addressRegion":"Styria",
+          "addressLocality":"Graz",
+          "postalCode":"8010"
+        }
+      },
+      "temp_sensor_unit":{
+        "value":"°C"
+      },
+      "humid_sensor_unit":{
+        "value":"%"
+      }, 
+	  "air_sensor_unit":{
+        "value": "μg/m³"
+      }, 
+	  "air_pressure_sensor_unit":{
+	    "value": "hPa"
+	  }
+    },
+    {
+      "id":"Sensor4",
+      "type":"static",
+      "name":{
+        "value":"Sensor 4"
+      },
+      "description":{
+        "value":"Sensor Riesstraße, Neue Stiftingtalstraße"
+      },
+      "location":{
+        "type":"geo:point",
+        "value":"47.079206,15.468575"
+      },
+      "address":{
+        "type":"PostalAddress",
+        "value":{
+          "streetAddress":"Riesstraße",
+          "addressRegion":"Styria",
+          "addressLocality":"Graz",
+          "postalCode":"8010"
+        }
+      },
+      "temp_sensor_unit":{
+        "value":"°C"
+      },
+      "humid_sensor_unit":{
+        "value":"%"
+      }, 
+	  "air_sensor_unit":{
+        "value": "μg/m³"
+      }, 
+	  "air_pressure_sensor_unit":{
+	    "value": "hPa"
+	  }
+    },
+    {
+      "id":"Sensor5",
+      "type":"static",
+      "name":{
+        "value":"Sensor 5"
+      },
+      "description":{
+        "value":"Sensor Ragnitzstraße"
+      },
+      "location":{
+        "type":"geo:point",
+        "value":"47.078504,15.476574"
+      },
+      "address":{
+        "type":"PostalAddress",
+        "value":{
+          "streetAddress":"Ragnitzstraße",
+          "addressRegion":"Styria",
+          "addressLocality":"Graz",
+          "postalCode":"8010"
+        }
+      },
+      "temp_sensor_unit":{
+        "value":"°C"
+      },
+      "humid_sensor_unit":{
+        "value":"%"
+      }, 
+	  "air_sensor_unit":{
+        "value": "μg/m³"
+      }, 
+	  "air_pressure_sensor_unit":{
+	    "value": "hPa"
+	  }
+    },
+    {
+      "id":"Sensor6",
+      "type":"static",
+      "name":{
+        "value":"Sensor 6"
+      },
+      "description":{
+        "value":"Sensor Neue Stiftingtalstraße, Aspasiagasse"
+      },
+      "location":{
+        "type":"geo:point",
+        "value":"47.084242,15.470033"
+      },
+      "address":{
+        "type":"PostalAddress",
+        "value":{
+          "streetAddress":"Neue Stiftingtalstraße",
+          "addressRegion":"Styria",
+          "addressLocality":"Graz",
+          "postalCode":"8010"
+        }
+      },
+      "temp_sensor_unit":{
+        "value":"°C"
+      },
+      "humid_sensor_unit":{
+        "value":"%"
+      }, 
+	  "air_sensor_unit":{
+        "value": "μg/m³"
+      }, 
+	  "air_pressure_sensor_unit":{
+	    "value": "hPa"
+	  }
+    },
+	{
+      "id":"Sensor7",
+      "type":"static",
+      "name":{
+        "value":"Sensor 7"
+      },
+      "description":{
+        "value":"Sensor Merangasse"
+      },
+      "location":{
+        "type":"geo:point",
+        "value":"47.076031,15.452047"
+      },
+      "address":{
+        "type":"PostalAddress",
+        "value":{
+          "streetAddress":"Merangasse",
+          "addressRegion":"Styria",
+          "addressLocality":"Graz",
+          "postalCode":"8010"
+        }
+      },
+      "temp_sensor_unit":{
+        "value":"°C"
+      },
+      "humid_sensor_unit":{
+        "value":"%"
+      }, 
+	  "air_sensor_unit":{
+        "value": "μg/m³"
+      }, 
+	  "air_pressure_sensor_unit":{
+	    "value": "hPa"
+	  }
+    }
+  ]
+}

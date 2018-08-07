@@ -1,0 +1,305 @@
+{
+  "devices": [
+    {
+      "device_id": "Dev_Sensor1",
+      "entity_name": "Sensor1",
+      "entity_type": "static",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "t",
+          "name": "temperature",
+          "type": "Float"
+        },
+        {
+          "object_id": "h",
+          "name": "humidity",
+          "type": "Float"
+        },
+		{
+          "object_id": "pm25",
+          "name": "pm25",
+          "type": "Int"
+        },
+        {
+          "object_id": "pm10",
+          "name": "pm10",
+          "type": "Int"
+        },
+        {
+          "object_id": "ap",
+          "name": "airPressure",
+          "type": "Float"
+        },
+		{
+          "object_id": "t2",
+          "name": "mangOHTemp",
+          "type": "Float"
+        },
+        {
+          "object_id": "ap2",
+          "name": "mangOHPress",
+          "type": "Float"
+        }
+      ]
+    },
+    {
+      "device_id": "Dev_Sensor2",
+      "entity_name": "Sensor2",
+      "entity_type": "static",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "t",
+          "name": "temperature",
+          "type": "Float"
+        },
+        {
+          "object_id": "h",
+          "name": "humidity",
+          "type": "Float"
+        },
+		{
+          "object_id": "pm25",
+          "name": "pm25",
+          "type": "Int"
+        },
+        {
+          "object_id": "pm10",
+          "name": "pm10",
+          "type": "Int"
+        },
+        {
+          "object_id": "ap",
+          "name": "airPressure",
+          "type": "Float"
+        },
+		{
+          "object_id": "t2",
+          "name": "mangOHTemp",
+          "type": "Float"
+        },
+        {
+          "object_id": "ap2",
+          "name": "mangOHPress",
+          "type": "Float"
+        }
+      ]
+    },
+    {
+      "device_id": "Dev_Sensor3",
+      "entity_name": "Sensor3",
+      "entity_type": "static",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "t",
+          "name": "temperature",
+          "type": "Float"
+        },
+        {
+          "object_id": "h",
+          "name": "humidity",
+          "type": "Float"
+        },
+		{
+          "object_id": "pm25",
+          "name": "pm25",
+          "type": "Int"
+        },
+        {
+          "object_id": "pm10",
+          "name": "pm10",
+          "type": "Int"
+        },
+        {
+          "object_id": "ap",
+          "name": "airPressure",
+          "type": "Float"
+        },
+		{
+          "object_id": "t2",
+          "name": "mangOHTemp",
+          "type": "Float"
+        },
+        {
+          "object_id": "ap2",
+          "name": "mangOHPress",
+          "type": "Float"
+        }
+      ]
+    },
+    {
+      "device_id": "Dev_Sensor4",
+      "entity_name": "Sensor4",
+      "entity_type": "static",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "t",
+          "name": "temperature",
+          "type": "Float"
+        },
+        {
+          "object_id": "h",
+          "name": "humidity",
+          "type": "Float"
+        },
+		{
+          "object_id": "pm25",
+          "name": "pm25",
+          "type": "Int"
+        },
+        {
+          "object_id": "pm10",
+          "name": "pm10",
+          "type": "Int"
+        },
+        {
+          "object_id": "ap",
+          "name": "airPressure",
+          "type": "Float"
+        },
+		{
+          "object_id": "t2",
+          "name": "mangOHTemp",
+          "type": "Float"
+        },
+        {
+          "object_id": "ap2",
+          "name": "mangOHPress",
+          "type": "Float"
+        }
+      ]
+    },
+    {
+      "device_id": "Dev_Sensor5",
+      "entity_name": "Sensor5",
+      "entity_type": "static",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "t",
+          "name": "temperature",
+          "type": "Float"
+        },
+        {
+          "object_id": "h",
+          "name": "humidity",
+          "type": "Float"
+        },
+		{
+          "object_id": "pm25",
+          "name": "pm25",
+          "type": "Int"
+        },
+        {
+          "object_id": "pm10",
+          "name": "pm10",
+          "type": "Int"
+        },
+        {
+          "object_id": "ap",
+          "name": "airPressure",
+          "type": "Float"
+        },
+		{
+          "object_id": "t2",
+          "name": "mangOHTemp",
+          "type": "Float"
+        },
+        {
+          "object_id": "ap2",
+          "name": "mangOHPress",
+          "type": "Float"
+        }
+      ]
+    },
+    {
+      "device_id": "Dev_Sensor6",
+      "entity_name": "Sensor6",
+      "entity_type": "static",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "t",
+          "name": "temperature",
+          "type": "Float"
+        },
+        {
+          "object_id": "h",
+          "name": "humidity",
+          "type": "Float"
+        },
+		{
+          "object_id": "pm25",
+          "name": "pm25",
+          "type": "Int"
+        },
+        {
+          "object_id": "pm10",
+          "name": "pm10",
+          "type": "Int"
+        },
+        {
+          "object_id": "ap",
+          "name": "airPressure",
+          "type": "Float"
+        },
+		{
+          "object_id": "t2",
+          "name": "mangOHTemp",
+          "type": "Float"
+        },
+        {
+          "object_id": "ap2",
+          "name": "mangOHPress",
+          "type": "Float"
+        }
+      ]
+    },
+    {
+      "device_id": "Dev_Sensor7",
+      "entity_name": "Sensor7",
+      "entity_type": "static",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "t",
+          "name": "temperature",
+          "type": "Float"
+        },
+        {
+          "object_id": "h",
+          "name": "humidity",
+          "type": "Float"
+        },
+		{
+          "object_id": "pm25",
+          "name": "pm25",
+          "type": "Int"
+        },
+        {
+          "object_id": "pm10",
+          "name": "pm10",
+          "type": "Int"
+        },
+        {
+          "object_id": "ap",
+          "name": "airPressure",
+          "type": "Float"
+        },
+		{
+          "object_id": "t2",
+          "name": "mangOHTemp",
+          "type": "Float"
+        },
+        {
+          "object_id": "ap2",
+          "name": "mangOHPress",
+          "type": "Float"
+        }
+      ]
+    }
+  ]
+}

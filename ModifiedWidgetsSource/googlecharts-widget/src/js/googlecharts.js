@@ -141,7 +141,7 @@ window.Widget = (function () {
         var data = google.visualization.arrayToDataTable(rawdata);
 
         if (this.unit && this.unit !== undefined) {
-            var pattern = "#,#0.0'" + this.unit + "'";
+            var pattern = "#,##0.0'" + this.unit + "'";
             var formatter = new google.visualization.NumberFormat({
                 pattern: pattern});
             formatter.format(data, 1); // Apply formatter to second column
