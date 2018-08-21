@@ -85,14 +85,13 @@
             initEditorWidget.call(this, this.addButton);
             this.editorConfigOutput.pushEvent({
                 "readonly": [
-                    ["token"],
-                    ["cbroker"]
+                    ["token"]
                 ]
             });
             this.templateOutput.pushEvent(JSON.stringify({
                 "apikey": "",
                 "token": "token2",
-                "cbroker": MashupPlatform.prefs.get('ngsi_server'),
+                "cbroker": "http://orion:1026/",
                 "entity_type": "",
                 "resource": "",
                 "subservice": "/"
