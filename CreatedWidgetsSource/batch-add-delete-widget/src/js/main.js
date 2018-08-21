@@ -20,7 +20,7 @@
 
     "use strict";
 
-    var BatchAdd = function BatchAdd() {
+    var BatchAddDelete = function BatchAddDelete() {
         this.layout = null;
         this.textArea = null;
         this.btnSend = null;
@@ -31,6 +31,7 @@
         this.objectCount = 0;
         this.successful = 0;
         this.failed = 0;
+        this.deleteMode = false;
 
         MashupPlatform.widget.context.registerCallback(function (newValues) {
             if (this.layout && ("heightInPixels" in newValues || "widthInPixels" in newValues)) {
@@ -39,7 +40,7 @@
         }.bind(this));
     };
 
-    BatchAdd.prototype.init = function init() {
+    BatchAddDelete.prototype.init = function init() {
         clearPage(document.body);
 
         this.layout = new StyledElements.VerticalLayout();
@@ -67,11 +68,13 @@
             }
         }
 
-        this.btnSend.addEventListener('click', newObject.bind(this));
+        this.btnSend.addEventListener('click', addDelObject.bind(this));
         this.layout.center.appendChild(this.btnSend);
 
         this.objectInput = MashupPlatform.widget.createInputEndpoint(receiveObjects.bind(this));
-        this.addObjectOutput = MashupPlatform.widget.createOutputEndpoint();
+        this.objectOutput = MashupPlatform.widget.createOutputEndpoint();
+        this.subFilterInput = MashupPlatform.widget.createInputEndpoint(delFilteredSubs.bind(this));
+        this.subFilterOutput = MashupPlatform.widget.createOutputEndpoint();
     };
 
     var initIDASOperator = function initIDASOperator() {
@@ -89,10 +92,18 @@
 
             if (this.objectType === "service") {
                 this.objectInput.connect(this.idasWidget.outputs.serviceOutput);
-                this.addObjectOutput.connect(this.idasWidget.inputs.addService);
+                if (this.deleteMode) {
+                    this.objectOutput.connect(this.idasWidget.inputs.delService);
+                } else {
+                    this.objectOutput.connect(this.idasWidget.inputs.addService);
+                }
             } else {
                 this.objectInput.connect(this.idasWidget.outputs.deviceOutput);
-                this.addObjectOutput.connect(this.idasWidget.inputs.addDevice);
+                if (this.deleteMode) {
+                    this.objectOutput.connect(this.idasWidget.inputs.delDevice);
+                } else {
+                    this.objectOutput.connect(this.idasWidget.inputs.addDevice);
+                }
             }
         }
     };
@@ -112,18 +123,28 @@
 
             if (this.objectType === "entity") {
                 this.objectInput.connect(this.orionWidget.outputs.entityOutput);
-                this.addObjectOutput.connect(this.orionWidget.inputs.addEntity);
+                if (this.deleteMode) {
+                    this.objectOutput.connect(this.orionWidget.inputs.delEntity);
+                } else {
+                    this.objectOutput.connect(this.idasWidget.inputs.addEntity);
+                }
             } else {
-                this.objectInput.connect(this.orionWidget.outputs.subOutput);
-                this.addObjectOutput.connect(this.orionWidget.inputs.addSubscription);
+                if (this.deleteMode) {
+                    this.subFilterInput.connect(this.orionWidget.outputs.subOutput);
+                    this.objectOutput.connect(this.orionWidget.inputs.getSubscriptions);
+                } else {
+                    this.objectInput.connect(this.orionWidget.outputs.subOutput);
+                    this.objectOutput.connect(this.orionWidget.inputs.addSubscription);
+                }
             }
         }
     };
 
-    var newObject = function newObject() {
+    var addDelObject = function addDelObject() {
         var json;
         this.btnSend.disable();
         this.textArea.readOnly = true;
+        this.deleteMode = false;
 
         try {
             json = JSON.parse(this.textArea.value);
@@ -132,43 +153,63 @@
             json = null;
         }
 
+        if (json && json.mode && (json.mode === "delete")) {
+            this.deleteMode = true;
+        }
+
         if (json && json.services) {
             this.objectType = "service";
             this.objectCount = json.services.length;
             initIDASOperator.call(this);
-            this.textArea.value = "Attempting to add " + this.objectCount + " new services...";
+            if (this.deleteMode) {
+                this.textArea.value = "Attempting to delete " + this.objectCount + " services...";
+            } else {
+                this.textArea.value = "Attempting to add " + this.objectCount + " new services...";
+            }
 
             json.services.forEach(function (serv) {
                 var data = {"services": [serv]};
-                this.addObjectOutput.pushEvent(JSON.stringify(data));
+                this.objectOutput.pushEvent(JSON.stringify(data));
             }.bind(this));
         } else if (json && json.devices) {
             this.objectType = "device";
             this.objectCount = json.devices.length;
             initIDASOperator.call(this);
-            this.textArea.value = "Attempting to add " + this.objectCount + " new devices...";
+            if (this.deleteMode) {
+                this.textArea.value = "Attempting to delete " + this.objectCount + " devices...";
+            } else {
+                this.textArea.value = "Attempting to add " + this.objectCount + " new devices...";
+            }
 
             json.devices.forEach(function (dev) {
                 var data = {"devices": [dev]};
-                this.addObjectOutput.pushEvent(JSON.stringify(data));
+                this.objectOutput.pushEvent(JSON.stringify(data));
             }.bind(this));
         } else if (json && json.entities) {
             this.objectType = "entity";
             this.objectCount = json.entities.length;
             initORIONOperator.call(this);
-            this.textArea.value = "Attempting to add " + this.objectCount + " new entities...";
+            if (this.deleteMode) {
+                this.textArea.value = "Attempting to delete " + this.objectCount + " entities...";
+            } else {
+                this.textArea.value = "Attempting to add " + this.objectCount + " new entities...";
+            }
 
             json.entities.forEach(function (ent) {
-                this.addObjectOutput.pushEvent(JSON.stringify(ent));
+                this.objectOutput.pushEvent(JSON.stringify(ent));
             }.bind(this));
         } else if (json && json.subscriptions) {
             this.objectType = "subscription";
             this.objectCount = json.subscriptions.length;
             initORIONOperator.call(this);
-            this.textArea.value = "Attempting to add " + this.objectCount + " new subscriptions...";
+            if (this.deleteMode) {
+                this.textArea.value = "Attempting to delete subscriptions...";
+            } else {
+                this.textArea.value = "Attempting to add " + this.objectCount + " new subscriptions...";
+            }
 
             json.subscriptions.forEach(function (sub) {
-                this.addObjectOutput.pushEvent(JSON.stringify(sub));
+                this.objectOutput.pushEvent(JSON.stringify(sub));
             }.bind(this));
         } else {
             this.objectType = null;
@@ -177,8 +218,11 @@
             this.textArea.readOnly = false;
             this.textArea.value = '>>> Invalid input detected! <<<\n\n' +
                 'Please input object data in JSON format.\n' +
+                'To switch between add and delete mode, change the "mode" attribute to "add" or "delete".\n' +
+                'If the attribute is omitted, the widget operates in add mode by default.\n\n' +
                 'Example data for adding new services (adapt accordingly for entities, devices and subscriptions):\n' +
                 '{\n' +
+                '    "mode": "add",\n' +
                 '    "services": [\n' +
                 '        {\n' +
                 '            "apikey": "example_apikey",\n' +
@@ -188,7 +232,43 @@
                 '            "resource": "/iot/example"\n' +
                 '        }\n' +
                 '    ]\n' +
+                '}\n\n' +
+                'Example for deleting all subscriptions of an entity with the monitored\n' +
+                'attributes "temperature", "humidity" and "airPressure":\n' +
+                '{\n' +
+                '    "mode": "delete",\n' +
+                '    "subscriptions": [\n' +
+                '        {\n' +
+                '            "entity_name": "example_id",\n' +
+                '            "entity_type": "example_type",\n' +
+                '            "attributes": ["temperature", "humidity", "airPressure"]\n' +
+                '        }\n' +
+                '    ]\n' +
                 '}';
+        }
+    };
+
+    var delFilteredSubs = function delFilteredSubs(input) {
+        var json;
+        this.subFilterInput.disconnect(this.orionWidget.outputs.subOutput);
+        this.objectInput.connect(this.orionWidget.outputs.subOutput);
+        this.subFilterOutput.connect(this.orionWidget.inputs.delSubscription);
+
+        try {
+            json = JSON.parse(input);
+        } catch (e) {
+            json = null;
+        }
+
+        if (json && json.subscriptions) {
+            this.objectCount = json.subscriptions.length;
+            if (this.objectCount > 0) {
+                json.subscriptions.forEach(function (sub) {
+                    this.subFilterOutput.pushEvent(JSON.stringify(sub));
+                }.bind(this));
+            } else {
+                this.subFilterOutput.pushEvent("{}");
+            }
         }
     };
 
@@ -204,22 +284,36 @@
 
         if (json && json.statusAdd && json.statusAdd.state === "success") {
             this.successful++;
+        } else if (json && json.statusDel && json.statusDel.state === "success") {
+            this.successful++;
         } else {
             this.failed++;
         }
 
-        if (this.objectCount === 0) {
+        if (this.objectCount <= 0) {
             this.objectType = null;
             this.btnSend.enable();
             this.textArea.readOnly = false;
             this.textArea.value += "\n\n";
 
-            if (this.successful > 0) {
-                this.textArea.value += String(this.successful) + " object(s) added successfully.\n";
-            }
+            if (this.objectCount < 0) {
+                this.textArea.value += "No objects found matching these criteria.";
+            } else {
+                if (this.successful > 0) {
+                    if (this.deleteMode) {
+                        this.textArea.value += String(this.successful) + " object(s) deleted successfully.\n";
+                    } else {
+                        this.textArea.value += String(this.successful) + " object(s) added successfully.\n";
+                    }
+                }
 
-            if (this.failed > 0) {
-                this.textArea.value += "Add-procedure failed for " + String(this.failed) + " object(s).";
+                if (this.failed > 0) {
+                    if (this.deleteMode) {
+                        this.textArea.value += "Delete-procedure failed for " + String(this.failed) + " object(s).";
+                    } else {
+                        this.textArea.value += "Add-procedure failed for " + String(this.failed) + " object(s).";
+                    }
+                }
             }
 
             if (this.orionWidget) {
@@ -241,6 +335,6 @@
         }
     };
 
-    var widget = new BatchAdd();
+    var widget = new BatchAddDelete();
     window.addEventListener("DOMContentLoaded", widget.init.bind(widget), false);
 })();

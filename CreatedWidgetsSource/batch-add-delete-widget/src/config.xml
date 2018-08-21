@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="batch-add" version="1.1">
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="batch-add-delete" version="1.2">
     <details>
-        <title>Batch add</title>
+        <title>Batch add/delete</title>
         <authors>Michael Janusch</authors>
         <image>images/catalogue.png</image>
-        <description>Widget for adding multiple database objects at once</description>
+        <description>Widget for adding and deleting multiple database objects at once</description>
         <license>Apache License 2.0</license>
         <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
     </details>

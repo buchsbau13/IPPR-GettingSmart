@@ -1,8 +1,8 @@
 {
   "vendor": "FH-JOANNEUM",
-  "name": "batch-add",
-  "version": "1.0.0",
-  "description": "Widget for adding multiple database objects at once",
+  "name": "batch-add-delete",
+  "version": "1.2",
+  "description": "Widget for adding and deleting multiple database objects at once",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
