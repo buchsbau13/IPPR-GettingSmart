@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="poi-beautifier" version="1.3">
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="poi-beautifier" version="1.4">
   <details>
     <title>PoI beautifier</title>
     <authors>Michael Janusch</authors>
@@ -12,6 +12,7 @@
       <preference name="attributes" label="Attributes to display" description="Comma seperated list of attributes that should be displayed in the PoI info window" default="id,type" type="text"/>
       <preference name="comp_attributes" label="Composite attributes" description="For attributes containing multiple subattributes, choose the subattribute(s) to display in the info window. Comma seperated list of key-value pairs (format: attribute=subattr_1&amp;subattr_2)." default="address=streetAddress" type="text"/>
       <preference name="unit_attributes" label="Unit values" description="Unit values for the corresponding sensors. Comma seperated list of key-value pairs (format: sensor=unit_attr)." default="temperature=temp_sensor_unit" type="text"/>
+      <preference name="timestamp_name" label="Timestamp name" description="Identifier of the timestamp attribute" default="timestamp" type="text"/>
       <preference name="timestamp_format" label="Timestamp format" description="Format of the timestamp (placeholders: dd=day, mm=month, yyyy(or yy)=year, HH=hours, MM=minutes, ss=seconds)" default="dd.mm.yyyy HH:MM:ss" type="text"/>
   </preferences>
   <wiring>

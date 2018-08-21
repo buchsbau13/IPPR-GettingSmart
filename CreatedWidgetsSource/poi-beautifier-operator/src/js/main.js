@@ -133,7 +133,7 @@
                         value = String(round(poi.data[attr], 1)) + " " + poi.data[unitAttributes[attr]];
                     }
 
-                    if (attr == "timestamp") {
+                    if (attr == MashupPlatform.prefs.get('timestamp_name')) {
                         var timestamp = new Date(poi.data[attr]);
                         value = "yyyy-mm-dd HH:MM:ss";
                         if (MashupPlatform.prefs.get('timestamp_format')) {
