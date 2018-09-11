@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wirecloud
+  labels:
+    run: wirecloud
+spec:
+  ports:
+  - name: "80"
+    port: 80
+    targetPort: 80
+    nodePort: 30082
+  selector:
+    run: wirecloud
+  type: LoadBalancer
