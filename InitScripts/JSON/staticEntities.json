@@ -7,16 +7,16 @@
         "value":"Sensor 1"
       },
       "description":{
-        "value":"Sensor Elisabethstraße, Hugo-Wolf-Gasse, Lichtenfelsgasse"
+        "value":"Sensor ID 359377069966009"
       },
       "location":{
         "type":"geo:point",
-        "value":"47.074488,15.450101"
+        "value":"47.078227,15.485107"
       },
       "address":{
         "type":"PostalAddress",
         "value":{
-          "streetAddress":"Elisabethstraße",
+          "streetAddress":"Ragnitzstr-Rauchleitenstr",
           "addressRegion":"Styria",
           "addressLocality":"Graz",
           "postalCode":"8010"
@@ -42,16 +42,16 @@
         "value":"Sensor 2"
       },
       "description":{
-        "value":"Sensor Elisabethstraße, Hartenaugasse"
+        "value":"Sensor ID 359377069965860"
       },
       "location":{
         "type":"geo:point",
-        "value":"47.076682,15.457922"
+        "value":"47.081651,15.467288"
       },
       "address":{
         "type":"PostalAddress",
         "value":{
-          "streetAddress":"Elisabethstraße",
+          "streetAddress":"Stiftingtalstr-Zahnklinik",
           "addressRegion":"Styria",
           "addressLocality":"Graz",
           "postalCode":"8010"
@@ -77,16 +77,16 @@
         "value":"Sensor 3"
       },
       "description":{
-        "value":"Sensor Leechgasse"
+        "value":"Sensor ID 359377069965613"
       },
       "location":{
         "type":"geo:point",
-        "value":"47.077369,15.455445"
+        "value":"47.079273,15.468530"
       },
       "address":{
         "type":"PostalAddress",
         "value":{
-          "streetAddress":"Leechgasse",
+          "streetAddress":"Riesstr-Neue Stiftingtalstr",
           "addressRegion":"Styria",
           "addressLocality":"Graz",
           "postalCode":"8010"
@@ -112,16 +112,16 @@
         "value":"Sensor 4"
       },
       "description":{
-        "value":"Sensor Riesstraße, Neue Stiftingtalstraße"
+        "value":"Sensor ID 359377069966215"
       },
       "location":{
         "type":"geo:point",
-        "value":"47.079206,15.468575"
+        "value":"47.078841,15.464372"
       },
       "address":{
         "type":"PostalAddress",
         "value":{
-          "streetAddress":"Riesstraße",
+          "streetAddress":"Riesstr-Hilmteichstr",
           "addressRegion":"Styria",
           "addressLocality":"Graz",
           "postalCode":"8010"
@@ -147,16 +147,16 @@
         "value":"Sensor 5"
       },
       "description":{
-        "value":"Sensor Ragnitzstraße"
+        "value":"Sensor ID 359377069965894"
       },
       "location":{
         "type":"geo:point",
-        "value":"47.078504,15.476574"
+        "value":"47.076752,15.457929"
       },
       "address":{
         "type":"PostalAddress",
         "value":{
-          "streetAddress":"Ragnitzstraße",
+          "streetAddress":"Elisabethstr-Hartenaugasse",
           "addressRegion":"Styria",
           "addressLocality":"Graz",
           "postalCode":"8010"
@@ -182,16 +182,16 @@
         "value":"Sensor 6"
       },
       "description":{
-        "value":"Sensor Neue Stiftingtalstraße, Aspasiagasse"
+        "value":"Sensor ID 359377069965977"
       },
       "location":{
         "type":"geo:point",
-        "value":"47.084242,15.470033"
+        "value":"47.074493,15.450071"
       },
       "address":{
         "type":"PostalAddress",
         "value":{
-          "streetAddress":"Neue Stiftingtalstraße",
+          "streetAddress":"Elisabethstr-Lichtenfelsgasse",
           "addressRegion":"Styria",
           "addressLocality":"Graz",
           "postalCode":"8010"
@@ -217,16 +217,16 @@
         "value":"Sensor 7"
       },
       "description":{
-        "value":"Sensor Merangasse"
+        "value":"Sensor ID 359377069966140"
       },
       "location":{
         "type":"geo:point",
-        "value":"47.076031,15.452047"
+        "value":"47.077940,15.455806"
       },
       "address":{
         "type":"PostalAddress",
         "value":{
-          "streetAddress":"Merangasse",
+          "streetAddress":"Leechgasse 29",
           "addressRegion":"Styria",
           "addressLocality":"Graz",
           "postalCode":"8010"
