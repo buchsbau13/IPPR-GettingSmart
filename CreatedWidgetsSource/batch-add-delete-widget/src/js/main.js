@@ -32,6 +32,8 @@
         this.successful = 0;
         this.failed = 0;
         this.deleteMode = false;
+        this.delSubList = [];
+        this.delSubCount = 0;
 
         MashupPlatform.widget.context.registerCallback(function (newValues) {
             if (this.layout && ("heightInPixels" in newValues || "widthInPixels" in newValues)) {
@@ -126,12 +128,13 @@
                 if (this.deleteMode) {
                     this.objectOutput.connect(this.orionWidget.inputs.delEntity);
                 } else {
-                    this.objectOutput.connect(this.idasWidget.inputs.addEntity);
+                    this.objectOutput.connect(this.orionWidget.inputs.addEntity);
                 }
             } else {
                 if (this.deleteMode) {
                     this.subFilterInput.connect(this.orionWidget.outputs.subOutput);
                     this.objectOutput.connect(this.orionWidget.inputs.getSubscriptions);
+                    this.subFilterOutput.connect(this.orionWidget.inputs.delSubscription);
                 } else {
                     this.objectInput.connect(this.orionWidget.outputs.subOutput);
                     this.objectOutput.connect(this.orionWidget.inputs.addSubscription);
@@ -168,7 +171,12 @@
             }
 
             json.services.forEach(function (serv) {
-                var data = {"services": [serv]};
+                var data;
+                if (this.deleteMode) {
+                    data = serv;
+                } else {
+                    data = {"services": [serv]};
+                }
                 this.objectOutput.pushEvent(JSON.stringify(data));
             }.bind(this));
         } else if (json && json.devices) {
@@ -182,7 +190,12 @@
             }
 
             json.devices.forEach(function (dev) {
-                var data = {"devices": [dev]};
+                var data;
+                if (this.deleteMode) {
+                    data = dev;
+                } else {
+                    data = {"devices": [dev]};
+                }
                 this.objectOutput.pushEvent(JSON.stringify(data));
             }.bind(this));
         } else if (json && json.entities) {
@@ -201,6 +214,8 @@
         } else if (json && json.subscriptions) {
             this.objectType = "subscription";
             this.objectCount = json.subscriptions.length;
+            this.delSubCount = 0;
+            this.delSubList = [];
             initORIONOperator.call(this);
             if (this.deleteMode) {
                 this.textArea.value = "Attempting to delete subscriptions...";
@@ -250,9 +265,6 @@
 
     var delFilteredSubs = function delFilteredSubs(input) {
         var json;
-        this.subFilterInput.disconnect(this.orionWidget.outputs.subOutput);
-        this.objectInput.connect(this.orionWidget.outputs.subOutput);
-        this.subFilterOutput.connect(this.orionWidget.inputs.delSubscription);
 
         try {
             json = JSON.parse(input);
@@ -261,13 +273,21 @@
         }
 
         if (json && json.subscriptions) {
-            this.objectCount = json.subscriptions.length;
-            if (this.objectCount > 0) {
-                json.subscriptions.forEach(function (sub) {
-                    this.subFilterOutput.pushEvent(JSON.stringify(sub));
-                }.bind(this));
-            } else {
-                this.subFilterOutput.pushEvent("{}");
+            this.delSubCount++;
+            this.delSubList = this.delSubList.concat(json.subscriptions);
+
+            if (this.delSubCount === this.objectCount) {
+                this.objectCount = this.delSubList.length;
+                this.subFilterInput.disconnect(this.orionWidget.outputs.subOutput);
+                this.objectInput.connect(this.orionWidget.outputs.subOutput);
+
+                if (this.objectCount > 0) {
+                    this.delSubList.forEach(function (sub) {
+                        this.subFilterOutput.pushEvent(JSON.stringify(sub));
+                    }.bind(this));
+                } else {
+                    this.subFilterOutput.pushEvent("{}");
+                }
             }
         }
     };

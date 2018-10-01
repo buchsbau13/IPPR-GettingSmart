@@ -30,7 +30,7 @@
         if (MashupPlatform.wiring.hasInputConnections("friendlyEntInput")) {
             (function loop(count) {
                 setTimeout(function () {
-                    if (friendlyEnt || count == 0) {
+                    if (friendlyEnt || count === 0) {
                         sendOuput(JSON.parse(poi));
                     } else if (--count > 0) {
                         loop(count);
@@ -76,7 +76,7 @@
             var keyValueList = MashupPlatform.prefs.get('comp_attributes').split(new RegExp(',\\s*'));
             keyValueList.forEach(function (entry) {
                 var pair = entry.split(new RegExp('=\\s*'));
-                if (pair.length == 2) {
+                if (pair.length === 2) {
                     compAttributes[pair[0]] = pair[1];
                 } else {
                     compAttributes = {};
@@ -90,7 +90,7 @@
             var keyValueList = MashupPlatform.prefs.get('unit_attributes').split(new RegExp(',\\s*'));
             keyValueList.forEach(function (entry) {
                 var pair = entry.split(new RegExp('=\\s*'));
-                if (pair.length == 2) {
+                if (pair.length === 2) {
                     unitAttributes[pair[0]] = pair[1];
                 } else {
                     unitAttributes = {};
@@ -133,7 +133,7 @@
                         value = String(round(poi.data[attr], 1)) + " " + poi.data[unitAttributes[attr]];
                     }
 
-                    if (attr == MashupPlatform.prefs.get('timestamp_name')) {
+                    if (attr === MashupPlatform.prefs.get('timestamp_name')) {
                         var timestamp = new Date(poi.data[attr]);
                         value = "yyyy-mm-dd HH:MM:ss";
                         if (MashupPlatform.prefs.get('timestamp_format')) {
@@ -152,10 +152,18 @@
                         value = value.replace("ss", (timestamp.getSeconds() < 10 ? "0" : "") + timestamp.getSeconds());
                     }
 
+                    if (attr === MashupPlatform.prefs.get('location_name')) {
+                        var coords = poi.data[attr].split(new RegExp(',\\s*'));
+
+                        if (!isNaN(parseFloat(coords[0])) && !isNaN(parseFloat(coords[1]))) {
+                            value = (parseFloat(coords[0])).toFixed(6) + "," + (parseFloat(coords[1])).toFixed(6);
+                        }
+                    }
+
                     if (friendlyEnt && friendlyEnt[attr]) {
-                        if (attr == "id" && friendlyEnt.entity_id) {
+                        if (attr === "id" && friendlyEnt.entity_id) {
                             name = friendlyEnt.entity_id;
-                        } else if (attr == "type" && friendlyEnt.entity_type) {
+                        } else if (attr === "type" && friendlyEnt.entity_type) {
                             name = friendlyEnt.entity_type;
                         } else {
                             name = friendlyEnt[attr];
