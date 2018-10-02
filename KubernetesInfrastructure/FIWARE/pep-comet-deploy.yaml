@@ -14,16 +14,13 @@ spec:
     spec:
       containers:
       - name: pep-comet
-        image: fiware/pep-proxy:7.0.1
+        image: fiware/pep-proxy:7.0.2
         ports:
         - containerPort: 8666
         volumeMounts:
         - mountPath: /opt/fiware-pep-proxy/config.js
           name: pep-comet-config
           subPath: config.js
-        - mountPath: /opt/fiware-pep-proxy/lib/azf.js
-          name: pep-comet-config
-          subPath: azf.js
       restartPolicy: Always
       volumes:
       - name: pep-comet-config
