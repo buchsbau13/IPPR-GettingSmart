@@ -29,7 +29,7 @@ NUM_ARG=len(sys.argv)
 COMMAND=sys.argv[0] 
 
 def sendValues(payload):
-   URL = IDAS_PROTO+'://'+IDAS_HOST+':'+IDAS_UL20_PORT+'/iot/d?k='+API_KEY+'&i='+SENSOR_ID
+   URL = IDAS_PROTO+'://'+IDAS_HOST+':'+IDAS_UL20_PORT+'/iot/d/'+API_KEY+'/'+SENSOR_ID
    HEADERS = {'content-type': 'text/plain', 'X-Auth-Token' : TOKEN, 'Fiware-Service' : FIWARE_SERVICE, 'Fiware-ServicePath' : FIWARE_SERVICEPATH }
    print "* SENDING VALUES OF SENSOR '"+SENSOR_ID+"'"
    print "* USING TOKEN '"+TOKEN+"'"

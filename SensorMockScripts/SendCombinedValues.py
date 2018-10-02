@@ -74,7 +74,7 @@ data = [line.replace(" ","").strip() for line in lines]
 
 cd.close()
 
-URL = "http://"+IDAS_HOST+":"+IDAS_UL20_PORT+'/iot/d?k='+API_KEY+'&i='+SENSOR_ID
+URL = 'http://'+IDAS_HOST+':'+IDAS_UL20_PORT+'/iot/d?k='+API_KEY+'&i='+SENSOR_ID
 
 HEADERS = {'content-type': 'text/plain' , 'X-Auth-Token' : TOKEN, 'Fiware-Service' : FIWARE_SERVICE, 'Fiware-ServicePath' : FIWARE_SERVICEPATH }
 
