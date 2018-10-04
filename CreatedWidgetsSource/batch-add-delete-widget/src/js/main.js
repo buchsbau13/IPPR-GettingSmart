@@ -218,12 +218,16 @@
             this.delSubList = [];
             initORIONOperator.call(this);
             if (this.deleteMode) {
-                this.textArea.value = "Attempting to delete subscriptions...";
+                this.textArea.value = "Attempting to delete " + this.objectCount + " subscriptions...";
             } else {
                 this.textArea.value = "Attempting to add " + this.objectCount + " new subscriptions...";
             }
 
             json.subscriptions.forEach(function (sub) {
+                if (this.deleteMode) {
+                    sub = {"entity_name": sub.subject.entities[0].id, "entity_type": sub.subject.entities[0].type,
+                        "attributes": sub.subject.condition.attrs};
+                }
                 this.objectOutput.pushEvent(JSON.stringify(sub));
             }.bind(this));
         } else {
@@ -237,28 +241,37 @@
                 'If the attribute is omitted, the widget operates in add mode by default.\n\n' +
                 'Example data for adding new services (adapt accordingly for entities, devices and subscriptions):\n' +
                 '{\n' +
-                '    "mode": "add",\n' +
-                '    "services": [\n' +
-                '        {\n' +
-                '            "apikey": "example_apikey",\n' +
-                '            "token": "token2",\n' +
-                '            "cbroker": "http://example:1026",\n' +
-                '            "entity_type": "example_entity_type",\n' +
-                '            "resource": "/iot/example"\n' +
-                '        }\n' +
-                '    ]\n' +
+                '  "mode": "add",\n' +
+                '  "services": [\n' +
+                '    {\n' +
+                '      "apikey": "example_apikey",\n' +
+                '      "token": "token2",\n' +
+                '      "cbroker": "http://example:1026",\n' +
+                '      "entity_type": "example_entity_type",\n' +
+                '      "resource": "/iot/example"\n' +
+                '    }\n' +
+                '  ]\n' +
                 '}\n\n' +
-                'Example for deleting all subscriptions of an entity with the monitored\n' +
-                'attributes "temperature", "humidity" and "airPressure":\n' +
+                'Example for deleting the subscription of an entity with the monitored attribute "temperature":\n' +
                 '{\n' +
-                '    "mode": "delete",\n' +
-                '    "subscriptions": [\n' +
-                '        {\n' +
-                '            "entity_name": "example_id",\n' +
-                '            "entity_type": "example_type",\n' +
-                '            "attributes": ["temperature", "humidity", "airPressure"]\n' +
+                '  "mode": "delete",\n' +
+                '  "subscriptions": [\n' +
+                '    {\n' +
+                '      "subject": {\n' +
+                '        "entities": [\n' +
+                '          {\n' +
+                '            "id": "example_id",\n' +
+                '            "type": "example_type"\n' +
+                '          }\n' +
+                '        ],\n' +
+                '        "condition": {\n' +
+                '          "attrs": [\n' +
+                '            "temperature"\n' +
+                '          ]\n' +
                 '        }\n' +
-                '    ]\n' +
+                '      }\n' +
+                '    }\n' +
+                '  ]\n' +
                 '}';
         }
     };
