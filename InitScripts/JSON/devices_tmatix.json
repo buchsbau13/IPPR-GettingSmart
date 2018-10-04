@@ -19,12 +19,12 @@
 		{
           "object_id": "pm25",
           "name": "pm25",
-          "type": "Int"
+          "type": "Float"
         },
         {
           "object_id": "pm10",
           "name": "pm10",
-          "type": "Int"
+          "type": "Float"
         },
         {
           "object_id": "ap",
@@ -62,12 +62,12 @@
 		{
           "object_id": "pm25",
           "name": "pm25",
-          "type": "Int"
+          "type": "Float"
         },
         {
           "object_id": "pm10",
           "name": "pm10",
-          "type": "Int"
+          "type": "Float"
         },
         {
           "object_id": "ap",
@@ -105,12 +105,12 @@
 		{
           "object_id": "pm25",
           "name": "pm25",
-          "type": "Int"
+          "type": "Float"
         },
         {
           "object_id": "pm10",
           "name": "pm10",
-          "type": "Int"
+          "type": "Float"
         },
         {
           "object_id": "ap",
@@ -148,12 +148,12 @@
 		{
           "object_id": "pm25",
           "name": "pm25",
-          "type": "Int"
+          "type": "Float"
         },
         {
           "object_id": "pm10",
           "name": "pm10",
-          "type": "Int"
+          "type": "Float"
         },
         {
           "object_id": "ap",
@@ -191,12 +191,12 @@
 		{
           "object_id": "pm25",
           "name": "pm25",
-          "type": "Int"
+          "type": "Float"
         },
         {
           "object_id": "pm10",
           "name": "pm10",
-          "type": "Int"
+          "type": "Float"
         },
         {
           "object_id": "ap",
@@ -234,12 +234,12 @@
 		{
           "object_id": "pm25",
           "name": "pm25",
-          "type": "Int"
+          "type": "Float"
         },
         {
           "object_id": "pm10",
           "name": "pm10",
-          "type": "Int"
+          "type": "Float"
         },
         {
           "object_id": "ap",
@@ -277,12 +277,12 @@
 		{
           "object_id": "pm25",
           "name": "pm25",
-          "type": "Int"
+          "type": "Float"
         },
         {
           "object_id": "pm10",
           "name": "pm10",
-          "type": "Int"
+          "type": "Float"
         },
         {
           "object_id": "ap",

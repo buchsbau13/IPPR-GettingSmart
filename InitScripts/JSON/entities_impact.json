@@ -1,0 +1,142 @@
+{
+   "entities":[
+      {
+         "id":"Sensor_DonBosco",
+         "type":"static",
+         "name":{
+            "value":"Sensor Don Bosco"
+         },
+         "description":{
+            "value":"Statischer Sensor Don Bosco"
+         },
+		 "location":{
+			"type":"geo:point",
+			"value":"47.06304743,15.42418457"
+         },
+		  "address":{
+			"type":"PostalAddress",
+			"value":{
+			  "streetAddress":"Don Bosco",
+			  "addressRegion":"Styria",
+			  "addressLocality":"Graz",
+			  "postalCode":"8010"
+			}
+		  },
+         "temp_sensor_unit":{
+            "value":"°C"
+         },
+         "humid_sensor_unit":{
+            "value":"%"
+         },
+         "air_sensor_unit":{
+            "value":"μg/m³"
+         },
+         "air_pressure_sensor_unit":{
+            "value":"hPa"
+         },
+		 "ppb_sensor_unit":{
+            "value":"ppb"
+         }
+      },
+      {
+         "id":"Bus1_30",
+         "type":"mobile",
+         "name":{
+            "value":"Bus Nr. 30"
+         },
+         "description":{
+            "value":"Wagennummer 30"
+         },
+         "temp_sensor_unit":{
+            "value":"°C"
+         },
+         "humid_sensor_unit":{
+            "value":"%"
+         },
+         "air_sensor_unit":{
+            "value":"μg/m³"
+         },
+         "air_pressure_sensor_unit":{
+            "value":"hPa"
+         },
+		 "ppb_sensor_unit":{
+            "value":"ppb"
+         }
+      },
+      {
+         "id":"Bus2_31",
+         "type":"mobile",
+         "name":{
+            "value":"Bus Nr. 31"
+         },
+         "description":{
+            "value":"Wagennummer 31"
+         },
+         "temp_sensor_unit":{
+            "value":"°C"
+         },
+         "humid_sensor_unit":{
+            "value":"%"
+         },
+         "air_sensor_unit":{
+            "value":"μg/m³"
+         },
+         "air_pressure_sensor_unit":{
+            "value":"hPa"
+         }, 
+		 "ppb_sensor_unit":{
+            "value":"ppb"
+         }
+      },
+      {
+         "id":"Tram1_654",
+         "type":"mobile",
+         "name":{
+            "value":"Tram Nr. 654"
+         },
+         "description":{
+            "value":"Wagennummer 654, Linie 1"
+         },
+         "temp_sensor_unit":{
+            "value":"°C"
+         },
+         "humid_sensor_unit":{
+            "value":"%"
+         },
+         "air_sensor_unit":{
+            "value":"μg/m³"
+         },
+         "air_pressure_sensor_unit":{
+            "value":"hPa"
+         },
+		 "ppb_sensor_unit":{
+            "value":"ppb"
+         }
+      },
+      {
+         "id":"Tram2_655",
+         "type":"mobile",
+         "name":{
+            "value":"Tram Nr. 655"
+         },
+         "description":{
+            "value":"Wagennummer 655, Linie 4"
+         },
+         "temp_sensor_unit":{
+            "value":"°C"
+         },
+         "humid_sensor_unit":{
+            "value":"%"
+         },
+         "air_sensor_unit":{
+            "value":"μg/m³"
+         },
+         "air_pressure_sensor_unit":{
+            "value":"hPa"
+         },
+		 "ppb_sensor_unit":{
+            "value":"ppb"
+         }
+      }
+   ]
+}
