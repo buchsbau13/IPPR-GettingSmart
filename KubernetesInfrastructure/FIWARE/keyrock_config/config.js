@@ -1,15 +1,16 @@
 var config = {};
 
-config.host = 'http://localhost:5000';
-config.port = 5000
+config.port = (process.env.IDM_PORT || 31533);
+config.host = (process.env.IDM_HOST || 'http://i101v181.intra.graz.at:' + config.port);
+
 
 // HTTPS enable
 config.https = {
-    enabled: false,
+    enabled: (process.env.IDM_HTTPS_ENABLED || false),
     cert_file: 'certs/idm-2018-cert.pem',
     key_file: 'certs/idm-2018-key.pem',
     ca_certs: [],
-    port: 443
+    port: (process.env.IDM_HTTPS_PORT || 443 )
 };
 
 // Config email list type to use domain filtering
@@ -17,13 +18,13 @@ config.email_list_type = null   // whitelist or blacklist
 
 // Secret for user sessions in web
 config.session = {
-    secret: 'scvbvWFz54hfs',       // Must be changed
+    secret:  (process.env.IDM_SESSION_SECRET || require('crypto').randomBytes(20).toString('hex')),       // Must be changed
     expires: 60 * 60 * 1000     // 1 hour
 }
 
 // Key to encrypt user passwords
 config.password_encryption = {
-	key: 'rjNEsz647tzewu'		// Must be changed
+    key: (process.env.IDM_ENCRYPTION_KEY || 'rjNEsz647tzewu')   // Must be changed
 }
 
 // Config oauth2 parameters
@@ -45,66 +46,72 @@ config.api = {
 // you need to have an instance of authzforce deployed to perform advanced authorization request from a Pep Proxy.
 // If authorization level is basic, only HTTP verb+resource rules can be created
 config.authorization = {
-    level: 'advanced',     // basic|advanced 
+    level: (process.env.IDM_PDP_LEVEL || 'advanced'),     // basic|advanced 
     authzforce: {
-        enabled: true,
-        host: 'authzforce',
-        port: 8080,
+        enabled: (process.env.IDM_AUTHZFORCE_ENABLED || true),
+        host: (process.env.IDM_AUTHZFORCE_HOST || 'authzforce'),
+        port: (process.env.IDM_AUTHZFORCE_PORT||  8080),
     } 
 }
 
 var database_host = (process.env.DATABASE_HOST) ? process.env.DATABASE_HOST : 'localhost'
 
 // Database info
-config.database = {
-    host: database_host,         // default: 'localhost' 
-    password: 'idm',             // default: 'idm'
-    username: 'root',            // default: 'root'
-    database: 'idm',             // default: 'idm'
-    dialect: 'mysql',            // default: 'mysql'
-    port: undefined              // default: undefined (which means that the port 
-                                 //          is the default for each dialect)
+config.database  = {
+    host:     (process.env.DATABASE_HOST || 'localhost'),      
+    password: (process.env.IDM_DB_PASS || 'idm'),
+    username: (process.env.IDM_DB_USER || 'root'),
+    database: (process.env.IDM_DB_NAME || 'idm'),
+    dialect:  (process.env.IDM_DIALECT || 'mysql'),
+    port:     (process.env.IDM_DB_PORT || undefined)
 };
-
 // External user authentication
 config.external_auth = {
-    enabled: false,
-    authentication_driver: 'custom_authentication_driver',
+    enabled: (process.env.IDM_EX_AUTH_ENABLED || false ),
+    authentication_driver: (process.env.IDM_EX_AUTH_DRIVER ||'custom_authentication_driver'),
     database: {
-        host: 'localhost',
-        database: 'db_name',
-        username: 'db_user',
-        password: 'db_pass',
-        user_table: 'user',
-        dialect: 'mysql',
-        port: undefined
+        host: (process.env.IDM_EX_AUTH_DB_HOST ||'localhost'),
+        database: (process.env.IDM_EX_AUTH_DB_NAME ||'db_name'),
+        username: (process.env.IDM_EX_AUTH_DB_USER || 'db_user'),
+        password: (process.env.IDM_EX_AUTH_DB_PASS ||'db_pass'),
+        user_table: (process.env.IDM_EX_AUTH_DB_USER_TABLE ||'user'),
+        dialect: (process.env.IDM_EX_AUTH_DIALECT || 'mysql'),
+        port: (process.env.IDM_EX_AUTH_PORT || undefined)
     }
 }
 
 // Email configuration
 config.mail = {
-    host: 'smtp.gmail.com',
-    port: 587,
+    host: (process.env.IDM_EMAIL_HOST || 'smtp.gmail.com'),
+    port: (process.env.IDM_EMAIL_PORT || 587),
     auth: {
       user: 'fiwaregraz@gmail.com',
       pass: 'IPPR_aim16'      
     },
-    from: 'fiwaregraz@gmail.com'
+    from: (process.env.IDM_EMAIL_ADDRESS || 'FIWARE Graz')
 }
-
 
 // Config themes
 config.site = {
-    title: 'Identity Manager',
-    theme: 'default'
+    title: (process.env.IDM_TITLE || 'Identity Manager'),
+    theme: (process.env.IDM_THEME || 'default')
 };
 
 // Config eIDAs Authentication
 config.eidas = {
-    enabled: false,
-    gateway_host: 'localhost',
-    idp_host: 'https://se-eidas.redsara.es/EidasNode/ServiceProvider',
+    enabled:       (process.env.IDM_EIDAS_ENABLED || false),
+    gateway_host:  (process.env.IDM_EIDAS_GATEWAY_HOST || 'localhost'),
+    idp_host:      (process.env.IDM_EIDAS_IDP_HOST || 'https://se-eidas.redsara.es/EidasNode/ServiceProvider'),
     metadata_expiration: 60 * 60 * 24 * 365 // One year
 }
+
+
+if (config.session.secret === 'nodejs_idm' || config.password_encryption.key  === 'nodejs_idm'){
+    console.log( "****************");
+    console.log( "WARNING: The current encryption keys match the defaults found in the plaintext " + 
+        "template file - please update for a production instance");
+    console.log( "****************");
+}
+
 
 module.exports = config;

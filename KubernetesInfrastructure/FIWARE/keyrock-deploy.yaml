@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: keyrock
-        image: fiware/idm:latest
+        image: fiware/idm:7.0.2
         env:
         - name: DATABASE_HOST
           value: "mysql"
@@ -24,6 +24,9 @@ spec:
         - mountPath: /opt/fiware-idm/config.js
           name: keyrock-config
           subPath: config.js
+        - mountPath: /opt/fiware-idm/lib/authzforce_templates/policy.ejs
+          name: keyrock-config
+          subPath: policy.ejs
       restartPolicy: Always
       volumes:
       - name: keyrock-config

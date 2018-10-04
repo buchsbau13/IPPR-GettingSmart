@@ -13,22 +13,22 @@ config.https = {
 
 config.idm = {
 	host: 'keyrock',
-	port: 5000,
+	port: 31533,
 	ssl: false
 }
 
 config.app = {
-	host: 'idas',
-	port: '7896',
+	host: 'nodered-service.default',
+	port: '1880',
 	ssl: false // Use true if the app server listens in https
 }
 
 
 // Credentials obtained when registering PEP Proxy in app_id in Account Portal
 config.pep = {
-	app_id: 'e0fa7e7b-f5ed-4c12-b668-56aaa2bed6c9',
-	username: 'pep_proxy_6674bc6e-19e4-4c59-8741-778d0ef2271a',
-	password: 'pep_proxy_b95a3d0a-2a1c-402e-adf0-eeaa03445da6',
+	app_id: '56dc0a24-9592-4382-881a-61d19578a1e3',
+	username: 'pep_proxy_57d58f3c-4902-4614-8c30-09b2408837da',
+	password: 'pep_proxy_c54278d3-fd7c-4f76-a46e-23f5f2ed7939',
 	trusted_apps : []
 }
 

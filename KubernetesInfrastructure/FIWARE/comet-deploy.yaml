@@ -13,7 +13,7 @@ spec:
         run: comet
     spec:
       containers:
-      - image: fiware/sth-comet
+      - image: fiware/sth-comet:2.3.0
         name: comet
         ports:
         - containerPort: 8666

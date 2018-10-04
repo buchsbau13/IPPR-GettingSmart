@@ -13,7 +13,7 @@ spec:
         run: cygnus
     spec:
       containers:
-      - image: telefonicaiot/fiware-cygnus
+      - image: januschm/cygnus-ngsi
         name: cygnus
         ports:
         - containerPort: 8081

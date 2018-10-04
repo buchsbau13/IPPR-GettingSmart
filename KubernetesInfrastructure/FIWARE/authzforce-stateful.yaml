@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: authzforce
-        image: fiware/authzforce-ce-server:release-8.0.1
+        image: januschm/authzforce
         ports:
         - containerPort: 8080
         volumeMounts:

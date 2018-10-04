@@ -13,7 +13,7 @@ config.https = {
 
 config.idm = {
 	host: 'keyrock',
-	port: 5000,
+	port: 31533,
 	ssl: false
 }
 
@@ -26,9 +26,9 @@ config.app = {
 
 // Credentials obtained when registering PEP Proxy in app_id in Account Portal
 config.pep = {
-	app_id: '9f8dc445-be27-4d85-b084-0588b057ded5',
-	username: 'pep_proxy_c85de59f-dae1-483d-b684-aef475bde24a',
-	password: 'pep_proxy_358e90f6-cc97-4f05-bfc6-d1b745179492',
+	app_id: '777b7fee-6af9-44c0-b184-6c264fd9cbe9',
+	username: 'pep_proxy_c13579a1-264a-4b13-a1e3-b370c961ef87',
+	password: 'pep_proxy_50e7cded-b043-4831-84c9-895803d79db8',
 	trusted_apps : []
 }
 
