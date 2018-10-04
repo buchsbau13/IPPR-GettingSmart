@@ -112,7 +112,7 @@ try:
             status = sendValues(dataset)
             if status == 401:
                print
-               print "!!! TOKEN INVALID. ACQUIRING NEW TOKEN..."
+               print "!!! TOKEN INVALID OR USER NOT AUTHORISED. RETRYING..."
                print
                TOKEN = fetchToken()
                print
