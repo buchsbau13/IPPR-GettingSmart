@@ -38,14 +38,30 @@ spec:
         - containerPort: 9000
           name: defaultfs
         volumeMounts:
-        - name: namenode-pv-1
+        - name: nfs-hadoop-pv-1
           mountPath: /hdfs/volume1/name
+        - name: namenode-config
+          mountPath: /opt/hadoop/etc/hadoop/core-site.xml
+          subPath: core-site.xml
+        - name: namenode-config
+          mountPath: /opt/hadoop/etc/hadoop/hdfs-site.xml
+          subPath: hdfs-site.xml
+        - name: namenode-config
+          mountPath: /opt/hadoop/etc/hadoop/mapred-site.xml
+          subPath: mapred-site.xml
+        - name: namenode-config
+          mountPath: /opt/hadoop/etc/hadoop/yarn-site.xml
+          subPath: yarn-site.xml
+      volumes:
+      - name: namenode-config
+        configMap:
+          name: namenode-config
   volumeClaimTemplates:
   - metadata:
-      name: namenode-pv-1
+      name: nfs-hadoop-pv-1
     spec:
-      accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "namenode"
+      accessModes: [ "ReadWriteMany" ]
+      storageClassName: "nfs-hadoop"
       resources:
         requests:
-          storage: 20Gi
+          storage: 10Gi
