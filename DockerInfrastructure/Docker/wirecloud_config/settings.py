@@ -64,7 +64,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = '/var/www/static'
+STATIC_ROOT = path.join(BASEDIR, '../static')
 
 # Controls the absolute file path that linked static will be read from and
 # compressed static will be written to when using the default COMPRESS_STORAGE.
@@ -130,9 +130,10 @@ AUTHENTICATION_BACKENDS = (
     'wirecloud.fiware.social_auth_backend.FIWAREOAuth2',
 )
 
-FIWARE_IDM_SERVER = "http://192.168.1.139:5000"
-SOCIAL_AUTH_FIWARE_KEY = "34f2aa34-df04-4cc3-a8c2-9faf5d580cbb"
-SOCIAL_AUTH_FIWARE_SECRET = "5206508f-2950-4b9d-9f5e-2426b1ade4da"
+# Keyrock settings
+FIWARE_IDM_SERVER = "http://10.0.75.1:5000"
+SOCIAL_AUTH_FIWARE_KEY = "f35e2e51-802a-4b42-86ba-1497a763b2ed"
+SOCIAL_AUTH_FIWARE_SECRET = "5f7f5579-ce4a-470f-b819-d75a9e77103c"
 
 FIWARE_PORTALS = (
     {
@@ -154,7 +155,7 @@ FIWARE_PORTALS = (
 NOT_PROXY_FOR = ['localhost', '127.0.0.1']
 
 # Set mode to HTTPS
-FORCE_PROTO = 'https'
+#FORCE_PROTO = 'https'
 
 # Increase upload file size limit
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10490000
+DATA_UPLOAD_MAX_MEMORY_SIZE = 262144000

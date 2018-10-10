@@ -28,7 +28,7 @@ services:
 
     postgres:
         restart: on-failure
-        image: postgres:latest
+        image: postgres:10.4
         hostname: postgres
         container_name: postgres
         volumes:
@@ -40,7 +40,7 @@ services:
 
     authzforce:
         restart: on-failure
-        image: januschm/authzforce
+        image: fiware/authzforce-ce-server:latest-unstable
         hostname: authzforce
         container_name: authzforce
         volumes:
@@ -52,12 +52,11 @@ services:
 
     keyrock:
         restart: on-failure
-        image: fiware/idm:7.0.2
+        image: fiware/idm:latest
         hostname: keyrock
         container_name: keyrock
         volumes:
             - ./keyrock_config/config.js:/opt/fiware-idm/config.js:ro
-            - ./keyrock_config/policy.ejs:/opt/fiware-idm/lib/authzforce_templates/policy.ejs:ro
             - ./nginx_config/certs/:/opt/fiware-idm/certs/:ro
         environment:
             - DATABASE_HOST=mysql
@@ -82,13 +81,13 @@ services:
 
     cygnus:
         restart: on-failure
-        image: januschm/cygnus-ngsi
+        image: telefonicaiot/fiware-cygnus:1.9.0
         hostname: cygnus
         container_name: cygnus
         links:
             - mongodb:iot-mongo
         volumes:
-            - ./cygnus_config/agent.conf:/opt/apache-flume/conf/agent.conf:ro
+            - "./cygnus_config/agent.conf:/opt/apache-flume/conf/agent.conf:ro"
         networks:
             - secure
 
@@ -98,7 +97,7 @@ services:
         hostname: comet
         container_name: comet
         volumes: 
-            - ./comet_config/config.js:/opt/sth/config.js:ro
+            - "./comet_config/config.js:/opt/sth/config.js:ro"
         networks:
             - secure
 
@@ -112,39 +111,64 @@ services:
         networks:
             - secure
 
+    nginx:
+        restart: on-failure
+        image: nginx:1.15.0
+        hostname: nginx
+        container_name: nginx
+        volumes:
+            - ./nginx_config/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./nginx_config/certs/:/etc/nginx/certs/:ro
+            - letsencrypt_www:/var/www/letsencrypt/
+        volumes_from:
+            - wirecloud
+        ports:
+            - "80:80"
+            - "443:443"
+            - "3000:3000"
+        networks:
+            - default
+
+    certbot:
+        image: certbot/certbot:v0.25.1
+        hostname: certbot
+        container_name: certbot
+        volumes:
+            - ./nginx_config/certs/:/etc/letsencrypt/
+            - letsencrypt_www:/var/www/letsencrypt/
+        networks:
+            - default
+
     wirecloud:
         restart: on-failure
-        image: fhjima/docker-wirecloud
+        image: fiware/wirecloud:1.1-composable
         hostname: wirecloud
         container_name: wirecloud
         volumes:
             - ./wirecloud_config/graziotthemev2/:/opt/wirecloud_instance/graziotthemev2/:ro
             - ./wirecloud_config/settings.py:/opt/wirecloud_instance/wirecloud_instance/settings.py:ro
             - ./wirecloud_config/urls.py:/opt/wirecloud_instance/wirecloud_instance/urls.py:ro
-        ports:
-            - "80:80"
         networks:
             - default
 
     ngsi-proxy:
         restart: on-failure
-        image: fiware/ngsiproxy:latest
+        image: fiware/ngsiproxy:1.1
         hostname: ngsi-proxy
         container_name: ngsi-proxy
         environment:
             - TRUST_PROXY_HEADERS=1
-        ports:
-            - "3000:3000"
         networks:
             - default
 
     pep-orion:
         restart: on-failure
-        image: fiware/pep-proxy:7.0.2
+        image: fiware/pep-proxy:7.0.1
         hostname: pep-orion
         container_name: pep-orion
         volumes:
-            - ./pep-orion_config/config.js:/opt/fiware-pep-proxy/config.js:ro
+            - "./pep-orion_config/config.js:/opt/fiware-pep-proxy/config.js:ro"
+            - "./pep-orion_config/azf.js:/opt/fiware-pep-proxy/lib/azf.js:ro"
         ports:
             - "1026:1026"
         networks:
@@ -156,11 +180,12 @@ services:
 
     pep-idas-admin:
         restart: on-failure
-        image: fiware/pep-proxy:7.0.2
+        image: fiware/pep-proxy:7.0.1
         hostname: pep-idas-admin
         container_name: pep-idas-admin
         volumes:
-            - ./pep-idas-admin_config/config.js:/opt/fiware-pep-proxy/config.js:ro
+            - "./pep-idas-admin_config/config.js:/opt/fiware-pep-proxy/config.js:ro"
+            - "./pep-idas-admin_config/azf.js:/opt/fiware-pep-proxy/lib/azf.js:ro"
         ports:
             - "4041:4041"
         networks:
@@ -172,11 +197,12 @@ services:
 
     pep-idas-sensor:
         restart: on-failure
-        image: fiware/pep-proxy:7.0.2
+        image: fiware/pep-proxy:7.0.1
         hostname: pep-idas-sensor
         container_name: pep-idas-sensor
         volumes:
-            - ./pep-idas-sensor_config/config.js:/opt/fiware-pep-proxy/config.js:ro
+            - "./pep-idas-sensor_config/config.js:/opt/fiware-pep-proxy/config.js:ro"
+            - "./pep-idas-sensor_config/azf.js:/opt/fiware-pep-proxy/lib/azf.js:ro"
         ports:
             - "7896:7896"
         networks:
@@ -188,11 +214,12 @@ services:
 
     pep-comet:
         restart: on-failure
-        image: fiware/pep-proxy:7.0.2
+        image: fiware/pep-proxy:7.0.1
         hostname: pep-comet
         container_name: pep-comet
         volumes:
-            - ./pep-comet_config/config.js:/opt/fiware-pep-proxy/config.js:ro
+            - "./pep-comet_config/config.js:/opt/fiware-pep-proxy/config.js:ro"
+            - "./pep-comet_config/azf.js:/opt/fiware-pep-proxy/lib/azf.js:ro"
         ports:
             - "8666:8666"
         networks:
@@ -203,6 +230,7 @@ services:
                 condition: service_healthy
 
 volumes:
+    letsencrypt_www: ~
     postgres_vol: ~
     mysql_vol: ~
     authzforce_vol: ~

@@ -26,27 +26,33 @@ config.app = {
 
 // Credentials obtained when registering PEP Proxy in app_id in Account Portal
 config.pep = {
-	app_id: '2cc2a752-9c48-41e8-ad52-a5b6cfa9876a',
-	username: 'pep_proxy_681c9d20-a4c4-4155-87ef-8c5350975c45',
-	password: 'pep_proxy_98608cf2-dfce-448e-8088-9f2a8ed644a4',
+	app_id: '777b7fee-6af9-44c0-b184-6c264fd9cbe9',
+	username: 'pep_proxy_c13579a1-264a-4b13-a1e3-b370c961ef87',
+	password: 'pep_proxy_50e7cded-b043-4831-84c9-895803d79db8',
 	trusted_apps : []
 }
 
 // in seconds
 config.cache_time = 300;
 
-// if enabled PEP checks permissions with AuthZForce GE. 
-// only compatible with oauth2 tokens engine
-//
-// you can use custom policy checks by including programatic scripts 
-// in policies folder. An script template is included there
-config.azf = {
+// if enabled PEP checks permissions in two ways:
+//  - With IdM: only allow basic authorization
+//  - With Authzforce: allow basic and advanced authorization. 
+//	  For advanced authorization, you can use custom policy checks by including programatic scripts 
+//    in policies folder. An script template is included there 
+// 
+//	This is only compatible with oauth2 tokens engine
+
+config.authorization = {
 	enabled: true,
-	protocol: 'http',
-    host: 'authzforce',
-    port: 8080,
-    custom_policy: undefined // use undefined to default policy checks (HTTP verb + path).
-};
+	pdp: 'authzforce', 	// idm|authzforce  
+	azf: {
+		protocol: 'http',
+	    host: 'authzforce',
+	    port: 8080,
+	    custom_policy: undefined // use undefined to default policy checks (HTTP verb + path).
+	} 
+}
 
 // list of paths that will not check authentication/authorization
 // example: ['/public/*', '/static/css/']
