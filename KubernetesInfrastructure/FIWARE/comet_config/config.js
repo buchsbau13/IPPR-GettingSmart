@@ -128,7 +128,7 @@ config.database = {
     // 4. Collection names starting with 'system.' will be encoded as 'xsystem.'. For instance, system.myData will be
     //    encoded as xsystem.myData.
     // Default value: "true" (although we will set it to false until the Cygnus counterpart is ready and landed)
-    nameEncoding: 'false'
+    nameEncoding: 'true'
 };
 
 // Logging configuration
