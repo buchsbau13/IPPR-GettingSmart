@@ -83,14 +83,16 @@
 
     var updateMarkerIcon = function updateMarkerIcon() {
         icon = MashupPlatform.prefs.get('marker-icon');
-        if (icon == '') {
+        if (icon === '') {
             icon = internalUrl('images/icon.png');
-        } else if (icon == 'lamp') {
+        } else if (icon === 'lamp') {
             icon = internalUrl('images/iconLamp.png')
-        } else if (icon == 'bus') {
+        } else if (icon === 'bus') {
             icon = internalUrl('images/iconBus.png')
-        } else if (icon == 'tram') {
+        } else if (icon === 'tram') {
             icon = internalUrl('images/iconTram.png')
+        } else if (icon === 'car') {
+            icon = internalUrl('images/iconCar.png')
         }
     };
 

@@ -1,0 +1,132 @@
+{
+   "entities":[
+      {
+         "id":"Traffic1_west",
+         "type":"traffic",
+         "name":{
+            "value":"Traffic 1 West"
+         },
+         "description":{
+            "value":"DZS8010_228_West"
+         },
+         "location":{
+            "type":"geo:point",
+            "value":"47.074498, 15.449947"
+         },
+         "address":{
+            "type":"PostalAddress",
+            "value":{
+               "streetAddress":"Elisabethstraße-Lichtenfelsgasse Ri. West",
+               "addressRegion":"Styria",
+               "addressLocality":"Graz",
+               "postalCode":"8010"
+            }
+         },
+         "count_sensor_unit":{
+            "value":"vehicle/h"
+         },
+         "occ_sensor_unit":{
+            "value":"%"
+         },
+         "speed_sensor_unit":{
+            "value":"km/h"
+         }
+      },
+      {
+         "id":"Traffic1_east",
+         "type":"traffic",
+         "name":{
+            "value":"Traffic 1 East"
+         },
+         "description":{
+            "value":"DZS8010_228_Ost"
+         },
+         "location":{
+            "type":"geo:point",
+            "value":"47.074453, 15.450255"
+         },
+         "address":{
+            "type":"PostalAddress",
+            "value":{
+               "streetAddress":"Elisabethstraße-Lichtenfelsgasse Ri. Ost",
+               "addressRegion":"Styria",
+               "addressLocality":"Graz",
+               "postalCode":"8010"
+            }
+         },
+         "count_sensor_unit":{
+            "value":"vehicle/h"
+         },
+         "occ_sensor_unit":{
+            "value":"%"
+         },
+         "speed_sensor_unit":{
+            "value":"km/h"
+         }
+      },
+      {
+         "id":"Traffic2_west",
+         "type":"traffic",
+         "name":{
+            "value":"Traffic 2 West"
+         },
+         "description":{
+            "value":"DZS8010_229_West"
+         },
+         "location":{
+            "type":"geo:point",
+            "value":"47.079252, 15.468398"
+         },
+         "address":{
+            "type":"PostalAddress",
+            "value":{
+               "streetAddress":"Riesstraße-Neue Stiftingtalstraße Ri. West",
+               "addressRegion":"Styria",
+               "addressLocality":"Graz",
+               "postalCode":"8010"
+            }
+         },
+         "count_sensor_unit":{
+            "value":"vehicle/h"
+         },
+         "occ_sensor_unit":{
+            "value":"%"
+         },
+         "speed_sensor_unit":{
+            "value":"km/h"
+         }
+      },
+      {
+         "id":"Traffic2_east",
+         "type":"traffic",
+         "name":{
+            "value":"Traffic 2 East"
+         },
+         "description":{
+            "value":"DZS8010_229_Ost"
+         },
+         "location":{
+            "type":"geo:point",
+            "value":"47.079095, 15.468829"
+         },
+         "address":{
+            "type":"PostalAddress",
+            "value":{
+               "streetAddress":"Riesstraße-Neue Stiftingtalstraße Ri. Ost",
+               "addressRegion":"Styria",
+               "addressLocality":"Graz",
+               "postalCode":"8010"
+            }
+         },
+         "count_sensor_unit":{
+            "value":"vehicle/h"
+         },
+         "occ_sensor_unit":{
+            "value":"%"
+         },
+         "speed_sensor_unit":{
+            "value":"km/h"
+         }
+      }
+   ]
+}

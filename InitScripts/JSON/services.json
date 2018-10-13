@@ -14,6 +14,13 @@
       "entity_type": "mobile",
       "resource": "/iot/d"
     },
+	{
+      "apikey": "apitraffic",
+      "token": "token2",
+      "cbroker": "http://orion:1026",
+      "entity_type": "traffic",
+      "resource": "/iot/d"
+    },
     {
       "apikey": "settings",
       "token": "token2",
