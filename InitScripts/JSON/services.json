@@ -22,6 +22,13 @@
       "resource": "/iot/d"
     },
     {
+      "apikey": "apitest",
+      "token": "token2",
+      "cbroker": "http://orion:1026",
+      "entity_type": "test",
+      "resource": "/iot/d"
+    },
+    {
       "apikey": "settings",
       "token": "token2",
       "cbroker": "http://orion:1026",

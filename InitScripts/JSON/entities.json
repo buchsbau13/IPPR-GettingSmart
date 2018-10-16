@@ -2,7 +2,7 @@
   "entities": [
     {
       "id":"Trafficlight_1",
-      "type":"static",
+      "type":"test",
       "name":{
         "value":"Ampel 1"
       },
@@ -31,7 +31,7 @@
     },
     {
       "id":"Trafficlight_2",
-      "type":"static",
+      "type":"test",
       "name":{
         "value":"Ampel 2"
       },
@@ -60,7 +60,7 @@
     },
     {
       "id":"Trafficlight_3",
-      "type":"static",
+      "type":"test",
       "name":{
         "value":"Ampel 3"
       },
@@ -89,7 +89,7 @@
     },
     {
       "id":"Trafficlight_4",
-      "type":"static",
+      "type":"test",
       "name":{
         "value":"Ampel 4"
       },
@@ -118,7 +118,7 @@
     },
     {
       "id":"Trafficlight_5",
-      "type":"static",
+      "type":"test",
       "name":{
         "value":"Ampel 5"
       },
@@ -147,7 +147,7 @@
     },
     {
       "id":"Trafficlight_6",
-      "type":"static",
+      "type":"test",
       "name":{
         "value":"Ampel 6"
       },
@@ -176,7 +176,7 @@
     },
     {
       "id": "Tram_1",
-      "type": "mobile",
+      "type": "test",
       "name":
         {
           "value": "Strassenbahn 1"
@@ -196,7 +196,7 @@
     },
     {
       "id": "Tram_2",
-      "type": "mobile",
+      "type": "test",
       "name":
       {
         "value": "Strassenbahn 2"
@@ -216,7 +216,7 @@
     },
     {
       "id": "Bus_1",
-      "type": "mobile",
+      "type": "test",
       "name":
         {
           "value": "Bus 1"
@@ -236,7 +236,7 @@
     },
     {
       "id": "Bus_2",
-      "type": "mobile",
+      "type": "test",
       "name":
       {
         "value": "Bus 2"
@@ -256,7 +256,7 @@
     },
     {
       "id": "RasPi",
-      "type": "mobile",
+      "type": "test",
       "name":
         {
           "value": "Raspberry Pi 3"

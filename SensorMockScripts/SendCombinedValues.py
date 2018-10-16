@@ -41,7 +41,7 @@ else:
    print '          Where ALIAS_x = Alias for type of measurement, e.g. t for temperature'
    print '                VALUE_x = Value of the corresponding measurement'
    print
-   print '        Example: python '+COMMAND+' Dev_Bus_1 apimobile .\\bus_1-values.txt'
+   print '        Example: python '+COMMAND+' Dev_Bus_1 apitest .\\bus_1-values.txt'
    print
    sys.exit(2)
 

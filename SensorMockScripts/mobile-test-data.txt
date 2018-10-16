@@ -1,4 +1,0 @@
-Dev_Bus_1,apimobile,t,float,5.6
-Dev_Bus_1,apimobile,h,int,65
-Dev_Tram_1,apimobile,t,float,4.9
-Dev_Tram_1,apimobile,h,int,62

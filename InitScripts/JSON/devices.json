@@ -3,7 +3,7 @@
     {
       "device_id": "Dev_Trafficlight_1",
       "entity_name": "Trafficlight_1",
-      "entity_type": "static",
+      "entity_type": "test",
       "timezone": "Europe/Vienna",
       "attributes": [
         {
@@ -41,7 +41,7 @@
     {
       "device_id": "Dev_Trafficlight_2",
       "entity_name": "Trafficlight_2",
-      "entity_type": "static",
+      "entity_type": "test",
       "timezone": "Europe/Vienna",
       "attributes": [
         {
@@ -79,7 +79,7 @@
     {
       "device_id": "Dev_Trafficlight_3",
       "entity_name": "Trafficlight_3",
-      "entity_type": "static",
+      "entity_type": "test",
       "timezone": "Europe/Vienna",
       "attributes": [
         {
@@ -117,7 +117,7 @@
     {
       "device_id": "Dev_Trafficlight_4",
       "entity_name": "Trafficlight_4",
-      "entity_type": "static",
+      "entity_type": "test",
       "timezone": "Europe/Vienna",
       "attributes": [
         {
@@ -155,7 +155,7 @@
     {
       "device_id": "Dev_Trafficlight_5",
       "entity_name": "Trafficlight_5",
-      "entity_type": "static",
+      "entity_type": "test",
       "timezone": "Europe/Vienna",
       "attributes": [
         {
@@ -193,7 +193,7 @@
     {
       "device_id": "Dev_Trafficlight_6",
       "entity_name": "Trafficlight_6",
-      "entity_type": "static",
+      "entity_type": "test",
       "timezone": "Europe/Vienna",
       "attributes": [
         {
@@ -231,7 +231,7 @@
     {
       "device_id": "Dev_Bus_1",
       "entity_name": "Bus_1",
-      "entity_type": "mobile",
+      "entity_type": "test",
       "timezone": "Europe/Vienna",
       "attributes": [
         {
@@ -284,7 +284,7 @@
     {
       "device_id": "Dev_Bus_2",
       "entity_name": "Bus_2",
-      "entity_type": "mobile",
+      "entity_type": "test",
       "timezone": "Europe/Vienna",
       "attributes": [
         {
@@ -337,7 +337,7 @@
     {
       "device_id": "Dev_Tram_1",
       "entity_name": "Tram_1",
-      "entity_type": "mobile",
+      "entity_type": "test",
       "timezone": "Europe/Vienna",
       "attributes": [
         {
@@ -390,7 +390,7 @@
     {
       "device_id": "Dev_Tram_2",
       "entity_name": "Tram_2",
-      "entity_type": "mobile",
+      "entity_type": "test",
       "timezone": "Europe/Vienna",
       "attributes": [
         {
@@ -443,7 +443,7 @@
     {
       "device_id": "Dev_RasPi",
       "entity_name": "RasPi",
-      "entity_type": "mobile",
+      "entity_type": "test",
       "timezone": "Europe/Vienna",
       "attributes": [
         {
