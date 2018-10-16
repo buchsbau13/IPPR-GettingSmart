@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="heatmap-input-widget" version="1.4.4">
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="heatmap-input-widget" version="1.4.6">
     <details>
         <title>Heatmap Input Widget</title>
         <authors>Buchsbaum Julia</authors>
@@ -22,12 +22,16 @@
         <preference name="entity_id_pattern" type="text" label="Entity Id Filter" description="Id parttern of the entities to monitorize on the Orion Context Broker server" default=".*"/>
         <preference name="attributes" type="text" label="Attributes to display" description="Comma separated list of attributes to display"/>
     </preferences>
+    <persistentvariables>
+        <variable name="friendlyEntSave" type="text"/>
+    </persistentvariables>
     <wiring>
         <outputendpoint name="entities" type="text" label="Entities" description="Entities for which historic data will be retrieved"/>
         <outputendpoint name="attribute" type="text" label="Attribute" description="Attribute for which historic data will be retrieved"/>
         <outputendpoint name="dateFrom" type="text" label="Date From" description="Date From"/>
         <outputendpoint name="dateTo" type="text" label="Date To" description="Date To"/>
         <outputendpoint name="maxValues" type="text" label="Max Values" description="Maximum amount of values to retrieve"/>
+        <inputendpoint name="friendlyEntInput" type="text" label="Friendly name entity" description="Entity containing the friendly names for the user interface." friendcode="friendlyentinput"/>
     </wiring>
     <contents src="index.html" useplatformstyle="true"/>
     <rendering width="6" height="28"/>

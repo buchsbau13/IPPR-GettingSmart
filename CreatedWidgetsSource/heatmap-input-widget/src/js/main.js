@@ -30,7 +30,8 @@
         toValue,
         timeWidget,
         buttonEdit,
-        timestampInput;
+        timestampInput,
+        friendlyEnt;
 
     var create_ngsi_connection = function create_ngsi_connection() {
         var request_headers = {};
@@ -61,10 +62,24 @@
     };
 
     var init = function init() {
+        var friendlyEntSave = MashupPlatform.widget.getVariable('friendlyEntSave');
+        if (friendlyEntSave.get()) {
+            friendlyEnt = JSON.parse(friendlyEntSave.get());
+        }
+
+        var attrLabel = "Attribute";
+        var valLabel = "Max Values Per Entity";
+        var dateLabel = "Date Range";
+        if (friendlyEnt && friendlyEnt.attribute && friendlyEnt.max_values && friendlyEnt.date_range) {
+            attrLabel = friendlyEnt.attribute;
+            valLabel = friendlyEnt.max_values;
+            dateLabel = friendlyEnt.date_range;
+        }
+
         layout = new StyledElements.BorderLayout({'class': 'loading'});
         var fields = {
             "attribute": {
-                label: 'Attribute Name',
+                label: attrLabel,
                 type: 'select',
                 initialEntries: [{
                     label: "-------------------",
@@ -73,7 +88,7 @@
                 required: true
             },
             "maxValues": {
-                label: 'Max Values Per Entity',
+                label: valLabel,
                 type: 'select',
                 initialEntries: [
                     {value: "250"},
@@ -84,7 +99,7 @@
                 required: true
             },
             "dateRange": {
-                label: 'Date Range',
+                label: dateLabel,
                 type: 'text',
                 required: true,
                 readOnly: true
@@ -142,7 +157,7 @@
         info.setAttribute('id', "info");
         layout.getCenterContainer().appendChild(info);
 
-        hiddeStautsDivs();
+        hideStatusDivs();
 
         layout.repaint();
         create_ngsi_connection();
@@ -182,14 +197,14 @@
         info.classList.add('hidden');
     };
 
-    var hiddeStautsDivs = function hiddeStautsDivs() {
+    var hideStatusDivs = function hideStatusDivs() {
         info.classList.add('hidden');
         error.classList.add('hidden');
     };
 
     var doQuery = function doQuery() {
         form.disable();
-        hiddeStautsDivs();
+        hideStatusDivs();
 
         var id = {
             isPattern: true,
@@ -199,6 +214,7 @@
         ngsi.query([id],
             null,
             {
+                limit: 1000,
                 flat: true,
                 onSuccess: onQuerySuccess,
                 onFailure: onQueryFail
@@ -221,7 +237,11 @@
         if (attributes !== "") {
             attributes = attributes.split(new RegExp(',\\s*'));
             attributes.forEach(function (element) {
-                entries.push({value: element});
+                if (friendlyEnt && friendlyEnt[element]) {
+                    entries.push({value: element, label: friendlyEnt[element]});
+                } else {
+                    entries.push({value: element});
+                }
             });
         }
 
@@ -238,6 +258,24 @@
         form.disable();
         fail('Fail querying the server: ' + e);
     };
+
+    var clearWindow = function clearWindow() {
+        while (document.body.firstChild) {
+            document.body.removeChild(document.body.firstChild);
+        }
+    };
+
+    MashupPlatform.wiring.registerCallback("friendlyEntInput", function (entity) {
+        var save = MashupPlatform.widget.getVariable('friendlyEntSave');
+        var oldSave = save.get();
+        save.set(entity);
+
+        // If old and new friendly entity are different, reload with new data
+        if (oldSave !== entity) {
+            clearWindow();
+            init();
+        }
+    });
 
     MashupPlatform.prefs.registerCallback(function (new_values) {
         if ('ngsi_server' in new_values) {
