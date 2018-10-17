@@ -1,0 +1,9 @@
+python .\SendCombinedValues.py Dev_Tram_1 apimobile .\tram_1-values.txt
+python .\SendCombinedValues.py Dev_Tram_2 apimobile .\tram_2-values.txt
+python .\SendCombinedValues.py Dev_Bus_1 apimobile .\bus_1-values.tx <user> <password> .\bus_2-values.txt
+python .\SendCombinedValues.py Dev_Trafficlight_1 apistatic .\trafficlight-values.txt
+python .\SendCombinedValues.py Dev_Trafficlight_2 apistatic .\trafficlight-values.txt
+python .\SendCombinedValues.py Dev_Trafficlight_3 apistatic .\trafficlight-values.txt
+python .\SendCombinedValues.py Dev_Trafficlight_4 apistatic .\trafficlight-values.txt
+python .\SendCombinedValues.py Dev_Trafficlight_5 apistatic .\trafficlight-values.txt
+python .\SendCombinedValues.py Dev_Trafficlight_6 apistatic .\trafficlight-values.txt

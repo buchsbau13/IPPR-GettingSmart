@@ -1,4 +1,3 @@
-After Docker has finished initialising all containers, run the following commands from a separate PowerShell window:
+Create root user (only needed when using without security components):
 
-docker exec -it wirecloud /docker-entrypoint.sh initdb
-docker exec -it wirecloud sh -c "echo yes | python manage.py collectstatic"
+docker exec -it wirecloud python ./manage.py createsuperuser

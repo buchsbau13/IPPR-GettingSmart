@@ -1,0 +1,84 @@
+version: '2.1'
+services:
+    mongodb:
+        restart: on-failure
+        image: mongo:3.4
+        hostname: mongodb
+        container_name: mongodb
+        command: --smallfiles
+        ports:
+            - "27017:27017"
+
+    postgres:
+        restart: on-failure
+        image: postgres:latest
+        hostname: postgres
+        container_name: postgres
+        volumes:
+            - postgres_vol:/var/lib/postgresql
+        ports:
+            - "5432:5432"
+
+    orion:
+        restart: on-failure
+        image: fiware/orion:1.14.0
+        hostname: orion
+        container_name: orion
+        command: -dbhost mongodb
+        ports:
+            - "1026:1026"
+
+    cygnus:
+        restart: on-failure
+        image: januschm/cygnus-ngsi
+        hostname: cygnus
+        container_name: cygnus
+        links:
+            - mongodb:iot-mongo
+        volumes:
+            - ./cygnus_config/agent.conf:/opt/apache-flume/conf/agent.conf:ro
+
+    comet:
+        restart: on-failure
+        image: fiware/sth-comet:2.3.0
+        hostname: comet
+        container_name: comet
+        volumes: 
+            - ./comet_config/config.js:/opt/sth/config.js:ro
+        ports:
+            - "8666:8666"
+
+    idas:
+        restart: on-failure
+        image: fiware/iotagent-ul:1.6.0
+        hostname: idas
+        container_name: idas
+        links:
+            - mongodb:mongo
+        ports:
+            - "4041:4041"
+            - "7896:7896"
+
+    wirecloud:
+        restart: on-failure
+        image: fhjima/docker-wirecloud
+        hostname: wirecloud
+        container_name: wirecloud
+        volumes:
+            - ./wirecloud_config/graziotthemev2/:/opt/wirecloud_instance/graziotthemev2/:ro
+            - ./wirecloud_config/settings_no_security.py:/opt/wirecloud_instance/wirecloud_instance/settings.py:ro
+        ports:
+            - "80:80"
+
+    ngsi-proxy:
+        restart: on-failure
+        image: fiware/ngsiproxy:latest
+        hostname: ngsi-proxy
+        container_name: ngsi-proxy
+        environment:
+            - TRUST_PROXY_HEADERS=1
+        ports:
+            - "3000:3000"
+
+volumes:
+    postgres_vol: ~
