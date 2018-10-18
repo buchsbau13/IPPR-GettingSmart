@@ -158,7 +158,7 @@
             {
                 details: true,
                 flat: true,
-                limit: 100,
+                limit: 1000,
                 offset: page * 100,
                 onSuccess: function (data, details) {
                     handlerReceiveEntities.call(this, data);
