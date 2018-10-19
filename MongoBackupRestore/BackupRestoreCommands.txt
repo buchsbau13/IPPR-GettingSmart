@@ -1,0 +1,9 @@
+Backup database "sth_graziot":
+
+mongodump -h i101v181.intra.graz.at:32717 -d sth_graziot [--excludeCollectionsWithPrefix=sth_] --archive=sth_graziot
+(The flag "--excludeCollectionsWithPrefix" can optionally be used to exclude collections starting with the specified prefix)
+
+Restore database "sth_graziot":
+
+mongorestore -h i101v181.intra.graz.at:32717 [--nsInclude 'sth_graziot.*' --nsFrom 'sth_graziot.sth-$ent$-$type$' --nsTo 'sth_graziot.sth_x002fxffff$ent$xffff$type$'] --archive=sth_graziot
+(The flags "--nsInclude", "--nsFrom" and "--nsTo" can optionally be combined to rewrite the names of the original collections)
