@@ -23,22 +23,29 @@ from pymongo import MongoClient
 CONFIG_FILE='./settings.ini'
 
 NUM_ARG=len(sys.argv)
-COMMAND=sys.argv[0] 
+COMMAND=sys.argv[0]
+FLAG=''
 
-if NUM_ARG!=1:
-   print 'Usage: '+COMMAND
-   print '  Configure the preferences in the file "settings.ini".'
-   print '  List of available settings:'
-   print '        host = Host of the MongoDB instance'
-   print '        port = Port of the MongoDB instance'
-   print '        database = Name of the database that should be checked for duplicates'
-   print '        objKeys = Comma separated list of object keys that should be used for finding duplicates'
-   print
-   print '        -> The script connects to the configured MongoDB instance and deletes the duplicates'
-   print '           in all collections of the chosen database'
+if NUM_ARG>1:
+    FLAG=sys.argv[1]
 
-   print
-   sys.exit(2)
+if NUM_ARG!=1 and FLAG!='--dryRun':
+    print 'Usage: '+COMMAND+' [--dryRun]'
+    print '  Configure the preferences in the file "settings.ini".'
+    print '  To show potential duplicates without deleting them, use the --dryRun flag.'
+    print '  List of available settings:'
+    print '        host = Host of the MongoDB instance'
+    print '        port = Port of the MongoDB instance'
+    print '        database = Name of the database that should be checked for duplicates'
+    print '        objKeys = Comma separated list of object keys that should be used for finding duplicates'
+    print '        excludeCol = Collections with this term in their name will be excluded (ignored if term is empty)'
+    print '        includeCol = Only collections with this term in their name will be processed (ignored if term is empty)'
+    print
+    print '        -> The script connects to the configured MongoDB instance and deletes the duplicates'
+    print '           in all collections of the chosen database'
+
+    print
+    sys.exit(2)
 
 # Read the configuration file
 with open(CONFIG_FILE,'r+') as f:
@@ -50,9 +57,11 @@ HOST=config.get('mongo', 'host')
 PORT=config.get('mongo', 'port')
 DATABASE=config.get('mongo', 'database')
 KEYS=config.get('mongo', 'objKeys')
+EXCLUDE=config.get('mongo', 'excludeCol')
+INCLUDE=config.get('mongo', 'includeCol')
 
 # Generate $group object
-keyList=[key.strip() for key in KEYS.split(',') if key != '']
+keyList=[key.strip() for key in KEYS.split(',') if key!='']
 group={keyList[0]: '$'+keyList[0]}
 
 if len(keyList)>1:
@@ -68,31 +77,38 @@ colList=db.list_collection_names()
 
 # Find and remove duplicates of every collection in database
 for collection in colList:
-    dupObjs=[]
-    aggr=list(db[collection].aggregate([
-        { "$group": { 
-            "_id": group,
-            "dups": { "$addToSet": "$_id" }, 
-            "count": { "$sum": 1 } 
-        }}, 
-        { "$match": { 
-            "count": { "$gt": 1 }
-        }}
-    ]))
+    # Only check for duplicates if collection was not excluded
+    if EXCLUDE=='' or EXCLUDE not in collection:
+        # If collection was not excluded, check if it was explicitly included
+        if INCLUDE=='' or INCLUDE in collection:
+            dupObjs=[]
+            pipeline=[
+                { "$group": { 
+                    "_id": group,
+                    "dups": { "$addToSet": "$_id" }, 
+                    "count": { "$sum": 1 } 
+                }}, 
+                { "$match": { 
+                    "count": { "$gt": 1 }
+                }}
+            ]
+            aggr=list(db[collection].aggregate(pipeline, allowDiskUse=True))
 
-    print 'Processing collection "'+collection+'" of database "'+DATABASE+'"...'
+            print 'Processing collection "'+collection+'" of database "'+DATABASE+'"...'
 
-    for doc in aggr:
-        for cnt in range(0, len(doc['dups'])-1):
-            dupObjs.append(doc['dups'][cnt])
-            print 'Duplicate found! (ID: '+str(doc['dups'][cnt])+')'
+            for doc in aggr:
+                for cnt in range(0, len(doc['dups'])-1):
+                    dupObjs.append(doc['dups'][cnt])
+                    print 'Duplicate found! (ID: '+str(doc['dups'][cnt])+')'
 
-    if len(dupObjs)>0:
-        db[collection].delete_many({'_id':{'$in':dupObjs}})
-        print 'Duplicates of collection "'+collection+'" removed!'
-    else:
-        print 'No duplicates found!'
-    
-    print
+            if len(dupObjs)>0:
+                # If this is a dry run, do not delete the duplicates
+                if FLAG!='--dryRun':
+                    db[collection].delete_many({'_id':{'$in':dupObjs}})
+                    print 'Duplicates of collection "'+collection+'" removed!'
+            else:
+                print 'No duplicates found!'
+            
+            print
 
 print 'Finished!'
