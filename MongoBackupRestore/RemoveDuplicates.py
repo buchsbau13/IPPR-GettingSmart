@@ -81,6 +81,8 @@ for collection in colList:
     if EXCLUDE=='' or EXCLUDE not in collection:
         # If collection was not excluded, check if it was explicitly included
         if INCLUDE=='' or INCLUDE in collection:
+            print 'Processing collection "'+collection+'" of database "'+DATABASE+'"...'
+
             dupObjs=[]
             pipeline=[
                 { "$group": { 
@@ -93,8 +95,6 @@ for collection in colList:
                 }}
             ]
             aggr=list(db[collection].aggregate(pipeline, allowDiskUse=True))
-
-            print 'Processing collection "'+collection+'" of database "'+DATABASE+'"...'
 
             for doc in aggr:
                 for cnt in range(0, len(doc['dups'])-1):
