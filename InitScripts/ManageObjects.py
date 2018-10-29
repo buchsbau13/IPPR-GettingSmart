@@ -37,6 +37,33 @@ def fetchToken():
     print "* Token: "+r.json()['access_token']
     return r.json()['access_token']
 
+def getSubscriptions(page):
+    URL=ORION_PROTO+'://'+ORION_HOST+':'+ORION_PORT+'/v2/subscriptions?limit=1000&options=count&offset='+str(page*1000)
+    r = requests.get(URL, headers=HEADERS)
+    SUB_LIST.extend(r.json())
+    # Call this function until all subscriptions have been fetched (max 1000000)
+    if page<1000 and (page+1)*1000<int(r.headers['fiware-total-count']):
+        getSubscriptions(page+1)
+
+def filterSubscriptions(data):
+    getSubscriptions(0)
+    for entry in data['subscriptions']:
+        for sub in SUB_LIST:
+            entMatch=False
+            attrMatch=False
+            filterEnt=entry['subject']['entities'][0]
+            filterAttrs=entry['subject']['condition']['attrs']
+            for ent in sub['subject']['entities']:
+                if ent['id']==filterEnt['id'] and ent['type']==filterEnt['type']:
+                    entMatch=True
+                    break
+            for attr in sub['subject']['condition']['attrs']:
+                if attr in filterAttrs:
+                    attrMatch=True
+                    break
+            if entMatch and attrMatch:
+                SUB_FILTER_LIST.append(sub)
+
 def addDelServices(data):
     URL=IDAS_PROTO+'://'+IDAS_HOST+':'+IDAS_PORT+'/iot/services'
     success=0
@@ -155,8 +182,8 @@ def addDelSubscriptions(data):
     elif MODE=='del':
         print 'Deleting '+str(len(data['subscriptions']))+' subscriptions...'
         print
-        # TODO: Allow deleting subscription by entity ID/type and attribute
-        for sub in data['subscriptions']:
+        filterSubscriptions(data)
+        for sub in SUB_FILTER_LIST:
             path=URL+'/'+sub['id']
             r=requests.delete(path, headers=HEADERS, timeout=1)
             if r.status_code==204:
@@ -217,6 +244,12 @@ with codecs.open('./'+FILE_NAME,'r+','utf-8') as od:
 HEADERS={'Fiware-Service' : FIWARE_SERVICE, 'Fiware-ServicePath' : FIWARE_SERVICEPATH}
 HEAD_CONTENT={'Content-Type': 'application/json', 'Fiware-Service' : FIWARE_SERVICE, 'Fiware-ServicePath' : FIWARE_SERVICEPATH}
 # TODO: Add security token, if necessary
+
+SUB_LIST=[]
+SUB_FILTER_LIST=[]
+
+if SECURE.lower()=='true':
+    print '--- OAuth token feature: WORK IN PROGRESS ---'
 
 if 'services' in JSON:
     addDelServices(JSON)
