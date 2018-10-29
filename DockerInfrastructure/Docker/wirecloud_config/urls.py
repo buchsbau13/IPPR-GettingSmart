@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-# urls.py used as base for developing wirecloud.
 
+from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth import views as django_auth
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-from wirecloud.fiware import views as wc_fiware
 from wirecloud.commons import authentication as wc_auth
+from wirecloud.fiware import views as wc_fiware
 import wirecloud.platform.urls
 
 admin.autodiscover()
@@ -21,16 +21,18 @@ urlpatterns = (
     url(r'^cdp/', include('wirecloud.proxy.urls')),
 
     # Login/logout
-    #url(r'^login/?$', django_auth.login, name="login"),
-    url(r'^login/?$', wc_fiware.login, name="login"),
+    url(r'^login/?$', wc_fiware.login if settings.IDM_AUTH_ENABLED else django_auth.login, name="login"),
     url(r'^logout/?$', wc_auth.logout, name="logout"),
     url(r'^admin/logout/?$', wc_auth.logout),
 
     # Admin interface
     url(r'^admin/', include(admin.site.urls)),
-    
-    url('', include('social_django.urls', namespace='social')),
 )
+
+print("URL-Patterns:" , urlpatterns)
+print("IDM_AUTH_ENABLED = ", settings.IDM_AUTH_ENABLED)
+if settings.IDM_AUTH_ENABLED:
+    urlpatterns += (url('', include('social_django.urls', namespace='social')),)
 
 urlpatterns += wirecloud.platform.urls.urlpatterns
 urlpatterns += tuple(staticfiles_urlpatterns())

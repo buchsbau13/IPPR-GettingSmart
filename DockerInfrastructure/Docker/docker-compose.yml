@@ -26,17 +26,17 @@ services:
         networks:
             - secure
 
-    postgres:
-        restart: on-failure
-        image: postgres:latest
-        hostname: postgres
-        container_name: postgres
-        volumes:
-            - postgres_vol:/var/lib/postgresql
-        ports:
-            - "5432:5432"
-        networks:
-            - default
+    #postgres:
+    #    restart: on-failure
+    #    image: postgres:latest
+    #    hostname: postgres
+    #    container_name: postgres
+    #    volumes:
+    #        - postgres_vol:/var/lib/postgresql
+    #    ports:
+    #        - "5432:5432"
+    #    networks:
+    #        - default
 
     authzforce:
         restart: on-failure
@@ -52,7 +52,7 @@ services:
 
     keyrock:
         restart: on-failure
-        image: fiware/idm:7.0.2
+        image: fhjima/idm
         hostname: keyrock
         container_name: keyrock
         volumes:
@@ -63,6 +63,7 @@ services:
             - DATABASE_HOST=mysql
         ports:
             - "5000:5000"
+            - "9229:9229"
         networks:
             - default
         healthcheck:
@@ -73,7 +74,7 @@ services:
 
     orion:
         restart: on-failure
-        image: fiware/orion:1.14.0
+        image: fiware/orion:2.0.0
         hostname: orion
         container_name: orion
         command: -dbhost mongodb
@@ -94,17 +95,17 @@ services:
 
     comet:
         restart: on-failure
-        image: fiware/sth-comet:2.3.0
+        image: fiware/sth-comet:2.4.0
         hostname: comet
         container_name: comet
-        volumes: 
+        volumes:
             - ./comet_config/config.js:/opt/sth/config.js:ro
         networks:
             - secure
 
     idas:
         restart: on-failure
-        image: fiware/iotagent-ul:1.6.0
+        image: fiware/iotagent-ul:1.7.0
         hostname: idas
         container_name: idas
         links:
@@ -112,19 +113,95 @@ services:
         networks:
             - secure
 
+    #wirecloud:
+    #    restart: on-failure
+    #    image: fhjima/docker-wirecloud:1.2.0
+    #    hostname: wirecloud
+    #    container_name: wirecloud
+    #    environment:
+    #        - IDM_HOST=${IDM_HOST}
+    #    volumes:
+    #        - ./wirecloud_config/graziotthemev2/:/opt/wirecloud_instance/graziotthemev2/:ro
+    #        - ./wirecloud_config/settings.py:/opt/wirecloud_instance/wirecloud_instance/settings.py:ro
+    #        - ./wirecloud_config/urls.py:/opt/wirecloud_instance/wirecloud_instance/urls.py:ro
+    #    ports:
+    #        - "80:80"
+    #    networks:
+    #        - default
+
+    nginx:
+        restart: always
+        image: nginx
+        hostname: nginx
+        container_name: nginx
+        ports:
+            - 80:80
+        volumes:
+            - ./nginx_config/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./wirecloud-static:/var/www/static:ro
+        depends_on:
+            - wirecloud
+
+
+    postgres:
+        restart: always
+        image: postgres
+        hostname: postgres
+        container_name: postgres
+        environment:
+            - POSTGRES_PASSWORD=wirepass   # Change this password!
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+
+
+    elasticsearch:
+        restart: always
+        image: elasticsearch:2.4
+        hostname: elasticsearch
+        container_name: elasticsearch
+        volumes:
+            - elasticsearch-data:/usr/share/elasticsearch/data
+        command: elasticsearch -Des.index.max_result_window=50000
+
+
+    memcached:
+        restart: always
+        image: memcached:1
+        hostname: memcached
+        container_name: memcached
+        command: memcached -m 2048m
+
+
     wirecloud:
-        restart: on-failure
-        image: fhjima/docker-wirecloud
+        restart: always
+        image: fiware/wirecloud:1.2.0
         hostname: wirecloud
         container_name: wirecloud
-        volumes:
-            - ./wirecloud_config/graziotthemev2/:/opt/wirecloud_instance/graziotthemev2/:ro
-            - ./wirecloud_config/settings.py:/opt/wirecloud_instance/wirecloud_instance/settings.py:ro
-            - ./wirecloud_config/urls.py:/opt/wirecloud_instance/wirecloud_instance/urls.py:ro
+        depends_on:
+            - postgres
+            - elasticsearch
+            - memcached
         ports:
-            - "80:80"
-        networks:
-            - default
+            - 8000:8000
+        environment:
+            - DEBUG=False
+            # - DEFAULT_THEME=wirecloud.defaulttheme
+            - DB_HOST=postgres
+            - DB_PASSWORD=wirepass   # Change this password!
+            - FORWARDED_ALLOW_IPS=*
+            - ELASTICSEARCH2_URL=http://elasticsearch:9200/
+            - MEMCACHED_LOCATION=memcached:11211
+            # Uncomment the following environment variables to enable IDM integration
+            - FIWARE_IDM_SERVER=http://${IDM_HOST}:5000
+            - DEFAULT_THEME=graziotthemev2
+            - SOCIAL_AUTH_FIWARE_KEY=23c1fab4-2f69-470d-8778-4614522d29d3
+            - SOCIAL_AUTH_FIWARE_SECRET=0b9194f0-f74a-4717-9222-170e9e473bf4
+        volumes:
+            - wirecloud-data:/opt/wirecloud_instance/data
+            - wirecloud-static:/var/www/static
+            - ./wirecloud_config/graziotthemev2/:/opt/wirecloud_instance/graziotthemev2/
+            - ./wirecloud_config/settings.py:/opt/wirecloud_instance/wirecloud_instance/settings.py
+            - ./wirecloud_config/urls.py:/opt/wirecloud_instance/wirecloud_instance/urls.py
 
     ngsi-proxy:
         restart: on-failure
@@ -140,13 +217,16 @@ services:
 
     pep-orion:
         restart: on-failure
-        image: fiware/pep-proxy:7.0.2
+        image: fiware/pep-proxy:7.4.0
         hostname: pep-orion
         container_name: pep-orion
+        environment:
+            - IDM_HOST=${IDM_HOST}
         volumes:
             - ./pep-orion_config/config.js:/opt/fiware-pep-proxy/config.js:ro
         ports:
             - "1026:1026"
+            - "9230:9229"
         networks:
             - secure
             - default
@@ -156,9 +236,11 @@ services:
 
     pep-idas-admin:
         restart: on-failure
-        image: fiware/pep-proxy:7.0.2
+        image: fiware/pep-proxy:7.4.0
         hostname: pep-idas-admin
         container_name: pep-idas-admin
+        environment:
+            - IDM_HOST=${IDM_HOST}
         volumes:
             - ./pep-idas-admin_config/config.js:/opt/fiware-pep-proxy/config.js:ro
         ports:
@@ -172,9 +254,11 @@ services:
 
     pep-idas-sensor:
         restart: on-failure
-        image: fiware/pep-proxy:7.0.2
+        image: fiware/pep-proxy:7.4.0
         hostname: pep-idas-sensor
         container_name: pep-idas-sensor
+        environment:
+            - IDM_HOST=${IDM_HOST}
         volumes:
             - ./pep-idas-sensor_config/config.js:/opt/fiware-pep-proxy/config.js:ro
         ports:
@@ -188,9 +272,11 @@ services:
 
     pep-comet:
         restart: on-failure
-        image: fiware/pep-proxy:7.0.2
+        image: fiware/pep-proxy:7.4.0
         hostname: pep-comet
         container_name: pep-comet
+        environment:
+            - IDM_HOST=${IDM_HOST}
         volumes:
             - ./pep-comet_config/config.js:/opt/fiware-pep-proxy/config.js:ro
         ports:
@@ -206,6 +292,11 @@ volumes:
     postgres_vol: ~
     mysql_vol: ~
     authzforce_vol: ~
+    wirecloud-data:
+    wirecloud-static:
+    postgres-data:
+    elasticsearch-data:
+
 
 networks:
     secure:

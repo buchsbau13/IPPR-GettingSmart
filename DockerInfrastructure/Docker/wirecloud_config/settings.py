@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 # Django settings for wirecloud_instance project.
 
-from os import path
+import os
 from wirecloud.commons.utils.conf import load_default_wirecloud_conf
 from django.core.urlresolvers import reverse_lazy
 
-DEBUG = False
-BASEDIR = path.dirname(path.abspath(__file__))
+DEBUG = os.environ.get("DEBUG", "False").strip().lower() == "true"
+BASEDIR = os.path.dirname(os.path.abspath(__file__))
+DATADIR = os.path.join(BASEDIR, "..", "data")
 load_default_wirecloud_conf(locals())
 
 USE_XSENDFILE = False
@@ -17,21 +18,50 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',       # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'postgres',           # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'postgres',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '5432',                      # Set to empty string for default.
+# We only support postgres and sqlite3 for now
+if os.environ.get("DB_HOST", "").strip() != "":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get("DB_NAME", "postgres"),
+            'USER': os.environ.get("DB_USERNAME", "postgres"),
+            'PASSWORD': os.environ.get("DB_PASSWORD", "postgres"),
+            'HOST': os.environ["DB_HOST"],
+            'PORT': os.environ.get("DB_PORT", "5432"),
+        },
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(DATADIR, 'wirecloud.db'),
+            'USER': '',
+            'PASSWORD': '',
+            'HOST': '',
+            'PORT': '',
+        },
+    }
+
+
+if "ELASTICSEARCH2_URL" in os.environ:
+    HAYSTACK_CONNECTIONS = {
+        'default': {
+            'ENGINE': 'wirecloud.commons.haystack_backends.elasticsearch2_backend.Elasticsearch2SearchEngine',
+            'URL': os.environ['ELASTICSEARCH2_URL'],
+            'INDEX_NAME': 'wirecloud',
+        },
+    }
+else:
+    HAYSTACK_CONNECTIONS = {
+        'default': {
+            'ENGINE': 'wirecloud.commons.haystack_backends.whoosh_backend.WhooshEngine',
+            'PATH': os.path.join(DATADIR, 'index'),
+        },
+    }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split()
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -41,7 +71,7 @@ TIME_ZONE = 'Europe/Vienna'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'de-at'
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -64,7 +94,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = path.join(BASEDIR, '../static')
+STATIC_ROOT = "/var/www/static"
 
 # Controls the absolute file path that linked static will be read from and
 # compressed static will be written to when using the default COMPRESS_STORAGE.
@@ -89,51 +119,70 @@ STATIC_URL = '/static/'
 # )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '2+1b2_*z%1rioq_p83artq47b0zfi(=&h&30tkd)i(gca-00uj'
+SECRET_KEY = '4&0+qo=m4yk!7hohzh&xsw=i&g_7t88*-9_^j(xi!fzm9zz^7l'
 
 ROOT_URLCONF = 'wirecloud_instance.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'wirecloud_instance.wsgi.application'
 
-INSTALLED_APPS += (
-    #'django.contrib.sites',
-    #'wirecloud.oauth2provider',
-    'social_django',
-    'wirecloud.fiware',
-)
+# FIWARE IdM configuration
+FIWARE_IDM_SERVER = os.environ.get('FIWARE_IDM_SERVER', '').strip()
+SOCIAL_AUTH_FIWARE_KEY = os.environ.get('SOCIAL_AUTH_FIWARE_KEY', '').strip()
+SOCIAL_AUTH_FIWARE_SECRET = os.environ.get('SOCIAL_AUTH_FIWARE_SECRET', '').strip()
+IDM_AUTH_ENABLED = FIWARE_IDM_SERVER and SOCIAL_AUTH_FIWARE_KEY and SOCIAL_AUTH_FIWARE_SECRET
+print("IDM_AUTH_ENABLED = ", IDM_AUTH_ENABLED)
+print("idm: ", FIWARE_IDM_SERVER, "Key:", SOCIAL_AUTH_FIWARE_KEY, "Secret:", SOCIAL_AUTH_FIWARE_SECRET)
+
+if IDM_AUTH_ENABLED:
+    INSTALLED_APPS += (
+        'wirecloud.fiware',
+        'social_django',
+        'haystack',
+    )
+else:
+    INSTALLED_APPS += (
+        'wirecloud.oauth2provider',
+        'wirecloud.fiware',
+        'haystack',
+    )
 
 # Login/logout URLs
 LOGIN_URL = reverse_lazy('login')
 LOGOUT_URL = reverse_lazy('wirecloud.root')
 LOGIN_REDIRECT_URL = reverse_lazy('wirecloud.root')
 
-#THEME_ACTIVE = "wirecloud.defaulttheme"
-THEME_ACTIVE = "graziotthemev2"
+THEME_ACTIVE = os.environ.get("DEFAULT_THEME", "wirecloud.defaulttheme")
 DEFAULT_LANGUAGE = 'browser'
 
 # WGT deployment dirs
-CATALOGUE_MEDIA_ROOT = path.join(BASEDIR, 'catalogue_resources')
-GADGETS_DEPLOYMENT_DIR = path.join(BASEDIR, 'widget_files')
+CATALOGUE_MEDIA_ROOT = os.path.join(DATADIR, 'catalogue_resources')
+GADGETS_DEPLOYMENT_DIR = os.path.join(DATADIR, 'widget_files')
 
 # Cache settings
 CACHES = {
-    'default': {
+    "default": {}
+}
+
+if "MEMCACHED_LOCATION" in os.environ:
+    CACHES['default'] = {
+        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+        'LOCATION': os.environ['MEMCACHED_LOCATION'],
+    }
+else:
+    CACHES['default'] = {
         'BACKEND': 'wirecloud.platform.cache.backends.locmem.LocMemCache',
         'OPTIONS': {
             'MAX_ENTRIES': 3000,
         },
     }
-}
 
-AUTHENTICATION_BACKENDS = (
-    'wirecloud.fiware.social_auth_backend.FIWAREOAuth2',
-)
+NOT_PROXY_FOR = ['localhost', '127.0.0.1']
 
-# Keyrock settings
-FIWARE_IDM_SERVER = "http://10.0.75.1:5000"
-SOCIAL_AUTH_FIWARE_KEY = "f35e2e51-802a-4b42-86ba-1497a763b2ed"
-SOCIAL_AUTH_FIWARE_SECRET = "5f7f5579-ce4a-470f-b819-d75a9e77103c"
+# Allow X-Forwarded-* headers on Django (they are filtered by gunicorn depending on the value of FORWARDED_ALLOW_IPS env var)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
 
 FIWARE_PORTALS = (
     {
@@ -144,18 +193,15 @@ FIWARE_PORTALS = (
     },
 )
 
-# Wirecloud autodiscover Wirecloud plugins by default. Uncomment this for settings
-# the list of plugins manually.
-#
-#WIRECLOUD_PLUGINS = (
-#    'wirecloud.oauth2provider.plugins.OAuth2ProviderPlugin',
-#    'wirecloud.fiware.plugins.FiWarePlugin',
-#)
+# Auth configuration
+if IDM_AUTH_ENABLED:
+    print("IDM_AUTH_ENABLED")
+    AUTHENTICATION_BACKENDS = (
+        'wirecloud.fiware.social_auth_backend.FIWAREOAuth2',
+    )
+else:
+    AUTHENTICATION_BACKENDS = (
+        'django.contrib.auth.backends.ModelBackend',
+    )
 
-NOT_PROXY_FOR = ['localhost', '127.0.0.1']
-
-# Set mode to HTTPS
-#FORCE_PROTO = 'https'
-
-# Increase upload file size limit
 DATA_UPLOAD_MAX_MEMORY_SIZE = 262144000
