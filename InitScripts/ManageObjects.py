@@ -74,6 +74,12 @@ def addDelServices(data):
         for srv in data['services']:
             payload={'services': [srv]}
             r=requests.post(URL, data=json.dumps(payload, ensure_ascii=False).encode('utf-8'), headers=HEAD_CONTENT)
+            # If security token has expired, renew token and retry
+            if r.status_code==401:
+                TOKEN=fetchToken()
+                HEADERS['X-Auth-Token']=TOKEN
+                HEAD_CONTENT['X-Auth-Token']=TOKEN
+                r=requests.post(URL, data=json.dumps(payload, ensure_ascii=False).encode('utf-8'), headers=HEAD_CONTENT)
             if r.status_code==201:
                 success+=1
             else:
@@ -88,6 +94,12 @@ def addDelServices(data):
         for srv in data['services']:
             parameters={'apikey': srv['apikey'], 'resource': srv['resource']}
             r=requests.delete(URL, params=parameters, headers=HEAD_CONTENT, timeout=1)
+            # If security token has expired, renew token and retry
+            if r.status_code==401:
+                TOKEN=fetchToken()
+                HEADERS['X-Auth-Token']=TOKEN
+                HEAD_CONTENT['X-Auth-Token']=TOKEN
+                r=requests.delete(URL, params=parameters, headers=HEAD_CONTENT, timeout=1)
             if r.status_code==204:
                 success+=1
             else:
@@ -106,6 +118,12 @@ def addDelEntities(data):
         print
         for ent in data['entities']:
             r=requests.post(URL, data=json.dumps(ent, ensure_ascii=False).encode('utf-8'), headers=HEAD_CONTENT)
+            # If security token has expired, renew token and retry
+            if r.status_code==401:
+                TOKEN=fetchToken()
+                HEADERS['X-Auth-Token']=TOKEN
+                HEAD_CONTENT['X-Auth-Token']=TOKEN
+                r=requests.post(URL, data=json.dumps(ent, ensure_ascii=False).encode('utf-8'), headers=HEAD_CONTENT)
             if r.status_code==201:
                 success+=1
             else:
@@ -120,6 +138,12 @@ def addDelEntities(data):
         for ent in data['entities']:
             path=URL+'/'+ent['id']+'?type='+ent['type']
             r=requests.delete(path, headers=HEADERS, timeout=1)
+            # If security token has expired, renew token and retry
+            if r.status_code==401:
+                TOKEN=fetchToken()
+                HEADERS['X-Auth-Token']=TOKEN
+                HEAD_CONTENT['X-Auth-Token']=TOKEN
+                r=requests.delete(path, headers=HEADERS, timeout=1)
             if r.status_code==204:
                 success+=1
             else:
@@ -139,6 +163,12 @@ def addDelDevices(data):
         for dev in data['devices']:
             payload={'devices': [dev]}
             r=requests.post(URL, data=json.dumps(payload, ensure_ascii=False).encode('utf-8'), headers=HEAD_CONTENT)
+            # If security token has expired, renew token and retry
+            if r.status_code==401:
+                TOKEN=fetchToken()
+                HEADERS['X-Auth-Token']=TOKEN
+                HEAD_CONTENT['X-Auth-Token']=TOKEN
+                r=requests.post(URL, data=json.dumps(payload, ensure_ascii=False).encode('utf-8'), headers=HEAD_CONTENT)
             if r.status_code==201:
                 success+=1
             else:
@@ -153,6 +183,12 @@ def addDelDevices(data):
         for dev in data['devices']:
             path=URL+'/'+dev['device_id']
             r=requests.delete(path, headers=HEAD_CONTENT, timeout=1)
+            # If security token has expired, renew token and retry
+            if r.status_code==401:
+                TOKEN=fetchToken()
+                HEADERS['X-Auth-Token']=TOKEN
+                HEAD_CONTENT['X-Auth-Token']=TOKEN
+                r=requests.delete(path, headers=HEAD_CONTENT, timeout=1)
             if r.status_code==204:
                 success+=1
             else:
@@ -171,6 +207,12 @@ def addDelSubscriptions(data):
         print
         for sub in data['subscriptions']:
             r=requests.post(URL, data=json.dumps(sub, ensure_ascii=False).encode('utf-8'), headers=HEAD_CONTENT)
+            # If security token has expired, renew token and retry
+            if r.status_code==401:
+                TOKEN=fetchToken()
+                HEADERS['X-Auth-Token']=TOKEN
+                HEAD_CONTENT['X-Auth-Token']=TOKEN
+                r=requests.post(URL, data=json.dumps(sub, ensure_ascii=False).encode('utf-8'), headers=HEAD_CONTENT)
             if r.status_code==201:
                 success+=1
             else:
@@ -186,6 +228,12 @@ def addDelSubscriptions(data):
         for sub in SUB_FILTER_LIST:
             path=URL+'/'+sub['id']
             r=requests.delete(path, headers=HEADERS, timeout=1)
+            # If security token has expired, renew token and retry
+            if r.status_code==401:
+                TOKEN=fetchToken()
+                HEADERS['X-Auth-Token']=TOKEN
+                HEAD_CONTENT['X-Auth-Token']=TOKEN
+                r=requests.delete(path, headers=HEADERS, timeout=1)
             if r.status_code==204:
                 success+=1
             else:
@@ -243,13 +291,14 @@ with codecs.open('./'+FILE_NAME,'r+','utf-8') as od:
 
 HEADERS={'Fiware-Service' : FIWARE_SERVICE, 'Fiware-ServicePath' : FIWARE_SERVICEPATH}
 HEAD_CONTENT={'Content-Type': 'application/json', 'Fiware-Service' : FIWARE_SERVICE, 'Fiware-ServicePath' : FIWARE_SERVICEPATH}
-# TODO: Add security token, if necessary
 
 SUB_LIST=[]
 SUB_FILTER_LIST=[]
 
 if SECURE.lower()=='true':
-    print '--- OAuth token feature: WORK IN PROGRESS ---'
+    TOKEN=fetchToken()
+    HEADERS['X-Auth-Token']=TOKEN
+    HEAD_CONTENT['X-Auth-Token']=TOKEN
 
 if 'services' in JSON:
     addDelServices(JSON)
