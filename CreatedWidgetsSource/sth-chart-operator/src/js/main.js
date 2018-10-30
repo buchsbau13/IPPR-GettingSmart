@@ -20,7 +20,7 @@
 
     "use strict";
 
-    var startDate, endDate, hlimit, attribute, unit;
+    var startDate, endDate, hlimit, aggregation, attribute, unit;
     var entity = 'entity';
     var entity_type = 'entity_type';
 
@@ -64,15 +64,28 @@
 
         var url = new URL('v1/contextEntities/type/' + entity_type + '/id/' + entity + '/attributes/' + attribute, server);
 
-        mp.http.makeRequest(url, {
-            method: "GET",
-            requestHeaders: request_headers,
-            parameters: {
+        var declareParams = function declareParams() {
+            var parameters = {
                 hLimit: hlimit,
                 hOffset: 0,
                 dateFrom: startDate,
                 dateTo: endDate
-            },
+            }
+
+            if (!aggregation) {
+                return parameters;
+            } else if (aggregation) {
+                parameters.aggrMethod = aggregation; // aggregation = "avg"
+                delete parameters.hOffset;
+                return parameters;
+            }
+
+        }
+
+        mp.http.makeRequest(url, {
+            method: "GET",
+            requestHeaders: request_headers,
+            parameters: declareParams(),
             onSuccess: function (response) {
                 if (response.status !== 200) {
                     throw new Error('Unexpected response from STH');
@@ -117,6 +130,7 @@
         startDate = inputData.startDate;
         endDate = inputData.endDate;
         hlimit = inputData.maxValues;
+        aggregation = inputData.aggregation;
         requestData(entityString);
     });
 
