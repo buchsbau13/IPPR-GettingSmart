@@ -49,7 +49,7 @@ config.authorization = {
 	pdp: 'idm', 	// idm|authzforce
 	azf: {
 		protocol: 'http',
-	    host: 'keyrock',
+	    host: process.env.IDM_HOST,
 	    port: 5000,
 	    custom_policy: undefined // use undefined to default policy checks (HTTP verb + path).
 	}

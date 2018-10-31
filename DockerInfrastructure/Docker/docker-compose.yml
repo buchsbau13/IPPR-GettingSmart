@@ -52,7 +52,7 @@ services:
 
     keyrock:
         restart: on-failure
-        image: fhjima/idm
+        image: fhjima/fiware-idm
         hostname: keyrock
         container_name: keyrock
         volumes:
@@ -138,7 +138,7 @@ services:
             - 80:80
         volumes:
             - ./nginx_config/nginx.conf:/etc/nginx/nginx.conf:ro
-            - ./wirecloud-static:/var/www/static:ro
+            - wirecloud-static:/var/www/static:ro
         depends_on:
             - wirecloud
 
@@ -174,7 +174,7 @@ services:
 
     wirecloud:
         restart: always
-        image: fiware/wirecloud:1.2.0
+        image: fiware/wirecloud
         hostname: wirecloud
         container_name: wirecloud
         depends_on:

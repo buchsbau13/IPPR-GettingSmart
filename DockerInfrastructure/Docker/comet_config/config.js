@@ -46,7 +46,8 @@ config.server = {
     aggregationBy: ['day', 'hour', 'minute'],
     // Directory where temporary files will be stored, such as the ones generated when CSV files are requested.
     // Default value: "temp".
-    temporalDir: 'temp'
+    temporalDir: 'temp',
+    maxPageSize: '5000'
 };
 
 // Database configuration
