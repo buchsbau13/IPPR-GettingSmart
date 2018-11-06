@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
 # 
@@ -20,6 +21,7 @@ import ConfigParser
 import io
 import sys
 import random
+import codecs
 
 CONFIG_FILE='./settings.ini'
 
@@ -37,6 +39,8 @@ if NUM_ARG!=1:
    print '        type = Type of generated sensors (e.g. test)'
    print '        devAttrs = Comma separated list of device attributes in the format'
    print '                   <handle>/<name>/<data_type> (e.g. t/temperature/Float,h/humidity/Float)'
+   print '        attrUnits = Comma separated list of attribute units in the format'
+   print '                   <unit_name>=<unit_value> (e.g. temp_sensor_unit=°C,humid_sensor_unit=%)'
    print
    print '        -> The script generates entities, devices and subscriptions for the sensors with IDs'
    print '           <prefix><firstNum> until <prefix><lastNum> (e.g. Test_Sensor_1 to Test_Sensor_100)'
@@ -45,10 +49,8 @@ if NUM_ARG!=1:
    sys.exit(2)
 
 # Read the configuration file
-with open(CONFIG_FILE,'r+') as f:
-    sample_config=f.read()
 config=ConfigParser.RawConfigParser(allow_no_value=True)
-config.readfp(io.BytesIO(sample_config))
+config.readfp(codecs.open(CONFIG_FILE,'r+','utf-8'))
 
 CYGNUS=config.get('cygnus', 'url')
 PREFIX=config.get('sensors', 'prefix')
@@ -56,6 +58,7 @@ FIRSTNUM=config.get('sensors', 'firstNum')
 LASTNUM=config.get('sensors', 'lastNum')
 TYPE=config.get('sensors', 'type')
 ATTRS=config.get('sensors', 'devAttrs')
+UNITS=config.get('sensors', 'attrUnits')
 
 # Define coordinate boundaries
 MINLAT=47.2
@@ -66,13 +69,19 @@ MAXLON=16.3
 # Function for writing JSON to file
 def writeJSON(data, file):
     with open(file, 'w') as outfile:
-        outfile.write(json.dumps(data, indent=2))
+        outfile.write(json.dumps(data, indent=2, ensure_ascii=False).encode('utf-8'))
 
 # Generate attribute list
 attrList=[]
 for entry in ATTRS.split(','):
     attrData=entry.split('/')
     attrList.append({'object_id': attrData[0], 'name': attrData[1], 'type': attrData[2]})
+
+# Generate unit list
+unitList=[]
+for data in UNITS.split(','):
+    unitData=data.split('=')
+    unitList.append({'name': unitData[0], 'value': unitData[1]})
 
 # Create entity, device and subscription lists
 entJSON={'entities': []}
@@ -82,7 +91,10 @@ subJSON={'subscriptions': []}
 for cnt in range(int(FIRSTNUM), int(LASTNUM)+1):
     sensor=PREFIX+str(cnt)
     coords=str(round(random.uniform(MINLAT,MAXLAT), 6))+','+str(round(random.uniform(MINLON,MAXLON), 6))
-    entJSON['entities'].append({'id': sensor, 'type': TYPE, 'name': {'value': sensor}, 'location': {'type': 'geo:point', 'value': coords}})
+    entity={'id': sensor, 'type': TYPE, 'name': {'value': sensor}, 'location': {'type': 'geo:point', 'value': coords}}
+    for unit in unitList:
+        entity[unit['name']]={'value': unit['value']}
+    entJSON['entities'].append(entity)
     devJSON['devices'].append({'device_id': 'Dev_'+sensor, 'entity_name': sensor, 'entity_type': TYPE, 'timezone': 'Europe/Vienna', 'attributes': attrList})
     for attr in attrList:
         subJSON['subscriptions'].append({'subject': {'entities': [{'id': sensor, 'type': TYPE}], 'condition': {'attrs': [attr['name']]}},\

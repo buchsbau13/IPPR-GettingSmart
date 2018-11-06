@@ -85,6 +85,21 @@
                 initialValue: "3000",
                 required: true
             },
+            "aggregation": {
+                label: 'Aggregate Data',
+                type: 'select',
+                initialEntries: [
+                    {
+                        label: "None",
+                        value: false
+                    },
+                    {
+                        label: "Average",
+                        value: "avg"
+                    }
+                ],
+                required: true
+            },
             "datetime": {
                 label: 'Date Range',
                 type: 'text',
@@ -97,6 +112,7 @@
         form.fieldInterfaces.maxvalues.inputElement.addEventListener('change', removeMessageBar);
         form.fieldInterfaces.attribute.inputElement.addEventListener('change', removeMessageBar);
         form.fieldInterfaces.datetime.inputElement.addEventListener('change', removeMessageBar);
+        form.fieldInterfaces.aggregation.inputElement.addEventListener('change', removeMessageBar);
 
         moment.locale('de-at');
         $(form.fieldInterfaces.datetime.inputElement.inputElement).daterangepicker({
@@ -257,6 +273,7 @@
         var output = {};
         output.entity = currentData[entityId];
         output.attribute = data.attribute;
+        output.aggregation = data.aggregation;
 
         // Get unit string from entity data (if available)
         if (unitAttributes && unitAttributes[data.attribute] && currentData[entityId][unitAttributes[data.attribute]]) {
