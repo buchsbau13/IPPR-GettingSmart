@@ -26,7 +26,6 @@
 
     var STHSource = function STHSource() {
         var attribute;
-        var type;
 
         mp.wiring.registerCallback("attribute", function (inputAttribute) {
             attribute = inputAttribute;

@@ -5,7 +5,7 @@ Moreover, the NGSI Source has to provide the input entity for the widget.
 
 ## Settings
 
-- **Sensors with Attributes (JSON)** A list in JSON format of available sensor types and according attributes to select.
+- **Attributes** Comma separated list of the attributes that are available for selection.
 
 ## Wiring
 
