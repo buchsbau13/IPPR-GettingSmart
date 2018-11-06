@@ -1,0 +1,2 @@
+Move backup of the /data directory from the primary NodeRed instance into this folder.
+Make sure to preserve the file/folder permissions! (The parent folder nodered_data must be owned by user and group "nobody")

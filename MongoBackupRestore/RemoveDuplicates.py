@@ -29,6 +29,12 @@ FLAG=''
 if NUM_ARG>1:
     FLAG=sys.argv[1]
 
+def delDocs(db, collection, dupObjs, flag):
+    # If this is a dry run, do not delete the duplicates
+    if flag!='--dryRun':
+        print 'Removing duplicate batch of collection "'+collection+'"...'
+        db[collection].delete_many({'_id':{'$in':dupObjs}})
+
 if NUM_ARG!=1 and FLAG!='--dryRun':
     print 'Usage: '+COMMAND+' [--dryRun]'
     print '  Configure the preferences in the file "settings.ini".'
@@ -101,12 +107,14 @@ for collection in colList:
                     dupObjs.append(doc['dups'][cnt])
                     print 'Duplicate found! (ID: '+str(doc['dups'][cnt])+')'
 
+                # Remove documents once 10000 duplicates were found (otherwise the list gets too large)
+                if len(dupObjs)>10000:
+                    delDocs(db, collection, dupObjs, FLAG)
+                    dupObjs=[]
+
             if len(dupObjs)>0:
-                # If this is a dry run, do not delete the duplicates
-                if FLAG!='--dryRun':
-                    db[collection].delete_many({'_id':{'$in':dupObjs}})
-                    print 'Duplicates of collection "'+collection+'" removed!'
-            else:
+                delDocs(db, collection, dupObjs, FLAG)
+            elif len(aggr)==0:
                 print 'No duplicates found!'
             
             print

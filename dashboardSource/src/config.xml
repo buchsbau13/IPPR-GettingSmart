@@ -1,0 +1,1012 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mashup xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="dashboard_kubernetes" version="1.6">
+  <details>
+    <title>Dashboard_Kubernetes</title>
+    <description>ITG Graz Dashboard</description>
+    <longdescription>DESCRIPTION.md</longdescription>
+    <authors>Julia Buchsbaum, Michael Janusch</authors>
+  </details>
+  <preferences>
+    <preference name="idas_server" type="text" label="IoT agent URL" description="URL of the IoT agent server"/>
+    <preference name="ngsi_server" type="text" label="Context broker URL" description="URL of the Orion context broker"/>
+    <preference name="sth_server" type="text" label="STH server URL" description="URL of the STH server to use for retrieving historic values"/>
+    <preference name="cygnus_server" type="text" label="STH connector URL" description="URL of the STH connector server for receiving subscription notifications"/>
+    <preference name="ngsi_proxy" type="text" label="NGSI proxy URL" description="URL of the Orion Context Broker proxy to use for receiving notifications about changes"/>
+    <preference name="ngsi_tenant" type="text" label="FIWARE-Service" description="Tenant/service to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol. Maximum length is 50 characters. If empty, the default tenant will be used"/>
+    <preference name="ngsi_service_path" type="text" label="FIWARE-ServicePath" description="Scope/path to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol separated by &quot;/&quot; slashes. Maximum length is 50 characters. If empty, the default service path will be used: /"/>
+    <preference name="use_user_fiware_token" type="boolean" label="Use the FIWARE credentials of the user" description="Use the FIWARE credentials of the user logged into WireCloud. Take into account this option cannot be enabled if you want to use this widget in a public workspace as anonoymous users doesn't have a valid FIWARE auth token"/>
+    <preference name="use_owner_credentials" type="boolean" label="Use the FIWARE credentials of the workspace owner" description="Use the FIWARE credentials of the owner of the workspace. This preference takes preference over &quot;Use the FIWARE credentials of the user&quot;. This feature is available on WireCloud 0.7.0+ in a experimental basis, future versions of WireCloud can change the way to use it making this option not funcional and requiring you to upgrade this operator"/>
+  </preferences>
+  <structure>
+    <preferencevalue name="idas_server" value="http://pep-idas-admin:4041/"/>
+    <preferencevalue name="ngsi_server" value="http://pep-orion:1026/"/>
+    <preferencevalue name="sth_server" value="http://pep-comet:8666/STH"/>
+    <preferencevalue name="cygnus_server" value="http://cygnus:5050/notify"/>
+    <preferencevalue name="ngsi_proxy" value="http://i101v181.intra.graz.at:30003/"/>
+    <preferencevalue name="ngsi_tenant" value="graziot"/>
+    <preferencevalue name="ngsi_service_path" value="/"/>
+    <preferencevalue name="use_user_fiware_token" value="true"/>
+    <preferencevalue name="use_owner_credentials" value="false"/>
+    <tab id="0" name="karte" title="Karte">
+      <resource id="23" name="attribute-selector-widget" title="Attribute Selector" vendor="FH-JOANNEUM" version="1.2">
+        <position x="0" y="0" z="1"/>
+        <rendering height="8" width="7" layout="0"/>
+        <preferencevalue name="attributes" value="temperature,humidity,airPressure,pm25,pm10,pm1,co,no,no2,o3,so2,count,occupancy,speed"/>
+        <variablevalue name="friendlyEntSave" value="{&quot;id&quot;:&quot;DE&quot;,&quot;type&quot;:&quot;friendly_names&quot;,&quot;TimeInstant&quot;:&quot;Zeitstempel&quot;,&quot;address&quot;:&quot;Adresse&quot;,&quot;airPressure&quot;:&quot;Luftdruck&quot;,&quot;air_sensor_info&quot;:&quot;Sensor-Info [Feinstaub]&quot;,&quot;air_sensor_status&quot;:&quot;Sensor-Status [Feinstaub]&quot;,&quot;attribute&quot;:&quot;Attribut&quot;,&quot;co&quot;:&quot;CO-Konzentration&quot;,&quot;count&quot;:&quot;Frequenz&quot;,&quot;date_range&quot;:&quot;Zeitraum&quot;,&quot;description&quot;:&quot;Beschreibung&quot;,&quot;entity_id&quot;:&quot;ID&quot;,&quot;entity_type&quot;:&quot;Typ&quot;,&quot;from_date&quot;:&quot;Von&quot;,&quot;humid_sensor_info&quot;:&quot;Sensor-Info [Luftfeuchtigkeit]&quot;,&quot;humid_sensor_status&quot;:&quot;Sensor-Status [Luftfeuchtigkeit]&quot;,&quot;humidity&quot;:&quot;Luftfeuchtigkeit&quot;,&quot;loc_sensor_info&quot;:&quot;Sensor-Info [Position]&quot;,&quot;loc_sensor_status&quot;:&quot;Sensor-Status [Position]&quot;,&quot;location&quot;:&quot;Position&quot;,&quot;max_values&quot;:&quot;Max. Punkte pro Entität&quot;,&quot;name&quot;:&quot;Name&quot;,&quot;no&quot;:&quot;NO-Konzentration&quot;,&quot;no2&quot;:&quot;NO2-Konzentration&quot;,&quot;o3&quot;:&quot;O3-Konzentration&quot;,&quot;occupancy&quot;:&quot;Auslastung&quot;,&quot;pm1&quot;:&quot;Feinstaub [PM1]&quot;,&quot;pm10&quot;:&quot;Feinstaub [PM10]&quot;,&quot;pm25&quot;:&quot;Feinstaub [PM2.5]&quot;,&quot;so2&quot;:&quot;SO2-Konzentration&quot;,&quot;speed&quot;:&quot;Geschwindigkeit&quot;,&quot;temp_sensor_info&quot;:&quot;Sensor-Info [Temperatur]&quot;,&quot;temp_sensor_status&quot;:&quot;Sensor-Status [Temperatur]&quot;,&quot;temperature&quot;:&quot;Temperatur&quot;,&quot;timestamp&quot;:&quot;Zeitstempel&quot;,&quot;to_date&quot;:&quot;Bis&quot;}"/>
+      </resource>
+      <resource id="24" name="ol3-map" title="OpenLayers Map" vendor="FH-JOANNEUM" version="1.0.8">
+        <position x="0" y="8" z="0"/>
+        <rendering height="56" width="19" layout="0"/>
+        <preferencevalue name="initialCenter" value="15.421371,47.076668"/>
+        <preferencevalue name="layerTypes" value="{ &quot;static&quot;: &quot;Statische Sensoren&quot;, &quot;mobile&quot;: &quot;Mobile Sensoren&quot;, &quot;traffic&quot;: &quot;Verkehrssensoren&quot;, &quot;test&quot;: &quot;Testsensoren&quot;}"/>
+        <preferencevalue name="minzoom" value="4"/>
+        <preferencevalue name="initialZoom" value="14"/>
+      </resource>
+    </tab>
+    <tab id="1" name="diagramme" title="Diagramme">
+      <resource id="25" name="ngsi-browser" title="NGSI browser" vendor="CoNWeT" version="1.1.2">
+        <position x="0" y="0" z="0"/>
+        <rendering height="64" width="7" layout="0"/>
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="allow_edit" value="false"/>
+        <preferencevalue name="ngsi_server" value="%(params.ngsi_server)" readonly="true"/>
+        <preferencevalue name="type_column" value="true"/>
+        <preferencevalue name="extra_attributes" value="temperature, humidity"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="ngsi_entities" value="static, mobile, test"/>
+        <preferencevalue name="allow_use" value="false"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+        <preferencevalue name="allow_delete" value="false"/>
+        <preferencevalue name="allow_diagram" value="true"/>
+        <preferencevalue name="ngsi_id_filter" value=""/>
+      </resource>
+      <resource id="29" name="googlecharts" title="Luftfeuchtigkeit" vendor="CoNWeT" version="1.0.3">
+        <position x="14" y="32" z="4"/>
+        <rendering height="32" width="4" layout="0"/>
+      </resource>
+      <resource id="28" name="googlecharts" title="Temperatur" vendor="CoNWeT" version="1.0.3">
+        <position x="14" y="0" z="3"/>
+        <rendering height="32" width="4" layout="0"/>
+      </resource>
+      <resource id="27" name="googlecharts" title="Liniendiagramm Luftfeuchtigkeit" vendor="CoNWeT" version="1.0.3">
+        <position x="7" y="32" z="2"/>
+        <rendering height="32" width="7" layout="0"/>
+      </resource>
+      <resource id="26" name="googlecharts" title="Liniendiagramm Temperatur" vendor="CoNWeT" version="1.0.3">
+        <position x="7" y="0" z="1"/>
+        <rendering height="32" width="7" layout="0"/>
+      </resource>
+    </tab>
+    <tab id="2" name="historische-karte" title="Historische Karte">
+      <resource id="31" name="ol3-historic-map" title="OpenLayers Historic Heatmap" vendor="FH-JOANNEUM" version="1.0.7">
+        <position x="0" y="24" z="0"/>
+        <rendering height="61" width="18" layout="0"/>
+        <preferencevalue name="initialCenter" value="15.421371,47.076668"/>
+        <preferencevalue name="minzoom" value="4"/>
+        <preferencevalue name="initialZoom" value="14"/>
+      </resource>
+      <resource id="39" name="heatmap-input-widget" title="Heatmap Input Widget" vendor="FH-JOANNEUM" version="1.4.6">
+        <position x="0" y="0" z="1"/>
+        <rendering height="24" width="14" layout="0"/>
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="date_range_widget" value="FH-JOANNEUM/date-range/1.0"/>
+        <preferencevalue name="ngsi_server" value="%(params.ngsi_server)" readonly="true"/>
+        <preferencevalue name="entity_id_pattern" value=".*"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+        <preferencevalue name="attributes" value="temperature,humidity,airPressure,pm25,pm10,pm1,co,no,no2,o3,so2,count,occupancy,speed"/>
+        <preferencevalue name="entity_types" value="static, mobile, traffic, test"/>
+        <variablevalue name="friendlyEntSave" value="{&quot;id&quot;:&quot;DE&quot;,&quot;type&quot;:&quot;friendly_names&quot;,&quot;TimeInstant&quot;:&quot;Zeitstempel&quot;,&quot;address&quot;:&quot;Adresse&quot;,&quot;airPressure&quot;:&quot;Luftdruck&quot;,&quot;air_sensor_info&quot;:&quot;Sensor-Info [Feinstaub]&quot;,&quot;air_sensor_status&quot;:&quot;Sensor-Status [Feinstaub]&quot;,&quot;attribute&quot;:&quot;Attribut&quot;,&quot;co&quot;:&quot;CO-Konzentration&quot;,&quot;count&quot;:&quot;Frequenz&quot;,&quot;date_range&quot;:&quot;Zeitraum&quot;,&quot;description&quot;:&quot;Beschreibung&quot;,&quot;entity_id&quot;:&quot;ID&quot;,&quot;entity_type&quot;:&quot;Typ&quot;,&quot;from_date&quot;:&quot;Von&quot;,&quot;humid_sensor_info&quot;:&quot;Sensor-Info [Luftfeuchtigkeit]&quot;,&quot;humid_sensor_status&quot;:&quot;Sensor-Status [Luftfeuchtigkeit]&quot;,&quot;humidity&quot;:&quot;Luftfeuchtigkeit&quot;,&quot;loc_sensor_info&quot;:&quot;Sensor-Info [Position]&quot;,&quot;loc_sensor_status&quot;:&quot;Sensor-Status [Position]&quot;,&quot;location&quot;:&quot;Position&quot;,&quot;max_values&quot;:&quot;Max. Punkte pro Entität&quot;,&quot;name&quot;:&quot;Name&quot;,&quot;no&quot;:&quot;NO-Konzentration&quot;,&quot;no2&quot;:&quot;NO2-Konzentration&quot;,&quot;o3&quot;:&quot;O3-Konzentration&quot;,&quot;occupancy&quot;:&quot;Auslastung&quot;,&quot;pm1&quot;:&quot;Feinstaub [PM1]&quot;,&quot;pm10&quot;:&quot;Feinstaub [PM10]&quot;,&quot;pm25&quot;:&quot;Feinstaub [PM2.5]&quot;,&quot;so2&quot;:&quot;SO2-Konzentration&quot;,&quot;speed&quot;:&quot;Geschwindigkeit&quot;,&quot;temp_sensor_info&quot;:&quot;Sensor-Info [Temperatur]&quot;,&quot;temp_sensor_status&quot;:&quot;Sensor-Status [Temperatur]&quot;,&quot;temperature&quot;:&quot;Temperatur&quot;,&quot;timestamp&quot;:&quot;Zeitstempel&quot;,&quot;to_date&quot;:&quot;Bis&quot;}"/>
+      </resource>
+    </tab>
+    <tab id="3" name="historisches-diagramm" title="Historisches Diagramm">
+      <resource id="32" name="chart-input-widget" title="Chart Input Widget" vendor="FH-JOANNEUM" version="1.3">
+        <position x="0" y="0" z="0"/>
+        <rendering height="55" width="8" layout="0"/>
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="entity_id_pattern" value=".*"/>
+        <preferencevalue name="ngsi_server" value="%(params.ngsi_server)" readonly="true"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="unit_attributes" value="temperature=temp_sensor_unit,humidity=humid_sensor_unit,pm25=air_sensor_unit,pm10=air_sensor_unit,pm1=air_sensor_unit,airPressure=air_pressure_sensor_unit,co=ppb_sensor_unit,no=ppb_sensor_unit,no2=ppb_sensor_unit,o3=ppb_sensor_unit,so2=ppb_sensor_unit,count=count_sensor_unit,occupancy=occ_sensor_unit,speed=speed_sensor_unit"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+        <preferencevalue name="attributes" value="temperature,humidity,airPressure,pm25,pm10,pm1,co,no,no2,o3,so2,count,occupancy,speed"/>
+        <preferencevalue name="entity_types" value="static, mobile, traffic, test"/>
+      </resource>
+      <resource id="33" name="googlecharts" title="Liniendiagramm" vendor="CoNWeT" version="1.0.3">
+        <position x="8" y="0" z="1"/>
+        <rendering height="55" width="11" layout="0"/>
+      </resource>
+    </tab>
+    <tab id="4" name="batch-adddelete" title="Batch Add/Delete">
+      <resource id="40" name="batch-add-delete" title="Batch add/delete" vendor="FH-JOANNEUM" version="1.3.1">
+        <position x="0" y="0" z="0"/>
+        <rendering height="53" width="8" layout="0"/>
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="ngsi_server" value="%(params.ngsi_server)" readonly="true"/>
+        <preferencevalue name="orion_operator" value="FH-JOANNEUM/orion-rest-calls/1.0"/>
+        <preferencevalue name="idas_server" value="%(params.idas_server)" readonly="true"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="idas_operator" value="FH-JOANNEUM/idas-rest-calls/1.0"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+        <variablevalue name="textAreaSave" value=""/>
+      </resource>
+    </tab>
+    <tab id="5" name="admin-tools" title="Admin Tools">
+      <resource id="36" name="entity-manager" title="Entity manager" vendor="FH-JOANNEUM" version="1.3">
+        <position x="9" y="0" z="2"/>
+        <rendering height="32" width="9" layout="0"/>
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="allow_edit" value="true"/>
+        <preferencevalue name="ngsi_server" value="%(params.ngsi_server)" readonly="true"/>
+        <preferencevalue name="orion_operator" value="FH-JOANNEUM/orion-rest-calls/1.0"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="json_editor_widget" value="CoNWeT/json-editor/1.0"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+        <preferencevalue name="allow_delete" value="true"/>
+        <preferencevalue name="allow_add" value="true"/>
+        <preferencevalue name="auto_forward" value="true"/>
+      </resource>
+      <resource id="37" name="device-manager" title="Device manager" vendor="FH-JOANNEUM" version="1.3">
+        <position x="0" y="32" z="1"/>
+        <rendering height="32" width="9" layout="0"/>
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="allow_edit" value="true"/>
+        <preferencevalue name="idas_server" value="%(params.idas_server)" readonly="true"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+        <preferencevalue name="json_editor_widget" value="CoNWeT/json-editor/1.0"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="idas_operator" value="FH-JOANNEUM/idas-rest-calls/1.0"/>
+        <preferencevalue name="allow_delete" value="true"/>
+        <preferencevalue name="allow_add" value="true"/>
+        <preferencevalue name="auto_forward" value="true"/>
+      </resource>
+      <resource id="38" name="subscription-manager" title="Subscription manager" vendor="FH-JOANNEUM" version="1.3">
+        <position x="9" y="32" z="3"/>
+        <rendering height="32" width="9" layout="0"/>
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="allow_edit" value="true"/>
+        <preferencevalue name="ngsi_server" value="%(params.ngsi_server)" readonly="true"/>
+        <preferencevalue name="orion_operator" value="FH-JOANNEUM/orion-rest-calls/1.0"/>
+        <preferencevalue name="cygnus_server" value="%(params.cygnus_server)" readonly="true"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="json_editor_widget" value="CoNWeT/json-editor/1.0"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+        <preferencevalue name="allow_delete" value="true"/>
+        <preferencevalue name="allow_add" value="true"/>
+        <preferencevalue name="auto_forward" value="true"/>
+      </resource>
+      <resource id="35" name="service-manager" title="Service manager" vendor="FH-JOANNEUM" version="1.3.1">
+        <position x="0" y="0" z="0"/>
+        <rendering height="32" width="9" layout="0"/>
+        <preferencevalue name="allow_edit" value="true"/>
+        <preferencevalue name="ngsi_server" value="%(params.ngsi_server)" readonly="true"/>
+        <preferencevalue name="idas_server" value="%(params.idas_server)" readonly="true"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+        <preferencevalue name="json_editor_widget" value="CoNWeT/json-editor/1.0"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="idas_operator" value="FH-JOANNEUM/idas-rest-calls/1.0"/>
+        <preferencevalue name="allow_delete" value="true"/>
+        <preferencevalue name="allow_add" value="true"/>
+        <preferencevalue name="auto_forward" value="true"/>
+      </resource>
+    </tab>
+    <wiring version="2.0">
+      <operator id="24" name="sth-location-operator" vendor="FH-JOANNEUM" version="1.2">
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="sth_server" value="%(params.sth_server)" readonly="true"/>
+        <preferencevalue name="attribute" value="location"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+      </operator>
+      <operator id="25" name="poi-beautifier" vendor="FH-JOANNEUM" version="1.4.1">
+        <preferencevalue name="timestamp_name" value="TimeInstant"/>
+        <preferencevalue name="location_name" value="location"/>
+        <preferencevalue name="comp_attributes" value="address=streetAddress"/>
+        <preferencevalue name="unit_attributes" value="temperature=temp_sensor_unit,humidity=humid_sensor_unit,pm25=air_sensor_unit,pm10=air_sensor_unit,pm1=air_sensor_unit,airPressure=air_pressure_sensor_unit,co=ppb_sensor_unit,no=ppb_sensor_unit,no2=ppb_sensor_unit,o3=ppb_sensor_unit,so2=ppb_sensor_unit,count=count_sensor_unit,occupancy=occ_sensor_unit,speed=speed_sensor_unit"/>
+        <preferencevalue name="attributes" value="id,type,description,address,temperature,humidity,airPressure,pm25,pm10,pm1,co,no,no2,o3,so2,count,occupancy,speed,location,TimeInstant"/>
+        <preferencevalue name="timestamp_format" value="dd.mm.yyyy HH:MM:ss"/>
+      </operator>
+      <operator id="26" name="poi-beautifier" vendor="FH-JOANNEUM" version="1.4.1">
+        <preferencevalue name="timestamp_name" value="timestamp"/>
+        <preferencevalue name="location_name" value="location"/>
+        <preferencevalue name="comp_attributes" value=""/>
+        <preferencevalue name="unit_attributes" value="temperature=temp_sensor_unit,humidity=humid_sensor_unit,pm25=air_sensor_unit,pm10=air_sensor_unit,pm1=air_sensor_unit,airPressure=air_pressure_sensor_unit,co=ppb_sensor_unit,no=ppb_sensor_unit,no2=ppb_sensor_unit,o3=ppb_sensor_unit,so2=ppb_sensor_unit,count=count_sensor_unit,occupancy=occ_sensor_unit,speed=speed_sensor_unit"/>
+        <preferencevalue name="attributes" value="id,type,timestamp"/>
+        <preferencevalue name="timestamp_format" value="dd.mm.yyyy HH:MM:ss"/>
+      </operator>
+      <operator id="27" name="poi-beautifier" vendor="FH-JOANNEUM" version="1.4.1">
+        <preferencevalue name="timestamp_name" value="timestamp"/>
+        <preferencevalue name="location_name" value="location"/>
+        <preferencevalue name="comp_attributes" value=""/>
+        <preferencevalue name="unit_attributes" value="temperature=temp_sensor_unit,humidity=humid_sensor_unit,pm25=air_sensor_unit,pm10=air_sensor_unit,pm1=air_sensor_unit,airPressure=air_pressure_sensor_unit,co=ppb_sensor_unit,no=ppb_sensor_unit,no2=ppb_sensor_unit,o3=ppb_sensor_unit,so2=ppb_sensor_unit,count=count_sensor_unit,occupancy=occ_sensor_unit,speed=speed_sensor_unit"/>
+        <preferencevalue name="attributes" value="id,type,timestamp"/>
+        <preferencevalue name="timestamp_format" value="dd.mm.yyyy HH:MM:ss"/>
+      </operator>
+      <operator id="22" name="sth-source-operator" vendor="CoNWeT" version="1.2">
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="sth_server" value="%(params.sth_server)" readonly="true"/>
+        <preferencevalue name="debug_mode" value="False"/>
+        <preferencevalue name="attribute" value="temperature"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="lastn" value="10"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+      </operator>
+      <operator id="23" name="gauge-chart-operator" vendor="FH-JOANNEUM" version="1.2">
+        <preferencevalue name="attribute" value="temperature"/>
+        <preferencevalue name="options" value="{&quot;min&quot;: &quot;-50&quot;, &quot;max&quot;: &quot;50&quot;, &quot;yellowFrom&quot;: &quot;-50&quot;, &quot;yellowTo&quot;: &quot;0&quot;, &quot;yellowColor&quot;: &quot;#4876FF&quot;, &quot;redFrom&quot;: &quot;0&quot;, &quot;redTo&quot;: &quot;50&quot;, &quot;minorTicks&quot;: &quot;5&quot;}"/>
+        <preferencevalue name="unit" value="temp_sensor_unit"/>
+      </operator>
+      <operator id="29" name="ngsientity2poi" vendor="CoNWeT" version="3.0.4">
+        <preferencevalue name="coordinates_attr" value="location"/>
+        <preferencevalue name="marker-icon" value="car"/>
+      </operator>
+      <operator id="1" name="google-chart-operator" vendor="FH-JOANNEUM" version="1.4">
+        <preferencevalue name="yaxis" value="Wert"/>
+        <preferencevalue name="title" value="Historische Werte"/>
+        <preferencevalue name="xaxis" value="Uhrzeit"/>
+        <preferencevalue name="chartType" value="LineChart"/>
+        <preferencevalue name="options" value=""/>
+        <preferencevalue name="unit" value="%"/>
+      </operator>
+      <operator id="3" name="sth-data-to-poi" vendor="FH-JOANNEUM" version="1.1.3"/>
+      <operator id="2" name="sth-multi-input-source-operator" vendor="FH-JOANNEUM" version="1.1">
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="sth_server" value="%(params.sth_server)" readonly="true"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+      </operator>
+      <operator id="5" name="sth-source-operator" vendor="CoNWeT" version="1.2">
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="sth_server" value="%(params.sth_server)" readonly="true"/>
+        <preferencevalue name="debug_mode" value="False"/>
+        <preferencevalue name="attribute" value="humidity"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="lastn" value="10"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+      </operator>
+      <operator id="4" name="minmax-selector" vendor="FH-JOANNEUM" version="1.0">
+        <preferencevalue name="min_max_values" value="temperature=-20/40,humidity=0/100,pm25=0/25,pm10=0/50,pm1=0/25,co=0/10000,no=0/30,no2=0/80,so2=0/50,o3=0/120,airPressure=960/990,count=0/1500,occupancy=0/100,speed=0/55"/>
+      </operator>
+      <operator id="7" name="sth-chart-operator" vendor="FH-JOANNEUM" version="1.3">
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="sth_server" value="%(params.sth_server)" readonly="true"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+      </operator>
+      <operator id="6" name="google-chart-operator" vendor="FH-JOANNEUM" version="1.4">
+        <preferencevalue name="yaxis" value="Wert"/>
+        <preferencevalue name="title" value="Historische Werte"/>
+        <preferencevalue name="xaxis" value="Uhrzeit"/>
+        <preferencevalue name="chartType" value="LineChart"/>
+        <preferencevalue name="options" value=""/>
+        <preferencevalue name="unit" value="°C"/>
+      </operator>
+      <operator id="9" name="minmax-selector" vendor="FH-JOANNEUM" version="1.0">
+        <preferencevalue name="min_max_values" value="temperature=-20/40,humidity=0/100,pm25=0/25,pm10=0/50,pm1=0/25,co=0/10000,no=0/30,no2=0/80,so2=0/50,o3=0/120,airPressure=960/990,count=0/1500,occupancy=0/100,speed=0/55"/>
+      </operator>
+      <operator id="8" name="sth-location-operator" vendor="FH-JOANNEUM" version="1.2">
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="sth_server" value="%(params.sth_server)" readonly="true"/>
+        <preferencevalue name="attribute" value="location"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+      </operator>
+      <operator id="11" name="google-chart-operator" vendor="FH-JOANNEUM" version="1.4">
+        <preferencevalue name="yaxis" value="Wert"/>
+        <preferencevalue name="title" value="Historische Werte"/>
+        <preferencevalue name="xaxis" value="Datum und Uhrzeit"/>
+        <preferencevalue name="chartType" value="LineChart"/>
+        <preferencevalue name="options" value="{&quot;title&quot;: &quot;Historische Werte&quot;, &quot;hAxis&quot;: {&quot;title&quot;: &quot;Datum und Uhrzeit&quot;}, &quot;vAxis&quot;: {&quot;title&quot;: &quot;Werte&quot;}, &quot;legend&quot;: {&quot;position&quot;: &quot;none&quot;}, &quot;pointSize&quot;: 1}"/>
+        <preferencevalue name="unit" value=""/>
+      </operator>
+      <operator id="10" name="sth-data-to-poi" vendor="FH-JOANNEUM" version="1.1.3"/>
+      <operator id="13" name="sth-multiple-entities-source-operator" vendor="FH-JOANNEUM" version="1.1">
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="sth_server" value="%(params.sth_server)" readonly="true"/>
+        <preferencevalue name="debug_mode" value="False"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="lastn" value="10"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+      </operator>
+      <operator id="38" name="ngsi-source" vendor="CoNWeT" version="3.1">
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="ngsi_server" value="%(params.ngsi_server)" readonly="true"/>
+        <preferencevalue name="ngsi_update_attributes" value="id"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="ngsi_entities" value="friendly_names"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+        <preferencevalue name="ngsi_proxy" value="%(params.ngsi_proxy)" readonly="true"/>
+        <preferencevalue name="ngsi_id_filter" value="DE"/>
+      </operator>
+      <operator id="17" name="gauge-chart-operator" vendor="FH-JOANNEUM" version="1.2">
+        <preferencevalue name="attribute" value="humidity"/>
+        <preferencevalue name="options" value="{&quot;min&quot;: &quot;0&quot;, &quot;max&quot;: &quot;100&quot;, &quot;yellowFrom&quot;: &quot;65&quot;, &quot;yellowTo&quot;: &quot;100&quot;, &quot;yellowColor&quot;: &quot;#2E2EFE&quot;, &quot;redFrom&quot;: &quot;0&quot;, &quot;redTo&quot;: &quot;35&quot;,&quot;greenFrom&quot;: &quot;35&quot;, &quot;greenTo&quot;: &quot;65&quot;,&quot;minorTicks&quot;: &quot;5&quot;}"/>
+        <preferencevalue name="unit" value="humid_sensor_unit"/>
+      </operator>
+      <operator id="33" name="ngsientity2poi" vendor="CoNWeT" version="3.0.4">
+        <preferencevalue name="coordinates_attr" value="location"/>
+        <preferencevalue name="marker-icon" value="bus"/>
+      </operator>
+      <operator id="32" name="ngsi-source" vendor="CoNWeT" version="3.1">
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="ngsi_server" value="%(params.ngsi_server)" readonly="true"/>
+        <preferencevalue name="ngsi_update_attributes" value="id"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="ngsi_entities" value="mobile"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+        <preferencevalue name="ngsi_proxy" value="%(params.ngsi_proxy)" readonly="true"/>
+        <preferencevalue name="ngsi_id_filter" value="Bus"/>
+      </operator>
+      <operator id="31" name="ngsientity2poi" vendor="CoNWeT" version="3.0.4">
+        <preferencevalue name="coordinates_attr" value="location"/>
+        <preferencevalue name="marker-icon" value=""/>
+      </operator>
+      <operator id="30" name="ngsi-source" vendor="CoNWeT" version="3.1">
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="ngsi_server" value="%(params.ngsi_server)" readonly="true"/>
+        <preferencevalue name="ngsi_update_attributes" value="id"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="ngsi_entities" value="static, test"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+        <preferencevalue name="ngsi_proxy" value="%(params.ngsi_proxy)" readonly="true"/>
+        <preferencevalue name="ngsi_id_filter" value=""/>
+      </operator>
+      <operator id="37" name="ngsi-source" vendor="CoNWeT" version="3.1">
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="ngsi_server" value="%(params.ngsi_server)" readonly="true"/>
+        <preferencevalue name="ngsi_update_attributes" value="id"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="ngsi_entities" value="static, mobile, traffic, test"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+        <preferencevalue name="ngsi_proxy" value="%(params.ngsi_proxy)" readonly="true"/>
+        <preferencevalue name="ngsi_id_filter" value=""/>
+      </operator>
+      <operator id="36" name="ngsi-source" vendor="CoNWeT" version="3.1">
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="ngsi_server" value="%(params.ngsi_server)" readonly="true"/>
+        <preferencevalue name="ngsi_update_attributes" value="id"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="ngsi_entities" value="traffic"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+        <preferencevalue name="ngsi_proxy" value="%(params.ngsi_proxy)" readonly="true"/>
+        <preferencevalue name="ngsi_id_filter" value=""/>
+      </operator>
+      <operator id="35" name="ngsientity2poi" vendor="CoNWeT" version="3.0.4">
+        <preferencevalue name="coordinates_attr" value="location"/>
+        <preferencevalue name="marker-icon" value="tram"/>
+      </operator>
+      <operator id="34" name="ngsi-source" vendor="CoNWeT" version="3.1">
+        <preferencevalue name="ngsi_service_path" value="%(params.ngsi_service_path)" readonly="true"/>
+        <preferencevalue name="ngsi_server" value="%(params.ngsi_server)" readonly="true"/>
+        <preferencevalue name="ngsi_update_attributes" value="id"/>
+        <preferencevalue name="use_owner_credentials" value="%(params.use_owner_credentials)" readonly="true"/>
+        <preferencevalue name="ngsi_tenant" value="%(params.ngsi_tenant)" readonly="true"/>
+        <preferencevalue name="ngsi_entities" value="mobile"/>
+        <preferencevalue name="use_user_fiware_token" value="%(params.use_user_fiware_token)" readonly="true"/>
+        <preferencevalue name="ngsi_proxy" value="%(params.ngsi_proxy)" readonly="true"/>
+        <preferencevalue name="ngsi_id_filter" value="Tram"/>
+      </operator>
+      <connection>
+        <source endpoint="entity" id="23" type="widget"/>
+        <target endpoint="entity" id="13" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="attribute" id="23" type="widget"/>
+        <target endpoint="attribute" id="13" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="outputData" id="13" type="operator"/>
+        <target endpoint="inputData" id="8" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="outputData" id="8" type="operator"/>
+        <target endpoint="sthData" id="10" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="attribute" id="23" type="widget"/>
+        <target endpoint="attribute" id="9" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="minValue" id="9" type="operator"/>
+        <target endpoint="min" id="24" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="maxValue" id="9" type="operator"/>
+        <target endpoint="max" id="24" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="clear" id="13" type="operator"/>
+        <target endpoint="clear" id="24" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="values" id="5" type="operator"/>
+        <target endpoint="data-serie" id="1" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="timestamps" id="5" type="operator"/>
+        <target endpoint="timestamps" id="1" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="values" id="22" type="operator"/>
+        <target endpoint="data-serie" id="6" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="timestamps" id="22" type="operator"/>
+        <target endpoint="timestamps" id="6" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="minValue" id="4" type="operator"/>
+        <target endpoint="min" id="31" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="maxValue" id="4" type="operator"/>
+        <target endpoint="max" id="31" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="clear" id="2" type="operator"/>
+        <target endpoint="clear" id="31" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="outputData" id="2" type="operator"/>
+        <target endpoint="inputData" id="24" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="outputData" id="24" type="operator"/>
+        <target endpoint="sthData" id="3" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="selection" id="25" type="widget"/>
+        <target endpoint="entityInput" id="17" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="selection" id="25" type="widget"/>
+        <target endpoint="entityInput" id="23" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="selection" id="25" type="widget"/>
+        <target endpoint="entity" id="22" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="selection" id="25" type="widget"/>
+        <target endpoint="entity" id="5" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="values" id="7" type="operator"/>
+        <target endpoint="data-serie" id="11" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="timestamps" id="7" type="operator"/>
+        <target endpoint="timestamps" id="11" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="unit" id="7" type="operator"/>
+        <target endpoint="unit" id="11" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="message" id="7" type="operator"/>
+        <target endpoint="message" id="32" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="outputData" id="32" type="widget"/>
+        <target endpoint="inputWidgetData" id="7" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="chart" id="6" type="operator"/>
+        <target endpoint="input" id="26" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="chart" id="1" type="operator"/>
+        <target endpoint="input" id="27" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="gauge" id="17" type="operator"/>
+        <target endpoint="input" id="29" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="gauge" id="23" type="operator"/>
+        <target endpoint="input" id="28" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="chart" id="11" type="operator"/>
+        <target endpoint="input" id="33" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="poiOutput" id="26" type="operator"/>
+        <target endpoint="heatmapData" id="24" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="poiOutput" id="10" type="operator"/>
+        <target endpoint="poiInput" id="26" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="attribute" id="23" type="widget"/>
+        <target endpoint="addAttributes" id="26" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="poiOutput" id="25" type="operator"/>
+        <target endpoint="poiInput" id="24" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="poiOutput" id="27" type="operator"/>
+        <target endpoint="heatmapData" id="31" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="poiOutput" id="3" type="operator"/>
+        <target endpoint="poiInput" id="27" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="selection" id="35" type="widget"/>
+        <target endpoint="filterByType" id="36" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="selection" id="36" type="widget"/>
+        <target endpoint="filterByEnt" id="37" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="selection" id="37" type="widget"/>
+        <target endpoint="filterByDev" id="38" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="poiOutput" id="29" type="operator"/>
+        <target endpoint="poiInput" id="25" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="entityOutput" id="36" type="operator"/>
+        <target endpoint="entityInput" id="29" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="entityOutput" id="34" type="operator"/>
+        <target endpoint="entityInput" id="35" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="entityOutput" id="32" type="operator"/>
+        <target endpoint="entityInput" id="33" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="entityOutput" id="30" type="operator"/>
+        <target endpoint="entityInput" id="31" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="poiOutput" id="31" type="operator"/>
+        <target endpoint="poiInput" id="25" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="poiOutput" id="33" type="operator"/>
+        <target endpoint="poiInput" id="25" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="poiOutput" id="35" type="operator"/>
+        <target endpoint="poiInput" id="25" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="entityOutput" id="37" type="operator"/>
+        <target endpoint="entity" id="23" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="reload" id="23" type="widget"/>
+        <target endpoint="reload" id="37" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="entities" id="39" type="widget"/>
+        <target endpoint="entities" id="2" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="attribute" id="39" type="widget"/>
+        <target endpoint="attribute" id="2" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="dateFrom" id="39" type="widget"/>
+        <target endpoint="dateFrom" id="2" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="dateTo" id="39" type="widget"/>
+        <target endpoint="dateTo" id="2" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="maxValues" id="39" type="widget"/>
+        <target endpoint="maxValues" id="2" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="attribute" id="39" type="widget"/>
+        <target endpoint="addAttributes" id="27" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="attribute" id="39" type="widget"/>
+        <target endpoint="attribute" id="4" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="entityOutput" id="38" type="operator"/>
+        <target endpoint="friendlyEntInput" id="23" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="entityOutput" id="38" type="operator"/>
+        <target endpoint="friendlyEntInput" id="26" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="entityOutput" id="38" type="operator"/>
+        <target endpoint="friendlyEntInput" id="25" type="operator"/>
+      </connection>
+      <connection>
+        <source endpoint="entityOutput" id="38" type="operator"/>
+        <target endpoint="friendlyEntInput" id="39" type="widget"/>
+      </connection>
+      <connection>
+        <source endpoint="entityOutput" id="38" type="operator"/>
+        <target endpoint="friendlyEntInput" id="27" type="operator"/>
+      </connection>
+      <visualdescription>
+        <component id="24" type="operator">
+          <position x="681" y="1301"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="25" type="operator">
+          <position x="775" y="372"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="26" type="operator">
+          <position x="1531" y="97"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="27" type="operator">
+          <position x="1212" y="1308"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="22" type="operator">
+          <position x="340" y="917"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="23" type="operator">
+          <position x="339" y="834"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="29" type="operator">
+          <position x="249" y="534"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="1" type="operator">
+          <position x="613" y="1075"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="3" type="operator">
+          <position x="955" y="1301"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="2" type="operator">
+          <position x="364" y="1331"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="5" type="operator">
+          <position x="340" y="1069"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="4" type="operator">
+          <position x="363" y="1512"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="7" type="operator">
+          <position x="494" y="1631"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="6" type="operator">
+          <position x="611" y="922"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="9" type="operator">
+          <position x="718" y="186"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="8" type="operator">
+          <position x="1023" y="80"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="11" type="operator">
+          <position x="873" y="1645"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="10" type="operator">
+          <position x="1290" y="80"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="13" type="operator">
+          <position x="717" y="81"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="38" type="operator">
+          <position x="192" y="163"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="17" type="operator">
+          <position x="340" y="755"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="33" type="operator">
+          <position x="248" y="381"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="32" type="operator">
+          <position x="33" y="381"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="31" type="operator">
+          <position x="248" y="301"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="30" type="operator">
+          <position x="33" y="303"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="37" type="operator">
+          <position x="194" y="61"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="36" type="operator">
+          <position x="31" y="531"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="35" type="operator">
+          <position x="247" y="459"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="34" type="operator">
+          <position x="31" y="456"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="24" type="widget">
+          <position x="1774" y="199"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="25" type="widget">
+          <position x="31" y="930"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="26" type="widget">
+          <position x="882" y="946"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="27" type="widget">
+          <position x="892" y="1101"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="23" type="widget">
+          <position x="456" y="57"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="33" type="widget">
+          <position x="1162" y="1670"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="32" type="widget">
+          <position x="77" y="1635"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="31" type="widget">
+          <position x="1468" y="1381"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="28" type="widget">
+          <position x="593" y="834"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="39" type="widget">
+          <position x="73" y="1331"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="35" type="widget">
+          <position x="798" y="580"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="29" type="widget">
+          <position x="592" y="755"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="36" type="widget">
+          <position x="1022" y="580"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="37" type="widget">
+          <position x="1237" y="580"/>
+          <sources/>
+          <targets/>
+        </component>
+        <component id="38" type="widget">
+          <position x="1457" y="580"/>
+          <sources/>
+          <targets/>
+        </component>
+        <connection sourcename="widget/23/entity" targetname="operator/13/entity"/>
+        <connection sourcename="widget/23/attribute" targetname="operator/13/attribute"/>
+        <connection sourcename="operator/13/outputData" targetname="operator/8/inputData"/>
+        <connection sourcename="operator/8/outputData" targetname="operator/10/sthData"/>
+        <connection sourcename="widget/23/attribute" targetname="operator/9/attribute"/>
+        <connection sourcename="operator/9/minValue" targetname="widget/24/min"/>
+        <connection sourcename="operator/9/maxValue" targetname="widget/24/max"/>
+        <connection sourcename="operator/13/clear" targetname="widget/24/clear"/>
+        <connection sourcename="operator/5/values" targetname="operator/1/data-serie"/>
+        <connection sourcename="operator/5/timestamps" targetname="operator/1/timestamps"/>
+        <connection sourcename="operator/22/values" targetname="operator/6/data-serie"/>
+        <connection sourcename="operator/22/timestamps" targetname="operator/6/timestamps"/>
+        <connection sourcename="operator/4/minValue" targetname="widget/31/min"/>
+        <connection sourcename="operator/4/maxValue" targetname="widget/31/max"/>
+        <connection sourcename="operator/2/clear" targetname="widget/31/clear"/>
+        <connection sourcename="operator/2/outputData" targetname="operator/24/inputData"/>
+        <connection sourcename="operator/24/outputData" targetname="operator/3/sthData"/>
+        <connection sourcename="widget/25/selection" targetname="operator/17/entityInput"/>
+        <connection sourcename="widget/25/selection" targetname="operator/23/entityInput"/>
+        <connection sourcename="widget/25/selection" targetname="operator/22/entity"/>
+        <connection sourcename="widget/25/selection" targetname="operator/5/entity"/>
+        <connection sourcename="operator/7/values" targetname="operator/11/data-serie"/>
+        <connection sourcename="operator/7/timestamps" targetname="operator/11/timestamps"/>
+        <connection sourcename="operator/7/unit" targetname="operator/11/unit"/>
+        <connection sourcename="operator/7/message" targetname="widget/32/message"/>
+        <connection sourcename="widget/32/outputData" targetname="operator/7/inputWidgetData"/>
+        <connection sourcename="operator/6/chart" targetname="widget/26/input"/>
+        <connection sourcename="operator/1/chart" targetname="widget/27/input"/>
+        <connection sourcename="operator/17/gauge" targetname="widget/29/input"/>
+        <connection sourcename="operator/23/gauge" targetname="widget/28/input"/>
+        <connection sourcename="operator/11/chart" targetname="widget/33/input"/>
+        <connection sourcename="operator/26/poiOutput" targetname="widget/24/heatmapData"/>
+        <connection sourcename="operator/10/poiOutput" targetname="operator/26/poiInput"/>
+        <connection sourcename="widget/23/attribute" targetname="operator/26/addAttributes"/>
+        <connection sourcename="operator/25/poiOutput" targetname="widget/24/poiInput"/>
+        <connection sourcename="operator/27/poiOutput" targetname="widget/31/heatmapData"/>
+        <connection sourcename="operator/3/poiOutput" targetname="operator/27/poiInput"/>
+        <connection sourcename="widget/35/selection" targetname="widget/36/filterByType"/>
+        <connection sourcename="widget/36/selection" targetname="widget/37/filterByEnt"/>
+        <connection sourcename="widget/37/selection" targetname="widget/38/filterByDev"/>
+        <connection sourcename="operator/29/poiOutput" targetname="operator/25/poiInput"/>
+        <connection sourcename="operator/36/entityOutput" targetname="operator/29/entityInput"/>
+        <connection sourcename="operator/34/entityOutput" targetname="operator/35/entityInput"/>
+        <connection sourcename="operator/32/entityOutput" targetname="operator/33/entityInput"/>
+        <connection sourcename="operator/30/entityOutput" targetname="operator/31/entityInput"/>
+        <connection sourcename="operator/31/poiOutput" targetname="operator/25/poiInput"/>
+        <connection sourcename="operator/33/poiOutput" targetname="operator/25/poiInput"/>
+        <connection sourcename="operator/35/poiOutput" targetname="operator/25/poiInput"/>
+        <connection sourcename="operator/37/entityOutput" targetname="widget/23/entity"/>
+        <connection sourcename="widget/23/reload" targetname="operator/37/reload"/>
+        <connection sourcename="widget/39/entities" targetname="operator/2/entities"/>
+        <connection sourcename="widget/39/attribute" targetname="operator/2/attribute"/>
+        <connection sourcename="widget/39/dateFrom" targetname="operator/2/dateFrom"/>
+        <connection sourcename="widget/39/dateTo" targetname="operator/2/dateTo"/>
+        <connection sourcename="widget/39/maxValues" targetname="operator/2/maxValues"/>
+        <connection sourcename="widget/39/attribute" targetname="operator/27/addAttributes"/>
+        <connection sourcename="widget/39/attribute" targetname="operator/4/attribute"/>
+        <connection sourcename="operator/38/entityOutput" targetname="widget/23/friendlyEntInput"/>
+        <connection sourcename="operator/38/entityOutput" targetname="operator/26/friendlyEntInput"/>
+        <connection sourcename="operator/38/entityOutput" targetname="operator/25/friendlyEntInput"/>
+        <connection sourcename="operator/38/entityOutput" targetname="widget/39/friendlyEntInput"/>
+        <connection sourcename="operator/38/entityOutput" targetname="operator/27/friendlyEntInput"/>
+      </visualdescription>
+    </wiring>
+  </structure>
+  <embedded>
+    <resource name="heatmap-input-widget" src="macs/FH-JOANNEUM_heatmap-input-widget_1.4.6.wgt" vendor="FH-JOANNEUM" version="1.4.6"/>
+    <resource name="ngsi-source" src="macs/CoNWeT_ngsi-source_3.1.wgt" vendor="CoNWeT" version="3.1"/>
+    <resource name="device-manager" src="macs/FH-JOANNEUM_device-manager_1.3.wgt" vendor="FH-JOANNEUM" version="1.3"/>
+    <resource name="gauge-chart-operator" src="macs/FH-JOANNEUM_gauge-chart-operator_1.2.wgt" vendor="FH-JOANNEUM" version="1.2"/>
+    <resource name="ngsientity2poi" src="macs/CoNWeT_ngsientity2poi_3.0.4.wgt" vendor="CoNWeT" version="3.0.4"/>
+    <resource name="sth-data-to-poi" src="macs/FH-JOANNEUM_sth-data-to-poi_1.1.3.wgt" vendor="FH-JOANNEUM" version="1.1.3"/>
+    <resource name="service-manager" src="macs/FH-JOANNEUM_service-manager_1.3.1.wgt" vendor="FH-JOANNEUM" version="1.3.1"/>
+    <resource name="poi-beautifier" src="macs/FH-JOANNEUM_poi-beautifier_1.4.1.wgt" vendor="FH-JOANNEUM" version="1.4.1"/>
+    <resource name="chart-input-widget" src="macs/FH-JOANNEUM_chart-input-widget_1.3.wgt" vendor="FH-JOANNEUM" version="1.3"/>
+    <resource name="sth-multi-input-source-operator" src="macs/FH-JOANNEUM_sth-multi-input-source-operator_1.1.wgt" vendor="FH-JOANNEUM" version="1.1"/>
+    <resource name="attribute-selector-widget" src="macs/FH-JOANNEUM_attribute-selector-widget_1.2.wgt" vendor="FH-JOANNEUM" version="1.2"/>
+    <resource name="ol3-historic-map" src="macs/FH-JOANNEUM_ol3-historic-map_1.0.7.wgt" vendor="FH-JOANNEUM" version="1.0.7"/>
+    <resource name="entity-manager" src="macs/FH-JOANNEUM_entity-manager_1.3.wgt" vendor="FH-JOANNEUM" version="1.3"/>
+    <resource name="sth-location-operator" src="macs/FH-JOANNEUM_sth-location-operator_1.2.wgt" vendor="FH-JOANNEUM" version="1.2"/>
+    <resource name="ol3-map" src="macs/FH-JOANNEUM_ol3-map_1.0.8.wgt" vendor="FH-JOANNEUM" version="1.0.8"/>
+    <resource name="sth-source-operator" src="macs/CoNWeT_sth-source-operator_1.2.wgt" vendor="CoNWeT" version="1.2"/>
+    <resource name="sth-chart-operator" src="macs/FH-JOANNEUM_sth-chart-operator_1.3.wgt" vendor="FH-JOANNEUM" version="1.3"/>
+    <resource name="subscription-manager" src="macs/FH-JOANNEUM_subscription-manager_1.3.wgt" vendor="FH-JOANNEUM" version="1.3"/>
+    <resource name="batch-add-delete" src="macs/FH-JOANNEUM_batch-add-delete_1.3.1.wgt" vendor="FH-JOANNEUM" version="1.3.1"/>
+    <resource name="google-chart-operator" src="macs/FH-JOANNEUM_google-chart-operator_1.4.wgt" vendor="FH-JOANNEUM" version="1.4"/>
+    <resource name="sth-multiple-entities-source-operator" src="macs/FH-JOANNEUM_sth-multiple-entities-source-operator_1.1.wgt" vendor="FH-JOANNEUM" version="1.1"/>
+    <resource name="ngsi-browser" src="macs/CoNWeT_ngsi-browser_1.1.2.wgt" vendor="CoNWeT" version="1.1.2"/>
+    <resource name="minmax-selector" src="macs/FH-JOANNEUM_minmax-selector_1.0.wgt" vendor="FH-JOANNEUM" version="1.0"/>
+    <resource name="googlecharts" src="macs/CoNWeT_googlecharts_1.0.3.wgt" vendor="CoNWeT" version="1.0.3"/>
+  </embedded>
+  <wiring>
+    <outputendpoint name="reload" type="text" label="Reload" description="Reload NGSI Source"/>
+    <outputendpoint name="entity" type="text" label="Entity" description="Entity"/>
+    <outputendpoint name="attribute" type="text" label="Attribute" description="Attribute"/>
+    <outputendpoint name="selection" type="text" label="Selection"/>
+    <outputendpoint name="entities" type="text" label="Entities"/>
+    <outputendpoint name="data_selected" type="text" label="Data Selected" description="Data Selection. See the documentation for more information" friendcode="googlecharts-graph-data-out"/>
+    <outputendpoint name="data_selected" type="text" label="Data Selected" description="Data Selection. See the documentation for more information" friendcode="googlecharts-graph-data-out"/>
+    <outputendpoint name="data_selected" type="text" label="Data Selected" description="Data Selection. See the documentation for more information" friendcode="googlecharts-graph-data-out"/>
+    <outputendpoint name="data_selected" type="text" label="Data Selected" description="Data Selection. See the documentation for more information" friendcode="googlecharts-graph-data-out"/>
+    <outputendpoint name="entities" type="text" label="Entities" description="Entities for which historic data will be retrieved"/>
+    <outputendpoint name="attribute" type="text" label="Attribute" description="Attribute for which historic data will be retrieved"/>
+    <outputendpoint name="dateFrom" type="text" label="Date From" description="Date From"/>
+    <outputendpoint name="dateTo" type="text" label="Date To" description="Date To"/>
+    <outputendpoint name="maxValues" type="text" label="Max Values" description="Maximum amount of values to retrieve"/>
+    <outputendpoint name="outputData" type="text" label="Output Data" description="Selected Output" friendcode="outputData"/>
+    <outputendpoint name="data_selected" type="text" label="Data Selected" description="Data Selection. See the documentation for more information" friendcode="googlecharts-graph-data-out"/>
+    <outputendpoint name="selection" type="text" label="Selection" description="Selection"/>
+    <outputendpoint name="selection" type="text" label="Selection" description="Selection"/>
+    <outputendpoint name="selection" type="text" label="Selection" description="Selection"/>
+    <outputendpoint name="selection" type="text" label="Selection" description="Selection"/>
+    <inputendpoint name="entity" type="text" label="Entity" description="Entity"/>
+    <inputendpoint name="friendlyEntInput" type="text" label="Friendly name entity" description="Entity containing the friendly names for the user interface." friendcode="friendlyentinput"/>
+    <inputendpoint name="poiInput" type="text" label="Insert/Update PoI" description="Insert or update a Point of Interest." actionlabel="Map Viewer Insert/Update PoI" friendcode="poi poi-list"/>
+    <inputendpoint name="heatmapData" type="text" label="Heatmap PoIs" description="Heatmap PoIs" friendcode="heatmapData"/>
+    <inputendpoint name="min" type="text" label="Min Attribute Value" description="Min Attribute Value"/>
+    <inputendpoint name="max" type="text" label="Max Attribute Value" description="Max Attribute Value"/>
+    <inputendpoint name="clear" type="text" label="Clear" description="Clear PoIs with a specific ID"/>
+    <inputendpoint name="filter-by-type" type="text" label="Filter by Type" friendcode="ngsi-type-info"/>
+    <inputendpoint name="input" type="text" label="Data in" description="Data Input. See the documentation for more information" friendcode="googlecharts-graph-data-in"/>
+    <inputendpoint name="input" type="text" label="Data in" description="Data Input. See the documentation for more information" friendcode="googlecharts-graph-data-in"/>
+    <inputendpoint name="input" type="text" label="Data in" description="Data Input. See the documentation for more information" friendcode="googlecharts-graph-data-in"/>
+    <inputendpoint name="input" type="text" label="Data in" description="Data Input. See the documentation for more information" friendcode="googlecharts-graph-data-in"/>
+    <inputendpoint name="heatmapData" type="text" label="Heatmap PoIs" description="Heatmap PoIs"/>
+    <inputendpoint name="clear" type="text" label="Clear Heatmap" description="Clear Heatmap"/>
+    <inputendpoint name="min" type="text" label="Min Attribute Value" description="Min Attribute Value"/>
+    <inputendpoint name="max" type="text" label="Max Attribute Value" description="Max Attribute Value"/>
+    <inputendpoint name="friendlyEntInput" type="text" label="Friendly name entity" description="Entity containing the friendly names for the user interface." friendcode="friendlyentinput"/>
+    <inputendpoint name="message" type="text" label="Message" description="Message" friendcode="message"/>
+    <inputendpoint name="input" type="text" label="Data in" description="Data Input. See the documentation for more information" friendcode="googlecharts-graph-data-in"/>
+    <inputendpoint name="filterByType" type="text" label="Filter by type" description="Show only entities of the supplied entity type, service path and tenant" friendcode="filterbytype"/>
+    <inputendpoint name="filterByEnt" type="text" label="Filter by entity" description="Show only devices containing the supplied entity ID, type, service path and tenant" friendcode="filterbyent"/>
+    <inputendpoint name="filterByDev" type="text" label="Filter by device" description="Show only subscriptions containing the supplied entity ID and type, device attributes, service path and tenant" friendcode="filterbydev"/>
+  </wiring>
+</mashup>

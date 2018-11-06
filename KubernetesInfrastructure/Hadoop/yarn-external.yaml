@@ -14,6 +14,10 @@ spec:
     targetPort: 19888
     nodePort: 30198    
     name: yarn-hs
+  - port: 4040
+    targetPort: 4040
+    nodePort: 30404    
+    name: spark-ui
   selector:
     app: yarn
   type: LoadBalancer

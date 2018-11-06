@@ -3,18 +3,11 @@ Python 2.7 and the python module 'requests' (install using pip)
 
 >>Setup<<
 1) Make sure your FIWARE instance is running
-2) Change the [contextbroker], [idas] and [cygnus] sections in the config.ini according to your FIWARE setup
+2) Change the [contextbroker], [idas], [service] and [idm] sections in the config.ini according to your FIWARE setup
 
 >>Execution<<
-'CreateObjects.py':
+'ManageObjects.py':
 
-python .\CreateObjects.py ent Bus_1.txt
-(Replace 'ent' with the type of object you want to create ('ent' for entity, 'srv' for service or
- 'dev' for device), replace 'Bus_1.txt' with the name of the file containing the corresponding payload
- in json format. NOTE: entities must be created using individual files, whereas multiple services and
- devices can be created using a single file)
- 
-'CreateSubscriptions.py':
- 
-python .\CreateSubscriptions.py subscriptions.txt
-(You can replace 'subscriptions.txt' with your own file)
+python .\ManageObjects.py add .\services.json
+(Replace 'add' with 'del' if you want to remove objects instead of creating them. The file '.\services.json'
+ can be replaced by a different file containing service/entity/device/subscription data in JSON format.)

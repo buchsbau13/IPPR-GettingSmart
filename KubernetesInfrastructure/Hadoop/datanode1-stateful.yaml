@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: datanode1
-        image: bxjulia/datanode-3.1.0:latest
+        image: bxjulia/hadoop-datanode:3.1.1
         env:
         - name: HADOOP_HOST_NAMENODE
           value: namenode
@@ -40,6 +40,22 @@ spec:
         volumeMounts:
         - name: datanode-pv-1
           mountPath: /hdfs/volume1/data
+        - name: datanode-config
+          mountPath: /opt/hadoop/etc/hadoop/core-site.xml
+          subPath: core-site.xml
+        - name: datanode-config
+          mountPath: /opt/hadoop/etc/hadoop/hdfs-site.xml
+          subPath: hdfs-site.xml
+        - name: datanode-config
+          mountPath: /opt/hadoop/etc/hadoop/mapred-site.xml
+          subPath: mapred-site.xml
+        - name: datanode-config
+          mountPath: /opt/hadoop/etc/hadoop/yarn-site.xml
+          subPath: yarn-site.xml
+      volumes:
+      - name: datanode-config
+        configMap:
+          name: datanode-config
   volumeClaimTemplates:
   - metadata:
       name: datanode-pv-1
