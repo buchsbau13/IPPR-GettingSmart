@@ -85,8 +85,31 @@
                 initialValue: "3000",
                 required: true
             },
-            "aggregation": {
-                label: 'Aggregate Data',
+            "aggregationPeriod": {
+                label: 'Aggreg. Period',
+                type: 'select',
+                readOnly: true,
+                initialEntries: [
+                    {
+                        label: "None",
+                        value: false
+                    },
+                    {
+                        label: "Month",
+                        value: "month"
+                    },
+                    {
+                        label: "Day",
+                        value: "day"
+                    },
+                    {
+                        label: "Hour",
+                        value: "hour"
+                    },
+                ]
+            },
+            "aggregationMethod": {
+                label: 'Aggreg. Method',
                 type: 'select',
                 initialEntries: [
                     {
@@ -94,8 +117,16 @@
                         value: false
                     },
                     {
+                        label: "Maximum",
+                        value: "max"
+                    },
+                    {
                         label: "Average",
                         value: "avg"
+                    },
+                    {
+                        label: "Minimum",
+                        value: "min"
                     }
                 ],
                 required: true
@@ -112,7 +143,9 @@
         form.fieldInterfaces.maxvalues.inputElement.addEventListener('change', removeMessageBar);
         form.fieldInterfaces.attribute.inputElement.addEventListener('change', removeMessageBar);
         form.fieldInterfaces.datetime.inputElement.addEventListener('change', removeMessageBar);
-        form.fieldInterfaces.aggregation.inputElement.addEventListener('change', removeMessageBar);
+        form.fieldInterfaces.aggregationMethod.inputElement.addEventListener('change', onAggMethodChange);
+        form.fieldInterfaces.aggregationPeriod.inputElement.addEventListener('change', onAggPeriodChange);
+
 
         moment.locale('de-at');
         $(form.fieldInterfaces.datetime.inputElement.inputElement).daterangepicker({
@@ -193,6 +226,35 @@
         form.fieldInterfaces.attribute.inputElement.addEntries(entries);
         if (attributes.indexOf(old_attribute) !== -1) {
             form.fieldInterfaces.attribute.inputElement.setValue(old_attribute);
+        }
+        removeMessageBar();
+    };
+
+    var onAggPeriodChange = function onAggPeriodChange(select) {
+        var aggPeriod = select.getValue();
+
+        if (!aggPeriod) {
+            // enable number input
+            form.fieldInterfaces.maxvalues.inputElement.enable();
+            form.fieldInterfaces.maxvalues.inputElement.value = 3000;
+        } else if (aggPeriod) {
+            // disable number input
+            form.fieldInterfaces.maxvalues.inputElement.value = "";
+            form.fieldInterfaces.maxvalues.inputElement.disable();
+        }
+        removeMessageBar();
+    };
+
+    var onAggMethodChange = function onAggMethodChange(select) {
+        var aggMethod = select.getValue();
+
+        if (!aggMethod) {
+            // disable agg period select
+            form.fieldInterfaces.aggregationPeriod.inputElement.value = "None";
+            form.fieldInterfaces.aggregationPeriod.inputElement.disable();
+        } else if (aggMethod) {
+            // enable agg period select
+            form.fieldInterfaces.aggregationPeriod.inputElement.enable();
         }
         removeMessageBar();
     };
