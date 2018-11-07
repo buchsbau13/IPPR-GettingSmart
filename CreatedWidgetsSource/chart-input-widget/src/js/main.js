@@ -335,7 +335,8 @@
         var output = {};
         output.entity = currentData[entityId];
         output.attribute = data.attribute;
-        output.aggregation = data.aggregation;
+        output.aggregationMethod = data.aggregationMethod;
+        output.aggregationPeriod = data.aggregationPeriod;
 
         // Get unit string from entity data (if available)
         if (unitAttributes && unitAttributes[data.attribute] && currentData[entityId][unitAttributes[data.attribute]]) {
