@@ -1,0 +1,3 @@
+Write output from top into file:
+
+top -b > cpu-ram.log &

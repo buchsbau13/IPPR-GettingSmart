@@ -1,0 +1,8 @@
+Write log file of container into file:
+
+kubectl logs --namespace fiware-graziot --tail 50 -f cygnus-74546cbd86-gl7hm > cygnus.log &
+kubectl logs --namespace fiware-graziot --tail 50 -f idas-575996f5-npsb8 > idas.log &
+kubectl logs --namespace fiware-graziot --tail 50 -f orion-749d65448-khz4x > orion.log &
+kubectl logs --namespace fiware-graziot --tail 50 -f mongo-0 > mongodb.log &
+kubectl logs --namespace fiware-graziot --tail 50 -f keyrock-6594796984-fstqk > keyrock.log &
+kubectl logs --namespace fiware-graziot --tail 50 -f pep-idas-sensor-5cbb47688f-knw6w > pep-idas-sensor.log &
