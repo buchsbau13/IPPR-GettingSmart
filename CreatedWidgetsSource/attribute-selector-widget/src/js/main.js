@@ -22,7 +22,8 @@
 
     var friendlyEnt,
         layout,
-        form;
+        form,
+        selectedType;
 
     MashupPlatform.wiring.registerCallback("friendlyEntInput", function (entity) {
         var save = MashupPlatform.widget.getVariable('friendlyEntSave');
@@ -48,41 +49,53 @@
             friendlyEnt = JSON.parse(friendlyEntSave.get());
         }
 
-        var entries = [];
-        var attributes = MashupPlatform.prefs.get('attributes').trim();
-        if (attributes) {
-            attributes = attributes.split(new RegExp(',\\s*'));
-            attributes.forEach(function (element) {
-                if (friendlyEnt && friendlyEnt[element]) {
-                    entries.push({value: element, label: friendlyEnt[element]});
-                } else {
-                    entries.push({value: element});
-                }
+        var fields = {};
+
+        // Get JSON from Settings
+        var json = JSON.parse(MashupPlatform.prefs.get('attributesJSON').trim());
+        if (json) {
+            json.devices.forEach(function(device) {
+                var entries = [];
+                // Set initial entry for drop down
+                entries.push({value: "Select ---"});
+
+                // Get all entries for drop down with friendly names
+                device.attributes.forEach(function(attribute) {
+                    if(friendlyEnt && friendlyEnt[attribute.name]) {
+                        entries.push({value: attribute.name, label: friendlyEnt[attribute.name]});
+                    }
+                    else {
+                        entries.push({value: attribute.name});
+                    }
+                });
+
+                // drop down with entries
+                fields[device.entity_type] = {
+                    label: device.entity_type,
+                    type: 'select',
+                    initialEntries: entries,
+                    required: true
+                };
             });
         }
 
-        var attrLabel = "Attribute";
-        if (friendlyEnt && friendlyEnt.attribute) {
-            attrLabel = friendlyEnt.attribute;
-        }
-
         layout = new StyledElements.BorderLayout({'class': 'loading'});
-        var fields = {
-            "attribute": {
-                label: attrLabel,
-                type: 'select',
-                initialEntries: entries,
-                required: true
-            },
-        };
+
         form = new StyledElements.Form(fields, {cancelButton: false, acceptButton: false});
-        form.fieldInterfaces.attribute.inputElement.addEventListener('change', onInputChange);
+
+        // Event listener (on change) for drop down fields
+        json.devices.forEach(function(device) {
+            form.fieldInterfaces[device.entity_type].inputElement.addEventListener('change', function(){onInputChange(device.entity_type);});
+        });
 
         layout.getCenterContainer().appendChild(form);
         layout.insertInto(document.body);
     };
 
-    var onInputChange = function onInputChange() {
+    // Pushes selected attribute to next widget and sets the selected sensor type
+    var onInputChange = function onInputChange(type) {
+        selectedType = type;
+        MashupPlatform.wiring.pushEvent('attribute', form.fieldInterfaces[type].inputElement.getValue());
         MashupPlatform.wiring.pushEvent("reload", "Reload NGSI Source");
         MashupPlatform.widget.log(
             "Reload NGSI Source", MashupPlatform.log.INFO);
@@ -96,11 +109,12 @@
 
     window.addEventListener("DOMContentLoaded", init, false);
 
+    // Called after (re)load and checks, if entity has the selected type to push entity to next widget
     MashupPlatform.wiring.registerCallback("entity", function (entity) {
         if (form && form.fieldInterfaces) {
-            MashupPlatform.wiring.pushEvent('attribute', form.fieldInterfaces.attribute.inputElement.getValue());
-            MashupPlatform.wiring.pushEvent('entity', entity);
+            if(JSON.parse(entity).type == selectedType) {
+                MashupPlatform.wiring.pushEvent('entity', entity);
+            }
         }
     });
-
 })();

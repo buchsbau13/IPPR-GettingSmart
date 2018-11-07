@@ -31,24 +31,39 @@ spec:
     spec:
       containers:
       - name: yarn
-        image: bxjulia/yarn-3.1.0:latest
-        env:
-        - name: HADOOP_HOST_NAMENODE
-          value: namenode
+        image: bxjulia/hadoop-yarn:3.1.1
         ports:
         - containerPort: 8088
           name: yarn-rm
         - containerPort: 19888
           name: yarn-hs
+        - containerPort: 4040
+          name: spark-ui
         volumeMounts:
-        - name: yarn-pv-1
+        - name: nfs-yarn-pv-1
           mountPath: /hdfs/volume1/yarn
+        - name: yarn-config
+          mountPath: /opt/hadoop/etc/hadoop/core-site.xml
+          subPath: core-site.xml
+        - name: yarn-config
+          mountPath: /opt/hadoop/etc/hadoop/hdfs-site.xml
+          subPath: hdfs-site.xml
+        - name: yarn-config
+          mountPath: /opt/hadoop/etc/hadoop/mapred-site.xml
+          subPath: mapred-site.xml
+        - name: yarn-config
+          mountPath: /opt/hadoop/etc/hadoop/yarn-site.xml
+          subPath: yarn-site.xml
+      volumes:
+      - name: yarn-config
+        configMap:
+          name: yarn-config
   volumeClaimTemplates:
   - metadata:
-      name: yarn-pv-1
+      name: nfs-yarn-pv-1
     spec:
-      accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "yarn"
+      accessModes: [ "ReadWriteMany" ]
+      storageClassName: "nfs-yarn"
       resources:
         requests:
           storage: 10Gi
