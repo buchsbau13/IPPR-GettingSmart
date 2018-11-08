@@ -14,7 +14,7 @@ config.https = {
 };
 
 // Config email list type to use domain filtering
-config.email_list_type = null   // whitelist or blacklist 
+config.email_list_type = null   // whitelist or blacklist
 
 // Secret for user sessions in web
 config.session = {
@@ -41,24 +41,24 @@ config.api = {
 
 // Configure Policy Decision Point (PDP)
 //  - IdM can perform basic policy checks (HTTP verb + path)
-//  - AuthZForce can perform basic policy checks as well as advanced 
+//  - AuthZForce can perform basic policy checks as well as advanced
 // If authorization level is advanced you can create rules, HTTP verb+resource and XACML advanced. In addition
 // you need to have an instance of authzforce deployed to perform advanced authorization request from a Pep Proxy.
 // If authorization level is basic, only HTTP verb+resource rules can be created
 config.authorization = {
-    level: (process.env.IDM_PDP_LEVEL || 'advanced'),     // basic|advanced 
+    level: (process.env.IDM_PDP_LEVEL || 'advanced'),     // basic|advanced
     authzforce: {
-        enabled: (process.env.IDM_AUTHZFORCE_ENABLED || true),
+        enabled: (process.env.IDM_AUTHZFORCE_ENABLED || false),
         host: (process.env.IDM_AUTHZFORCE_HOST || 'authzforce'),
         port: (process.env.IDM_AUTHZFORCE_PORT||  8080),
-    } 
+    }
 }
 
 var database_host = (process.env.DATABASE_HOST) ? process.env.DATABASE_HOST : 'localhost'
 
 // Database info
 config.database  = {
-    host:     (process.env.DATABASE_HOST || 'localhost'),      
+    host:     (process.env.DATABASE_HOST || 'localhost'),
     password: (process.env.IDM_DB_PASS || 'idm'),
     username: (process.env.IDM_DB_USER || 'root'),
     database: (process.env.IDM_DB_NAME || 'idm'),
@@ -86,7 +86,7 @@ config.mail = {
     port: (process.env.IDM_EMAIL_PORT || 587),
     auth: {
       user: 'fiwaregraz@gmail.com',
-      pass: 'IPPR_aim16'      
+      pass: 'IPPR_aim16'
     },
     from: (process.env.IDM_EMAIL_ADDRESS || 'FIWARE Graz')
 }
@@ -108,7 +108,7 @@ config.eidas = {
 
 if (config.session.secret === 'nodejs_idm' || config.password_encryption.key  === 'nodejs_idm'){
     console.log( "****************");
-    console.log( "WARNING: The current encryption keys match the defaults found in the plaintext " + 
+    console.log( "WARNING: The current encryption keys match the defaults found in the plaintext " +
         "template file - please update for a production instance");
     console.log( "****************");
 }

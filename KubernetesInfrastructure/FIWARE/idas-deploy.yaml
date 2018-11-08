@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: idas
-        image: fiware/iotagent-ul:1.6.0
+        image: fiware/iotagent-ul:1.7.0
         ports:
         - containerPort: 7896
         - containerPort: 4041

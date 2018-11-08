@@ -12,8 +12,8 @@ config.https = {
 };
 
 config.idm = {
-	host: 'keyrock',
-	port: 31533,
+	host: process.env.IDM_HOST,
+	port: 5000,
 	ssl: false
 }
 
@@ -26,9 +26,9 @@ config.app = {
 
 // Credentials obtained when registering PEP Proxy in app_id in Account Portal
 config.pep = {
-	app_id: '777b7fee-6af9-44c0-b184-6c264fd9cbe9',
-	username: 'pep_proxy_c13579a1-264a-4b13-a1e3-b370c961ef87',
-	password: 'pep_proxy_50e7cded-b043-4831-84c9-895803d79db8',
+	app_id: '23c1fab4-2f69-470d-8778-4614522d29d3',
+	username: 'pep_proxy_c33f29bc-7fd1-47fc-914a-7eb2aacd43c6',
+	password: 'pep_proxy_2bb49378-6ba3-48f4-b34a-42cf373a68e6',
 	trusted_apps : []
 }
 
@@ -37,21 +37,21 @@ config.cache_time = 300;
 
 // if enabled PEP checks permissions in two ways:
 //  - With IdM: only allow basic authorization
-//  - With Authzforce: allow basic and advanced authorization. 
-//	  For advanced authorization, you can use custom policy checks by including programatic scripts 
-//    in policies folder. An script template is included there 
-// 
+//  - With Authzforce: allow basic and advanced authorization.
+//	  For advanced authorization, you can use custom policy checks by including programatic scripts
+//    in policies folder. An script template is included there
+//
 //	This is only compatible with oauth2 tokens engine
 
 config.authorization = {
 	enabled: true,
-	pdp: 'authzforce', 	// idm|authzforce  
+	pdp: 'idm', 	// idm|authzforce
 	azf: {
 		protocol: 'http',
-	    host: 'authzforce',
-	    port: 8080,
+	    host: process.env.IDM_HOST,
+	    port: 5000,
 	    custom_policy: undefined // use undefined to default policy checks (HTTP verb + path).
-	} 
+	}
 }
 
 // list of paths that will not check authentication/authorization
