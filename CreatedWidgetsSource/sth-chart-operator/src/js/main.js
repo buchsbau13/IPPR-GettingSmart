@@ -72,9 +72,9 @@
             }
 
             if ((!aggregationPeriod && !aggregationMethod) || (!aggregationPeriod && aggregationMethod)) {
-                parameters.hlimit = hlimit;
+                parameters.hLimit = hlimit;
             }
-            if (aggregationPeriod) {
+            if (aggregationPeriod && aggregationMethod) {
                 parameters.aggrMethod = aggregationMethod;
                 parameters.aggrPeriod = aggregationPeriod;
                 delete parameters.hOffset;
@@ -82,9 +82,8 @@
                 parameters.aggrMethod = aggregationMethod;
                 delete parameters.hOffset;
             }
-
             return parameters;
-        }
+        };
 
         mp.http.makeRequest(url, {
             method: "GET",

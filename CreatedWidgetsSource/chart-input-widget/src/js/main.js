@@ -80,7 +80,7 @@
             "maxvalues": {
                 label: 'Max Data Points',
                 type: 'number',
-                min: "1",
+                min: "0",
                 max: "10000",
                 initialValue: "3000",
                 required: true
@@ -239,7 +239,7 @@
             form.fieldInterfaces.maxvalues.inputElement.value = 3000;
         } else if (aggPeriod) {
             // disable number input
-            form.fieldInterfaces.maxvalues.inputElement.value = "";
+            form.fieldInterfaces.maxvalues.inputElement.value = 0;
             form.fieldInterfaces.maxvalues.inputElement.disable();
         }
         removeMessageBar();
@@ -257,6 +257,19 @@
             form.fieldInterfaces.aggregationPeriod.inputElement.enable();
         }
         removeMessageBar();
+    };
+
+    var afterUpdateForm = function afterUpdateForm() {
+        if (!form.fieldInterfaces.aggregationMethod.inputElement.getValue()) {
+            form.fieldInterfaces.aggregationPeriod.inputElement.disable();
+        } else {
+            form.fieldInterfaces.aggregationPeriod.inputElement.enable();
+        }
+        if (!form.fieldInterfaces.aggregationPeriod.inputElement.getValue()) {
+            form.fieldInterfaces.maxvalues.inputElement.enable();
+        } else {
+            form.fieldInterfaces.maxvalues.inputElement.disable();
+        }
     };
 
     var doQuery = function doQuery() {
@@ -353,6 +366,7 @@
         MashupPlatform.widget.log(output, MashupPlatform.log.INFO);
 
         form.enable();
+        afterUpdateForm();
     };
 
     MashupPlatform.prefs.registerCallback(function (new_values) {
