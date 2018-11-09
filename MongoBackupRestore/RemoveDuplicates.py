@@ -21,7 +21,7 @@ import sys
 import json
 from pymongo import MongoClient
 
-CONFIG_FILE='./settings.ini'
+CONFIG_FILE='./rem-dup-config.ini'
 
 NUM_ARG=len(sys.argv)
 COMMAND=sys.argv[0]
@@ -38,7 +38,7 @@ def delDocs(db, collection, dupObjs, flag):
 
 if NUM_ARG!=1 and FLAG!='--dryRun':
     print 'Usage: '+COMMAND+' [--dryRun]'
-    print '  Configure the preferences in the file "settings.ini".'
+    print '  Configure the preferences in the file "rem-dup-config.ini".'
     print '  To show potential duplicates without deleting them, use the --dryRun flag.'
     print '  List of available settings:'
     print '        host = Host of the MongoDB instance'
