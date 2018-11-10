@@ -24,14 +24,46 @@ import json
 import datetime
 from pymongo import MongoClient
 
-CONFIG_FILE='./mh-transfer-config.ini'
+CONFIG_FILE='./config.ini'
 
 NUM_ARG=len(sys.argv)
 COMMAND=sys.argv[0]
 
+def remDups(db, collection):
+    print '-- Looking for potential duplicate entries...'
+    dupObjs=[]
+    pipeline=[
+        { "$group": { 
+            "_id": {"attrName": "$attrName", "recvTime": "$recvTime"},
+            "dups": { "$addToSet": "$_id" }, 
+            "count": { "$sum": 1 } 
+        }}, 
+        { "$match": { 
+            "count": { "$gt": 1 }
+        }}
+    ]
+    aggr=list(db[collection].aggregate(pipeline, allowDiskUse=True))
+
+    for doc in aggr:
+        for cnt in range(0, len(doc['dups'])-1):
+            dupObjs.append(doc['dups'][cnt])
+
+        # Remove documents once 10000 duplicates were found (otherwise the list gets too large)
+        if len(dupObjs)>10000:
+            db[collection].delete_many({'_id':{'$in':dupObjs}})
+            dupObjs=[]
+
+    if len(dupObjs)>0:
+        db[collection].delete_many({'_id':{'$in':dupObjs}})
+
+    if len(aggr)==0:
+        print '-- No duplicates found!'
+    else:
+        print '-- Duplicates of '+str(len(aggr))+' document(s) removed!'
+
 if NUM_ARG!=1:
     print 'Usage: '+COMMAND
-    print '  Configure the preferences in the file "mh-transfer-config.ini".'
+    print '  Configure the preferences in the file "config.ini".'
     print '  List of available settings:'
     print '        host = Host of the MongoDB instance'
     print '        port = Port of the MongoDB instance'
@@ -82,6 +114,9 @@ if not os.path.exists(dir):
 for collection in colList:
     if EXCLUDE=='' or EXCLUDE not in collection:
         print 'Processing collection "'+collection+'" of database "'+DATABASE+'"...'
+        
+        # Remove duplicates, if any
+        remDups(db, collection)
         
         # Extract entity ID and type from collection name
         matchObj=re.match('.*xffff(.*)xffff(.*)', collection)
