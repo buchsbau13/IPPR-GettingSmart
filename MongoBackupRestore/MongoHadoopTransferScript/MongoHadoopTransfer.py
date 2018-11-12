@@ -17,11 +17,11 @@
 
 import ConfigParser
 import io
-import os
 import re
 import sys
 import json
 import datetime
+import requests
 from pymongo import MongoClient
 
 CONFIG_FILE='./config.ini'
@@ -61,17 +61,90 @@ def remDups(db, collection):
     else:
         print '-- Duplicates of '+str(len(aggr))+' document(s) removed!'
 
+def getFileStatus(host, port, path):
+    # Check if file exists
+    URL='http://'+host+':'+port+path+'&op=GETFILESTATUS'
+    r=requests.get(URL)
+    return r.status_code
+
+def createFile(host, port, path):
+    # Get redirect URL for CREATE operation
+    URL='http://'+host+':'+port+path+'&op=CREATE'
+    r=requests.put(URL, allow_redirects=False)
+    if r.status_code!=307:
+        print '>> Error! (CREATE redirect request)'
+
+    locationData=re.match('.*?:\/\/(.*?)(\/.*)', r.headers['location'])
+    node=locationData.group(1)
+    newPath=locationData.group(2)
+    newPort=''
+
+    if NAMENODE[0] in node:
+        newPort=NAMENODE[1]
+    elif DATANODE_1[0] in node:
+        newPort=DATANODE_1[1]
+    elif DATANODE_2[0] in node:
+        newPort=DATANODE_2[1]
+    elif DATANODE_3[0] in node:
+        newPort=DATANODE_3[1]
+
+    # Create file
+    URL='http://'+host+':'+newPort+newPath
+    r=requests.put(URL)
+    if r.status_code==201:
+        print ">> Hadoop file created"
+    else:
+        print '>> Error! (CREATE request)'
+
+def appendData(host, port, path, content):
+    # Get redirect URL for APPEND operation
+    URL='http://'+host+':'+port+path+'&op=APPEND'
+    r=requests.post(URL, allow_redirects=False)
+    if r.status_code!=307:
+        print '>> Error! (APPEND redirect request)'
+
+    locationData=re.match('.*?:\/\/(.*?)(\/.*)', r.headers['location'])
+    node=locationData.group(1)
+    newPath=locationData.group(2)
+    newPort=''
+
+    if NAMENODE[0] in node:
+        newPort=NAMENODE[1]
+    elif DATANODE_1[0] in node:
+        newPort=DATANODE_1[1]
+    elif DATANODE_2[0] in node:
+        newPort=DATANODE_2[1]
+    elif DATANODE_3[0] in node:
+        newPort=DATANODE_3[1]
+
+    # Send data to append
+    URL='http://'+host+':'+newPort+newPath
+    r=requests.post(URL, data=content)
+    if r.status_code==200:
+        print ">> Collection data appended to Hadoop file"
+    else:
+        print '>> Error! (APPEND request)'
+
 if NUM_ARG!=1:
     print 'Usage: '+COMMAND
     print '  Configure the preferences in the file "config.ini".'
     print '  List of available settings:'
+    print '     [mongo] section:'
     print '        host = Host of the MongoDB instance'
     print '        port = Port of the MongoDB instance'
     print '        database = Name of the MongoDB database'
+    print '        service = FIWARE service/tenant name'
     print '        servicePath = FIWARE service path'
     print '        startDateUTC = Only retrieve datasets newer than this date (ignored if term is empty)'
     print '        endDateUTC = Only retrieve datasets older than this date (is set to current date if term is empty)'
     print '        excludeCol = Collections with this term in their name will be excluded (ignored if term is empty)'
+    print '     [hadoop] section:'
+    print '        host = Host of the Hadoop instance'
+    print '        namenode = Hostname and port of the Hadoop namenode (separated by comma)'
+    print '        datanode1 = Hostname and port of the first Hadoop datanode (separated by comma)'
+    print '        datanode2 = Hostname and port of the second Hadoop datanode (separated by comma)'
+    print '        datanode3 = Hostname and port of the third Hadoop datanode (separated by comma)'
+    print '        user = User for the Hadoop instance'
 
     print
     sys.exit(2)
@@ -82,16 +155,24 @@ with open(CONFIG_FILE,'r+') as f:
 config=ConfigParser.RawConfigParser(allow_no_value=True)
 config.readfp(io.BytesIO(sample_config))
 
-HOST=config.get('mongo', 'host')
-PORT=config.get('mongo', 'port')
+MONGO_HOST=config.get('mongo', 'host')
+MONGO_PORT=config.get('mongo', 'port')
 DATABASE=config.get('mongo', 'database')
+SRV=config.get('mongo', 'service')
 SRV_PATH=config.get('mongo', 'servicePath')
 START=config.get('mongo', 'startDateUTC')
 END=config.get('mongo', 'endDateUTC')
 EXCLUDE=config.get('mongo', 'excludeCol')
 
+HADOOP_HOST=config.get('hadoop', 'host')
+NAMENODE=[str.strip() for str in config.get('hadoop', 'namenode').split(',')]
+DATANODE_1=[str.strip() for str in config.get('hadoop', 'datanode1').split(',')]
+DATANODE_2=[str.strip() for str in config.get('hadoop', 'datanode2').split(',')]
+DATANODE_3=[str.strip() for str in config.get('hadoop', 'datanode3').split(',')]
+HADOOP_USER=config.get('hadoop', 'user')
+
 # Connect to MongoDB
-mongo=MongoClient(HOST,int(PORT))
+mongo=MongoClient(MONGO_HOST,int(MONGO_PORT))
 db=mongo[DATABASE]
 
 # Get collection names of database
@@ -106,11 +187,7 @@ if END!='':
 if START!='':
     dateFilter['$gt']=datetime.datetime.strptime(START, '%Y-%m-%dT%H:%M:%S')
 
-# Get database entries for every collection (filtered by date filter) and write to file
-dir='./HadoopFiles'
-if not os.path.exists(dir):
-    os.makedirs(dir)
-
+# Get database entries for every collection (filtered by date filter) and append to Hadoop file
 for collection in colList:
     if EXCLUDE=='' or EXCLUDE not in collection:
         print 'Processing collection "'+collection+'" of database "'+DATABASE+'"...'
@@ -119,11 +196,12 @@ for collection in colList:
         remDups(db, collection)
         
         # Extract entity ID and type from collection name
-        matchObj=re.match('.*xffff(.*)xffff(.*)', collection)
+        matchObj=re.match('^.*?xffff(.*?)xffff(.*?)(\..*)?$', collection)
         entID=matchObj.group(1)
         entType=matchObj.group(2)
+        filename=entID+'_'+entType
 
-        hadoopFile=open(dir+'/'+entID+'-'+entType+'-hadoop.json', 'w')
+        colString=''
         pipeline=[
             { "$group": {
                 "_id": { "recvTime": "$recvTime" },
@@ -134,16 +212,27 @@ for collection in colList:
             }}
         ]
         aggr=list(db[collection].aggregate(pipeline, allowDiskUse=True))
+        
+        path='/webhdfs/v1/user/'+HADOOP_USER+'/'+SRV+'/'+filename+'/'+filename+'.txt?user.name='+HADOOP_USER
+        
+        # Create hadoop file if necessary
+        if getFileStatus(HADOOP_HOST, NAMENODE[1], path)!=200:
+            createFile(HADOOP_HOST, NAMENODE[1], path)
 
+        # Convert database entries to Hadoop column-oriented format and append output to Hadoop file
         for doc in aggr:
             timestamp=doc['_id']['recvTime'].strftime('%Y-%m-%dT%H:%M:%S')+doc['_id']['recvTime'].strftime('.%f')[:4]+'Z'
             timestampDict={'recvTime': timestamp, 'fiwareServicePath': SRV_PATH, 'entityId': entID, 'entityType': entType}
             for entry in doc['entries']:
                 timestampDict.update({entry['attrName']: entry['attrValue'], entry['attrName']+'_md': [{'name': 'TimeInstant',
                     'type': 'ISO8601', 'value': timestamp}]})
-            hadoopFile.write(json.dumps(timestampDict)+'\n')
-        hadoopFile.close()
-        
+            colString+=json.dumps(timestampDict)+'\n'
+            if len(colString)>1000000:
+                appendData(HADOOP_HOST, NAMENODE[1], path, colString)
+                colString=''
+        if len(colString)>0:
+            appendData(HADOOP_HOST, NAMENODE[1], path, colString)
+
         print 'Collection "'+collection+'" of database "'+DATABASE+'" parsed successfully!'
         print
 

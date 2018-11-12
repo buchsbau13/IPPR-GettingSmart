@@ -27,5 +27,5 @@ python .\MongoRow2HadoopColParser.py Bus_1 mobile / .\bus_1.json
 
 python .\MongoHadoopTransfer.py
 (The script fetches all collections of the configured MongoDB database and converts them to
- the Hadoop column-oriented format. The resulting files will be created as
- '<ENTITY_ID>-<ENTITY_TYPE>-hadoop.json' in the folder 'HadoopFiles')
+ the Hadoop column-oriented format. The resulting output will be appended to the corresponding
+ files on the configured Hadoop server)
