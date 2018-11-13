@@ -1,3 +1,3 @@
-Write output from top into file:
+Write output from 'kubectl describe nodes' into file:
 
-top -b > cpu-ram.log &
+./createPerfLog.sh 10.1.101.180 > node180_cpu-ram.log &
