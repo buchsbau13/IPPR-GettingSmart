@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 
 # Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
-# 
+#
 # This file is part of FIGWAY software (a set of tools for FIWARE Orion ContextBroker and IDAS2.6).
 #
-# FIGWAY is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as 
+# FIGWAY is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as
 # published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-# FIGWAY is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of 
+# FIGWAY is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 #
-# You should have received a copy of the GNU Affero General Public License along with FIGWARE. 
+# You should have received a copy of the GNU Affero General Public License along with FIGWARE.
 # If not, see http://www.gnu.org/licenses/
 #
-# For those usages not covered by the GNU Affero General Public License please contact with: Carlos Ralli Ucendo [ralli@tid.es] 
+# For those usages not covered by the GNU Affero General Public License please contact with: Carlos Ralli Ucendo [ralli@tid.es]
 # Developed by Carlos Ralli Ucendo (@carlosralli), Apr 2015.
 
 
@@ -26,7 +26,7 @@ import base64
 CONFIG_FILE = "./config_secure.ini"
 
 NUM_ARG=len(sys.argv)
-COMMAND=sys.argv[0] 
+COMMAND=sys.argv[0]
 
 def sendValues(payload):
    URL = IDAS_PROTO+'://'+IDAS_HOST+':'+IDAS_UL20_PORT+'/iot/d/'+API_KEY+'/'+SENSOR_ID
@@ -125,6 +125,6 @@ try:
             print
             sendValues(dataset)
 
-         time.sleep(5)
+         time.sleep(2)
 except KeyboardInterrupt:
    pass
