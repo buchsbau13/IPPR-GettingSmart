@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keyrock-config
+  namespace: {{.Values.fiware.namespace}}
+data:
+  {{- (.Files.Glob "files/keyrock/*").AsConfig | nindent 2 }}

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wirecloud-static-pvc
+  namespace: {{.Values.fiware.namespace}}
+spec:
+  storageClassName: wirecloud-static
+  accessModes:
+  - {{.Values.wirecloud.wirecloud_static_pvc.accessModes}}
+  resources:
+     requests:
+       storage: {{.Values.wirecloud.wirecloud_static_pvc.storage}}

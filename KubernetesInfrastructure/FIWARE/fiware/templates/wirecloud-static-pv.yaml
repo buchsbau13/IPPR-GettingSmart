@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: wirecloud-static-pv
+spec:
+  capacity:
+    storage: {{.Values.wirecloud.wirecloud_static_pv.storage}}
+  accessModes:
+  - {{.Values.wirecloud.wirecloud_static_pv.accessModes}}
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: wirecloud-static
+  local:
+    path: /opt/fiware/wirecloud
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+            - {{.Values.wirecloud.wirecloud_static_pv.host}}

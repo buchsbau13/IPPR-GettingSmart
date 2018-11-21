@@ -1,0 +1,36 @@
+# MongoDB as StatefulSet
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+  namespace: {{.Values.fiware.namespace}}
+spec:
+  selector:
+    matchLabels:
+      app: mongo # has to match .spec.template.metadata.labels
+  serviceName: "mongo"
+  replicas: 1 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: mongo # has to match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:{{.Values.mongo.version}}
+        args:
+        - --smallfiles
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongo-pv-1
+          mountPath: /data
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-pv-1
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "mongo"
+      resources:
+        requests:
+          storage: {{.Values.mongo.storage}}

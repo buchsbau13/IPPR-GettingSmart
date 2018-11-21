@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: idas
+  namespace: {{.Values.fiware.namespace}}
+spec:
+  selector:
+    matchLabels:
+      run: idas
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: idas
+    spec:
+      containers:
+      - name: idas
+        image: {{.Values.idas.image}}
+        ports:
+        - containerPort: 7896
+        - containerPort: 4041

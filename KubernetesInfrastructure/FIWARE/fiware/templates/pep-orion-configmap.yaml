@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pep-orion-config
+  namespace: {{.Values.fiware.namespace}}
+data:
+  {{- (.Files.Glob "files/pep-orion/*").AsConfig | nindent 2 }}

@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wirecloud
+  namespace: {{.Values.fiware.namespace}}
+spec:
+  selector:
+    matchLabels:
+      run: wirecloud
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: wirecloud
+    spec:
+      containers:
+      - name: wirecloud
+        image: {{.Values.wirecloud.image}}
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DEBUG
+          value: "false"
+        - name: DB_HOST
+          value: "postgres"
+        - name: DB_PASSWORD
+          value: "wirepass"
+        - name: FORWARDED_ALLOW_IPS
+          value: "*"
+        - name: MEMCACHED_LOCATION
+          value: "memcached:11211"
+        - name: FIWARE_IDM_SERVER
+          value: {{quote .Values.wirecloud.env.fiware_idm_server}}
+        - name: SOCIAL_AUTH_FIWARE_KEY
+          value: {{quote .Values.wirecloud.env.social_auth_fiware_key}}
+        - name: SOCIAL_AUTH_FIWARE_SECRET
+          value: {{quote .Values.wirecloud.env.social_auth_fiware_secret}}
+        - name: FORCE_PORT
+          value: {{quote .Values.wirecloud.nodePort}}
+        volumeMounts:
+         - mountPath: /opt/wirecloud_instance/data
+           name: wirecloud-data
+         - mountPath: /var/www/static
+           name: wirecloud-static
+         - mountPath: /opt/wirecloud_instance/wirecloud_instance/settings.py
+           name: wirecloud-config
+           subPath: settings.py
+      - name: nginx-wirecloud
+        image: nginx
+        ports:
+        - containerPort: {{.Values.wirecloud.nodePort}}
+        volumeMounts:
+           - mountPath: /var/www/static
+             name: wirecloud-static
+           - mountPath: /etc/nginx/nginx.conf
+             name: nginx-wirecloud-config
+             subPath: nginx.conf
+             readOnly: true
+      securityContext:
+        fsGroup: 65534
+      volumes:
+      - name: wirecloud-data
+        persistentVolumeClaim:
+          claimName: wirecloud-data-pvc
+      - name: wirecloud-static
+        persistentVolumeClaim:
+          claimName: wirecloud-static-pvc
+      - name: nginx-wirecloud-config
+        configMap:
+          name: nginx-wirecloud-config
+      - name: wirecloud-config
+        configMap:
+          name: wirecloud-config

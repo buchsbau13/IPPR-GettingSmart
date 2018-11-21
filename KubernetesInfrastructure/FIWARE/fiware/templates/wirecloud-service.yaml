@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wirecloud
+  namespace: {{.Values.fiware.namespace}}
+  labels:
+    run: wirecloud
+spec:
+  ports:
+  - port: {{.Values.wirecloud.nodePort}}
+    nodePort: {{.Values.wirecloud.nodePort}}
+    name: wirecloud
+  selector:
+     run: wirecloud
+  type: LoadBalancer

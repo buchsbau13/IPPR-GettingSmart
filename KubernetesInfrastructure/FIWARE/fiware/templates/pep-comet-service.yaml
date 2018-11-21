@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pep-comet
+  namespace: {{.Values.fiware.namespace}}
+  labels:
+    run: pep-comet
+spec:
+  ports:
+  - port: 8666
+    nodePort: {{.Values.pep.comet.nodePort}}
+    name: fiware-pep-comet
+  selector:
+     run: pep-comet
+  type: LoadBalancer
