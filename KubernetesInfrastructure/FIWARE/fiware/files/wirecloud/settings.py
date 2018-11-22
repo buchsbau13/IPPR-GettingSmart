@@ -185,7 +185,9 @@ USE_X_FORWARDED_PORT = True
 if os.environ.get("FORCE_PORT", "").strip() != "":
     FORCE_PORT = os.environ.get("FORCE_PORT", "").strip()
 else:
-    FORCE_PORT = 80    
+    FORCE_PORT = 80
+
+print('FORCE_PORT =', FORCE_PORT)
 
 FIWARE_PORTALS = (
     {

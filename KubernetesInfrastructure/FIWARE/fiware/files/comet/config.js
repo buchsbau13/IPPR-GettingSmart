@@ -64,7 +64,7 @@ config.database = {
     password: '',
     // The URI to use for the database connection. It supports replica set URIs. This does not
     // include the "mongo://" protocol part. Default value: "localhost:27017"
-    URI: 'mongo.fiware-graziot:27017',
+    URI: 'mongo:27017',
     // The name of the replica set to connect to, if any. Default value: "".
     replicaSet: '',
     // The prefix to be added to the service for the creation of the databases. Default value: "sth".
