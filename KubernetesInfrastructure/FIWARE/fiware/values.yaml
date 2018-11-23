@@ -5,7 +5,7 @@ fiware:
   namespace: fiware-graziot
 
 mongo:
-  version: 3.4
+  version: 3.6
   mongo_local_pv:
     host: minikube
     storage: 3Gi
