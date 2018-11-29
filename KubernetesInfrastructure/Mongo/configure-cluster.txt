@@ -24,12 +24,3 @@ kubectl exec -it mongo-router-0 -n mongo bash
 $ mongo
 > db.getSiblingDB('admin').auth("dbadmin", "admin");
 > sh.status();
-
-# Enable Sharding
-> sh.enableSharding("<database>") (e.g. sh.enableSharding("sth_graziot"))
-
-# if collection already contains data, you must create an index on the shard key
-> db.<collection>.createIndex({"key": "value"}) (e.g. db.sth_x002fxffffSensor1xffffstatic.createIndex({"_id": 1}))
-
-# shard collection using ranged sharding strategy
-> sh.shardCollection("<database>.<collection>", { <shard key> : <direction> } ) (e.g. sh.shardCollection("sth_graziot.sth_x002fxffffSensor1xffffstatic", { "_id" : 1 }))
