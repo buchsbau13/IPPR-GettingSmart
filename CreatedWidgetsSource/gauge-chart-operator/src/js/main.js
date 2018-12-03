@@ -24,7 +24,7 @@
 
         rounded = Math.round(parseFloat(entity[attribute]) * 10) / 10;
         label = ['Label', 'Value'];
-        value = [attribute, rounded];
+        value = [entity[unit], rounded];
 
         chartData.push(label);
         chartData.push(value);
@@ -32,7 +32,7 @@
         chart.type = "Gauge";
         chart.options = chartOptions;
         chart.data = chartData;
-        chart.unit = entity[unit];
+        // chart.unit = entity[unit];
 
         MashupPlatform.wiring.pushEvent("gauge", JSON.stringify(chart));
     });
