@@ -23,14 +23,14 @@ import sys
 import random
 import codecs
 
-CONFIG_FILE='./settings.ini'
+CONFIG_FILE='./config.ini'
 
 NUM_ARG=len(sys.argv)
 COMMAND=sys.argv[0] 
 
 if NUM_ARG!=1:
    print 'Usage: '+COMMAND
-   print '  Configure the preferences in the file "settings.ini".'
+   print '  Configure the preferences in the file "config.ini".'
    print '  List of available settings:'
    print '        url = Destination URL for subscription notifications'
    print '        prefix = Prefix for sensor ID and name (e.g. Test_Sensor_)'

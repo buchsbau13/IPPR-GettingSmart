@@ -18,9 +18,10 @@
 import ConfigParser
 import io
 import sys
+import json
 from pymongo import MongoClient
 
-CONFIG_FILE='./settings.ini'
+CONFIG_FILE='./config.ini'
 
 NUM_ARG=len(sys.argv)
 COMMAND=sys.argv[0]
@@ -37,13 +38,13 @@ def delDocs(db, collection, dupObjs, flag):
 
 if NUM_ARG!=1 and FLAG!='--dryRun':
     print 'Usage: '+COMMAND+' [--dryRun]'
-    print '  Configure the preferences in the file "settings.ini".'
+    print '  Configure the preferences in the file "config.ini".'
     print '  To show potential duplicates without deleting them, use the --dryRun flag.'
     print '  List of available settings:'
     print '        host = Host of the MongoDB instance'
     print '        port = Port of the MongoDB instance'
     print '        database = Name of the database that should be checked for duplicates'
-    print '        objKeys = Comma separated list of object keys that should be used for finding duplicates'
+    print '        objKeysJSON = JSON string with object keys that should be used for finding duplicates'
     print '        excludeCol = Collections with this term in their name will be excluded (ignored if term is empty)'
     print '        includeCol = Only collections with this term in their name will be processed (ignored if term is empty)'
     print
@@ -62,17 +63,12 @@ config.readfp(io.BytesIO(sample_config))
 HOST=config.get('mongo', 'host')
 PORT=config.get('mongo', 'port')
 DATABASE=config.get('mongo', 'database')
-KEYS=config.get('mongo', 'objKeys')
+KEYS=config.get('mongo', 'objKeysJSON')
 EXCLUDE=config.get('mongo', 'excludeCol')
 INCLUDE=config.get('mongo', 'includeCol')
 
 # Generate $group object
-keyList=[key.strip() for key in KEYS.split(',') if key!='']
-group={keyList[0]: '$'+keyList[0]}
-
-if len(keyList)>1:
-    for cnt in range(1, len(keyList)):
-        group[keyList[cnt]]='$'+keyList[cnt]
+group=json.loads(KEYS)
 
 # Connect to MongoDB
 mongo=MongoClient(HOST,int(PORT))

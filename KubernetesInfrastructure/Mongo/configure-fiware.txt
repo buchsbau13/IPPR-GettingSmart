@@ -1,0 +1,42 @@
+# Create fiware user for databases
+> db.getSiblingDB("sth_graziot").createUser({user:"fiware",pwd:"graziot",roles:[{role:"readWrite",db:"sth_graziot"}]});
+> db.getSiblingDB("orion-graziot").createUser({user:"fiware",pwd:"graziot",roles:[{role:"readWrite",db:"orion-graziot"}]});
+> db.getSiblingDB("iotagentul").createUser({user:"",pwd:"",roles:[{role:"readWrite",db:"iotagentul"}]});
+
+# Cygnus mongo sink config
+cygnus-ngsi.sinks.mongo-sink.mongo_hosts = mongo-router-svc.mongo.svc.cluster.local:27017
+cygnus-ngsi.sinks.mongo-sink.mongo_username = fiware
+cygnus-ngsi.sinks.mongo-sink.mongo_password = graziot
+
+# Comet Default Service Configuration
+// The service to be used if not sent by the Orion Context Broker in the notifications.
+// Default value: "testservice".
+defaultService: 'graziot',
+
+# Comet Database Configuration
+// The username to use for the database connection. Default value: "".
+user: 'fiware',
+// The password to use for the database connection. Default value: "".
+password: 'graziot',
+// The URI to use for the database connection. It supports replica set URIs. This does not
+// include the "mongo://" protocol part. Default value: "localhost:27017"
+URI: 'mongo-router-svc.mongo.svc.cluster.local:27017',
+
+# Orion configuration
+-dbhost mongo-router-svc.mongo.svc.cluster.local:27017
+-dbuser fiware
+-dbpwd graziot
+
+# IoT Agent configuration (environment variables) --> Authentication?
+"IOTA_MONGO_HOST=mongo-db"
+"IOTA_MONGO_PORT=27017"
+"IOTA_MONGO_DB=iotagentul"
+
+# Enable Sharding
+> sh.enableSharding("<database>") (e.g. sh.enableSharding("sth_graziot"))
+
+# if collection already contains data, you must create an index on the shard key
+> db.<collection>.createIndex({"key": "value"}) (e.g. db.sth_x002fxffffSensor1xffffstatic.createIndex({"_id": 1}))
+
+# shard collection using ranged sharding strategy
+> sh.shardCollection("<database>.<collection>", { <shard key> : <direction> } ) (e.g. sh.shardCollection("sth_graziot.sth_x002fxffffSensor1xffffstatic", { "_id" : 1 }))

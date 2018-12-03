@@ -17,7 +17,6 @@
 # New Features added/developped by Easy Global Market, Nov 2015 abbas.ahmad@eglobalmark.com 
 
 import json
-import io
 import sys
 import arrow
 
@@ -48,7 +47,11 @@ hadoopFile=open(ENT_ID+'-'+ENT_TYPE+'-hadoop.json', 'w')
 print 'Parsing MongoDB data...'
 
 for line in mongoFile:
-    jsonLine=json.loads(line)
+    try:
+        jsonLine=json.loads(line)
+    except ValueError:
+        continue
+
     jsonLine.pop('_id', None)
     jsonLine['recvTime']=jsonLine['recvTime']['$date']
     jsonLine['recvTimeTs']=str(arrow.get(jsonLine['recvTime']).timestamp)
@@ -61,5 +64,3 @@ for line in mongoFile:
 print 'Parsing completed!'
 mongoFile.close()
 hadoopFile.close()
-    
-

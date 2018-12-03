@@ -20,7 +20,7 @@
 
     "use strict";
 
-    var startDate, endDate, hlimit, aggregation, attribute, unit;
+    var startDate, endDate, hlimit, aggregationMethod, aggregationPeriod, attribute, unit;
     var entity = 'entity';
     var entity_type = 'entity_type';
 
@@ -66,21 +66,24 @@
 
         var declareParams = function declareParams() {
             var parameters = {
-                hLimit: hlimit,
                 hOffset: 0,
                 dateFrom: startDate,
                 dateTo: endDate
             }
 
-            if (!aggregation) {
-                return parameters;
-            } else if (aggregation) {
-                parameters.aggrMethod = aggregation; // aggregation = "avg"
-                delete parameters.hOffset;
-                return parameters;
+            if ((!aggregationPeriod && !aggregationMethod) || (!aggregationPeriod && aggregationMethod)) {
+                parameters.hLimit = hlimit;
             }
-
-        }
+            if (aggregationPeriod && aggregationMethod) {
+                parameters.aggrMethod = aggregationMethod;
+                parameters.aggrPeriod = aggregationPeriod;
+                delete parameters.hOffset;
+            } else if (!aggregationPeriod && aggregationMethod) {
+                parameters.aggrMethod = aggregationMethod;
+                delete parameters.hOffset;
+            }
+            return parameters;
+        };
 
         mp.http.makeRequest(url, {
             method: "GET",
@@ -130,7 +133,8 @@
         startDate = inputData.startDate;
         endDate = inputData.endDate;
         hlimit = inputData.maxValues;
-        aggregation = inputData.aggregation;
+        aggregationMethod = inputData.aggregationMethod;
+        aggregationPeriod = inputData.aggregationPeriod;
         requestData(entityString);
     });
 

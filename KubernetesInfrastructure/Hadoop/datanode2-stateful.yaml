@@ -30,11 +30,6 @@ spec:
       containers:
       - name: datanode2
         image: bxjulia/hadoop-datanode:3.1.1
-        env:
-        - name: HADOOP_HOST_NAMENODE
-          value: namenode
-        - name: HADOOP_HOST_YARN
-          value: yarn
         ports:
         - containerPort: 9864
         volumeMounts:

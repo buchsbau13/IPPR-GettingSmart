@@ -94,9 +94,11 @@ services:
 
     comet:
         restart: on-failure
-        image: fiware/sth-comet:2.3.0
+        image: amarbajric/sth-comet:2.4
         hostname: comet
         container_name: comet
+        environment:
+            - MAX_PAGE_SIZE=10000
         volumes: 
             - ./comet_config/config.js:/opt/sth/config.js:ro
         networks:
