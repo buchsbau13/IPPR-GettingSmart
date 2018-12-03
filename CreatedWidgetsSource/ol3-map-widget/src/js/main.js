@@ -23,6 +23,7 @@
 
     var widget = new Widget('body', '#incoming-modal');
     var min, max;
+    var gradient = [];
     widget.init();
 
     MashupPlatform.wiring.registerCallback('poiInput', (poi_info) => {
@@ -47,13 +48,19 @@
         }
     });
 
+    MashupPlatform.wiring.registerCallback('gradient', (value) => {
+        if (value) {
+            gradient = value;
+        }
+    });
+
     MashupPlatform.wiring.registerCallback('heatmapData', (heatmapData) => {
         if (heatmapData && typeof heatmapData === "string") {
             heatmapData = JSON.parse(heatmapData);
         }
 
-        if (max && min) {
-            widget.addHistoricHeatmap(heatmapData, min, max);
+        if (max && min && gradient) {
+            widget.addHistoricHeatmap(heatmapData, min, max, gradient);
         }
     });
 

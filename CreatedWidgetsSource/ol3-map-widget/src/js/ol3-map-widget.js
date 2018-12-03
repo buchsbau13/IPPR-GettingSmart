@@ -132,27 +132,30 @@
         map.addLayer(layer);
     };
 
-    var createEmptyHeatmap = function createEmptyHeatmap(heatmapName) {
+    var createEmptyHeatmap = function createEmptyHeatmap(heatmapName, gradient) {
         document.getElementById('heatmap-settings').style.display = 'block';
         var blur = document.getElementById('blur');
         var radius = document.getElementById('radius');
 
         blur.addEventListener('input', function () {
-            var heatmap = getLayerByName("heatmap", map);
+            var heatmap = getLayerByName(heatmapName, map);
             heatmap.setBlur(parseInt(blur.value, 10));
         });
 
         radius.addEventListener('input', function () {
-            var heatmap = getLayerByName("heatmap", map);
+            var heatmap = getLayerByName(heatmapName, map);
             heatmap.setRadius(parseInt(radius.value, 10));
         });
 
         var mapSource = new ol.source.Vector();
+
         var heatmapLayer = new ol.layer.Colormap({
             source: mapSource,
             radius: parseInt(radius.value, 10),
-            blur: parseInt(blur.value, 10)
+            blur: parseInt(blur.value, 10),
+            gradient: gradient
         });
+
         heatmapLayer.set('name', heatmapName);
         return heatmapLayer;
     };
@@ -179,12 +182,12 @@
             var layer = getLayerByName(layerName, map);
             if (this.checked) {
                 layer.setVisible(true);
-                if (layerName === 'heatmap') {
+                if (layerName.includes('heatmap')) {
                     document.getElementById('heatmap-settings').style.display = 'block';
                 }
             } else {
                 layer.setVisible(false);
-                if (layerName === 'heatmap') {
+                if (layerName.includes('heatmap')) {
                     document.getElementById('heatmap-settings').style.display = 'none';
                 }
             }
@@ -361,17 +364,31 @@
         iconFeature.setStyle(style);
     };
 
-    Widget.prototype.addHistoricHeatmap = function addHistoricHeatmap(poi_info, min, max) {
-        var heatmapLayer = getLayerByName('heatmap', map);
+    var prevGradient;
+
+    Widget.prototype.addHistoricHeatmap = function addHistoricHeatmap(poi_info, min, max, gradient) {
+        var heatmapName = "heatmap" + poi_info.data.type;
+        var heatmapLayer = getLayerByName(heatmapName, map);
         var id = poi_info.id;
         var poiSetIdentifier = poi_info.poiSetIdentifier;
         var currentValue = poi_info.currentValue;
 
         if (!heatmapLayer) {
-            heatmapLayer = createEmptyHeatmap('heatmap');
-            createCheckbox("heatmap", "Heatmap");
+            heatmapLayer = createEmptyHeatmap(heatmapName, gradient);
             map.getLayers().insertAt(1, heatmapLayer);
-            toggleLayer('heatmap', 'heatmap', map);
+            // Only one checkbox for all heatmap layers
+            if (!document.getElementById('heatmap')) {
+                createCheckbox('heatmap', 'Heatmap');
+            }
+            // Checkbox used to switch on/off all heatmap layers
+            toggleLayer('heatmap', heatmapName, map);
+        }
+        else {
+            // Set gradient only if not the same as for previous point
+            if (prevGradient !== gradient) {
+                heatmapLayer.setGradient(gradient);
+                prevGradient = gradient;
+            }
         }
 
         var oldFeatures = heatmapLayer.getSource().getFeatures();
@@ -396,25 +413,27 @@
             )
         );
         heatmapFeature.set('weight', calculateHeatmapWeight(currentValue, min, max));
-
         heatmapLayer.getSource().addFeature(heatmapFeature);
     };
 
     Widget.prototype.clearHeatmap = function clearHeatmap(id) {
-        var heatmapLayer = getLayerByName('heatmap', map);
-        if (heatmapLayer) {
-            var features = heatmapLayer.getSource().getFeatures();
-            for (var i = 0; i < features.length; i++) {
-                var featureName = features[i].get('name');
-                if (featureName === id.toString()) {
-                    heatmapLayer.getSource().removeFeature(features[i]);
+        map.getLayers().forEach(function (layer) {
+            var layerName = layer.get('name');
+            if(layerName) {
+                if (layerName.includes('heatmap')) {
+                    var features = layer.getSource().getFeatures();
+                    for (var i = 0; i < features.length; i++) {
+                        var featureName = features[i].get('name');
+                        if (featureName === id.toString()) {
+                            layer.getSource().removeFeature(features[i]);
+                        }
+                    }
                 }
             }
-        }
+        });
     };
 
     Widget.prototype.center_popup_menu = function center_popup_menu(feature) {
-
         this.selected_feature = feature;
         this.popover = new StyledElements.Popover({
             placement: ['top', 'bottom', 'right', 'left'],
@@ -463,7 +482,6 @@
     };
 
     Widget.prototype.select_feature = function select_feature(feature) {
-        // this.selected_feature = feature;
         this.center_popup_menu(feature);
     };
 
