@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-cluster-external
+  labels:
+    app: mongo-cluster-external
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+    nodePort: 30017
+  selector:
+    app: mongo-router
+  type: LoadBalancer
+
+

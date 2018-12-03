@@ -36,7 +36,7 @@ spec:
         - containerPort: 27017
         volumeMounts:
         - name: mongo-pv-1
-          mountPath: /database/data
+          mountPath: /data/db
   volumeClaimTemplates:
   - metadata:
       name: mongo-pv-1

@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-shard1-svc
+  labels:
+    app: mongo-shard1
+spec:
+  ports:
+  - protocol: TCP
+    port: 27017
+    targetPort: 27017
+    name: shard1-main
+  clusterIP: None
+  selector:
+    app: mongo-shard1
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo-shard1
+spec:
+  serviceName: mongo-shard1-svc
+  selector:
+    matchLabels:
+      app: mongo-shard1
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: mongo-shard1
+      name: mongo-shard1
+    spec:
+      containers:
+      - name: mongo-shard1
+        image: mongo:3.6.9
+        command:
+        - "mongod"
+        - "--keyFile"
+        - "/etc/secrets/mongodb-keyfile"
+        - "--shardsvr"
+        - "--replSet"
+        - "shard1"
+        - "--port"
+        - "27017"
+        - "--dbpath"
+        - "/data/db"
+        - "--bind_ip"
+        - "0.0.0.0"
+        ports:
+        - containerPort: 27017
+          name: shard1-main
+        volumeMounts:
+          - mountPath: /etc/secrets
+            name: secrets
+          - mountPath: /data/db
+            name: mongo-shard1-pv
+      volumes:
+        - name: secrets
+          secret:
+            secretName: mongodb-key
+            defaultMode: 256
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-shard1-pv
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: mongo-shard1
+      resources:
+        requests:
+          storage: 10Gi

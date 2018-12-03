@@ -22,7 +22,9 @@
 
     var attribute;
     var minMaxValues = {};
+    var gradient = [];
 
+    // attribute to be shown for POI
     MashupPlatform.wiring.registerCallback("attribute", function (attr) {
         attribute = attr;
         init();
@@ -35,6 +37,7 @@
     });
 
     var init = function init() {
+        // get the min and max value for the attribute
         if (MashupPlatform.prefs.get('min_max_values')) {
             var keyValueList = MashupPlatform.prefs.get('min_max_values').split(new RegExp(',\\s*'));
             keyValueList.forEach(function (entry) {
@@ -57,9 +60,21 @@
             minMaxValues = {};
         }
 
-        if (minMaxValues && minMaxValues[attribute]) {
+        // get the JSON with the gradient information for the attribute
+        var json = JSON.parse(MashupPlatform.prefs.get('gradientsJSON').trim());
+        if(json){
+            json.attributes.forEach(function (attr) {
+                if (attr.name == attribute) {
+                    gradient = attr.gradient;
+                }
+            });
+        }
+
+        if (minMaxValues && minMaxValues[attribute] && gradient) {
             MashupPlatform.wiring.pushEvent("minValue", minMaxValues[attribute].min);
             MashupPlatform.wiring.pushEvent("maxValue", minMaxValues[attribute].max);
+            MashupPlatform.wiring.pushEvent("gradient", gradient);
+            gradient = [];
         }
     };
 })();

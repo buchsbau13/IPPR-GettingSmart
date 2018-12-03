@@ -64,6 +64,7 @@ Input Endpoints
 - **Heatmap PoIs**: Insert or update a Point of Interest for the Heatmap Layer. PoIs have a similiar structure as normal PoIs.
 - **Min Attribute Value**: Min Value which is needed to calculate the weight for the heatmap points.
 - **Max Attribute Value**: Max Value which is needed to calculate the weight for the heatmap points.
+- **Gradient**: List of values (colors) to set the gradient for the heatmap.
 - **Clear**: If no values could be found for the heatmap the map will be cleared. 
 
 Output Endpoints

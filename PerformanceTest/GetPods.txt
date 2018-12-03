@@ -1,0 +1,3 @@
+List all FIWARE pods with corresponding nodes:
+
+kubectl get pod -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name --namespace=fiware-graziot

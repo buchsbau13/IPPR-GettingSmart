@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="minmax-selector" version="1.0">
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="minmax-selector" version="1.0.2">
   <details>
     <title>Min/max selector</title>
     <authors>Michael Janusch</authors>
@@ -9,11 +9,13 @@
     <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
   </details>
   <preferences>
-      <preference name="min_max_values" label="Min/max values" description="Comma seperated list of min/max values for entity attributes (format: attribute=min/max)." default="temperature=-20/40" type="text"/>
+    <preference name="min_max_values" label="Min/max values" description="Comma seperated list of min/max values for entity attributes (format: attribute=min/max)." default="temperature=-20/40" type="text"/>
+    <preference name="gradientsJSON" label="Gradient values for attributes (JSON)" type="text" description="List of attributes with their gradient values in JSON format"/>
   </preferences>
   <wiring>
     <outputendpoint name="minValue" type="text" label="Min value" description="Minimum value of attribute" friendcode="minValue"/>
     <outputendpoint name="maxValue" type="text" label="Max value" description="Maximum value of attribute" friendcode="maxValue"/>
+    <outputendpoint name="gradient" type="text" label="Gradient" description="Gradient for attribute" friendcode="gradientValue"/>
     <inputendpoint name="attribute" type="text" label="Attribute" description="Entity attribute whose min/max values should be set" friendcode="attribute"/>
   </wiring>
   <scripts>
