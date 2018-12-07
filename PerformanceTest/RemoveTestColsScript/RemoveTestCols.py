@@ -26,6 +26,14 @@ CONFIG_FILE='./config.ini'
 NUM_ARG=len(sys.argv)
 COMMAND=sys.argv[0]
 
+def dropCol(col):
+    try:
+        db.drop_collection(col)
+    # Handle potential AutoReconnect exception
+    except pymongo.errors.AutoReconnect:
+        time.sleep(2)
+        dropCol(col)
+
 if NUM_ARG!=1:
     print 'Usage: '+COMMAND
     print '  Configure the preferences in the file "config.ini".'
@@ -66,11 +74,7 @@ for cnt in range(int(START), int(END)+1):
     collection='sth_x002fxffff'+PREFIX+str(cnt)+'xffff'+TYPE
     print 'Dropping collection "'+collection+'"'
     print
-    try:
-        db.drop_collection(collection)
-    # Handle potential AutoReconnect exception
-    except pymongo.errors.AutoReconnect:
-        time.sleep(2)
+    dropCol(collection)
 
 mongo.close()
 print 'Finished!'
