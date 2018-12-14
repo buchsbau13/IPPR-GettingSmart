@@ -1,7 +1,7 @@
 #!/bin/bash
 
-tar -xjvf mongo-october-2018.tar.bz2
-rm mongo-october-2018.tar.bz2
+tar -xjvf mongo-dump.tar.bz2
+rm mongo-dump.tar.bz2
 cd mongo
 mongorestore --drop -d orion-graziot orion-graziot
 mongorestore --drop -d iotagentul iotagentul
