@@ -4,7 +4,9 @@ metadata:
   name: wirecloud-static-pvc
   namespace: {{.Values.fiware.namespace}}
 spec:
-  storageClassName: wirecloud-static
+  {{ if eq .Values.infrastructure "minikube" }}
+  storageClassName: standard
+  {{end}}
   accessModes:
   - {{.Values.wirecloud.wirecloud_static_pvc.accessModes}}
   resources:

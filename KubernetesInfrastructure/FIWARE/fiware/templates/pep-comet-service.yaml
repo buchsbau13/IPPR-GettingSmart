@@ -8,6 +8,7 @@ metadata:
 spec:
   ports:
   - port: 8666
+    targetPort: 8666
     nodePort: {{.Values.pep.comet.nodePort}}
     name: fiware-pep-comet
   selector:

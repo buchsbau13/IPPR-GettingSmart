@@ -13,7 +13,7 @@ config.https = {
 
 config.idm = {
 	host: process.env.IDM_HOST,
-	port: 5000,
+	port: {{.Values.keyrock.port}},
 	ssl: false
 }
 
@@ -49,7 +49,7 @@ config.authorization = {
 	azf: {
 		protocol: 'http',
 	    host: process.env.IDM_HOST,
-	    port: 5000,
+	    port: {{.Values.keyrock.nodePort}},
 	    custom_policy: undefined // use undefined to default policy checks (HTTP verb + path).
 	}
 }

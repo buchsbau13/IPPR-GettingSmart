@@ -4,4 +4,4 @@ metadata:
   name: keyrock-config
   namespace: {{.Values.fiware.namespace}}
 data:
-  {{- (.Files.Glob "files/keyrock/*").AsConfig | nindent 2 }}
+  {{- tpl (.Files.Glob "files/keyrock/*").AsConfig . | nindent 2 }}

@@ -7,8 +7,8 @@ metadata:
     run: keyrock
 spec:
   ports:
-  - port: 5000
-    targetPort: 5000
+  - port: {{.Values.keyrock.port}}
+    targetPort: {{.Values.keyrock.port}}
     nodePort: {{.Values.keyrock.nodePort}}
   selector:
     run: keyrock

@@ -131,6 +131,7 @@ config.database = {
     nameEncoding: 'true'
 };
 
+
 // Logging configuration
 //------------------------
 config.logging = {

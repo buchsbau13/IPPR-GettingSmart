@@ -209,4 +209,4 @@ else:
         'django.contrib.auth.backends.ModelBackend',
     )
 
-DATA_UPLOAD_MAX_MEMORY_SIZE = 262144000
+DATA_UPLOAD_MAX_MEMORY_SIZE = 662144000

@@ -8,6 +8,7 @@ metadata:
 spec:
   ports:
   - port: 4041
+    targetPort: 4041
     name: fiware-pep-idas-admin
     nodePort: {{.Values.pep.idas_admin.nodePort}}
   selector:

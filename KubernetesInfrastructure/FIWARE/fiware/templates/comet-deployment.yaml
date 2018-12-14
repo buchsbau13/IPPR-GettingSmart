@@ -16,6 +16,9 @@ spec:
       containers:
       - image: {{.Values.comet.image}}
         name: comet
+        env:
+        - name: MAX_PAGE_SIZE
+          value: {{.Values.comet.max_page_size | quote}}
         ports:
         - containerPort: 8666
         volumeMounts:

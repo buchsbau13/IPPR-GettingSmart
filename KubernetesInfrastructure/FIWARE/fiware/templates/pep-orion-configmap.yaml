@@ -4,4 +4,4 @@ metadata:
   name: pep-orion-config
   namespace: {{.Values.fiware.namespace}}
 data:
-  {{- (.Files.Glob "files/pep-orion/*").AsConfig | nindent 2 }}
+  {{-  tpl (.Files.Glob "files/pep-orion/*").AsConfig . | nindent 2 }}

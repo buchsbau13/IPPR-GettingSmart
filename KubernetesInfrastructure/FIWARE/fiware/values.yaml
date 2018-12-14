@@ -4,6 +4,8 @@
 fiware:
   namespace: fiware-graziot
 
+infrastructure: minikube
+
 mongo:
   version: 3.6
   mongo_local_pv:
@@ -20,8 +22,9 @@ mysql:
 
 keyrock:
   image: fhjima/fiware-idm
-  idm_host: http:///192.168.99.100:5000
+  idm_host: http://192.168.99.100:30500
   nodePort: 30500
+  port: 5000
 
 orion:
   image: fiware/orion:2.0.0
@@ -30,13 +33,14 @@ idas:
   image: fiware/iotagent-ul:1.7.0
 
 cygnus:
-  image: januschm/cygnus-ngsi
+  image: fiware/cygnus-ngsi:1.10.0
 
 comet:
   image: fiware/sth-comet:2.4.0
+  max_page_size: 8000
 
 pep:
-  image: fiware/pep-proxy:7.4.0
+  image: fiware/pep-proxy:7.5.0
   orion:
     nodePort: 31026
   idas_admin:

@@ -4,4 +4,4 @@ metadata:
   name: pep-comet-config
   namespace: {{.Values.fiware.namespace}}
 data:
-  {{- (.Files.Glob "files/pep-comet/*").AsConfig | nindent 2 }}
+  {{- tpl (.Files.Glob "files/pep-comet/*").AsConfig . | nindent 2 }}

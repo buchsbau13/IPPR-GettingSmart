@@ -20,7 +20,7 @@ spec:
         - containerPort: 8000
         env:
         - name: DEBUG
-          value: "false"
+          value: "true"
         - name: DB_HOST
           value: "postgres"
         - name: DB_PASSWORD
