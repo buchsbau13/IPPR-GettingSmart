@@ -1,0 +1,81 @@
+# Default values for fiware.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+fiware:
+  namespace: fiware-graziot
+
+infrastructure: minikube
+
+mongo:
+  version: 3.6
+  mongo_local_pv:
+    host: minikube
+    storage: 3Gi
+  storage: 3Gi
+
+mysql:
+  version: 5.7.21
+  mysql_local_pv:
+    host: minikube
+    storage: 1Gi
+  storage: 1Gi
+
+keyrock:
+  image: fhjima/fiware-idm
+  idm_host: http://192.168.99.100:30500
+  nodePort: 30500
+  port: 5000
+
+orion:
+  image: fiware/orion:2.0.0
+
+idas:
+  image: fiware/iotagent-ul:1.7.0
+
+cygnus:
+  image: fiware/cygnus-ngsi:1.10.0
+
+comet:
+  image: fiware/sth-comet:2.4.0
+  max_page_size: 8000
+
+pep:
+  image: fiware/pep-proxy:7.5.0
+  orion:
+    nodePort: 31026
+  idas_admin:
+    nodePort: 30041
+  idas_sensor:
+    nodePort: 30896
+  comet:
+    nodePort: 30666
+  app_id: 23c1fab4-2f69-470d-8778-4614522d29d3
+  username: pep_proxy_c33f29bc-7fd1-47fc-914a-7eb2aacd43c6
+  password: pep_proxy_2bb49378-6ba3-48f4-b34a-42cf373a68e6
+
+postgres:
+  postgres_pvc:
+    accessModes: ReadWriteOnce
+    storage: 1Gi
+
+wirecloud:
+  nfs_wirecloud_pv:
+    accessModes: ReadWriteOnce
+    storage: 1Gi
+    host: minikube
+  wirecloud_static_pv:
+    accessModes: ReadWriteOnce
+    storage: 1Gi
+    host: minikube
+  wirecloud_data_pvc:
+    accessModes: ReadWriteMany
+    storage: 1Gi
+  wirecloud_static_pvc:
+    accessModes: ReadWriteMany
+    storage: 1Gi
+  nodePort: 30080
+  image: fiwareaustria/wirecloud:latest
+  env:
+    fiware_idm_server: http://192.168.99.100:30500
+    social_auth_fiware_key: 23c1fab4-2f69-470d-8778-4614522d29d3
+    social_auth_fiware_secret: 0b9194f0-f74a-4717-9222-170e9e473bf4

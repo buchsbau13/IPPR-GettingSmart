@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pep-idas-sensor-config
+  namespace: {{.Values.fiware.namespace}}
+data:
+  {{- tpl (.Files.Glob "files/pep-idas-sensor/*").AsConfig . | nindent 2 }}

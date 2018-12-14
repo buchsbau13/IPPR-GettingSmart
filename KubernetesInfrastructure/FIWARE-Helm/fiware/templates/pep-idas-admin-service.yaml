@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pep-idas-admin
+  namespace: {{.Values.fiware.namespace}}
+  labels:
+    run: pep-idas-admin
+spec:
+  ports:
+  - port: 4041
+    targetPort: 4041
+    name: fiware-pep-idas-admin
+    nodePort: {{.Values.pep.idas_admin.nodePort}}
+  selector:
+     run: pep-idas-admin
+  type: LoadBalancer

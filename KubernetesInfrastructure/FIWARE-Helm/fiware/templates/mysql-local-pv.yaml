@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-local-pv
+spec:
+  capacity:
+    storage: {{.Values.mysql.mysql_local_pv.storage}}
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: mysql
+  local:
+    path: /opt/fiware/mysql
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+            - {{.Values.mysql.mysql_local_pv.host}}

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-wirecloud-config
+  namespace: {{.Values.fiware.namespace}}
+data:
+  {{ tpl (.Files.Glob "files/nginx/*").AsConfig . | nindent 2 }}

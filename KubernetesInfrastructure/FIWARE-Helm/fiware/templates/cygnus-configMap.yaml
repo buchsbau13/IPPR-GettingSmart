@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cygnus-config
+  namespace: {{.Values.fiware.namespace}}
+data:
+  {{- (.Files.Glob "files/cygnus/*").AsConfig | nindent 2 }}
