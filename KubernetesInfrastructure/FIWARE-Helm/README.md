@@ -19,7 +19,7 @@ Some of the pods defined in this chart require local volumes that are mapped to 
 ```bash
 sudo mkdir -p /opt/fiware/mysql
 sudo mkdir -p /opt/fiware/mongo
-sudo mkdir -p /opt/fiware/mysql
+sudo mkdir -p /opt/fiware/wirecloud
 ```
 
 ## Helm
