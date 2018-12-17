@@ -29,6 +29,9 @@ config.pep = {
 	app_id: process.env.APP_ID,
 	username: process.env.USERNAME,
 	password: process.env.PASSWORD,
+  token: {
+    secret: ''   // Secret must be configured in order validate a jwt
+  },
 	trusted_apps : []
 }
 

@@ -56,4 +56,38 @@ This will automatically perform a rolling upgrade of all pods concerned. If the 
 
 ## Installing the Database dumps
 
-This project comes with a prototypic IdM (keyrock) configuration and context broker as well as historic data. To restore these datasets run the script `restore-idm.sh`.
+This project comes with a prototypic IdM (keyrock) configuration and context broker as well as historic data. To restore these datasets run the script `restore-idm.sh`. Until the databes is restored, pep-proxies won't be able to connect with the IdM, without terminating with an error. Thus you need to check the logs of all pep proxies an propably need to delete them in order to force re-creation once the databes is restored.
+
+## Dumping your IdM-Database
+
+When you make changes to your IdM settings, don't forget to export these changes using the script `backup-idm.sh`
+
+## Accessing your Services
+
+Once your cluster is running to can get an overwiew of all services and how to access them. Simply use the command `minikube service list -n fiware-graziot`:
+
+```
+|----------------|--------------------|-----------------------------|
+|   NAMESPACE    |        NAME        |             URL             |
+|----------------|--------------------|-----------------------------|
+| fiware-graziot | comet              | No node port                |
+| fiware-graziot | cygnus             | No node port                |
+| fiware-graziot | idas               | No node port                |
+| fiware-graziot | keyrock            | http://192.168.99.100:30500 |
+| fiware-graziot | memcached          | No node port                |
+| fiware-graziot | mongo              | No node port                |
+| fiware-graziot | mysql              | No node port                |
+| fiware-graziot | ngsi-proxy-service | http://192.168.99.100:30003 |
+| fiware-graziot | orion              | No node port                |
+| fiware-graziot | pep-comet          | http://192.168.99.100:30666 |
+| fiware-graziot | pep-idas-admin     | http://192.168.99.100:30041 |
+| fiware-graziot | pep-idas-sensor    | http://192.168.99.100:30896 |
+| fiware-graziot | pep-orion          | http://192.168.99.100:31026 |
+| fiware-graziot | postgres           | No node port                |
+| fiware-graziot | wirecloud          | http://192.168.99.100:30080 |
+|----------------|--------------------|-----------------------------|
+```
+
+### Keyrock (Identity Manager)
+
+The default endpoint for `keyrock` should be [http://192.168.99.100:30500](http://192.168.99.100:30500). The admin account that comes with the database dump is `jd@test.com` with password  `topsecret`.

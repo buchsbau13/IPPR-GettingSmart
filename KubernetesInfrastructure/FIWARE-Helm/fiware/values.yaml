@@ -40,7 +40,7 @@ comet:
   max_page_size: 8000
 
 pep:
-  image: fiware/pep-proxy:7.5.0
+  image: fiware/pep-proxy:7.4.0
   orion:
     nodePort: 31026
   idas_admin:
