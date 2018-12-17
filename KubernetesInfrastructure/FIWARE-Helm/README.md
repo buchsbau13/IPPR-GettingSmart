@@ -14,7 +14,7 @@ You can also bring up the kubernetes dashboard using the following command:
 
 ## Setting up local volumes folders
 
-Some of the pods defined in this chart require local volumes that are mapped to folders on a node's filesystem. In the case of minikube there'll be only one node called `minikube`. In order to create the necessary folders first run `minikube ssh` in order to log into the node and than execute the folling commands:
+Some of the pods defined in this chart require local volumes that are mapped to folders on a node's filesystem. In the case of minikube there'll be only one node called `minikube`. In order to create the necessary folders first run `minikube ssh` in order to log into the node and than execute the following commands:
 
 ```bash
 sudo mkdir -p /opt/fiware/mysql
