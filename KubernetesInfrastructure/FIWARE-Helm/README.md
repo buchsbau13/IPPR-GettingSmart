@@ -1,6 +1,6 @@
 # A Helm Chart for FIWARE
 
-This folder contains a [helm](https://helm.sh/) chart for installing a complete FIWARE setup
+This folder contains a [helm](https://helm.sh/) chart for installing a complete FIWARE setup (see details [here](CHART.md))
 
 ## Prerequisites
 
