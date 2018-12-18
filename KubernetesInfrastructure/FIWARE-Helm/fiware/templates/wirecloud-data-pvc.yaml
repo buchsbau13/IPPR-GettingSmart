@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wirecloud-data-pvc
+  namespace: {{.Values.fiware.namespace}}
+spec:
+  accessModes:
+  - {{.Values.wirecloud.wirecloud_data_pvc.accessModes}}
+  resources:
+     requests:
+       storage: {{.Values.wirecloud.wirecloud_data_pvc.storage}}

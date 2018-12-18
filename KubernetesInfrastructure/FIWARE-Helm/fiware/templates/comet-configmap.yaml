@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: comet-config
+  namespace: {{.Values.fiware.namespace}}
+data:
+  {{- (.Files.Glob "files/comet/*").AsConfig | nindent 2 }}

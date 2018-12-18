@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pep-orion
+  namespace: {{.Values.fiware.namespace}}
+spec:
+  selector:
+    matchLabels:
+      run: pep-orion
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: pep-orion
+    spec:
+      containers:
+      - name: pep-orion
+        image: {{.Values.pep.image}}
+        ports:
+        - containerPort: 1026
+        volumeMounts:
+        - mountPath: /opt/fiware-pep-proxy/config.js
+          name: pep-orion-config
+          subPath: config.js
+        env:
+        - name: IDM_HOST
+          value: "keyrock"
+        - name: APP_ID
+          value: "{{.Values.pep.app_id}}"
+        - name: USERNAME
+          value: "{{.Values.pep.username}}"
+        - name: PASSWORD
+          value: "{{.Values.pep.password}}"
+      restartPolicy: Always
+      volumes:
+      - name: pep-orion-config
+        configMap:
+          name: pep-orion-config
