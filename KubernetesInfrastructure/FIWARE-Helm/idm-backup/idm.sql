@@ -35,7 +35,7 @@ CREATE TABLE `SequelizeMeta` (
 
 LOCK TABLES `SequelizeMeta` WRITE;
 /*!40000 ALTER TABLE `SequelizeMeta` DISABLE KEYS */;
-INSERT INTO `SequelizeMeta` VALUES ('201802190000-CreateUserTable.js'),('201802190003-CreateUserRegistrationProfileTable.js'),('201802190005-CreateOrganizationTable.js'),('201802190008-CreateOAuthClientTable.js'),('201802190009-CreateUserAuthorizedApplicationTable.js'),('201802190010-CreateRoleTable.js'),('201802190015-CreatePermissionTable.js'),('201802190020-CreateRoleAssignmentTable.js'),('201802190025-CreateRolePermissionTable.js'),('201802190030-CreateUserOrganizationTable.js'),('201802190035-CreateIotTable.js'),('201802190040-CreatePepProxyTable.js'),('201802190045-CreateAuthZForceTable.js'),('201802190050-CreateAuthTokenTable.js'),('201802190060-CreateOAuthAuthorizationCodeTable.js'),('201802190065-CreateOAuthAccessTokenTable.js'),('201802190070-CreateOAuthRefreshTokenTable.js'),('201802190075-CreateOAuthScopeTable.js'),('20180405125424-CreateUserTourAttribute.js'),('20180612134640-CreateEidasTable.js'),('20180727101745-CreateUserEidasIdAttribute.js'),('20180730094347-CreateTrustedApplicationsTable.js'),('20180828133454-CreatePasswordSalt.js'),('20180913140934-CreateOauthTokenType.js'),('20180921104653-CreateEidasNifColumn.js');
+INSERT INTO `SequelizeMeta` VALUES ('201802190000-CreateUserTable.js'),('201802190003-CreateUserRegistrationProfileTable.js'),('201802190005-CreateOrganizationTable.js'),('201802190008-CreateOAuthClientTable.js'),('201802190009-CreateUserAuthorizedApplicationTable.js'),('201802190010-CreateRoleTable.js'),('201802190015-CreatePermissionTable.js'),('201802190020-CreateRoleAssignmentTable.js'),('201802190025-CreateRolePermissionTable.js'),('201802190030-CreateUserOrganizationTable.js'),('201802190035-CreateIotTable.js'),('201802190040-CreatePepProxyTable.js'),('201802190045-CreateAuthZForceTable.js'),('201802190050-CreateAuthTokenTable.js'),('201802190060-CreateOAuthAuthorizationCodeTable.js'),('201802190065-CreateOAuthAccessTokenTable.js'),('201802190070-CreateOAuthRefreshTokenTable.js'),('201802190075-CreateOAuthScopeTable.js'),('20180405125424-CreateUserTourAttribute.js'),('20180612134640-CreateEidasTable.js'),('20180727101745-CreateUserEidasIdAttribute.js'),('20180730094347-CreateTrustedApplicationsTable.js'),('20180828133454-CreatePasswordSalt.js'),('20180921104653-CreateEidasNifColumn.js'),('20180922140934-CreateOauthTokenType.js'),('20181022103002-CreateEidasTypeAndAttributes.js'),('20181108144720-RevokeToken.js'),('20181113121450-FixExtraAndScopeAttribute.js'),('20181203120316-FixTokenTypesLength.js');
 /*!40000 ALTER TABLE `SequelizeMeta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -122,6 +122,8 @@ CREATE TABLE `eidas_credentials` (
   `organization_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `oauth_client_id` char(36) CHARACTER SET latin1 COLLATE latin1_bin DEFAULT NULL,
   `organization_nif` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `attributes_list` json DEFAULT NULL,
+  `sp_type` varchar(255) DEFAULT 'private',
   PRIMARY KEY (`id`),
   UNIQUE KEY `oauth_client_id` (`oauth_client_id`),
   CONSTRAINT `eidas_credentials_ibfk_1` FOREIGN KEY (`oauth_client_id`) REFERENCES `oauth_client` (`id`) ON DELETE CASCADE
@@ -174,21 +176,26 @@ DROP TABLE IF EXISTS `oauth_access_token`;
 CREATE TABLE `oauth_access_token` (
   `access_token` varchar(255) NOT NULL,
   `expires` datetime DEFAULT NULL,
-  `scope` varchar(255) DEFAULT NULL,
+  `scope` varchar(2000) DEFAULT NULL,
   `refresh_token` varchar(255) DEFAULT NULL,
   `valid` tinyint(1) DEFAULT NULL,
   `extra` json DEFAULT NULL,
   `oauth_client_id` char(36) CHARACTER SET latin1 COLLATE latin1_bin DEFAULT NULL,
   `user_id` char(36) CHARACTER SET latin1 COLLATE latin1_bin DEFAULT NULL,
   `iot_id` varchar(255) DEFAULT NULL,
+  `authorization_code` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`access_token`),
   UNIQUE KEY `access_token` (`access_token`),
   KEY `oauth_client_id` (`oauth_client_id`),
   KEY `user_id` (`user_id`),
   KEY `iot_id` (`iot_id`),
+  KEY `refresh_token` (`refresh_token`),
+  KEY `authorization_code_at` (`authorization_code`),
+  CONSTRAINT `authorization_code_at` FOREIGN KEY (`authorization_code`) REFERENCES `oauth_authorization_code` (`authorization_code`) ON DELETE CASCADE,
   CONSTRAINT `oauth_access_token_ibfk_1` FOREIGN KEY (`oauth_client_id`) REFERENCES `oauth_client` (`id`) ON DELETE CASCADE,
   CONSTRAINT `oauth_access_token_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `oauth_access_token_ibfk_3` FOREIGN KEY (`iot_id`) REFERENCES `iot` (`id`) ON DELETE CASCADE
+  CONSTRAINT `oauth_access_token_ibfk_3` FOREIGN KEY (`iot_id`) REFERENCES `iot` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `refresh_token` FOREIGN KEY (`refresh_token`) REFERENCES `oauth_refresh_token` (`refresh_token`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -198,7 +205,6 @@ CREATE TABLE `oauth_access_token` (
 
 LOCK TABLES `oauth_access_token` WRITE;
 /*!40000 ALTER TABLE `oauth_access_token` DISABLE KEYS */;
-INSERT INTO `oauth_access_token` VALUES ('026d07fd7ecc9665e2a894171d539d1ae8c2cc90','2018-11-23 08:56:53',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','7b43faa9-12f7-46a7-a28e-9f1c4a2633b9',NULL),('054325c3f87bfe37a35cbee025d8be7013c774aa','2018-10-29 16:55:27',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('0cf4679e18d5e592694ee493eab938e0254489af','2018-10-30 09:30:19',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('1ef5f16168dd63591ea75f1eb1d03b3adb8c9785','2018-10-29 10:56:50',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('1f2916ff15ad416301dda83ab27faee00b324a16','2018-10-31 08:38:18',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','7b43faa9-12f7-46a7-a28e-9f1c4a2633b9',NULL),('34a9aa4b4b60f491b808a5b22f284686259e386f','2018-10-29 16:47:50',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('46c89f9a41fd14f258c9fe261cd64127ea06c796','2018-12-17 13:47:16',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','7b43faa9-12f7-46a7-a28e-9f1c4a2633b9',NULL),('51a4bb190a213fe15c475a2d798f0f84b18414bf','2018-10-29 10:30:18',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('57f8311692f5332972461f2655973a0f3f93343c','2018-10-29 11:15:21',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('5840de79746e8cbec400fbaa631d78caf0e6d6e0','2018-10-30 18:24:47',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('59684afde188c671d143880e8a80822a6b4a2ad1','2018-10-30 08:04:54',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('5f639441e48775a82829907a2dc355e8bc9c940c','2018-10-29 16:54:19',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('605ed83e6ae8a48dbbe4d89dba55974b0ef3edb4','2018-10-29 14:23:00',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('60da4d2624a65bfa06afb9cbe65b70cf5f460aca','2018-10-29 14:23:00',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('76a2898307ff90bc67529ab152001de6b1dc1661','2018-10-27 21:15:49',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('9386129b8cc02eb16823d496bfdc1fea68088683','2018-10-30 10:30:11',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('9704ad59b7abe1b29bc6c559811ed52fe9ce40b9','2018-10-29 11:16:01',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('9e5bd7e39e44ead5184fb7275d4860fdd4e1161d','2018-10-30 09:28:15',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('a0caa402219f05048376a15e423b06878ebbe7fb','2018-10-29 12:20:05',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('a734f9cffde396bc78699b14c4057e873898fd03','2018-10-31 08:13:36',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('ae311553b7e8d82ec25dc6ffb2bf76de02ac48c1','2018-10-29 17:00:57',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('b88c79a36ae49b7abe6b1ab8c9a8eefb9e7e124e','2018-10-29 16:59:19',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('c37b603def19af679b4637b8602d061da71c8ac4','2018-10-29 19:09:14',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('c636fd060968b1c95742964c47d1938b94a6f2c2','2018-10-29 12:20:05',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('c6dece281cfa67905a5b78c116aa627781e1c55d','2018-10-29 16:42:18',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('cf43fee44e6056cde01045850a2a1bdaf41255d5','2018-10-30 10:15:14',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('e10e288194a373fc2c95a2f707bbeabc4ce66eb5','2018-10-30 08:04:54',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('ef8323c30698c8c3ffe46383c17867c3eba2ed45','2018-10-28 13:40:54',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','7b43faa9-12f7-46a7-a28e-9f1c4a2633b9',NULL),('f8596e6108177148558e71a863af1098769bda50','2018-10-31 08:13:36',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('fbb9369ea26f5b9d4c2321312897301e047b3794','2018-10-30 18:24:47',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('fd077b868b21e12b1e6c1f287dd15acd99a813d3','2018-10-27 19:48:01',NULL,NULL,NULL,NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL);
 /*!40000 ALTER TABLE `oauth_access_token` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -255,9 +261,9 @@ CREATE TABLE `oauth_client` (
   `grant_type` varchar(255) DEFAULT NULL,
   `response_type` varchar(255) DEFAULT NULL,
   `client_type` varchar(15) DEFAULT NULL,
-  `scope` varchar(80) DEFAULT NULL,
+  `scope` varchar(2000) DEFAULT NULL,
   `extra` json DEFAULT NULL,
-  `token_type` varchar(15) DEFAULT 'bearer',
+  `token_types` varchar(2000) DEFAULT NULL,
   `jwt_secret` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -269,7 +275,7 @@ CREATE TABLE `oauth_client` (
 
 LOCK TABLES `oauth_client` WRITE;
 /*!40000 ALTER TABLE `oauth_client` DISABLE KEYS */;
-INSERT INTO `oauth_client` VALUES ('23c1fab4-2f69-470d-8778-4614522d29d3','WireCloud','WireCloud','0b9194f0-f74a-4717-9222-170e9e473bf4','http://localhost','http://192.168.99.100:30080/complete/fiware/','default','authorization_code,implicit,password,client_credentials,refresh_token','code,token',NULL,NULL,NULL,'bearer',NULL),('idm_admin_app','idm','idm',NULL,'','','default','','',NULL,NULL,NULL,'bearer',NULL);
+INSERT INTO `oauth_client` VALUES ('23c1fab4-2f69-470d-8778-4614522d29d3','WireCloud','WireCloud','0b9194f0-f74a-4717-9222-170e9e473bf4','http://localhost','http://192.168.99.100:30080/complete/fiware/','default','authorization_code,implicit,password,client_credentials,refresh_token','code,token',NULL,NULL,NULL,NULL,NULL),('idm_admin_app','idm','idm',NULL,'','','default','','',NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `oauth_client` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,11 +293,15 @@ CREATE TABLE `oauth_refresh_token` (
   `oauth_client_id` char(36) CHARACTER SET latin1 COLLATE latin1_bin DEFAULT NULL,
   `user_id` char(36) CHARACTER SET latin1 COLLATE latin1_bin DEFAULT NULL,
   `iot_id` varchar(255) DEFAULT NULL,
+  `authorization_code` varchar(255) DEFAULT NULL,
+  `valid` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`refresh_token`),
   UNIQUE KEY `refresh_token` (`refresh_token`),
   KEY `oauth_client_id` (`oauth_client_id`),
   KEY `user_id` (`user_id`),
   KEY `iot_id` (`iot_id`),
+  KEY `authorization_code_rt` (`authorization_code`),
+  CONSTRAINT `authorization_code_rt` FOREIGN KEY (`authorization_code`) REFERENCES `oauth_authorization_code` (`authorization_code`) ON DELETE CASCADE,
   CONSTRAINT `oauth_refresh_token_ibfk_1` FOREIGN KEY (`oauth_client_id`) REFERENCES `oauth_client` (`id`) ON DELETE CASCADE,
   CONSTRAINT `oauth_refresh_token_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
   CONSTRAINT `oauth_refresh_token_ibfk_3` FOREIGN KEY (`iot_id`) REFERENCES `iot` (`id`) ON DELETE CASCADE
@@ -304,7 +314,6 @@ CREATE TABLE `oauth_refresh_token` (
 
 LOCK TABLES `oauth_refresh_token` WRITE;
 /*!40000 ALTER TABLE `oauth_refresh_token` DISABLE KEYS */;
-INSERT INTO `oauth_refresh_token` VALUES ('1bbb76a22c056cf067a5cf69e2f4eb97a6cbce2f','2018-12-07 07:56:53',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','7b43faa9-12f7-46a7-a28e-9f1c4a2633b9',NULL),('1bed0693426afd654430f5456d4697244061925a','2018-11-12 16:00:57',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('1e6c4bc7117b3255a2f78ffd94134ebb162f1e2b','2018-11-12 11:20:05',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('1ef38ad4f09b901318dbd30ae43092b18a3296ef','2018-11-10 21:15:49',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('3c67d3dff49239ab2e64e73f283a523915755957','2018-11-12 15:47:50',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('49c4e6738d02211e69cfdc48c9a3b37c819466bc','2018-11-11 12:40:54',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','7b43faa9-12f7-46a7-a28e-9f1c4a2633b9',NULL),('4d08feb7abae2f4ac61857bafd72929341e6f33e','2018-11-12 15:54:19',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('5aa3ea0dd1d78f47229e28124358b1181147a7d2','2018-11-12 13:23:00',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('6786cb7e01223d52ab23607549e9c419167387bc','2018-11-12 15:55:27',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('6bcd5de63a734f95682e1761d4d8948afd947b8d','2018-11-14 07:38:18',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','7b43faa9-12f7-46a7-a28e-9f1c4a2633b9',NULL),('7795573fb74347ea1bc0fa3e174f29b9731fd77d','2018-11-12 09:56:50',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('7d1607e94e809dd0eca2656acf7a35ea83dbd1f4','2018-12-31 12:47:16',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','7b43faa9-12f7-46a7-a28e-9f1c4a2633b9',NULL),('86271273984692d9b1ce509e911d4299d33be1ad','2018-11-13 07:04:54',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('870ad4cbea96103edeca41d2afd70cc4886e08f6','2018-11-10 19:48:01',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('8740aca512fe7b265628fbf4285e72a94d9f2fd3','2018-11-13 17:24:47',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('8bcf6176dc03578b3b1b6c4e8f67cef13b38c3de','2018-11-12 10:16:01',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('93305a643fa6c550d7e151587239eba427620d11','2018-11-12 10:15:21',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('b0f27af19e01ed97ac09bbf692fc25109c40ed65','2018-11-14 07:13:36',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('c2c8972cffd64df1839b82a9ad93361f1fc4e09f','2018-11-13 08:28:15',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('d49cb6bf2412620b2f3d862616a7d719e8cb3885','2018-11-14 07:13:36',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('de28aa4a208a9439a5a82c3141dbc03eed200026','2018-11-12 15:59:19',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL),('ff6f6e21ee36756683e9610ccfef0b9b47591d3d','2018-11-13 09:15:14',NULL,'23c1fab4-2f69-470d-8778-4614522d29d3','salho',NULL);
 /*!40000 ALTER TABLE `oauth_refresh_token` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -678,4 +687,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-17 13:01:45
+-- Dump completed on 2018-12-23 15:37:25

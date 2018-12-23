@@ -21,7 +21,7 @@ mysql:
   storage: 1Gi
 
 keyrock:
-  image: fhjima/fiware-idm
+  image: fiwareaustria/idm:env
   idm_host: http://192.168.99.100:30500
   nodePort: 30500
   port: 5000
@@ -36,11 +36,11 @@ cygnus:
   image: fiware/cygnus-ngsi:1.10.0
 
 comet:
-  image: fiware/sth-comet:2.4.0
+  image: amarbajric/sth-comet:2.4.1
   max_page_size: 8000
 
 pep:
-  image: fiware/pep-proxy:7.4.0
+  image: fiwareaustria/pep-proxy:7.5.1
   orion:
     nodePort: 31026
   idas_admin:
