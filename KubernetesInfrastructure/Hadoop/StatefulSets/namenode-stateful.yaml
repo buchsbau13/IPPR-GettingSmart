@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: namenode
-        image: bxjulia/hadoop-namenode:3.1.1
+        image: bxjulia/hadoop-namenode:latest
         ports:
         - containerPort: 9870
           name: webhdfs

@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: yarn
-        image: bxjulia/hadoop-yarn:3.1.1-spark-2.3.2
+        image: bxjulia/hadoop-yarn:latest
         ports:
         - containerPort: 8088
           name: yarn-rm

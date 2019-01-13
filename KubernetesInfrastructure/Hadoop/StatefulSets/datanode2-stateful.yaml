@@ -1,44 +1,39 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: datanode3
+  name: datanode2
   labels:
-    app: datanode3
+    app: datanode2
 spec:
   ports:
   - port: 9864
-    name: hdfs-datanode3
+    name: hdfs-datanode2
   clusterIP: None
   selector:
-     app: datanode3
+     app: datanode2
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: hadoop-datanode3
+  name: hadoop-datanode2
 spec:
   selector:
     matchLabels:
-      app: datanode3 # has to match .spec.template.metadata.labels
-  serviceName: "datanode3"
+      app: datanode2 # has to match .spec.template.metadata.labels
+  serviceName: "datanode2"
   replicas: 1 # by default is 1
   template:
     metadata:
       labels:
-        app: datanode3 # has to match .spec.selector.matchLabels
+        app: datanode2 # has to match .spec.selector.matchLabels
     spec:
       containers:
-      - name: datanode3
-        image: bxjulia/hadoop-datanode:3.1.1
-        env:
-        - name: HADOOP_HOST_NAMENODE
-          value: namenode
-        - name: HADOOP_HOST_YARN
-          value: yarn
+      - name: datanode2
+        image: bxjulia/hadoop-datanode:latest
         ports:
         - containerPort: 9864
         volumeMounts:
-        - name: datanode-pv-3
+        - name: datanode-pv-2
           mountPath: /hdfs/volume1/data
         - name: datanode-config
           mountPath: /opt/hadoop/etc/hadoop/core-site.xml
@@ -58,10 +53,10 @@ spec:
           name: datanode-config
   volumeClaimTemplates:
   - metadata:
-      name: datanode-pv-3
+      name: datanode-pv-2
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "datanode3"
+      storageClassName: "datanode2"
       resources:
         requests:
           storage: 50Gi

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: datanode2-external
+  labels:
+    app: datanode2-external
+spec:
+  ports:
+  - port: 9864
+    targetPort: 9864
+    nodePort: 30002
+    name: datanode2
+  - port: 8042
+    targetPort: 8042
+    nodePort: 30012
+    name: nodemanger2
+  selector:
+    app: datanode2
+  type: LoadBalancer
