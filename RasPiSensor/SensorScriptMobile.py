@@ -21,7 +21,7 @@ APN = "webapn.at"
 
 # Settings for communicating with the FIWARE IoT agent
 FIWARE_HEADERS = "Fiware-Service: graziot\\r\\nFiware-ServicePath: /"
-URL = "http://160.85.2.61:7896/iot/d?k=apimobile&i=Dev_RasPi"
+URL = "http://160.85.2.61:7896/iot/d?k=apitest&i=Dev_RasPi"
 
 
 serGSMGPS = None
