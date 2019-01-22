@@ -43,6 +43,8 @@ if NUM_ARG!=1 and FLAG!='--dryRun':
     print '  List of available settings:'
     print '        host = Host of the MongoDB instance'
     print '        port = Port of the MongoDB instance'
+    print '        user = Username for the MongoDB instance (ignored if term is empty)'
+    print '        password = Pasword for the MongoDB instance (ignored if term is empty)'
     print '        database = Name of the database that should be checked for duplicates'
     print '        objKeysJSON = JSON string with object keys that should be used for finding duplicates'
     print '        excludeCol = Collections with this term in their name will be excluded (ignored if term is empty)'
@@ -62,6 +64,8 @@ config.readfp(io.BytesIO(sample_config))
 
 HOST=config.get('mongo', 'host')
 PORT=config.get('mongo', 'port')
+USER=config.get('mongo', 'user')
+PASSWORD=config.get('mongo', 'password')
 DATABASE=config.get('mongo', 'database')
 KEYS=config.get('mongo', 'objKeysJSON')
 EXCLUDE=config.get('mongo', 'excludeCol')
@@ -71,7 +75,10 @@ INCLUDE=config.get('mongo', 'includeCol')
 group=json.loads(KEYS)
 
 # Connect to MongoDB
-mongo=MongoClient(HOST,int(PORT))
+if USER!='' and PASSWORD!='':
+    mongo=MongoClient(HOST,int(PORT),username=USER,password=PASSWORD)
+else:
+    mongo=MongoClient(HOST,int(PORT))
 db=mongo[DATABASE]
 
 # Get collection names of database
