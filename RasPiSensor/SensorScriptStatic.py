@@ -89,14 +89,19 @@ try:
       print "\n[Sending values to server...]"
       payload = ("l|%s,%s|a1|%s|a2|%s|t|%s|h|%s" % (str(LAT), str(LON), str(pm2_5), str(pm10), str(temp), str(humid)))
       print "+++ Payload: " + payload + " +++"
-      r = requests.post(URL, data=payload, headers=HEADERS, timeout=1)
-      if r.status_code == 200:
-        print "+++ Payload successfully sent! +++"
-      else:
-        print "!!! Sending values failed. Skipping iteration... !!!"
+      try:
+        r = requests.post(URL, data=payload, headers=HEADERS, timeout=1)
+        if r.status_code == 200:
+          print "+++ Payload successfully sent! +++"
+        else:
+          print "!!! Sending values failed. Skipping iteration... !!!"
+      except requests.exceptions.RequestException as e:
+        print "!!! Exception raised while sending values. Skipping iteration... !!!"
+        print "Exception: " + e
 
-      # Subtract the delay for reading temperature/humidity values 
-      time.sleep(SENSOR_TIMEOUT - 2)
+      # Subtract the delay for reading temperature/humidity values
+      if SENSOR_TIMEOUT > 2:
+        time.sleep(SENSOR_TIMEOUT - 2)
 except KeyboardInterrupt:
   sys.exit("\rCTRL-C received. Exiting...")
 except serial.SerialException:
