@@ -97,7 +97,7 @@ try:
           print "!!! Sending values failed. Skipping iteration... !!!"
       except requests.exceptions.RequestException as e:
         print "!!! Exception raised while sending values. Skipping iteration... !!!"
-        print "Exception: " + e
+        print "Exception: " + e.message
 
       # Subtract the delay for reading temperature/humidity values
       if SENSOR_TIMEOUT > 2:
