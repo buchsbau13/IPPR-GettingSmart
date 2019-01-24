@@ -21,7 +21,7 @@ APN = "webapn.at"
 
 # Settings for communicating with the FIWARE IoT agent
 FIWARE_HEADERS = "Fiware-Service: graziot\\r\\nFiware-ServicePath: /"
-URL = "http://160.85.2.61:7896/iot/d?k=apitest&i=Dev_RasPi"
+URL = "http://160.85.2.61:7896/iot/d?k=apitest&i=Dev_RasPi_Mobile"
 
 
 serGSMGPS = None
@@ -210,7 +210,7 @@ try:
 
       print "\n[Sending values to server...]"
       reply = ""
-      payload = ("l|%s,%s|a1|%s|a2|%s|t|%s|h|%s" % (str(lat), str(lon), str(pm2_5), str(pm10), str(temp), str(humid)))
+      payload = ("l|%s,%s|pm25|%s|pm10|%s|t|%s|h|%s" % (str(lat), str(lon), str(pm2_5), str(pm10), str(temp), str(humid)))
       print "+++ Payload: " + payload + " +++"
       serGSMGPS.write("AT+HTTPINIT\r")
       time.sleep(0.01)
