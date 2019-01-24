@@ -255,8 +255,56 @@
       }
     },
     {
-      "id": "RasPi",
+      "id": "RasPi_Mobile",
       "type": "test",
+      "name":
+        {
+          "value": "Raspberry Pi 3"
+        },
+      "description":
+        {
+          "value": "Raspberry Pi 3 with air quality/temperature/humidity sensors"
+        },
+      "temp_sensor_unit":
+        {
+          "value": "°C"
+        },
+      "humid_sensor_unit":
+        {
+          "value": "%"
+        },
+      "air_sensor_unit":
+        {
+          "value": "μg/m³"
+        }
+    },
+    {
+      "id": "RasPi_1",
+      "type": "static",
+      "name":
+        {
+          "value": "Raspberry Pi 3"
+        },
+      "description":
+        {
+          "value": "Raspberry Pi 3 with air quality/temperature/humidity sensors"
+        },
+      "temp_sensor_unit":
+        {
+          "value": "°C"
+        },
+      "humid_sensor_unit":
+        {
+          "value": "%"
+        },
+      "air_sensor_unit":
+        {
+          "value": "μg/m³"
+        }
+    },
+    {
+      "id": "RasPi_2",
+      "type": "static",
       "name":
         {
           "value": "Raspberry Pi 3"

@@ -604,7 +604,7 @@
       "subject": {
         "entities": [
           {
-            "id": "RasPi",
+            "id": "RasPi_Mobile",
             "type": "test"
           }
         ],
@@ -629,7 +629,7 @@
       "subject": {
         "entities": [
           {
-            "id": "RasPi",
+            "id": "RasPi_Mobile",
             "type": "test"
           }
         ],
@@ -654,13 +654,13 @@
       "subject": {
         "entities": [
           {
-            "id": "RasPi",
+            "id": "RasPi_Mobile",
             "type": "test"
           }
         ],
         "condition": {
           "attrs": [
-            "pm2_5"
+            "pm25"
           ]
         }
       },
@@ -669,7 +669,7 @@
           "url": "http://cygnus:5050/notify"
         },
         "attrs": [
-          "pm2_5"
+          "pm25"
         ],
         "attrsFormat": "legacy"
       },
@@ -679,7 +679,7 @@
       "subject": {
         "entities": [
           {
-            "id": "RasPi",
+            "id": "RasPi_Mobile",
             "type": "test"
           }
         ],
@@ -704,7 +704,7 @@
       "subject": {
         "entities": [
           {
-            "id": "RasPi",
+            "id": "RasPi_Mobile",
             "type": "test"
           }
         ],
@@ -720,6 +720,206 @@
         },
         "attrs": [
           "location"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "RasPi_1",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "temperature"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "temperature"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "RasPi_1",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "humidity"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "humidity"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "RasPi_1",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "pm25"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "pm25"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "RasPi_1",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "pm10"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "pm10"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "RasPi_2",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "temperature"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "temperature"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "RasPi_2",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "humidity"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "humidity"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "RasPi_2",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "pm25"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "pm25"
+        ],
+        "attrsFormat": "legacy"
+      },
+      "throttling": 3
+    },
+    {
+      "subject": {
+        "entities": [
+          {
+            "id": "RasPi_2",
+            "type": "static"
+          }
+        ],
+        "condition": {
+          "attrs": [
+            "pm10"
+          ]
+        }
+      },
+      "notification": {
+        "http": {
+          "url": "http://cygnus:5050/notify"
+        },
+        "attrs": [
+          "pm10"
         ],
         "attrsFormat": "legacy"
       },
