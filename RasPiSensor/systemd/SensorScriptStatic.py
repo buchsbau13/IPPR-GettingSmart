@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python -u
 # -*- coding: utf-8 -*-
 
 import serial, requests, json, base64, time, sys, signal, Adafruit_DHT
@@ -37,14 +37,7 @@ LOOP_COUNT = 0
 # Set token variable
 TOKEN = "invalid_token"
 
-def sigTermExit(signal, frame):
-  sys.exit("\rSIGTERM received. Exiting...")
-
-# Catch SIGTERM signal for controlled termination
-signal.signal(signal.SIGTERM, sigTermExit)
-
-try:
-  while True:
+while True:
     try:
       serAir = serial.Serial(SERIAL_PORT_AIR, baudrate = 9600, timeout = 5)
     except serial.SerialException:
@@ -148,7 +141,3 @@ try:
         time.sleep(SENSOR_TIMEOUT - 2)
       else:
         time.sleep(SENSOR_TIMEOUT)
-except KeyboardInterrupt:
-  sys.exit("\rCTRL-C received. Exiting...")
-except serial.SerialException:
-  sys.exit("At least one serial port busy/not reachable. Exiting...")
