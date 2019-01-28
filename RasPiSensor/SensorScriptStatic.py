@@ -31,8 +31,8 @@ TEMP_HUMID_TYPE = Adafruit_DHT.DHT22
 TEMP_HUMID_GPIO = 4
 
 
-# Set loop counter
-LOOP_COUNT = 0
+# Set start time for token fetch interval
+START_TIME = 0.0
 
 # Set token variable
 TOKEN = "invalid_token"
@@ -100,8 +100,10 @@ try:
         print "+++ PM10: " + str(pm10) + " +++"
         success = False
 
-      # Only get token every 50 transmissions (if authentication is enabled)
-      if AUTH_ENABLED and LOOP_COUNT % 50 == 0:
+      # Only get token every 600 seconds (if authentication is enabled)
+      END_TIME = time.time()
+
+      if AUTH_ENABLED and END_TIME - START_TIME >= 600.0:
         print "\n[Fetching valid OAuth2 token...]"
         auth_head = "Basic " + base64.b64encode((CLIENT_ID + ":" + CLIENT_SECRET).encode()).decode('UTF-8')
         token_headers = {'content-type': 'application/x-www-form-urlencoded', 'authorization': auth_head}
@@ -111,6 +113,7 @@ try:
           r = requests.post(token_url, data=token_payload, headers=token_headers, timeout=2)
           if r.status_code == 200:
             print "+++ Token successfully received! +++"
+            START_TIME = time.time()
             TOKEN = r.json()['access_token']
             print "Token: " + TOKEN
           else:
@@ -125,7 +128,10 @@ try:
 
       print "\n[Sending values to server...]"
       headers = {'content-type': 'text/plain', 'X-Auth-Token' : TOKEN, 'Fiware-Service': FIWARE_SERVICE, 'Fiware-ServicePath': FIWARE_SERVICE_PATH}
-      url = HOST + "/iot/d?k=" + API_KEY + "&i=" + DEVICE_ID
+      # Original path:
+      #url = HOST + "/iot/d?k=" + API_KEY + "&i=" + DEVICE_ID
+      # New path:
+      url = HOST + "/iot/d/" + API_KEY + "/" + DEVICE_ID
       payload = ("pm25|%s|pm10|%s|t|%s|h|%s" % (str(pm2_5), str(pm10), str(temp), str(humid)))
       print "+++ Payload: " + payload + " +++"
       try:
@@ -137,11 +143,6 @@ try:
       except requests.exceptions.RequestException as e:
         print "!!! Exception raised while sending values. Skipping iteration... !!!"
         print "Exception: " + str(e)
-
-      # Increase loop counter
-      LOOP_COUNT += 1
-      if LOOP_COUNT > 50:
-        LOOP_COUNT = 1
 
       # Subtract the delay for reading temperature/humidity values
       if SENSOR_TIMEOUT > 2:
