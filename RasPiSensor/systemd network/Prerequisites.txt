@@ -1,0 +1,4 @@
+-> Install Python package configparser for root user (sudo pip install configparser)
+
+-> Create backups of files /etc/dhcpcd.conf and /etc/wpa_supplicant/wpa_supplicant.conf as
+   /etc/dhcpcd.conf.orig and /etc/wpa_supplicant/wpa_supplicant.conf.orig
