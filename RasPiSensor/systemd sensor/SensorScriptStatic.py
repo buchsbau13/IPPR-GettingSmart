@@ -1,7 +1,7 @@
 #!/usr/bin/python -u
 # -*- coding: utf-8 -*-
 
-import serial, requests, json, base64, time, sys, signal, Adafruit_DHT
+import serial, requests, json, base64, time, Adafruit_DHT
 
 
 # Delay between transmissions of sensor measurements (in seconds)
