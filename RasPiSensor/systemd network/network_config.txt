@@ -2,13 +2,20 @@
 # Set this option to true to apply the static IP settings for the ethernet
 # device in the [Ethernet] section during the next boot
 set_ethernet_static_ip = false
+
+# Set this option to true to apply the static IP settings for the WiFi
+# device in the [WiFi] section during the next boot
+set_wifi_static_ip = false
+
 # Set this option to true to connect to the WiFi network specified in the
 # [WiFi] section during the next boot
 set_wifi_network = false
 
+
 # Set this option to true to reactivate the dynamic IP configuration for
-# the ethernet device during the next boot
-reset_ethernet_config = false
+# the ethernet and WiFi device during the next boot
+reset_ip_config = false
+
 # Set this option to true to remove all previoucly added WiFi networks from
 # the configuration during the next boot
 reset_wifi_config = false
@@ -22,3 +29,8 @@ dns = 8.8.8.8
 [WiFi]
 ssid = NetworkName
 password = 12345678
+
+static_ip = 192.168.1.123
+subnet_bits = 24
+gateway = 192.168.1.1
+dns = 8.8.8.8

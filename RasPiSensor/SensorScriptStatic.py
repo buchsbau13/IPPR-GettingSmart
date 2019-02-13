@@ -34,11 +34,51 @@ TEMP_HUMID_GPIO = 4
 # Set start time for token fetch interval
 START_TIME = 0.0
 
+# Set token renewal delay (in seconds)
+RENEWAL_DELAY = 600.0
+
 # Set token variable
 TOKEN = "invalid_token"
 
 def sigTermExit(signal, frame):
   sys.exit("\rSIGTERM received. Exiting...")
+
+def fetchToken(tries):
+  if tries > 0:
+    auth_head = "Basic " + base64.b64encode((CLIENT_ID + ":" + CLIENT_SECRET).encode()).decode('UTF-8')
+    token_headers = {'content-type': 'application/x-www-form-urlencoded', 'authorization': auth_head}
+    token_url = AUTH_HOST + "/oauth2/token"
+    token_payload = {'grant_type': 'password', 'username': USERNAME, 'password': PASSWORD}
+    try:
+      r = requests.post(token_url, data=token_payload, headers=token_headers, timeout=1)
+      if r.status_code == 200:
+        return r.json()['access_token']
+      else:
+        return fetchToken(tries - 1)
+    except requests.exceptions.RequestException:
+      return fetchToken(tries - 1)
+  else:
+    return "invalid_token"
+
+def sendValues(tries):
+  if tries > 0:
+    headers = {'content-type': 'text/plain', 'X-Auth-Token' : TOKEN, 'Fiware-Service': FIWARE_SERVICE, 'Fiware-ServicePath': FIWARE_SERVICE_PATH}
+    # Original path:
+    #url = HOST + "/iot/d?k=" + API_KEY + "&i=" + DEVICE_ID
+    # New path:
+    url = HOST + "/iot/d/" + API_KEY + "/" + DEVICE_ID
+    payload = ("pm25|%s|pm10|%s|t|%s|h|%s" % (str(pm2_5), str(pm10), str(temp), str(humid)))
+    try:
+      r = requests.post(url, data=payload, headers=headers, timeout=1)
+      if r.status_code == 200:
+        print "+++ Payload: " + payload + " +++"
+        return True
+      else:
+        return sendValues(tries - 1)
+    except requests.exceptions.RequestException:
+      return sendValues(tries - 1)
+  else:
+    return False
 
 # Catch SIGTERM signal for controlled termination
 signal.signal(signal.SIGTERM, sigTermExit)
@@ -100,49 +140,26 @@ try:
         print "+++ PM10: " + str(pm10) + " +++"
         success = False
 
-      # Only get token every 600 seconds (if authentication is enabled)
+      # Only renew token after interval expires (if authentication is enabled)
       END_TIME = time.time()
 
-      if AUTH_ENABLED and END_TIME - START_TIME >= 600.0:
+      if AUTH_ENABLED and END_TIME - START_TIME >= RENEWAL_DELAY:
         print "\n[Fetching valid OAuth2 token...]"
-        auth_head = "Basic " + base64.b64encode((CLIENT_ID + ":" + CLIENT_SECRET).encode()).decode('UTF-8')
-        token_headers = {'content-type': 'application/x-www-form-urlencoded', 'authorization': auth_head}
-        token_url = AUTH_HOST + "/oauth2/token"
-        token_payload = {'grant_type': 'password', 'username': USERNAME, 'password': PASSWORD}
-        try:
-          r = requests.post(token_url, data=token_payload, headers=token_headers, timeout=2)
-          if r.status_code == 200:
-            print "+++ Token successfully received! +++"
-            START_TIME = time.time()
-            TOKEN = r.json()['access_token']
-            print "Token: " + TOKEN
-          else:
-            print "!!! Fetching token failed. Skipping iteration... !!!"
-            time.sleep(SENSOR_TIMEOUT)
-            continue
-        except requests.exceptions.RequestException as e:
-          print "!!! Exception raised while fetching token. Skipping iteration... !!!"
-          print "Exception: " + str(e)
+        TOKEN = fetchToken(3)
+        if TOKEN != "invalid_token":
+          START_TIME = time.time()
+          print "+++ Token successfully received! +++"
+          print "Token: " + TOKEN
+        else:
+          print "!!! Fetching token failed. Skipping iteration... !!!"
           time.sleep(SENSOR_TIMEOUT)
           continue
 
       print "\n[Sending values to server...]"
-      headers = {'content-type': 'text/plain', 'X-Auth-Token' : TOKEN, 'Fiware-Service': FIWARE_SERVICE, 'Fiware-ServicePath': FIWARE_SERVICE_PATH}
-      # Original path:
-      #url = HOST + "/iot/d?k=" + API_KEY + "&i=" + DEVICE_ID
-      # New path:
-      url = HOST + "/iot/d/" + API_KEY + "/" + DEVICE_ID
-      payload = ("pm25|%s|pm10|%s|t|%s|h|%s" % (str(pm2_5), str(pm10), str(temp), str(humid)))
-      print "+++ Payload: " + payload + " +++"
-      try:
-        r = requests.post(url, data=payload, headers=headers, timeout=2)
-        if r.status_code == 200:
-          print "+++ Payload successfully sent! +++"
-        else:
-          print "!!! Sending values failed. Skipping iteration... !!!"
-      except requests.exceptions.RequestException as e:
-        print "!!! Exception raised while sending values. Skipping iteration... !!!"
-        print "Exception: " + str(e)
+      if sendValues(3):
+        print "+++ Payload successfully sent! +++"
+      else:
+        print "!!! Sending values failed. Skipping iteration... !!!"
 
       # Subtract the delay for reading temperature/humidity values
       if SENSOR_TIMEOUT > 2:
