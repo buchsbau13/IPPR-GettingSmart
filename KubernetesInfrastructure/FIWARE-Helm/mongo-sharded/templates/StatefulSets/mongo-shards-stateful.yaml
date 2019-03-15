@@ -1,0 +1,76 @@
+{{- $rName := .Release.Name -}}
+{{- $mongoVersion := .Values.mongoVersion -}}
+{{- $namespace := .Release.Namespace -}}
+{{- range $shard := .Values.shards }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $rName }}-{{$shard.name}}-svc
+  labels:
+    app: {{ $rName }}-{{$shard.name}}
+spec:
+  ports:
+  - protocol: TCP
+    port: 27017
+    targetPort: 27017
+    name: {{$shard.name}}-main
+  clusterIP: None
+  selector:
+    app: {{ $rName }}-{{$shard.name}}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $rName }}-{{$shard.name}}
+spec:
+  serviceName: {{ $rName }}-{{$shard.name}}-svc
+  selector:
+    matchLabels:
+      app: {{ $rName }}-{{$shard.name}}
+  replicas: {{$shard.replicas}}
+  template:
+    metadata:
+      labels:
+        app: {{ $rName }}-{{$shard.name}}
+      name: {{ $rName }}-{{$shard.name}}
+    spec:
+      containers:
+      - name: {{ $rName }}-{{$shard.name}}
+        image: mongo:{{$mongoVersion}}
+        command:
+        - "mongod"
+        - "--keyFile"
+        - "/etc/secrets/mongodb-keyfile"
+        - "--shardsvr"
+        - "--replSet"
+        - {{$shard.name | quote}}
+        - "--port"
+        - "27017"
+        - "--dbpath"
+        - "/data/db"
+        - "--bind_ip"
+        - "0.0.0.0"
+        ports:
+        - containerPort: 27017
+          name: {{$shard.name}}-main
+        volumeMounts:
+          - mountPath: /etc/secrets
+            name: secrets
+          - mountPath: /data/db
+            name: {{ $rName }}-{{$shard.name}}-pv
+      volumes:
+        - name: secrets
+          secret:
+            secretName: mongodb-key
+            defaultMode: 256
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ $rName }}-{{$shard.name}}-pv
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: {{ $rName }}-{{$shard.name}}
+      resources:
+        requests:
+          storage: {{$shard.size}}
+{{- end }}
