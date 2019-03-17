@@ -1,0 +1,51 @@
+{{- $image := .Values.pep.image -}}
+{{- $idm := .Values.pep.idm }}
+{{- range $pep :=  .Values.pep.instances }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pep-{{$pep.name}}
+spec:
+  selector:
+    matchLabels:
+      run: pep-{{$pep.name}}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: pep-{{$pep.name}}
+    spec:
+      containers:
+      - name: pep-{{$pep.name}}
+        image: {{$image}}
+        ports:
+        - containerPort: {{$pep.port}}
+        volumeMounts:
+        - mountPath: /opt/fiware-pep-proxy/config.js
+          name: pep-{{$pep.name}}-config
+          subPath: config.js
+        env:
+        - name: PEP_PROXY_IDM_HOST
+          value: {{ $idm.host | quote}}
+        - name: PEP_PROXY_IDM_PORT
+          value: {{ $idm.port | quote }}
+        - name: PEP_PROXY_IDM_SSL_ENABLED
+          value: "false"
+        - name: PEP_PROXY_APP_HOST
+          value: {{ $pep.host | quote }}
+        - name: PEP_PROXY_APP_PORT
+          value: {{ $pep.port | quote }}
+        - name: PEP_PROXY_APP_ID
+          value: {{ $pep.app_id | quote }}
+        - name: PEP_PROXY_USERNAME
+          value: {{ $pep.username | quote }}
+        - name: PEP_PASSWORD
+          value: {{ $pep.password | quote }}
+      restartPolicy: Always
+      volumes:
+      - name: pep-{{$pep.name}}-config
+        configMap:
+          name: pep-{{$pep.name}}-config
+{{- end }}

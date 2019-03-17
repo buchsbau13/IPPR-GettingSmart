@@ -1,0 +1,14 @@
+# Provide MongoDB to other Pods
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  labels:
+    app: mongo
+spec:
+  ports:
+  - port: 27017
+    name: fiware-mongo
+  clusterIP: None
+  selector:
+     app: mongo

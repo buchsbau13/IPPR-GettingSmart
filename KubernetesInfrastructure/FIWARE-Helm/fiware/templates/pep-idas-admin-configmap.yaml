@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: pep-idas-admin-config
-  namespace: {{.Values.fiware.namespace}}
-data:
-  {{- tpl (.Files.Glob "files/pep-idas-admin/*").AsConfig . | nindent 2 }}

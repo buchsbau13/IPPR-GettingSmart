@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keyrock
+spec:
+  selector:
+    matchLabels:
+      run: keyrock
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: keyrock
+    spec:
+      containers:
+      - name: keyrock
+        image: {{.Values.keyrock.image}}
+        env:
+        - name: IDM_DB_HOST
+          value: {{ .Values.keyrock.database.host | quote }}
+        - name: IDM_DB_PASS
+          value: {{ .Values.keyrock.database.password | quote }}
+        - name: IDM_DB_USER
+          value: {{ .Values.keyrock.database.user | quote }}
+        - name: IDM_DB_HOST
+          value: {{ .Values.keyrock.database.host | quote }}
+        - name: IDM_DB_NAME
+          value: {{ .Values.keyrock.database.name | quote }}
+        - name: IDM_DB_DIALECT
+          value: {{ .Values.keyrock.database.dialect | quote }}
+        - name: IDM_DB_PORT
+          value: {{ .Values.keyrock.database.port | quote }}
+        - name: IDM_AUTHZFORCE_ENABLED
+          value: "false"
+        - name: IDM_PORT
+          value: {{ .Values.keyrock.port | quote }}
+        - name: IDM_HOST
+          value: {{.Values.keyrock.idm_host | quote }}
+        ports:
+        - containerPort: {{ .Values.keyrock.port }}
+        volumeMounts:
+        - mountPath: /opt/fiware-idm/config.js
+          name: keyrock-config
+          subPath: config.js
+        - mountPath: /opt/fiware-idm/lib/authzforce_templates/policy.ejs
+          name: keyrock-config
+          subPath: policy.ejs
+      restartPolicy: Always
+      volumes:
+      - name: keyrock-config
+        configMap:
+          name: keyrock-config

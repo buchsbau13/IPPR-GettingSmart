@@ -1,0 +1,10 @@
+{{ $top := . }}
+{{- range $pep := .Values.pep.instances }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pep-{{$pep.name}}-config
+data:
+  {{- tpl ($top.Files.Glob "files/peps/*").AsConfig $top | nindent 2 }}
+{{- end }}

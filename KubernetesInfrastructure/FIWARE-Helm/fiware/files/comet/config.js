@@ -31,7 +31,7 @@ config.server = {
     host: '0.0.0.0',
     // The port where the STH server will be listening.
     // Default value: "8666".
-    port: '8666',
+    port: '{{ .Values.comet.port }}',
     // The service to be used if not sent by the Orion Context Broker in the notifications.
     // Default value: "testservice".
     defaultService: 'testservice',
@@ -64,7 +64,7 @@ config.database = {
     password: '',
     // The URI to use for the database connection. It supports replica set URIs. This does not
     // include the "mongo://" protocol part. Default value: "localhost:27017"
-    URI: 'mongo:27017',
+    URI: '{{ .Values.comet.mongo_uri }}',
     // The name of the replica set to connect to, if any. Default value: "".
     replicaSet: '',
     // The prefix to be added to the service for the creation of the databases. Default value: "sth".

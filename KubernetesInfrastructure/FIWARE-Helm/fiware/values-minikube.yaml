@@ -1,0 +1,135 @@
+# Default values for fiware.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+fiware:
+  namespace: fiware-graziot
+
+infrastructure: minikube
+
+mongo:
+  version: 4.0.6
+  mongo_local_pv:
+    host: minikube
+    storage: 3Gi
+    path: /opt/fiware/mongo
+  storage: 3Gi
+
+mysql:
+  version: 5.7.21
+  mysql_local_pv:
+    host: minikube
+    storage: 1Gi
+    path: /opt/fiware/mysql
+  storage: 1Gi
+  root_password: idm
+  external: true
+
+keyrock:
+  image: fhjima/fiware-idm:latest
+  idm_host: http://192.168.99.100:30500
+  nodePort: 30500
+  port: 5000
+  database:
+    dialect: mysql
+    host: mysql
+    user: root
+    password: idm
+    name: idm
+    port: 3306
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    user: fiwaregraz@gmail.com
+    password: IPPR_aim16
+
+orion:
+  image: fiware/orion:2.2.0
+  dbhost: mongo
+
+idas:
+  image: fiware/iotagent-ul:1.8.0
+  replicas: 1
+
+cygnus:
+  image: fiware/cygnus-ngsi:1.10.0
+  http_source_port: 5050
+  replicas: 1
+  sinks:
+    mongo:
+      uri: mongo:27017
+      username: ""
+      password: ""
+      batch_size: 1000
+      batch_timeout: 30
+
+comet:
+  image: fiware/sth-comet:2.5.0
+  max_page_size: 8000
+  port: 8666
+  mongo_uri: mongo:27017
+  replicas: 1
+
+
+pep:
+  image: fiware/pep-proxy:FIWARE_7.5
+  idm:
+    host: my-service
+    port: 3000
+  instances:
+    - name: orion
+      port: 1026
+      host: orion
+      app_id: 23c1fab4-2f69-470d-8778-4614522d29d3
+      username: pep_proxy_c33f29bc-7fd1-47fc-914a-7eb2aacd43c6
+      password: pep_proxy_2bb49378-6ba3-48f4-b34a-42cf373a68e6
+      nodePort: 31026
+    - name: idas-admin
+      port: 4041
+      host: idas
+      app_id: 23c1fab4-2f69-470d-8778-4614522d29d3
+      username: pep_proxy_c33f29bc-7fd1-47fc-914a-7eb2aacd43c6
+      password: pep_proxy_2bb49378-6ba3-48f4-b34a-42cf373a68e6
+      nodePort: 30041
+    - name: idas-sensor
+      port: 7896
+      host: idas
+      app_id: 23c1fab4-2f69-470d-8778-4614522d29d3
+      username: pep_proxy_c33f29bc-7fd1-47fc-914a-7eb2aacd43c6
+      password: pep_proxy_2bb49378-6ba3-48f4-b34a-42cf373a68e6
+      nodePort: 30896
+    - name: comet
+      port: 8666
+      host: comet
+      app_id: 23c1fab4-2f69-470d-8778-4614522d29d3
+      username: pep_proxy_c33f29bc-7fd1-47fc-914a-7eb2aacd43c6
+      password: pep_proxy_2bb49378-6ba3-48f4-b34a-42cf373a68e6
+      nodePort: 30666
+
+
+
+postgres:
+  postgres_pvc:
+    accessModes: ReadWriteOnce
+    storage: 1Gi
+
+wirecloud:
+  nfs_wirecloud_pv:
+    accessModes: ReadWriteOnce
+    storage: 1Gi
+    host: minikube
+  wirecloud_static_pv:
+    accessModes: ReadWriteOnce
+    storage: 1Gi
+    host: minikube
+  wirecloud_data_pvc:
+    accessModes: ReadWriteMany
+    storage: 1Gi
+  wirecloud_static_pvc:
+    accessModes: ReadWriteMany
+    storage: 1Gi
+  nodePort: 30080
+  image: fiware/wirecloud:1.2
+  env:
+    fiware_idm_server: http://192.168.99.100:30500
+    social_auth_fiware_key: 23c1fab4-2f69-470d-8778-4614522d29d3
+    social_auth_fiware_secret: 0b9194f0-f74a-4717-9222-170e9e473bf4
