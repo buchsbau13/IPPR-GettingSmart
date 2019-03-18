@@ -73,8 +73,8 @@ comet:
 pep:
   image: fiware/pep-proxy:FIWARE_7.5
   idm:
-    host: my-service
-    port: 3000
+    host: keyrock
+    port: 5000
   instances:
     - name: orion
       port: 1026
