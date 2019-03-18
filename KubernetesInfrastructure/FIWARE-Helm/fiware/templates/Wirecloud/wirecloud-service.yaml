@@ -2,7 +2,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: wirecloud
-  namespace: {{.Values.fiware.namespace}}
   labels:
     run: wirecloud
 spec:

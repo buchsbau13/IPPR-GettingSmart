@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: wirecloud
-  namespace: {{.Values.fiware.namespace}}
 spec:
   selector:
     matchLabels:
