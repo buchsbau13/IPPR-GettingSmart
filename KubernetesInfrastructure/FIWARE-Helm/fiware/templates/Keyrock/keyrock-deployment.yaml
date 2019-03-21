@@ -24,6 +24,8 @@ spec:
           value: {{ .Values.keyrock.database.user | quote }}
         - name: IDM_DB_HOST
           value: {{ .Values.keyrock.database.host | quote }}
+        - name: DATABASE_HOST
+          value: {{ .Values.keyrock.database.host | quote }}
         - name: IDM_DB_NAME
           value: {{ .Values.keyrock.database.name | quote }}
         - name: IDM_DB_DIALECT

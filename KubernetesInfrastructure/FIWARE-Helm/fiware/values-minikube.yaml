@@ -13,6 +13,7 @@ mongo:
     storage: 3Gi
     path: /opt/fiware/mongo
   storage: 3Gi
+  external: true
 
 mysql:
   version: 5.7.21
@@ -41,6 +42,15 @@ keyrock:
     port: 587
     user: fiwaregraz@gmail.com
     password: IPPR_aim16
+  # This option will expose a locally (outside k8s) running keyrock
+  # instance to the kubernetes cluster, which is useful for debugging
+  # and development.
+  # it will disable the k8s keyrock deployment and Service and create
+  # a labelless service with host endpoint on your developer machine
+  # Attention: Still under development!
+  debug_local:
+    ip: localhost
+    port: 8080
 
 orion:
   image: fiware/orion:2.2.0
