@@ -1,5 +1,6 @@
 {{- $image := .Values.pep.image -}}
 {{- $idm := .Values.pep.idm }}
+{{- $keyrock := .Values.keyrock}}
 {{- range $pep :=  .Values.pep.instances }}
 
 ---
@@ -27,10 +28,14 @@ spec:
           name: pep-{{$pep.name}}-config
           subPath: config.js
         env:
+        - name: PEP_PROXY_AUTH_ENABLED
+          value: "true"
         - name: PEP_PROXY_IDM_HOST
-          value: {{ $idm.host | quote}}
+          value: {{ if $keyrock.debug_local }}"keyrock-external"{{else}}{{$idm.host | quote}}{{end}}
         - name: PEP_PROXY_IDM_PORT
-          value: {{ $idm.port | quote }}
+          value: {{ $keyrock.debug_local.port | default $idm.port | quote }}
+        - name: PEP_PROXY_PORT
+          value: {{ $pep.port | quote }}
         - name: PEP_PROXY_IDM_SSL_ENABLED
           value: "false"
         - name: PEP_PROXY_APP_HOST

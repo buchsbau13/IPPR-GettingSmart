@@ -11,20 +11,3 @@ spec:
   selector:
     run: orion
   type: ClusterIP
-
-{{ if .Value.mongo.external }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mongo-external
-  labels:
-    app: mongo
-spec:
-  ports:
-  - port: 1016
-    nodePort: 31026
-  type: LoadBalancer
-  selector:
-     app: mysql
-{{- end}}

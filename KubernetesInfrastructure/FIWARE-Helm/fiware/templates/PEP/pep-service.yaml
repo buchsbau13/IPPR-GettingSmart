@@ -8,8 +8,8 @@ metadata:
     run: pep-{{$pep.name}}
 spec:
   ports:
-  - port: 8666
-    targetPort: 8666
+  - port: {{$pep.port}}
+    targetPort: {{$pep.port}}
     nodePort: {{$pep.nodePort}}
     name: fiware-pep-{{$pep.name}}
   selector:
