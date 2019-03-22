@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: idas
-  namespace: {{.Values.fiware.namespace}}
 spec:
   selector:
     matchLabels:

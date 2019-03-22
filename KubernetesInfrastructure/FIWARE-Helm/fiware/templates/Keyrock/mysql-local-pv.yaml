@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mysql-local-pv
+  name: {{ .Release.Namespace}}-mysql-pv
 spec:
   capacity:
     storage: {{.Values.mysql.mysql_local_pv.storage}}
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: mysql
+  storageClassName: {{ .Release.Namespace}}-mysql
   local:
     path: {{ .Values.mysql.mysql_local_pv.path }}
   nodeAffinity:

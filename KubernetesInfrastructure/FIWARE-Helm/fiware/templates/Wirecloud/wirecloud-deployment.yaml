@@ -38,9 +38,11 @@ spec:
           value: {{quote .Values.wirecloud.nodePort}}
         volumeMounts:
          - mountPath: /opt/wirecloud_instance/data
-           name: wirecloud-data
+           name: wirecloud-pvc
+           subPath: data
          - mountPath: /var/www/static
-           name: wirecloud-static
+           name: wirecloud-pvc
+           subPath: static
          - mountPath: /opt/wirecloud_instance/wirecloud_instance/settings.py
            name: wirecloud-config
            subPath: settings.py
@@ -50,7 +52,8 @@ spec:
         - containerPort: {{.Values.wirecloud.nodePort}}
         volumeMounts:
            - mountPath: /var/www/static
-             name: wirecloud-static
+             name: wirecloud-pvc
+             subPath: static
            - mountPath: /etc/nginx/nginx.conf
              name: nginx-wirecloud-config
              subPath: nginx.conf
@@ -58,12 +61,12 @@ spec:
       securityContext:
         fsGroup: 65534
       volumes:
-      - name: wirecloud-data
+      - name: wirecloud-pvc
         persistentVolumeClaim:
-          claimName: wirecloud-data-pvc
-      - name: wirecloud-static
-        persistentVolumeClaim:
-          claimName: wirecloud-static-pvc
+          claimName: wirecloud-pvc
+      #- name: wirecloud-static
+      #  persistentVolumeClaim:
+      #    claimName: wirecloud-static-pvc
       - name: nginx-wirecloud-config
         configMap:
           name: nginx-wirecloud-config

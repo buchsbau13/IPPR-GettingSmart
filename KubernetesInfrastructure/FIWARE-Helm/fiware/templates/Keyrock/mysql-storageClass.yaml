@@ -1,6 +1,6 @@
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: mysql
+  name: {{ .Release.Namespace}}-mysql
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
