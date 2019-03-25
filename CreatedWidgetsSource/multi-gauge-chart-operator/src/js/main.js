@@ -87,7 +87,7 @@
             }
             var a = entities[entity.type].attributes[attr]
             if(entity.hasOwnProperty(entities[entity.type].attributes[attr])){
-                gaugeOptions[widgetNumber].title = attrData[a].attrName
+                gaugeOptions[widgetNumber].title = entity[attrData[a].attrName+'.friendly']
                 if(attrData[a].attrWidget === null) attrData[a].attrWidget = MashupPlatform.mashup.addWidget('CoNWeT/googlecharts/1.0.3', gaugeOptions[widgetNumber]);
                 widgetNumber++;
                 try{

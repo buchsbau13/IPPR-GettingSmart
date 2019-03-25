@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="entity-selector-widget" version="1.3">
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="dual-chart-input-widget" version="1.0">
     <details>
-        <title>Entity Selector</title>
+        <title>Dual Chart Input Widget</title>
         <authors>Stefan Leitner</authors>
         <image>images/catalogue.png</image>
         <smartphoneimage>images/catalogue.png</smartphoneimage>
@@ -9,27 +9,26 @@
     </details>
     <requirements>
         <feature name="NGSI"/>
-        <feature name="DashboardManagement"/>
     </requirements>
     <preferences>
-        <preference name="ngsi_server" type="text" label="NGSI Server" description="NGSI Server where the lamp post info is located" default="http://pep-orion:1026/"/>
+        <preference name="ngsi_server" type="text" label="NGSI Server" description="NGSI Server where the lamp post info is located" default="http://orion:1026/"/>
         <preference name="use_user_fiware_token" type="boolean" label="Use the FIWARE credentials of the user" description="Use the FIWARE credentials of the user logged into WireCloud. Take into account this option cannot be enabled if you want to use this widget in a public workspace as anonoymous users doesn't have a valid FIWARE auth token. As an alternative, you can make use of the &quot;Use the FIWARE credentials of the workspace owner&quot; preference." default="true"/>
         <preference name="use_owner_credentials" type="boolean" label="Use the FIWARE credentials of the workspace owner" description="Use the FIWARE credentials of the owner of the workspace. This preference takes preference over &quot;Use the FIWARE credentials of the user&quot;. This feature is available on WireCloud 0.7.0+ in a experimental basis, future versions of WireCloud can change the way to use it making this option not funcional and requiring you to upgrade this operator" default="false"/>
-        <preference name="ngsi_tenant" type="text" label="Tenant" description="Tenant/service to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol. Maximum length is 50 characters. If empty, the default tenant will be used" default="graziot"/>
+		<preference name="ngsi_tenant" type="text" label="Tenant" description="Tenant/service to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol. Maximum length is 50 characters. If empty, the default tenant will be used" default="graziot"/>
         <preference name="ngsi_service_path" type="text" label="Service path" description="Scope/path to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol separated by &quot;/&quot; slashes. Maximum length is 50 characters. If empty, the default service path will be used: /" default="/"/>
-        <preference name="entity_types" type="text" label="NGSI entity types" description="A comma separated list of entity types to use for filtering entities from the Orion Context broker. This field cannot be empty." default="static, mobile, traffic"/>
+        <preference name="entity_types" type="text" label="NGSI entity types" description="A comma separated list of entity types to use for filtering entities from the Orion Context broker. This field cannot be empty." default=""/>
         <preference name="entity_id_pattern" type="text" label="Entity Id Filter" description="Id parttern of the entities to monitorize on the Orion Context Broker server" default=".*"/>
-        <preference name="attributes" type="text" label="Attributes to display" description="Comma separated list of attributes to display"/>
-        <preference name="unit_attributes" label="Unit values" description="Unit values for the corresponding sensors. Comma seperated list of key-value pairs (format: sensor=unit_attr)." default="temperature=temp_sensor_unit" type="text"/>
+        <preference name="attributes" type="text" label="Attributes to display" description="Comma separated list of attributes to display" default="temperature,humidity,airPressure,pm25,pm10,pm1,co,no,no2,o3,so2,count,occupancy,speed"/>
+        <preference name="unit_attributes" label="Unit values" description="Unit values for the corresponding sensors. Comma seperated list of key-value pairs (format: sensor=unit_attr)." default="temperature=temp_sensor_unit,humidity=humid_sensor_unit,pm25=air_sensor_unit,pm10=air_sensor_unit,pm1=air_sensor_unit,airPressure=air_pressure_sensor_unit,co=ppb_sensor_unit,no=ppb_sensor_unit,no2=ppb_sensor_unit,o3=ppb_sensor_unit,so2=ppb_sensor_unit,count=count_sensor_unit,occupancy=occ_sensor_unit,speed=speed_sensor_unit" type="text"/>
     </preferences>
     <persistentvariables>
         <variable name="friendlyEntSave" type="text"/>
     </persistentvariables>
     <wiring>
-        <outputendpoint name="entity" type="text" label="Entity" description="Selected Entity " friendcode="entity"/>
+        <outputendpoint name="outputData" type="text" label="Output Data" description="Selected Output" friendcode="outputData"/>
         <inputendpoint name="message" type="text" label="Message" description="Message" friendcode="message"/>
         <inputendpoint name="friendlyEntInput" type="text" label="Friendly name entity" description="Entity containing the friendly names for the user interface." friendcode="friendlyentinput"/>
     </wiring>
     <contents src="index.html" useplatformstyle="true"/>
-    <rendering width="600px" height="100px"/>
+    <rendering width="6" height="28"/>
 </widget>

@@ -24,8 +24,10 @@
         ngsi,
         form,
         currentData,
+        lastreceived,
         error,
-        info;
+        info,
+        friendlyEnt;
     var unitAttributes = {};
 
     var create_ngsi_connection = function create_ngsi_connection() {
@@ -57,6 +59,11 @@
     };
 
     var init = function init() {
+        var friendlyEntSave = MashupPlatform.widget.getVariable('friendlyEntSave');
+        if (friendlyEntSave.get()) {
+            friendlyEnt = JSON.parse(friendlyEntSave.get());
+        }
+
         layout = new StyledElements.HorizontalLayout({'class': 'loading'});
         var fields = {
             "entity": {
@@ -74,6 +81,12 @@
 
         layout.getCenterContainer().appendChild(form);
         layout.insertInto(document.body);
+
+        // Create last received 
+        lastreceived = document.createElement('div')
+        lastreceived.setAttribute('class', 'text-center text-muted div_spaced')
+        lastreceived.innerHTML = 'zuletzt gemessen: -'
+        layout.getCenterContainer().appendChild(lastreceived)
 
         // Create the error div
         error = document.createElement('div');
@@ -122,6 +135,12 @@
             output.unit = "";
         }
 
+        //output.map(attr => friendlyEnt && friendlyEnt[attr] ? output[attr+".friendly"] = friendlyEnt[attr] : output[attr+".friendly"] = attr);
+
+        for(var attr in output){
+            if(friendlyEnt && friendlyEnt[attr]) output[attr+'.friendly'] = friendlyEnt[attr];
+        }
+        lastreceived.innerHTML = 'zuletzt gemessen: '+(new Date(output.TimeInstant)).toLocaleString()
         MashupPlatform.widget.outputs.entity.pushEvent(JSON.stringify(output));
     };
 
@@ -169,6 +188,7 @@
         } else {
             unitAttributes = {};
         }*/
+        MashupPlatform.widget.log(entityIdList, MashupPlatform.log.INFO);
     };
 
     var onQuerySuccess = function onQuerySuccess(data) {
@@ -181,7 +201,7 @@
 
         form.fieldInterfaces.entity.inputElement.clear();
         form.fieldInterfaces.entity.inputElement.addEntries(entries);
-        //onEntityChange(form.fieldInterfaces.entity.inputElement);
+        onEntityChange(form.fieldInterfaces.entity.inputElement);
 
         form.enable();
     };
@@ -213,6 +233,24 @@
             complete(message.text);
         }
     });
+
+    MashupPlatform.wiring.registerCallback("friendlyEntInput", function (entity) {
+        var save = MashupPlatform.widget.getVariable('friendlyEntSave');
+        var oldSave = save.get();
+        save.set(entity);
+
+        // If old and new friendly entity are different, reload with new data
+        if (oldSave !== entity) {
+            clearWindow();
+            init();
+        }
+    });
+
+    var clearWindow = function clearWindow() {
+        while (document.body.firstChild) {
+            document.body.removeChild(document.body.firstChild);
+        }
+    };
 
     var removeMessageBar = function removeMessageBar() {
         if (error) {
