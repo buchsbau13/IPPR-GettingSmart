@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: datanode3-external
+  labels:
+    app: datanode3-external
+spec:
+  ports:
+  - port: 9864
+    targetPort: 9864
+    nodePort: 30033
+    name: datanode3
+  - port: 8042
+    targetPort: 8042
+    nodePort: 30013
+    name: nodemanger3
+  selector:
+    app: datanode3
+  type: LoadBalancer

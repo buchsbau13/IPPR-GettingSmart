@@ -1,0 +1,33 @@
+{{- if .Values.mongo }}
+# Provide MongoDB to other Pods
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  labels:
+    app: mongo
+spec:
+  ports:
+  - port: 27017
+    name: fiware-mongo
+  clusterIP: None
+  selector:
+     app: mongo
+
+{{ if .Values.mongo.external }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-external
+  labels:
+    app: mongo
+spec:
+  ports:
+  - port: 27017
+    nodePort: 31717
+  type: LoadBalancer
+  selector:
+     app: mongo
+{{- end }}
+{{- end }}

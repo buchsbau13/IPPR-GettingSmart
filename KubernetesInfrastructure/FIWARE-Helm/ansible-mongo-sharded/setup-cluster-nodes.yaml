@@ -1,0 +1,19 @@
+---
+- hosts: "{{ node_grp }}"
+  tasks:
+    - name: create folder for configdb
+      file:
+        path: /opt/mongo/config
+        state: directory
+      become: yes
+      become_method: sudo
+    - name: create folders for shards
+      file:
+        path: /opt/mongo/{{ item }}
+        state: directory
+      loop:
+          - shard1
+          - shard2
+          - shard3
+      become: yes
+      become_method: sudo

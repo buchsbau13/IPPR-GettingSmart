@@ -1,10 +1,7 @@
 #!/bin/bash
-
-tar -xjvf mongo-dump.tar.bz2
-rm mongo-dump.tar.bz2
-cd mongo
-mongorestore --drop -d orion-graziot orion-graziot
-mongorestore --drop -d iotagentul iotagentul
-mongorestore --drop -d sth_graziot sth_graziot
-cd ..
-rm -fR mongo
+kubectl cp mongo-dump.tar.bz2 fiware-graziot/mongo-0:/
+kubectl cp restore-mongo.sh fiware-graziot/mongo-0:/
+kubectl exec mongo-0 -n fiware-graziot -- apt-get update
+kubectl exec mongo-0 -n fiware-graziot -- apt-get install bzip2 -y
+kubectl exec mongo-0 -n fiware-graziot -- chmod u+x /restore-mongo.sh
+kubectl exec mongo-0 -n fiware-graziot -- /restore-mongo.sh

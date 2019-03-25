@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-cluster-external
+  labels:
+    app: mongo-cluster-external
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+    nodePort: 30017
+  selector:
+    app: {{ .Release.Name }}-router
+  type: LoadBalancer

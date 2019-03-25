@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: keyrock
+  labels:
+    run: keyrock
+spec:
+  ports:
+  - port: {{.Values.keyrock.port}}
+    targetPort: {{.Values.keyrock.port}}
+    nodePort: {{.Values.keyrock.nodePort}}
+  selector:
+    run: keyrock
+  type: LoadBalancer
+
+# {{ if .Values.keyrock.debug_local }}
+# ---
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: keyrock-external
+# spec:
+#   ports:
+#   - protocol: TCP
+#     name: keyrock
+#     port: {{.Values.keyrock.debug_local.port}}
+#     targetPort: {{.Values.keyrock.debug_local.port}}
+# selector: {}
+#
+# ---
+# kind: Endpoints
+# apiVersion: v1
+# metadata:
+#   name: keyrock-external
+# subsets:
+#   - addresses:
+#       - ip: {{.Values.keyrock.debug_local.ip}}
+#     ports:
+#       - port: {{.Values.keyrock.debug_local.port}}
+#         name: keyrock
+# {{- end }}

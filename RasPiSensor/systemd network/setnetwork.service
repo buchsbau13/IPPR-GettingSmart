@@ -1,0 +1,16 @@
+[Unit]
+Description=Load Network Settings from File
+After=syslog.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/home/pi
+ExecStart=/home/pi/SetNetworkConfig.py
+SyslogIdentifier=setnetwork
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target

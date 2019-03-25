@@ -1,0 +1,18 @@
+{{- range $pep := .Values.pep.instances }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pep-{{$pep.name}}
+  labels:
+    run: pep-{{$pep.name}}
+spec:
+  ports:
+  - port: {{$pep.port}}
+    targetPort: {{$pep.port}}
+    nodePort: {{$pep.nodePort}}
+    name: fiware-pep-{{$pep.name}}
+  selector:
+     run: pep-{{$pep.name}}
+  type: LoadBalancer
+{{- end}}

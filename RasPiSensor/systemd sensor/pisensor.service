@@ -1,0 +1,18 @@
+[Unit]
+Description=RasPi Sensor Service
+After=syslog.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/home/pi
+ExecStart=/home/pi/SensorScriptStatic.py
+SyslogIdentifier=pisensor
+StandardOutput=syslog
+StandardError=syslog
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

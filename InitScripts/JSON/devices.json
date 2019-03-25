@@ -441,8 +441,8 @@
       ]
     },
     {
-      "device_id": "Dev_RasPi",
-      "entity_name": "RasPi",
+      "device_id": "Dev_RasPi_Mobile",
+      "entity_name": "RasPi_Mobile",
       "entity_type": "test",
       "timezone": "Europe/Vienna",
       "attributes": [
@@ -464,7 +464,7 @@
         {
           "object_id": "h",
           "name": "humidity",
-          "type": "Int"
+          "type": "Float"
         },
         {
           "object_id": "hi",
@@ -477,12 +477,12 @@
           "type": "Text"
         },
         {
-          "object_id": "a1",
-          "name": "pm2_5",
+          "object_id": "pm25",
+          "name": "pm25",
           "type": "Float"
         },
         {
-          "object_id": "a2",
+          "object_id": "pm10",
           "name": "pm10",
           "type": "Float"
         },
@@ -509,6 +509,122 @@
         {
           "object_id": "ls",
           "name": "loc_sensor_status",
+          "type": "Text"
+        }
+      ]
+    },
+    {
+      "device_id": "Dev_RasPi_1",
+      "entity_name": "RasPi_1",
+      "entity_type": "static",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "t",
+          "name": "temperature",
+          "type": "Float"
+        },
+        {
+          "object_id": "ti",
+          "name": "temp_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "ts",
+          "name": "temp_sensor_status",
+          "type": "Text"
+        },
+        {
+          "object_id": "h",
+          "name": "humidity",
+          "type": "Float"
+        },
+        {
+          "object_id": "hi",
+          "name": "humid_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "hs",
+          "name": "humid_sensor_status",
+          "type": "Text"
+        },
+        {
+          "object_id": "pm25",
+          "name": "pm25",
+          "type": "Float"
+        },
+        {
+          "object_id": "pm10",
+          "name": "pm10",
+          "type": "Float"
+        },
+        {
+          "object_id": "ai",
+          "name": "air_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "as",
+          "name": "air_sensor_status",
+          "type": "Text"
+        }
+      ]
+    },
+    {
+      "device_id": "Dev_RasPi_2",
+      "entity_name": "RasPi_2",
+      "entity_type": "static",
+      "timezone": "Europe/Vienna",
+      "attributes": [
+        {
+          "object_id": "t",
+          "name": "temperature",
+          "type": "Float"
+        },
+        {
+          "object_id": "ti",
+          "name": "temp_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "ts",
+          "name": "temp_sensor_status",
+          "type": "Text"
+        },
+        {
+          "object_id": "h",
+          "name": "humidity",
+          "type": "Float"
+        },
+        {
+          "object_id": "hi",
+          "name": "humid_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "hs",
+          "name": "humid_sensor_status",
+          "type": "Text"
+        },
+        {
+          "object_id": "pm25",
+          "name": "pm25",
+          "type": "Float"
+        },
+        {
+          "object_id": "pm10",
+          "name": "pm10",
+          "type": "Float"
+        },
+        {
+          "object_id": "ai",
+          "name": "air_sensor_info",
+          "type": "Text"
+        },
+        {
+          "object_id": "as",
+          "name": "air_sensor_status",
           "type": "Text"
         }
       ]

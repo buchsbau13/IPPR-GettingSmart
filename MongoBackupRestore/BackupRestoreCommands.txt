@@ -10,4 +10,4 @@ mongorestore -h i101v181.intra.graz.at:32717 [--nsInclude 'sth_graziot.*' --nsFr
 
 -- Export collection "Bus_1" from database "sth_graziot" as JSON:
 
-mongoexport -h i101v181.intra.graz.at:32717 -d sth_graziot -c Bus_1 -o Bus_1.json
+mongoexport -h i101v181.intra.graz.at:32717 -d sth_graziot -c sth_x002fxffffBus1_30xffffmobile -o Bus_1.json

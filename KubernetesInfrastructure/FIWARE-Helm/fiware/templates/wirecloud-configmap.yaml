@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: wirecloud-config
-  namespace: {{.Values.fiware.namespace}}
-data:
-  {{- (.Files.Glob "files/wirecloud/*").AsConfig | nindent 2 }}

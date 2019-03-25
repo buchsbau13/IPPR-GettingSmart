@@ -1,0 +1,36 @@
+mongoVersion: 3.6.9
+config:
+  replicas: 3
+  path: /opt/mongo/config
+  size: 10Gi
+  hosts:
+    - santaclara
+    - menlopark
+    - mountainview
+router:
+  replicas: 2
+shards:
+  - name: shard1
+    path: /opt/mongo/shard1
+    size: 10Gi
+    replicas: 3
+    hosts:
+      - sanmateo
+      - menlopark
+      - mountainview
+  - name: shard2
+    path: /opt/mongo/shard2
+    size: 10Gi
+    replicas: 3
+    hosts:
+      - sunnyvale
+      - sanmateo
+      - mountainview
+  - name: shard3
+    path: /opt/mongo/shard3
+    size: 10Gi
+    replicas: 3
+    hosts:
+      - sanmateo
+      - menlopark
+      - santaclara

@@ -1,0 +1,26 @@
+{{- $rName := .Release.Name -}}
+{{- $pv:= .Values.config -}}
+{{- range $index,$host := .Values.config.hosts}}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ $rName }}-config-local-pv{{$index}}
+spec:
+  capacity:
+    storage: {{$pv.size}}
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ $rName }}-config
+  local:
+    path: {{$pv.path}}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - {{ $host }}
+{{- end -}}

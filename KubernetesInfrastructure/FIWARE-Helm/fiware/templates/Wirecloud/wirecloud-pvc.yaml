@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wirecloud-pvc
+spec:
+  storageClassName: {{ .Release.Namespace }}-wirecloud
+  accessModes:
+  - {{.Values.wirecloud.pv.accessModes}}
+  resources:
+     requests:
+       storage: {{.Values.wirecloud.pvc.storage}}

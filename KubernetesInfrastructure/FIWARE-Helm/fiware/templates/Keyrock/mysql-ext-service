@@ -1,0 +1,16 @@
+{{- if .Values.mysql.external }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-external
+  labels:
+    app: mysql
+spec:
+  ports:
+  - port: {{ .Values.keyrock.database.port }}
+    name: fiware-mysql
+    nodePort: 32306
+  type: LoadBalancer
+  selector:
+     app: mysql
+{{- end }}

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wirecloud
+  labels:
+    run: wirecloud
+spec:
+  ports:
+  - port: {{.Values.wirecloud.nodePort}}
+    nodePort: {{.Values.wirecloud.nodePort}}
+    name: wirecloud
+  selector:
+     run: wirecloud
+  type: LoadBalancer

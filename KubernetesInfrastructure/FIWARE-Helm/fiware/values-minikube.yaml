@@ -1,0 +1,141 @@
+# Default values for fiware.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+mongo:
+  version: 4.0.6
+  mongo_local_pv:
+    host: minikube
+    storage: 3Gi
+    path: /opt/fiware/mongo
+  storage: 3Gi
+  external: true
+
+mysql:
+  version: 5.7.21
+  mysql_local_pv:
+    host: minikube
+    storage: 1Gi
+    path: /opt/fiware/mysql
+  storage: 1Gi
+  root_password: idm
+  external: true
+
+keyrock:
+  image: fiwareaustria/fiware-idm:latest
+  idm_host: http://192.168.99.100:30500
+  nodePort: 31533
+  port: 5000
+  database:
+    dialect: mysql
+    host: mysql
+    user: root
+    password: idm
+    name: idm
+    port: 3306
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    user: fiwaregraz@gmail.com
+    password: IPPR_aim16
+  # This option will expose a locally (outside k8s) running keyrock
+  # instance to the kubernetes cluster, which is useful for debugging
+  # and development.
+  # it will disable the k8s keyrock deployment and Service and create
+  # a labelless service with host endpoint on your developer machine
+  # Attention: Still under development!
+  #debug_local:
+  #  ip: 10.0.0.8
+  #  port: 3000
+
+orion:
+  image: fiware/orion:2.2.0
+  dbhost: mongo
+
+idas:
+  image: fiware/iotagent-ul:1.8.0
+  replicas: 1
+
+cygnus:
+  image: fiware/cygnus-ngsi:1.10.0
+  http_source_port: 5050
+  replicas: 1
+  sinks:
+    mongo:
+      uri: mongo:27017
+      username: ""
+      password: ""
+      batch_size: 1000
+      batch_timeout: 30
+
+comet:
+  image: fiware/sth-comet:2.5.0
+  max_page_size: 8000
+  port: 8666
+  mongo_uri: mongo:27017
+  replicas: 1
+
+
+pep:
+  image: fiware/pep-proxy:FIWARE_7.5
+  idm:
+    host: keyrock
+    port: 5000
+  instances:
+    - name: orion
+      port: 1026
+      host: orion
+      app_id: 777b7fee-6af9-44c0-b184-6c264fd9cbe9
+      username: pep_proxy_c13579a1-264a-4b13-a1e3-b370c961ef87
+      password: pep_proxy_50e7cded-b043-4831-84c9-895803d79db8
+      nodePort: 30099
+    - name: idas-admin
+      port: 4041
+      host: idas
+      app_id: 777b7fee-6af9-44c0-b184-6c264fd9cbe9
+      username: pep_proxy_c13579a1-264a-4b13-a1e3-b370c961ef87
+      password: pep_proxy_50e7cded-b043-4831-84c9-895803d79db8
+      nodePort: 30041
+    - name: idas-sensor
+      port: 7896
+      host: idas
+      app_id: 56dc0a24-9592-4382-881a-61d19578a1e3
+      username: pep_proxy_57d58f3c-4902-4614-8c30-09b2408837da
+      password: pep_proxy_c54278d3-fd7c-4f76-a46e-23f5f2ed7939
+      nodePort: 32324
+    - name: comet
+      port: 8666
+      host: comet
+      app_id: 777b7fee-6af9-44c0-b184-6c264fd9cbe9
+      username: pep_proxy_c13579a1-264a-4b13-a1e3-b370c961ef87
+      password: pep_proxy_50e7cded-b043-4831-84c9-895803d79db8
+      nodePort: 30666
+
+
+
+postgres:
+  postgres_pvc:
+    accessModes: ReadWriteOnce
+    storage: 1Gi
+
+wirecloud:
+  pv:
+    # either use 'local' or 'nfs'
+    # if 'nfs' is declared it takes precedence
+    accessModes: ReadWriteOnce
+    storage: 1Gi
+    local:
+      host: minikube
+      path: /opt/fiware/wirecloud
+    #nfs:
+    #  path: /var/nfs/wirecloud
+    #  server: 10.1.101.180
+    #  readOnly: false
+  pvc:
+    storage: 1Gi
+  nodePort: 30082
+  image: fiware/wirecloud:1.2
+  env:
+    fiware_idm_server: http://192.168.99.100:30500
+    social_auth_fiware_key: 23c1fab4-2f69-470d-8778-4614522d29d3
+    social_auth_fiware_secret: 0b9194f0-f74a-4717-9222-170e9e473bf4

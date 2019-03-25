@@ -36,13 +36,13 @@ The default settings of this chart assume that the ip of your kubernetes node is
 
 Installing the chart is pretty straight forward. Simple run
 
-`helm install fiware`
+`helm install fiware -n fiware --namespace fiware-graziot --values=fiware/values-minikube.yaml`
 
 This will send the entire configuration to your kubernetes cluster. Whenever you run `helm install`, helm will assign a new name to your deployment. You can get the names of all deployment using the command:
 
 `helm list`
 
-You can install a deployment using:
+You can delete a deployment using:
 
 `helm delete deploymentName`
 

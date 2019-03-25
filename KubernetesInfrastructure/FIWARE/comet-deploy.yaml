@@ -13,7 +13,7 @@ spec:
         run: comet
     spec:
       containers:
-      - image: amarbajric/sth-comet:2.4
+      - image: amarbajric/sth-comet:2.5.0
         name: comet
         env:
         - name: MAX_PAGE_SIZE
