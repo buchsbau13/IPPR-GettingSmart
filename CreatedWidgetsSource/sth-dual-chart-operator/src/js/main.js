@@ -60,7 +60,7 @@
         Promise.all([dataOne, dataTwo]).then(result => {
             const data = {}
             data.header = ["Time", inputData.attribute1 + ' - ' + inputData.entity1.id ,inputData.attribute2 + ' - ' + inputData.entity2.id]
-            data.timeStamps = [...new Set([...result[0].attributes[0].values.map(_ => _.recvTime),...result[1].attributes[0].values.map(_ => _.recvTime)])]
+            data.timeStamps = [...new Set([...result[0].attributes[0].values.map(_ => _.recvTime),...result[1].attributes[0].values.map(_ => _.recvTime)])].sort()
             data.sensorOneValues = result[0].attributes[0].values
             data.sensorTwoValues = result[1].attributes[0].values
             if(data.sensorOneValues.length == 0) throw new Error(inputData.entity1.id);
