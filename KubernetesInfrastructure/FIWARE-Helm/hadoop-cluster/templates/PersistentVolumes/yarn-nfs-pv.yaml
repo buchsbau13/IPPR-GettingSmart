@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-yarn-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-yarn
+  nfs:
+    path: /var/nfs/yarn
+    server: 10.0.0.100
+    readOnly: false
