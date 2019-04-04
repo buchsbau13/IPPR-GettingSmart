@@ -1,0 +1,34 @@
+{
+    "name": "ngsientityprovider",
+    "dependencies": {
+      "moment": "^2.20.1",
+      "bootstrap-css": "^3.3.7",
+      "jQuery": "^3.3.1",
+      "bootstrap-daterangepicker": "^2.1.27",
+      "moment-range": "^4.0.1"
+    },
+    "devDependencies": {},
+    "exportsOverride": {
+      "bootstrap-css": {
+        "js": "js/*.js",
+        "css": "css/*.css",
+        "fonts": "fonts/*",
+        "img": [
+          "img/*.png",
+          "img/*.jpg"
+        ]
+      },
+      "jQuery": {
+        "js": "dist/jquery.min.js"
+      },
+      "moment": {
+        "js": "min/*.js",
+        "locale": "locale/*.js"
+      },
+      "bootstrap-daterangepicker": {
+        "js": "daterangepicker.js",
+        "css": "daterangepicker.css"
+      }
+    }
+  }
+  

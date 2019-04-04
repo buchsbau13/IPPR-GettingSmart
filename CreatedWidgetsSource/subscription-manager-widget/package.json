@@ -1,7 +1,7 @@
 {
   "vendor": "FH-JOANNEUM",
   "name": "subscription-manager",
-  "version": "1.3",
+  "version": "1.0.0",
   "description": "This repository contains a WireCloud widget. This package.json file is used only for installing the node dependencies",
   "devDependencies": {
     "grunt": "^0.4.5",

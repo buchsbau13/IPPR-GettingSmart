@@ -1,0 +1,1 @@
+The Gauge Chart Operator is an operator that prepares data for a gauge chart with the Google Chart Widget of WireCloud. (https://github.com/Wirecloud/googlecharts-widget) More information about Google Charts can be found in the official documentation.

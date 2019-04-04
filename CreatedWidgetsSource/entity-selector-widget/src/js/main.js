@@ -20,22 +20,26 @@
 
     "use strict";
 
-    var friendlyEnt,
-        layout,
+    var layout,
         ngsi,
         form,
         currentData,
+        lastreceived,
         error,
-        info;
+        info,
+        friendlyEnt;
     var unitAttributes = {};
 
     var create_ngsi_connection = function create_ngsi_connection() {
         var request_headers = {};
 
-        if (MashupPlatform.prefs.get('use_owner_credentials')) {
-            request_headers['X-FIWARE-OAuth-Token'] = 'true';
-            request_headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
-            request_headers['X-FIWARE-OAuth-Source'] = 'workspaceowner';
+        if (MashupPlatform.prefs.get('use_user_fiware_token') || MashupPlatform.prefs.get('use_owner_credentials')) {
+            request_headers['FIWARE-OAuth-Token'] = 'true';
+            request_headers['FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+
+            if (MashupPlatform.prefs.get('use_owner_credentials')) {
+                request_headers['FIWARE-OAuth-Source'] = 'workspaceowner';
+            }
         }
 
         var tenant = MashupPlatform.prefs.get('ngsi_tenant').trim();
@@ -60,60 +64,29 @@
             friendlyEnt = JSON.parse(friendlyEntSave.get());
         }
 
-        var idLabel = "Entity ID";
-        var attrLabel = "Attribute";
-        var rangeLabel = "Date Range";
-        if (friendlyEnt && friendlyEnt.entity_id && friendlyEnt.attribute && friendlyEnt.date_range) {
-            idLabel = friendlyEnt.entity_id;
-            attrLabel = friendlyEnt.attribute;
-            rangeLabel = friendlyEnt.date_range;
-        }
-
-        layout = new StyledElements.BorderLayout({'class': 'loading'});
+        layout = new StyledElements.HorizontalLayout({'class': 'loading'});
         var fields = {
             "entity": {
-                label: idLabel,
+                label: 'Select Sensor',
                 type: 'select',
                 initialEntries: [{
                     label: "-------------------",
                     value: ""
                 }],
-                required: true
-            },
-            "attribute": {
-                label: attrLabel,
-                type: 'select',
-                initialEntries: [{
-                    label: "-------------------",
-                    value: ""
-                }],
-                required: true
-            },
-            "datetime": {
-                label: rangeLabel,
-                type: 'text',
                 required: true
             }
         };
-        form = new StyledElements.Form(fields, {cancelButton: false});
-        form.addEventListener("submit", updateEntity);
+        form = new StyledElements.Form(fields, {cancelButton: false, acceptButton: false});
         form.fieldInterfaces.entity.inputElement.addEventListener('change', onEntityChange);
-        form.fieldInterfaces.attribute.inputElement.addEventListener('change', removeMessageBar);
-        form.fieldInterfaces.datetime.inputElement.addEventListener('change', removeMessageBar);
-
-        moment.locale('de-at');
-        $(form.fieldInterfaces.datetime.inputElement.inputElement).daterangepicker({
-            timePicker: true,
-            timePicker24Hour: true,
-            timeZone: null,
-            timePickerIncrement: 5,
-            locale: {
-                format: 'LLL'
-            }
-        });
 
         layout.getCenterContainer().appendChild(form);
         layout.insertInto(document.body);
+
+        // Create last received 
+        lastreceived = document.createElement('div')
+        lastreceived.setAttribute('class', 'text-center text-muted div_spaced')
+        lastreceived.innerHTML = 'zuletzt gemessen: -'
+        layout.getCenterContainer().appendChild(lastreceived)
 
         // Create the error div
         error = document.createElement('div');
@@ -152,40 +125,23 @@
     };
 
     var onEntityChange = function onEntityChange(select) {
-        var attributesFilter = MashupPlatform.prefs.get('attributes').trim();
-        if (attributesFilter !== "") {
-            attributesFilter = attributesFilter.split(new RegExp(',\\s*'));
+
+        var output = currentData[select.getValue()];
+        var entityId = output.entityId;
+
+        if (unitAttributes && unitAttributes[output.attribute] && currentData[entityId][unitAttributes[output.attribute]]) {
+            output.unit = currentData[entityId][unitAttributes[output.attribute]];
+        } else {
+            output.unit = "";
         }
 
-        var attribute_values = currentData[select.getValue()];
+        //output.map(attr => friendlyEnt && friendlyEnt[attr] ? output[attr+".friendly"] = friendlyEnt[attr] : output[attr+".friendly"] = attr);
 
-        if (attribute_values == null) {
-            attribute_values = {};
+        for(var attr in output){
+            if(friendlyEnt && friendlyEnt[attr]) output[attr+'.friendly'] = friendlyEnt[attr];
         }
-
-        var attributes = Object.keys(attribute_values);
-        attributes = attributes.filter(function (e) {
-            return this.indexOf(e) >= 0;
-        }, attributesFilter);
-        var old_attribute = form.fieldInterfaces.attribute.inputElement.getValue();
-        var entries = [];
-
-        for (var i = 0; i < attributes.length; i++) {
-            if (['id', 'type'].indexOf(attributes[i]) === -1) {
-                if (friendlyEnt && friendlyEnt[attributes[i]]) {
-                    entries.push({value: attributes[i], label: friendlyEnt[attributes[i]]});
-                } else {
-                    entries.push({value: attributes[i]});
-                }
-            }
-        }
-
-        form.fieldInterfaces.attribute.inputElement.clear();
-        form.fieldInterfaces.attribute.inputElement.addEntries(entries);
-        if (attributes.indexOf(old_attribute) !== -1) {
-            form.fieldInterfaces.attribute.inputElement.setValue(old_attribute);
-        }
-        removeMessageBar();
+        lastreceived.innerHTML = 'zuletzt gemessen: '+(new Date(output.TimeInstant)).toLocaleString()
+        MashupPlatform.widget.outputs.entity.pushEvent(JSON.stringify(output));
     };
 
     var doQuery = function doQuery() {
@@ -211,13 +167,14 @@
         ngsi.query(entityIdList,
             null,
             {
+                details: true,
                 flat: true,
                 onSuccess: onQuerySuccess,
                 onFailure: onQueryFail
             }
         );
 
-        // Read unit definitions from settings
+        /*// Read unit definitions from settings
         if (MashupPlatform.prefs.get('unit_attributes')) {
             var keyValueList = MashupPlatform.prefs.get('unit_attributes').split(new RegExp(',\\s*'));
             keyValueList.forEach(function (entry) {
@@ -230,7 +187,8 @@
             });
         } else {
             unitAttributes = {};
-        }
+        }*/
+        MashupPlatform.widget.log(entityIdList, MashupPlatform.log.INFO);
     };
 
     var onQuerySuccess = function onQuerySuccess(data) {
@@ -251,34 +209,6 @@
     var onQueryFail = function onQueryFail(e) {
         form.disable();
         fail('Fail querying the server: ' + e);
-    };
-
-    var updateEntity = function updateEntity(form, data) {
-        form.disable();
-        hiddeStautsDivs();
-
-        var entityId = data.entity;
-        var dateParts = data.datetime.split(" - ");
-        var offset = moment().utcOffset();
-
-        var output = {};
-        output.entity = currentData[entityId];
-        output.attribute = data.attribute;
-
-        // Get unit string from entity data (if available)
-        if (unitAttributes && unitAttributes[data.attribute] && currentData[entityId][unitAttributes[data.attribute]]) {
-            output.unit = currentData[entityId][unitAttributes[data.attribute]];
-        } else {
-            output.unit = "";
-        }
-
-        output.startDate = moment(dateParts[0], 'LLL', 'de').utcOffset(offset).toISOString();
-        output.endDate = moment(dateParts[1], 'LLL', 'de').utcOffset(offset).toISOString();
-
-        MashupPlatform.wiring.pushEvent('outputData', JSON.stringify(output));
-        MashupPlatform.widget.log(output, MashupPlatform.log.INFO);
-
-        form.enable();
     };
 
     MashupPlatform.prefs.registerCallback(function (new_values) {
@@ -305,8 +235,22 @@
     });
 
     MashupPlatform.wiring.registerCallback("friendlyEntInput", function (entity) {
-        MashupPlatform.widget.getVariable('friendlyEntSave').set(entity);
+        var save = MashupPlatform.widget.getVariable('friendlyEntSave');
+        var oldSave = save.get();
+        save.set(entity);
+
+        // If old and new friendly entity are different, reload with new data
+        if (oldSave !== entity) {
+            clearWindow();
+            init();
+        }
     });
+
+    var clearWindow = function clearWindow() {
+        while (document.body.firstChild) {
+            document.body.removeChild(document.body.firstChild);
+        }
+    };
 
     var removeMessageBar = function removeMessageBar() {
         if (error) {

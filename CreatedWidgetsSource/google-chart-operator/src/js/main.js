@@ -119,3 +119,5 @@
     MashupPlatform.wiring.registerCallback("data-serie", dataserieCallback);
     MashupPlatform.wiring.registerCallback("unit", unitCallback);
 })();
+
+

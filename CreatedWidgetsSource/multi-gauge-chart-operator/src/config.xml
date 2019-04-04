@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="multi-gauge-chart-operator"
+          version="1.0">
+    <details>
+        <title>Multi Gauge Chart Operator</title>
+        <authors>Stefan Leitner</authors>
+        <image>images/catalogue.png</image>
+        <description>Prepare an entity for multiple gauge charts</description>
+        <longdescription>DESCRIPTION.md</longdescription>
+        <license>AGPLv3+ w/linking exception</license>
+        <licenseurl>http://www.gnu.org/licenses/agpl-3.0.html</licenseurl>
+    </details>
+    <requirements>
+        <feature name="DashboardManagement"/>
+    </requirements>
+    <preferences>
+        <preference name="typesAttributes" label="Types and Attributes" description="Entity types and attributes"
+                    default='{"devices":[{"entity_type":"static","attributes":[{"name":"temperature"},{"name":"humidity"},{"name":"airPressure"},{"name":"pm25"},{"name":"pm10"},{"name":"pm1"},{"name":"no2"},{"name":"no"},{"name":"so2"},{"name":"co"},{"name":"o3"}]},{"entity_type":"mobile","attributes":[{"name":"temperature"},{"name":"humidity"},{"name":"airPressure"},{"name":"pm25"},{"name":"pm10"},{"name":"pm1"},{"name":"no2"},{"name":"no"}]},{"entity_type":"traffic","attributes":[{"name":"count"},{"name":"occupancy"},{"name":"speed"}]}]}'
+                    type="text"/>
+        <preference name="attrOptions" label="Attribute options" description="Name of the entity attribute unit"
+                    default='{"attrOptions":[{"name":"temperature","gaugeOption":{"preferences":{"attribute":{"value":"temperature"},"unit":{"value":"temp_sensor_unit"},"options":{"value":{"min":"-50","max":"50","yellowFrom":"-50","yellowTo":"0","yellowColor":"#4876FF","redFrom":"0","redTo":"50","minorTicks":"5"}}}}},{"name":"airPressure","gaugeOption":{"preferences":{"attribute":{"value":"airPressure"},"unit":{"value":"air_pressure_sensor_unit"},"options":{"value":{"min":"950","max":"1050","redFrom":"1013","redTo":"1014","minorTicks":"5"}}}}},{"name":"humidity","gaugeOption":{"preferences":{"attribute":{"value":"humidity"},"unit":{"value":"humid_sensor_unit"},"options":{"value":{"min":"0","max":"100","yellowFrom":"65","yellowTo":"100","yellowColor":"#2E2EFE","redFrom":"0","redTo":"35","greenFrom":"35","greenTo":"65","minorTicks":"5"}}}}},{"name":"pm1","gaugeOption":{"preferences":{"attribute":{"value":"pm1"},"unit":{"value":"air_sensor_unit"},"options":{"value":{"min":"0","max":"100","yellowFrom":"40","yellowTo":"50","yellowColor":"#4876FF","redFrom":"50","redTo":"100","minorTicks":"5"}}}}},{"name":"pm25","gaugeOption":{"preferences":{"attribute":{"value":"pm25"},"unit":{"value":"air_sensor_unit"},"options":{"value":{"min":"0","max":"100","yellowFrom":"40","yellowTo":"50","yellowColor":"#4876FF","redFrom":"50","redTo":"100","minorTicks":"5"}}}}},{"name":"pm10","gaugeOption":{"preferences":{"attribute":{"value":"pm10"},"unit":{"value":"air_sensor_unit"},"options":{"value":{"min":"0","max":"100","yellowFrom":"40","yellowTo":"50","yellowColor":"#4876FF","redFrom":"50","redTo":"100","minorTicks":"5"}}}}},{"name":"no","gaugeOption":{"preferences":{"attribute":{"value":"no"},"unit":{"value":"air_sensor_unit"},"options":{"value":{"min":"0","max":"100","yellowFrom":"40","yellowTo":"50","yellowColor":"#4876FF","redFrom":"50","redTo":"100","minorTicks":"5"}}}}},{"name":"no2","gaugeOption":{"preferences":{"attribute":{"value":"no2"},"unit":{"value":"air_sensor_unit"},"options":{"value":{"min":"0","max":"100","yellowFrom":"40","yellowTo":"50","yellowColor":"#4876FF","redFrom":"50","redTo":"100","minorTicks":"5"}}}}},{"name":"so2","gaugeOption":{"preferences":{"attribute":{"value":"so2"},"unit":{"value":"air_sensor_unit"},"options":{"value":{"min":"0","max":"100","yellowFrom":"40","yellowTo":"50","yellowColor":"#4876FF","redFrom":"50","redTo":"100","minorTicks":"5"}}}}},{"name":"co","gaugeOption":{"preferences":{"attribute":{"value":"co"},"unit":{"value":"air_sensor_unit"},"options":{"value":{"min":"0","max":"100","yellowFrom":"40","yellowTo":"50","yellowColor":"#4876FF","redFrom":"50","redTo":"100","minorTicks":"5"}}}}},{"name":"o3","gaugeOption":{"preferences":{"attribute":{"value":"o3"},"unit":{"value":"air_sensor_unit"},"options":{"value":{"min":"0","max":"100","yellowFrom":"40","yellowTo":"50","yellowColor":"#4876FF","redFrom":"50","redTo":"100","minorTicks":"5"}}}}},{"name":"speed","gaugeOption":{"preferences":{"attribute":{"value":"speed"},"unit":{"value":"speed_sensor_unit"},"options":{"value":{"min":"0","max":"100","redFrom":"50","redTo":"100","minorTicks":"5"}}}}},{"name":"occupancy","gaugeOption":{"preferences":{"attribute":{"value":"occupancy"},"unit":{"value":"occ_sensor_unit"},"options":{"value":{"min":"0","max":"100","yellowFrom":"30","yellowTo":"60","redFrom":"60","redTo":"100","greenFrom":"0","greenTo":"30","minorTicks":"5"}}}}},{"name":"count","gaugeOption":{"preferences":{"attribute":{"value":"count"},"unit":{"value":"count_sensor_unit"},"options":{"value":{"min":"0","max":"1000","minorTicks":"5"}}}}}]}'
+                    type="text"/>
+        <preference name="gaugeSize" label="Gauge size (px)" description="Gauge size" default="300" type="number"/>
+        <preference name="gaugeRow" label="Gauges per row" description="Number of gauges per row" default="4" type="number"/>
+    </preferences>
+    <wiring>
+        <outputendpoint name="gauge" type="text" label="Gauge" description="Transformed Attribute from the received entity" friendcode="gauge"/>
+        <inputendpoint name="entityInput" type="text" label="Entity" description="Received entity will be transformed into an Attribute" friendcode="entity"/>
+    </wiring>
+    <scripts>
+        <script src="js/main.js"/>
+    </scripts>
+</operator>

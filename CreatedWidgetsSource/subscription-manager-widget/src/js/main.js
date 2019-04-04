@@ -330,11 +330,8 @@
                     if (MashupPlatform.prefs.get('allow_delete')) {
                         button = new StyledElements.Button({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
                         button.addEventListener('click', function () {
-                            var choice = window.confirm("Delete subscription with ID \"" + entry.id + "\"?");
-                            if (choice) {
-                                initOperator.call(this);
-                                this.delSubOutput.pushEvent(JSON.stringify(entry.subscription));
-                            }
+                            initOperator.call(this);
+                            this.delSubOutput.pushEvent(JSON.stringify(entry.subscription));
                         }.bind(this));
                         content.appendChild(button);
                     }
