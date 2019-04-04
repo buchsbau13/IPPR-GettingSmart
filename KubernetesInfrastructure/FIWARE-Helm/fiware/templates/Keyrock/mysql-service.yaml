@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: mysql
   labels:
-    app: mysql
+    app: mysql-service
 spec:
   ports:
   - port: {{ .Values.keyrock.database.port }}
@@ -11,3 +11,21 @@ spec:
   clusterIP: None
   selector:
      app: mysql
+
+
+{{ if .Values.keyrock.debug_local }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-external
+  labels:
+    app: mysql-service-external
+spec:
+  ports:
+  - port: {{ .Values.keyrock.database.port }}
+    name: fiware-mysql
+    nodePort: 32306
+  type: NodePort
+  selector:
+     app: mysql
+{{ end }}

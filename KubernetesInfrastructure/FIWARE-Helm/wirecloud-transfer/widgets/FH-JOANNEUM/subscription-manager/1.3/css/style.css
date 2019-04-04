@@ -1,0 +1,16 @@
+#messageContainer{
+    margin-top:36px;
+    position:absolute;
+}
+
+.show-subs-button {
+    position: absolute;
+    bottom: 2px;
+    right: 50px;
+}
+
+.add-sub-button {
+    position: absolute;
+    bottom: 2px;
+    right: 5px;
+}

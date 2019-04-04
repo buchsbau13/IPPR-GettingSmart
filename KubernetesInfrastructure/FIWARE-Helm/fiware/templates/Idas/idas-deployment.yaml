@@ -16,7 +16,15 @@ spec:
       - name: idas
         image: {{.Values.idas.image}}
         ports:
-        - containerPort: 7896
+        - containerPort: {{ .Values.idas.device_port | default 7896 }}
           name: "device-port"
-        - containerPort: 4041
+        - containerPort: {{ .Values.idas.admin_port | default 4041 }}
           name: "admin-port"
+        volumeMounts:
+        - mountPath: /opt/iotaul/config.js
+          name: idas-config
+          subPath: config.js
+      volumes:
+      - name: idas-config
+        configMap:
+          name: idas-config

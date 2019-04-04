@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="gauge-chart-operator"
+          version="1.3">
+    <details>
+        <title>Gauge Chart Operator</title>
+        <authors>Julia Buchsbaum</authors>
+        <image>images/catalogue.png</image>
+        <description>Prepare an entity for a gauge chart</description>
+        <longdescription>DESCRIPTION.md</longdescription>
+        <license>AGPLv3+ w/linking exception</license>
+        <licenseurl>http://www.gnu.org/licenses/agpl-3.0.html</licenseurl>
+    </details>
+    <requirements>
+	<feature name="NGSI"/>
+        <feature name="DashboardManagement"/>
+    </requirements>
+    <preferences>
+        <preference name="attribute" label="Attribute to show" description="Name of the entity attribute" default="temperature"
+                    type="text"/>
+        <preference name="unit" label="Unit" description="Name of the entity attribute unit" default="temp_sensor_unit"
+                    type="text"/>
+        <preference name="options" label="Chart Options" description="Gauge Chart Options" default='{"min": "-50", "max": "50", "yellowFrom": "-50", "yellowTo": "0", "yellowColor": "#4876FF", "redFrom": "0", "redTo": "50", "minorTicks": "5"}'
+                    type="text"/>
+    </preferences>
+    <wiring>
+        <outputendpoint name="gauge" type="text" label="Gauge"
+                        description="Transformed Attribute from the received entity" friendcode="gauge"/>
+        <inputendpoint name="entityInput" type="text" label="Entity"
+                       description="Received entity will be transformed into an Attribute" friendcode="entity"/>
+    </wiring>
+    <scripts>
+        <script src="js/main.js"/>
+    </scripts>
+</operator>

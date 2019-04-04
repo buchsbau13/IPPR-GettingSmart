@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="google-chart-operator"
+          version="1.4">
+    <details>
+        <title>Google Chart Operator</title>
+        <authors>Julia Buchsbaum</authors>
+        <image>images/catalogue.png</image>
+        <description>Prepare data for Google Charts widget</description>
+        <longdescription>DESCRIPTION.md</longdescription>
+        <license>AGPLv3+ w/linking exception</license>
+        <licenseurl>http://www.gnu.org/licenses/agpl-3.0.html</licenseurl>
+    </details>
+    <preferences>
+        <preference name="chartType" label="Chart Type" description="Type of the Chart" default="LineChart" type="list">
+            <option label="Line Chart" value="LineChart"/>
+            <option label="Area Chart" value="AreaChart"/>
+            <option label="Bar Chart" value="BarChart"/>
+            <option label="Column Chart" value="ColumnChart"/>
+            <option label="Scatter Chart" value="ScatterChart"/>
+            <option label="Stepped Area Chart" value="SteppedAreaChart"/>
+            <option label="Table" value="Table"/>
+        </preference>
+        <preference name="title" type="text" label="Chart Title" description="Title of the Chart" default="Historische Werte"/>
+        <preference name="xaxis" type="text" label="X-Axis Label" description="Label of the X-Axis" default="Uhrzeit"/>
+        <preference name="yaxis" type="text" label="Y-Axis Label" description="Label of the Y-Axis" default="Wert"/>
+        <preference name="unit" label="Unit" description="Unit of the values" default="°C" type="text"/>
+        <preference name="options" label="Custom Chart Options" description="Custom Chart Options can be entered as JSON String. If empty, default options will be used." type="text"/>
+    </preferences>
+    <wiring>
+        <outputendpoint name="chart" type="text" label="Chart"
+                        description="Chart data in JSON format" friendcode="chart"/>
+        <inputendpoint name="data-serie" label="Data Serie" description="Data series" type="text"
+                       friendcode="data-serie"/>
+        <inputendpoint name="timestamps" label="Timestamp List" description="Data timestamps" type="text"
+                       friendcode="timestamp-list"/>
+        <inputendpoint name="unit" label="Unit" description="Unit for Formatting" type="text"
+                       friendcode="unit"/>
+    </wiring>
+    <scripts>
+        <script src="js/main.js"/>
+    </scripts>
+</operator>

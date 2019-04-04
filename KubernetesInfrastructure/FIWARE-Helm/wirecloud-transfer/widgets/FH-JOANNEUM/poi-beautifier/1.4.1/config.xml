@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="poi-beautifier" version="1.4.1">
+  <details>
+    <title>PoI beautifier</title>
+    <authors>Michael Janusch</authors>
+    <image>images/catalogue.png</image>
+    <description>Customize the PoI information window</description>
+    <license>Apache License 2.0</license>
+    <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
+  </details>
+  <preferences>
+      <preference name="attributes" label="Attributes to display" description="Comma seperated list of attributes that should be displayed in the PoI info window" default="id,type" type="text"/>
+      <preference name="comp_attributes" label="Composite attributes" description="For attributes containing multiple subattributes, choose the subattribute(s) to display in the info window. Comma seperated list of key-value pairs (format: attribute=subattr_1&amp;subattr_2)." default="address=streetAddress" type="text"/>
+      <preference name="unit_attributes" label="Unit values" description="Unit values for the corresponding sensors. Comma seperated list of key-value pairs (format: sensor=unit_attr)." default="temperature=temp_sensor_unit" type="text"/>
+      <preference name="location_name" label="Location name" description="Identifier of the location attribute" default="location" type="text"/>
+      <preference name="timestamp_name" label="Timestamp name" description="Identifier of the timestamp attribute" default="timestamp" type="text"/>
+      <preference name="timestamp_format" label="Timestamp format" description="Format of the timestamp (placeholders: dd=day, mm=month, yyyy(or yy)=year, HH=hours, MM=minutes, ss=seconds)" default="dd.mm.yyyy HH:MM:ss" type="text"/>
+  </preferences>
+  <wiring>
+    <outputendpoint name="poiOutput" type="text" label="Modified PoI" description="PoI with modified info window" friendcode="poioutput"/>
+    <inputendpoint name="friendlyEntInput" type="text" label="Friendly name entity" description="Entity containing the friendly names for PoI attributes. For displaying PoI ID and type, the friendly name entity must contain the attributes &quot;entity_id&quot; and &quot;entity_type&quot;." friendcode="friendlyentinput"/>
+    <inputendpoint name="poiInput" type="text" label="Original PoI" description="Original PoI" friendcode="poiinput"/>
+    <inputendpoint name="addAttributes" type="text" label="Additional attributes" description="Additional attributes (as comma separated values) to display in info window" friendcode="addattributes"/>
+  </wiring>
+  <scripts>
+    <script src="js/main.js"/>
+  </scripts>
+</operator>

@@ -11,3 +11,21 @@ spec:
   selector:
      run: postgres
   type: ClusterIP
+
+{{ if .Values.postgres.external }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-external
+  labels:
+    run: postgres
+spec:
+  ports:
+  - port: 5432
+    name: postgres
+    nodePort: 32432
+  selector:
+     run: postgres
+
+  type: LoadBalancer
+{{ end }}

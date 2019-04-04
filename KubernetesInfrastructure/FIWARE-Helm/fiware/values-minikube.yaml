@@ -23,7 +23,7 @@ mysql:
 
 keyrock:
   image: fiwareaustria/fiware-idm:latest
-  idm_host: http://192.168.99.100:30500
+  idm_host: http://192.168.99.100:31533
   nodePort: 31533
   port: 5000
   database:
@@ -45,16 +45,19 @@ keyrock:
   # a labelless service with host endpoint on your developer machine
   # Attention: Still under development!
   #debug_local:
-  #  ip: 10.0.0.8
+  #  ip: 10.12.200.5
   #  port: 3000
 
 orion:
-  image: fiware/orion:2.2.0
+  image: fiware/orion:latest
   dbhost: mongo
+  replicas: 1
 
 idas:
-  image: fiware/iotagent-ul:1.8.0
+  image: fiware/iotagent-ul:latest
   replicas: 1
+  admin_port: 4041
+  device_port: 7896
 
 cygnus:
   image: fiware/cygnus-ngsi:1.10.0
@@ -67,9 +70,10 @@ cygnus:
       password: ""
       batch_size: 1000
       batch_timeout: 30
+    #hdfs:
 
 comet:
-  image: fiware/sth-comet:2.5.0
+  image: amarbajric/sth-comet:2.5.0
   max_page_size: 8000
   port: 8666
   mongo_uri: mongo:27017
@@ -101,7 +105,7 @@ pep:
       host: idas
       app_id: 56dc0a24-9592-4382-881a-61d19578a1e3
       username: pep_proxy_57d58f3c-4902-4614-8c30-09b2408837da
-      password: pep_proxy_c54278d3-fd7c-4f76-a46e-23f5f2ed7939
+      password: pep_proxy_43cfcf76-1da3-43ab-b9ff-7258e2daf2d5
       nodePort: 32324
     - name: comet
       port: 8666
@@ -117,6 +121,7 @@ postgres:
   postgres_pvc:
     accessModes: ReadWriteOnce
     storage: 1Gi
+  external: true
 
 wirecloud:
   pv:
@@ -136,6 +141,6 @@ wirecloud:
   nodePort: 30082
   image: fiware/wirecloud:1.2
   env:
-    fiware_idm_server: http://192.168.99.100:30500
-    social_auth_fiware_key: 23c1fab4-2f69-470d-8778-4614522d29d3
-    social_auth_fiware_secret: 0b9194f0-f74a-4717-9222-170e9e473bf4
+    fiware_idm_server: http://192.168.99.100:31533
+    social_auth_fiware_key: 777b7fee-6af9-44c0-b184-6c264fd9cbe9
+    social_auth_fiware_secret: 8ce801e3-2100-4102-aa79-014d597217c6

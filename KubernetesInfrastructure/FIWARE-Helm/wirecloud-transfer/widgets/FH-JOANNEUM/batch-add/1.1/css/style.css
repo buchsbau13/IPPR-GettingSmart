@@ -1,0 +1,13 @@
+.layout {
+    text-align: center;
+}
+
+.textarea {
+    width: 95%;
+    height: 40em;
+}
+
+.send-button {
+    margin: 0 auto;
+    display: table;
+}

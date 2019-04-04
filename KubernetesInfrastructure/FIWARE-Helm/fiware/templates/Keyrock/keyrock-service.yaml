@@ -13,29 +13,29 @@ spec:
     run: keyrock
   type: LoadBalancer
 
-# {{ if .Values.keyrock.debug_local }}
-# ---
-# kind: Service
-# apiVersion: v1
-# metadata:
-#   name: keyrock-external
-# spec:
-#   ports:
-#   - protocol: TCP
-#     name: keyrock
-#     port: {{.Values.keyrock.debug_local.port}}
-#     targetPort: {{.Values.keyrock.debug_local.port}}
-# selector: {}
-#
-# ---
-# kind: Endpoints
-# apiVersion: v1
-# metadata:
-#   name: keyrock-external
-# subsets:
-#   - addresses:
-#       - ip: {{.Values.keyrock.debug_local.ip}}
-#     ports:
-#       - port: {{.Values.keyrock.debug_local.port}}
-#         name: keyrock
-# {{- end }}
+{{ if .Values.keyrock.debug_local }}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: keyrock-external
+spec:
+  ports:
+  - protocol: TCP
+    name: keyrock-external
+    port: {{.Values.keyrock.debug_local.port}}
+    targetPort: {{.Values.keyrock.debug_local.port}}
+selector: {}
+
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: keyrock-external
+subsets:
+  - addresses:
+      - ip: {{.Values.keyrock.debug_local.ip}}
+    ports:
+      - port: {{.Values.keyrock.debug_local.port}}
+        name: keyrock-external
+{{- end }}

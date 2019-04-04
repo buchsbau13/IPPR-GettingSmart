@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="idas-rest-calls" version="1.0">
+  <details>
+    <title>IDAS REST calls</title>
+    <authors>Michael Janusch</authors>
+    <image>images/catalogue.png</image>
+    <description>Operator for executing REST calls to the IDAS server</description>
+    <license>Apache License 2.0</license>
+    <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
+  </details>
+    <preferences>
+        <preference name="idas_server" type="text" label="IoT agent server URL" description="URL of the IoT agent" default="http://idas:4041"/>
+        <preference name="use_user_fiware_token" type="boolean" label="Use the FIWARE credentials of the user" description="Use the FIWARE credentials of the user logged into WireCloud. Take into account this option cannot be enabled if you want to use this widget in a public workspace as anonoymous users doesn't have a valid FIWARE auth token" default="false"/>
+        <preference name="use_owner_credentials" type="boolean" label="Use the FIWARE credentials of the workspace owner" description="Use the FIWARE credentials of the owner of the workspace. This preference takes preference over &quot;Use the FIWARE credentials of the user&quot;. This feature is available on WireCloud 0.7.0+ in a experimental basis, future versions of WireCloud can change the way to use it making this option not funcional and requiring you to upgrade this operator" default="false"/>
+        <preference name="ngsi_tenant" type="text" label="NGSI tenant/service" description="Tenant/service to use when connecting to the server. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol. Maximum length is 50 characters. If empty, the default tenant will be used" default="service"/>
+        <preference name="ngsi_service_path" type="text" label="Service path" description="Scope/path to use when connecting to the IoT agent. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol separated by &quot;/&quot; slashes. Maximum length is 50 characters. If empty, the default service path will be used: /" default="/"/>
+    </preferences>
+  <wiring>
+    <inputendpoint name="getServices" type="text" label="Fetch services" description="Retrieve the list of available services" friendcode="getservices"/>
+    <inputendpoint name="addService" type="text" label="Add service" description="Add a new service, returns list of available services" friendcode="addservice"/>
+    <inputendpoint name="editService" type="text" label="Edit service" description="Edit an existing service, returns list of available services" friendcode="editservice"/>
+    <inputendpoint name="delService" type="text" label="Delete service" description="Delete an existing service, returns list of available services" friendcode="delservice"/>
+    <inputendpoint name="getDevices" type="text" label="Fetch devices" description="Retrieve the list of available devices. If the input data contains the subservice as well as device ID or entity ID and type attribute, only the corresponding devices are retrieved." friendcode="getdevices"/>
+    <inputendpoint name="addDevice" type="text" label="Add device" description="Add a new device, returns list of all devices of the same entity" friendcode="adddevice"/>
+    <inputendpoint name="editDevice" type="text" label="Edit device" description="Edit an existing device, returns list of all devices of the same entity" friendcode="editdevice"/>
+    <inputendpoint name="delDevice" type="text" label="Delete device" description="Delete an existing device, returns list of available devices" friendcode="deldevice"/>
+    <outputendpoint name="serviceOutput" type="text" label="Service output" description=" Service output" friendcode="serviceoutput"/>
+    <outputendpoint name="deviceOutput" type="text" label="Device output" description="Device output" friendcode="deviceoutput"/>
+  </wiring>
+  <scripts>
+    <script src="js/main.js"/>
+  </scripts>
+</operator>

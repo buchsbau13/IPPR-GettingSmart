@@ -1,0 +1,16 @@
+#messageContainer{
+    margin-top:36px;
+    position:absolute;
+}
+
+.reload-button {
+    position: absolute;
+    bottom: 2px;
+    right: 50px;
+}
+
+.add-service-button {
+    position: absolute;
+    bottom: 2px;
+    right: 5px;
+}

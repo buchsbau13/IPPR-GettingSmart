@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="attribute-selector-widget" version="1.3.3">
+    <details>
+        <title>Attribute Selector</title>
+        <authors>Buchsbaum Julia</authors>
+        <image>images/catalogue.png</image>
+        <doc>doc/userguide.md</doc>
+    </details>
+    <preferences>
+        <preference name="attributesJSON" type="text" label="Sensors with Attributes (JSON)" description="A JSON list of sensor types and according attributes" />
+    </preferences>
+    <persistentvariables>
+        <variable name="friendlyEntSave" type="text"/>
+    </persistentvariables>
+    <wiring>
+        <outputendpoint name="reload" type="text" label="Reload" description="Reload NGSI Source"/>
+        <outputendpoint name="entity" type="text" label="Entity" description="Entity"/>
+        <outputendpoint name="attribute" type="text" label="Attribute" description="Attribute"/>
+        <inputendpoint name="entity" type="text" label="Entity" description="Entity"/>
+        <inputendpoint name="friendlyEntInput" type="text" label="Friendly name entity" description="Entity containing the friendly names for the user interface." friendcode="friendlyentinput"/>
+    </wiring>
+    <contents src="index.html" useplatformstyle="true"/>
+    <rendering width="6" height="28"/>
+</widget>

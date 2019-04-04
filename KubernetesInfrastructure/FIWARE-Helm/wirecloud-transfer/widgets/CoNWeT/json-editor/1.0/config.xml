@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="json-editor" version="1.0">
+  <details>
+    <title>JSON Editor</title>
+    <email>aarranz@conwet.com</email>
+    <description>Simple JSON editor allowing you to view, edit, format and validate JSON structures</description>
+    <longdescription>DESCRIPTION.md</longdescription>
+    <authors>Álvaro Arranz &lt;aarranz@conwet.com&gt;</authors>
+    <image>images/catalogue.png</image>
+    <smartphoneimage>images/catalogueSmartphone.png</smartphoneimage>
+    <license>Apache License 2.0</license>
+    <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
+    <homepage>https://github.com/Wirecloud/json-editor-widget</homepage>
+    <issuetracker>https://github.com/Wirecloud/json-editor-widget/issues</issuetracker>
+    <changelog>doc/changelog.md</changelog>
+    <doc>doc/userguide.md</doc>
+  </details>
+  <requirements>
+      <feature name="StyledElements"/>
+  </requirements>
+  <wiring>
+    <inputendpoint name="input" type="text" label="Input" description="Data to be edited" friendcode="*"/>
+    <inputendpoint name="configure" type="text" label="Configuration" description="Configuration to use in the JSON editor" friendcode="json-editor-config"/>
+    <outputendpoint name="output" type="text" label="Output" description="Modified data" friendcode="*"/>
+  </wiring>
+  <contents src="index.html" useplatformstyle="true"/>
+  <rendering height="470px" width="25%"/>
+</widget>

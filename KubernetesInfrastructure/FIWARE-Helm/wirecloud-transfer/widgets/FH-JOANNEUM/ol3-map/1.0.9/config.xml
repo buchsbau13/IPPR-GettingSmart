@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="ol3-map" version="1.0.9">
+    <details>
+        <title>OpenLayers Map</title>
+        <image>images/catalogue.png</image>
+        <description>Map widget using OpenLayers.</description>
+        <authors>Buchsbaum Julia</authors>
+        <license>Apache License 2.0</license>
+        <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
+    </details>
+
+    <requirements>
+        <feature name="DashboardManagement"/>
+        <feature name="StyledElements"/>
+    </requirements>
+
+    <preferences>
+        <preference name="initialCenter" type="text" label="Initial Location" description="Decimal coordinates where map will be centered on load (e.g. `52, 5`). Leave this setting empty if you don't want to center the map at init. Remember to change the initial zoom level if you provide an initial location." default="15.421371,47.076668" />
+        <preference name="initialZoom" type="text" label="Initial Zoom Level" description="Initial zoom level. From 1 to 22, where '1' represents the furthest level and '22' the maximum zoom level." default="14" />
+        <preference name="minzoom" label="Min Zoom" type="text" description="" default="4" />
+        <preference name="layerTypes" label="POI types for Layers" type="text" description="POI Types which are used to generate different layers." default='{ "static": "Statische Sensoren", "mobile": "Mobile Sensoren"}' />
+    </preferences>
+
+    <wiring>
+        <inputendpoint name="poiInput" type="text" label="Insert/Update PoI" description="Insert or update a Point of Interest." actionlabel="Map Viewer Insert/Update PoI" friendcode="poi poi-list"/>
+        <inputendpoint name="heatmapData" type="text" label="Heatmap PoIs" description="Heatmap PoIs" friendcode="heatmapData"/>
+        <inputendpoint name="min" type="text" label="Min Attribute Value" description="Min Attribute Value"/>
+        <inputendpoint name="max" type="text" label="Max Attribute Value" description="Max Attribute Value"/>
+        <inputendpoint name="gradient" type="text" label="Gradient" description="Gradient for selected attribute"/>
+        <inputendpoint name="clear" type="text" label="Clear" description="Clear PoIs with a specific ID"/>
+</wiring>
+
+    <contents src="index.html" useplatformstyle="true"/>
+    <rendering height="300px" width="300px"/>
+</widget>

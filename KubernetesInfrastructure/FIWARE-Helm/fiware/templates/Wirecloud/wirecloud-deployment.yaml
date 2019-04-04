@@ -20,6 +20,8 @@ spec:
         env:
         - name: DEBUG
           value: "true"
+        - name: DB_NAME
+          value: "wirecloud"
         - name: DB_HOST
           value: "postgres"
         - name: DB_PASSWORD
@@ -29,7 +31,7 @@ spec:
         - name: MEMCACHED_LOCATION
           value: "memcached:11211"
         - name: FIWARE_IDM_SERVER
-          value: {{quote .Values.wirecloud.env.fiware_idm_server}}
+          value: {{ if .Values.keyrock.debug_local }}{{ cat "http://" .Values.keyrock.debug_local.ip ":" .Values.keyrock.debug_local.port | replace " " "" |quote }}{{else}}{{quote .Values.wirecloud.env.fiware_idm_server}}{{end}}
         - name: SOCIAL_AUTH_FIWARE_KEY
           value: {{quote .Values.wirecloud.env.social_auth_fiware_key}}
         - name: SOCIAL_AUTH_FIWARE_SECRET

@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="FH-JOANNEUM" name="date-range" version="1.0">
+    <details>
+        <title>Date range</title>
+        <authors>Michael Janusch</authors>
+        <image>images/catalogue.png</image>
+        <description>Widget for choosing a date range</description>
+        <license>Apache License 2.0</license>
+        <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
+    </details>
+    <requirements>
+        <feature name="StyledElements"/>
+    </requirements>
+    <persistentvariables>
+        <variable name="timestampSave" type="text"/>
+    </persistentvariables>
+    <wiring>
+        <outputendpoint name="timestamps" type="text" label="Timestamps" description="Start and end timestamps" friendcode="timestamps"/>
+    </wiring>
+    <contents src="index.html" useplatformstyle="true"/>
+    <rendering height="300px" width="33%"/>
+</widget>

@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       run: orion
-  replicas: 1
+  replicas: {{ .Values.orion.replicas }}
   template:
     metadata:
       labels:
