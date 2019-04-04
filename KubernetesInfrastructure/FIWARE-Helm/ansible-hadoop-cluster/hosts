@@ -1,0 +1,5 @@
+# datanodes for persistent volumes
+[datanodes]
+kubernetes01 ansible_host=10.0.0.101 ansible_user=root
+kubernetes02 ansible_host=10.0.0.102 ansible_user=root
+kubernetes03 ansible_host=10.0.0.103 ansible_user=root

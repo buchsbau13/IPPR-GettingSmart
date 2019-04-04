@@ -1,0 +1,9 @@
+---
+- hosts: datanodes
+  tasks:
+    - name: create folder for hdfs/data
+      file:
+          path: /opt/hadoop/hdfs/data/ # required. Path to the file being managed.
+          state: directory
+          
+          
