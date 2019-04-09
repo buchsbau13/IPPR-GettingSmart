@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Namespace }}-elasticsearch-pv
+spec:
+  capacity:
+    storage: {{.Values.elasticsearch.pv.storage}}
+  accessModes:
+  - {{.Values.elasticsearch.pv.accessModes}}
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Release.Namespace }}-elasticsearch
+  {{- if .Values.elasticsearch.pv.nfs }}
+  {{- with .Values.elasticsearch.pv.nfs}}
+  nfs:
+    path: {{ .path }}
+    server: {{ .server }}
+    readOnly: {{ .readOnly}}
+  {{- end }}
+  {{ else }}
+  {{- with .Values.elasticsearch.pv.local}}
+  local:
+    path: {{ .path }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+            - {{ .host }}
+  {{- end }}
+  {{- end }}

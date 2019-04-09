@@ -3,7 +3,7 @@ if [ "$#" -ne 3 ]
     echo "Usage: dump_orion.sh clustername database_name dump_file_name"
     exit 1
 fi
-NAMESPACE=fiware-graziot
+NAMESPACE=mongo4
 POD=mongo-0
 kubectl config use-context $1
 kubectl cp $3 $POD:/  -n $NAMESPACE

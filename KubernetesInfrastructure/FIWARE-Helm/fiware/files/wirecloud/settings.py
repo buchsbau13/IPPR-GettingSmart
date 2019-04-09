@@ -187,7 +187,7 @@ if os.environ.get("FORCE_PORT", "").strip() != "":
 else:
     FORCE_PORT = 80
 
-print('FORCE_PORT =', FORCE_PORT)
+#print('FORCE_PORT =', FORCE_PORT)
 
 FIWARE_PORTALS = (
     {
@@ -200,7 +200,7 @@ FIWARE_PORTALS = (
 
 # Auth configuration
 if IDM_AUTH_ENABLED:
-    print("IDM_AUTH_ENABLED")
+    #print("IDM_AUTH_ENABLED")
     AUTHENTICATION_BACKENDS = (
         'wirecloud.fiware.social_auth_backend.FIWAREOAuth2',
     )

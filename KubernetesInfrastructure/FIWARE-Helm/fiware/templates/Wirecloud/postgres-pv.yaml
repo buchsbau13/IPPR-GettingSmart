@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Namespace }}-postgres-pv
+spec:
+  capacity:
+    storage: {{.Values.postgres.pv.storage}}
+  accessModes:
+  - {{.Values.postgres.pv.accessModes}}
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Release.Namespace }}-postgres
+  {{- if .Values.postgres.pv.nfs }}
+  {{- with .Values.postgres.pv.nfs}}
+  nfs:
+    path: {{ .path }}
+    server: {{ .server }}
+    readOnly: {{ .readOnly}}
+  {{- end }}
+  {{ else }}
+  {{- with .Values.postgres.pv.local}}
+  local:
+    path: {{ .path }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+            - {{ .host }}
+  {{- end }}
+  {{- end }}

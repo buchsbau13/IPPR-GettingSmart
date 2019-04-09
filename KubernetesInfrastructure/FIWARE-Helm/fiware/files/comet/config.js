@@ -34,10 +34,10 @@ config.server = {
     port: '{{ .Values.comet.port }}',
     // The service to be used if not sent by the Orion Context Broker in the notifications.
     // Default value: "testservice".
-    defaultService: 'testservice',
+    defaultService: 'graziot',
     // The service path to be used if not sent by the Orion Context Broker in the notifications.
     // Default value: "/testservicepath".
-    defaultServicePath: '/testservicepath',
+    defaultServicePath: '/graziot',
     // A flag indicating if the empty results should be removed from the response.
     // Default value: "true".
     filterOutEmpty: 'true',
@@ -59,12 +59,12 @@ config.database = {
     // "collection-per-entity".
     dataModel: 'collection-per-entity',
     // The username to use for the database connection. Default value: "".
-    user: '',
+    user: '{{ .Values.cygnus.sinks.mongo.username }}',
     // The password to use for the database connection. Default value: "".
-    password: '',
+    password: '{{ .Values.cygnus.sinks.mongo.password }}',
     // The URI to use for the database connection. It supports replica set URIs. This does not
     // include the "mongo://" protocol part. Default value: "localhost:27017"
-    URI: '{{ .Values.comet.mongo_uri }}',
+    URI: '{{ .Values.cygnus.sinks.mongo.uri }}',
     // The name of the replica set to connect to, if any. Default value: "".
     replicaSet: '',
     // The prefix to be added to the service for the creation of the databases. Default value: "sth".

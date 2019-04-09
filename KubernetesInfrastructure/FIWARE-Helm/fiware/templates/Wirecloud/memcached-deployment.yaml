@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: memcached
-        image: memcached
+        image: {{ .Values.memcached.image }}
         ports:
-        - containerPort: 11211
+        - containerPort: {{ .Values.memcached.containerPort }}
         command: ['memcached', '-m', '2048m']

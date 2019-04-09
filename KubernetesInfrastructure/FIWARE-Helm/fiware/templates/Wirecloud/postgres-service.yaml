@@ -13,6 +13,7 @@ spec:
   type: ClusterIP
 
 {{ if .Values.postgres.external }}
+---
 apiVersion: v1
 kind: Service
 metadata:

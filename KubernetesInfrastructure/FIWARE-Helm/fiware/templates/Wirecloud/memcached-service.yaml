@@ -6,7 +6,7 @@ metadata:
     run: memcached
 spec:
   ports:
-  - port: 11211
+  - port: {{ .Values.memcached.containerPort}}
     name: memcached
   selector:
      run: memcached

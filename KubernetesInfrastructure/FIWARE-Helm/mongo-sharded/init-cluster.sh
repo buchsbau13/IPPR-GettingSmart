@@ -7,7 +7,7 @@ kubectl exec $NAME-shard1-0 -n $NAMESPACE -- mongo --eval "rs.initiate({_id: \"s
 kubectl exec $NAME-shard2-0 -n $NAMESPACE -- mongo --eval "rs.initiate({_id: \"shard2\", members: [ {_id: 0, host: \"$NAME-shard2-0.$NAME-shard2-svc.$NAMESPACE.svc.cluster.local:27017\"}, {_id: 1, host: \"$NAME-shard2-1.$NAME-shard2-svc.$NAMESPACE.svc.cluster.local:27017\"}, {_id: 2, host: \"$NAME-shard2-2.$NAME-shard2-svc.$NAMESPACE.svc.cluster.local:27017\"} ]});"
 kubectl exec $NAME-shard3-0 -n $NAMESPACE -- mongo --eval "rs.initiate({_id: \"shard3\", members: [ {_id: 0, host: \"$NAME-shard3-0.$NAME-shard3-svc.$NAMESPACE.svc.cluster.local:27017\"}, {_id: 1, host: \"$NAME-shard3-1.$NAME-shard3-svc.$NAMESPACE.svc.cluster.local:27017\"}, {_id: 2, host: \"$NAME-shard3-2.$NAME-shard3-svc.$NAMESPACE.svc.cluster.local:27017\"} ]});"
 
-# Chech if each MongoDB Shard's Replica Set + the ConfigDB Replica Set is ready
+# Check if each MongoDB Shard's Replica Set + the ConfigDB Replica Set is ready
 kubectl exec $NAME-config-0 -n $NAMESPACE -- mongo --quiet --eval 'if (rs.status().hasOwnProperty("myState") && rs.status().myState == 1) { print("mongo-config ok")} else {{ print("mongo-config not ok")}};'
 kubectl exec $NAME-shard1-0 -n $NAMESPACE -- mongo --quiet --eval 'if (rs.status().hasOwnProperty("myState") && rs.status().myState == 1) { print("mongo-shard1 ok")} else {{ print("mongo-shard1 not ok")}};'
 kubectl exec $NAME-shard2-0 -n $NAMESPACE -- mongo --quiet --eval 'if (rs.status().hasOwnProperty("myState") && rs.status().myState == 1) { print("mongo-shard2 ok")} else {{ print("mongo-shard2 not ok")}};'

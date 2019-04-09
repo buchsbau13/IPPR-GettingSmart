@@ -1,0 +1,33 @@
+{{- if .Values.elasticsearch }}
+# Provide MongoDB to other Pods
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+  labels:
+    run: elasticsearch
+spec:
+  ports:
+  - port: {{ .Values.elasticsearch.containerPort }}
+    name: elasticsearch
+  clusterIP: None
+  selector:
+     run: elasticsearch
+
+{{ if .Values.elasticsearch.external }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch-external
+  labels:
+    run: elasticsearch
+spec:
+  ports:
+  - port: {{ .Values.elasticsearch.containerPort }}
+    nodePort: {{ .Values.elasticsearch.nodePort }}
+  type: LoadBalancer
+  selector:
+     run: elasticsearch
+{{- end }}
+{{- end }}

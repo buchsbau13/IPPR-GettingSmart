@@ -1,0 +1,7 @@
+mongo:
+  pv:
+    path: /opt/fiware/mongo4
+    host: mountainview
+    storage: 5Gi
+  external: false
+  version: 4.0.6

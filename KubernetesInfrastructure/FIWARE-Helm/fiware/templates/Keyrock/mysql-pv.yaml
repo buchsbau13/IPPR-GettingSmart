@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  storageClassName: {{ .Release.Namespace }}-mysql
+  accessModes:
+  - {{.Values.mysql.pv.accessModes}}
+  resources:
+     requests:
+       storage: {{.Values.mysql.pv.storage}}
+
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Namespace}}-mysql-pv
+spec:
+  capacity:
+    storage: {{.Values.mysql.pv.storage}}
+  accessModes:
+  - {{.Values.mysql.pv.accessModes}}
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Release.Namespace}}-mysql
+  {{- if .Values.mysql.pv.nfs }}
+  {{- with .Values.mysql.pv.nfs}}
+  nfs:
+    path: {{ .path }}
+    server: {{ .server }}
+    readOnly: {{ .readOnly}}
+  {{- end }}
+  {{ else }}
+  {{- with .Values.mysql.pv.local}}
+  local:
+    path: {{ .path }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+            - {{ .host }}
+  {{- end }}
+  {{- end }}

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: elasticsearch-pvc
+spec:
+  storageClassName: {{ .Release.Namespace }}-elasticsearch
+  accessModes:
+  - {{.Values.elasticsearch.pv.accessModes}}
+  resources:
+     requests:
+       storage: {{.Values.elasticsearch.pv.storage}}

@@ -38,6 +38,8 @@ spec:
           value: {{quote .Values.wirecloud.env.social_auth_fiware_secret}}
         - name: FORCE_PORT
           value: {{quote .Values.wirecloud.nodePort}}
+        - name: "ELASTICSEARCH2_URL"
+          value: "http://elasticsearch:{{ .Values.elasticsearch.containerPort}}/"
         volumeMounts:
          - mountPath: /opt/wirecloud_instance/data
            name: wirecloud-pvc
@@ -61,6 +63,7 @@ spec:
              subPath: nginx.conf
              readOnly: true
       securityContext:
+        runAsUser: 0
         fsGroup: 65534
       volumes:
       - name: wirecloud-pvc

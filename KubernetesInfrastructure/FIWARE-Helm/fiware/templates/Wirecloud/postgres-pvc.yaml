@@ -3,8 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: postgres-pvc
 spec:
+  storageClassName: {{ .Release.Namespace }}-postgres
   accessModes:
-  - {{.Values.postgres.postgres_pvc.accessModes}}
+  - {{.Values.postgres.pv.accessModes}}
   resources:
      requests:
-       storage: {{.Values.postgres.postgres_pvc.storage}}
+       storage: {{.Values.postgres.pv.storage}}

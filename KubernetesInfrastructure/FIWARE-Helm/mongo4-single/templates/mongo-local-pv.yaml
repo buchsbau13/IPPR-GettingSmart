@@ -1,16 +1,18 @@
+{{- if .Values.mongo }}
+# PersistentVolume for MongoDB
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Release.Namespace}}-mysql-pv
+  name: {{ .Release.Namespace}}-mongo-pv
 spec:
   capacity:
-    storage: {{.Values.mysql.mysql_local_pv.storage}}
+    storage: {{.Values.mongo.pv.storage}}
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: {{ .Release.Namespace}}-mysql
+  storageClassName: {{ .Release.Namespace}}-mongo
   local:
-    path: {{ .Values.mysql.mysql_local_pv.path }}
+    path: {{.Values.mongo.pv.path}}
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -18,4 +20,5 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
-            - {{.Values.mysql.mysql_local_pv.host}}
+            - {{.Values.mongo.pv.host}}
+{{- end }}
