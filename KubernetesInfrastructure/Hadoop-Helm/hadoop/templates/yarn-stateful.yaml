@@ -1,75 +1,76 @@
+{{- $relname := .Release.Name -}}
+{{- $v := .Values.hadoopVersion -}}
+{{- range $y := .Values.yarn }}
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: yarn
+  name: {{ $y.name }}
   labels:
-    app: yarn
+    app: {{ $y.name }}
 spec:
   ports:
-  - port: 8088
-    name: yarn-rm
-  - port: 19888
-    name: yarn-hs
+  #{{- range $port, $name := $y.servicePorts}}
+  #- port: {{ $port }}
+  #  name: {{ $name }}
+  #{{- end }}
+{{ toYaml $y.servicePorts | indent 4 }}
   clusterIP: None
   selector:
-     app: yarn
+     app: {{ $y.name }}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: hadoop-yarn
+  name: hadoop-{{ $y.name }}
 spec:
   selector:
     matchLabels:
-      app: yarn # has to match .spec.template.metadata.labels
-  serviceName: "yarn"
+      app: {{ $y.name }} # has to match .spec.template.metadata.labels
+  serviceName: {{ $y.name }}
   replicas: 1 # by default is 1
   template:
     metadata:
       labels:
-        app: yarn # has to match .spec.selector.matchLabels
+        app: {{ $y.name }} # has to match .spec.selector.matchLabels
     spec:
       containers:
-      - name: yarn
-        image: {{ .Values.images.yarn }}:{{ .Values.images.tag }}
+      - name: {{ $y.name }}
+        image: {{ $y.image }}:{{ $v }}
         ports:
-        - containerPort: 8088
-          name: yarn-rm
-        - containerPort: 19888
-          name: yarn-hs
-        - containerPort: 4040
-          name: spark-ui
+{{ toYaml $y.containerPorts | indent 10 }}
         volumeMounts:
-        - name: nfs-yarn-pv-1
+        - name: {{ $y.name }}-pv-1
           mountPath: /hdfs/volume1/yarn
-        - name: yarn-config
+        - name: hadoop-config
           mountPath: /opt/hadoop/etc/hadoop/core-site.xml
           subPath: core-site.xml
-        - name: yarn-config
+        - name: hadoop-config
           mountPath: /opt/hadoop/etc/hadoop/hdfs-site.xml
           subPath: hdfs-site.xml
-        - name: yarn-config
+        - name: hadoop-config
           mountPath: /opt/hadoop/etc/hadoop/mapred-site.xml
           subPath: mapred-site.xml
-        - name: yarn-config
+        - name: hadoop-config
           mountPath: /opt/hadoop/etc/hadoop/yarn-site.xml
           subPath: yarn-site.xml
         - name: spark-config
           mountPath: /opt/hadoop/spark/conf/spark-defaults.conf
           subPath: spark-defaults.conf
       volumes:
-      - name: yarn-config
+      - name: hadoop-config
         configMap:
-          name: yarn-config
+          name: hadoop-config
       - name: spark-config
         configMap:
           name: spark-config
   volumeClaimTemplates:
   - metadata:
-      name: nfs-yarn-pv-1
+      name: {{ $y.name }}-pv-1
     spec:
       accessModes: [ "ReadWriteMany" ]
-      storageClassName: "nfs-yarn"
+      storageClassName: {{ $relname }}-{{ $y.name }}
       resources:
         requests:
-          storage: 2Gi
+          storage: {{ $y.size }}
+{{- end -}}

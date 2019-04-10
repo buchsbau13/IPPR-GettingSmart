@@ -1,15 +1,13 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: yarn-config
-  labels:
-    release: {{ .Release.Name }}
+  name: hadoop-config
 data:
   core-site.xml: |
     <configuration>
         <property>
             <name>fs.defaultFS</name>
-            <value>hdfs://hadoop-namenode-0.namenode.hadoop.svc.cluster.local:9000</value>
+            <value>hdfs://hadoop-namenode-0.namenode.{{ .Release.Namespace }}.svc.cluster.local:9000</value>
         </property>
         <property>
             <name>io.file.buffer.size</name>
@@ -38,12 +36,16 @@ data:
             <name>dfs.replication</name>
             <value>2</value>
         </property>
+        <property>
+            <name>dfs.webhdfs.enabled</name>
+            <value>true</value>
+        </property>
     </configuration>
   mapred-site.xml: |
     <configuration>
         <property>
             <name>mapreduce.job.tracker.address</name>
-            <value>hadoop-yarn-0.yarn.hadoop.svc.cluster.local</value>
+            <value>hadoop-yarn-0.yarn.{{ .Release.Namespace }}.svc.cluster.local</value>
         </property>
         <property>
             <name>mapreduce.framework.name</name>
@@ -63,11 +65,11 @@ data:
         </property>
         <property>
             <name>mapreduce.jobhistory.address</name>
-            <value>hadoop-yarn-0.yarn.hadoop.svc.cluster.local:10020</value>
+            <value>hadoop-yarn-0.yarn.{{ .Release.Namespace }}.svc.cluster.local:10020</value>
         </property>
         <property>
             <name>mapreduce.jobhistory.webapp.address</name>
-            <value>hadoop-yarn-0.yarn.hadoop.svc.cluster.local:19888</value>
+            <value>hadoop-yarn-0.yarn.{{ .Release.Namespace }}.svc.cluster.local:19888</value>
         </property>
         <property>
             <name>yarn.app.mapreduce.am.resource.mb</name>
@@ -82,12 +84,11 @@ data:
             <value>1024</value>
         </property>
     </configuration>
-    
   yarn-site.xml: |
     <configuration>
         <property>
             <name>yarn.resourcemanager.hostname</name>
-            <value>hadoop-yarn-0.yarn.hadoop.svc.cluster.local</value>
+            <value>hadoop-yarn-0.yarn.{{ .Release.Namespace }}.svc.cluster.local</value>
             <description>The hostname of the Resource Manager </description>
         </property>
         <property>
@@ -96,23 +97,23 @@ data:
         </property>
         <property>
             <name>yarn.resourcemanager.scheduler.address</name>
-            <value>hadoop-yarn-0.yarn.hadoop.svc.cluster.local:8030</value>
+            <value>hadoop-yarn-0.yarn.{{ .Release.Namespace }}.svc.cluster.local:8030</value>
         </property>
         <property>
             <name>yarn.resourcemanager.resource-tracker.address</name>
-            <value>hadoop-yarn-0.yarn.hadoop.svc.cluster.local:8031</value>
+            <value>hadoop-yarn-0.yarn.{{ .Release.Namespace }}.svc.cluster.local:8031</value>
         </property>
         <property>
             <name>yarn.resourcemanager.address</name>
-            <value>hadoop-yarn-0.yarn.hadoop.svc.cluster.local:8032</value>
+            <value>hadoop-yarn-0.yarn.{{ .Release.Namespace }}.svc.cluster.local:8032</value>
         </property>
         <property>
             <name>yarn.resourcemanager.admin.address</name>
-            <value>hadoop-yarn-0.yarn.hadoop.svc.cluster.local:8033</value>
+            <value>hadoop-yarn-0.yarn.{{ .Release.Namespace }}.svc.cluster.local:8033</value>
         </property>
         <property>
             <name>yarn.resourcemanager.webapp.address</name>
-            <value>hadoop-yarn-0.yarn.hadoop.svc.cluster.local:8088</value>
+            <value>hadoop-yarn-0.yarn.{{ .Release.Namespace }}.svc.cluster.local:8088</value>
         </property>
         <property>
             <name>yarn.nodemanager.resource.memory-mb</name>

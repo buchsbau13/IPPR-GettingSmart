@@ -1,0 +1,68 @@
+{{- $relname := .Release.Name -}}
+{{- $v := .Values.hadoopVersion -}}
+{{- $dn := .Values.datanode -}}
+{{- range $index, $host := $dn.hosts }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: datanode-{{ $index }}
+  labels:
+    app: datanode-{{ $index }}
+spec:
+  ports:
+  - port: 9864
+    name: hdfs-datanode-{{ $index }}
+  clusterIP: None
+  selector:
+     app: datanode-{{ $index }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hadoop-datanode-{{ $index }}
+spec:
+  selector:
+    matchLabels:
+      app: datanode-{{ $index }} # has to match .spec.template.metadata.labels
+  serviceName: datanode-{{ $index }}
+  replicas: 1 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: datanode-{{ $index }} # has to match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: datanode-{{ $index }}
+        image: {{ $dn.image }}:{{ $v }}
+        ports:
+        - containerPort: 9864
+        volumeMounts:
+        - name: datanode-pv-{{ $index }}
+          mountPath: /hdfs/volume1/data
+        - name: hadoop-config
+          mountPath: /opt/hadoop/etc/hadoop/core-site.xml
+          subPath: core-site.xml
+        - name: hadoop-config
+          mountPath: /opt/hadoop/etc/hadoop/hdfs-site.xml
+          subPath: hdfs-site.xml
+        - name: hadoop-config
+          mountPath: /opt/hadoop/etc/hadoop/mapred-site.xml
+          subPath: mapred-site.xml
+        - name: hadoop-config
+          mountPath: /opt/hadoop/etc/hadoop/yarn-site.xml
+          subPath: yarn-site.xml
+      volumes:
+      - name: hadoop-config
+        configMap:
+          name: hadoop-config
+  volumeClaimTemplates:
+  - metadata:
+      name: datanode-pv-{{ $index }}
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: {{ $relname }}-datanode-{{ $index }}
+      resources:
+        requests:
+          storage: {{ $dn.size }}
+{{- end -}}

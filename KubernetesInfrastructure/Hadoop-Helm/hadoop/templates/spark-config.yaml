@@ -2,8 +2,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: spark-config
-  labels:
-    release: {{ .Release.Name }}
 data:
   spark-defaults.conf: |
     # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -36,8 +34,8 @@ data:
     spark.master                        yarn
     #spark.submit.deployMode             cluster
     spark.eventLog.enabled              true
-    spark.eventLog.dir                  hdfs://hadoop-namenode-0.namenode.hadoop.svc.cluster.local:9000/spark-logs
-    spark.history.fs.logDirectory       hdfs://hadoop-namenode-0.namenode.hadoop.svc.cluster.local:9000/spark-logs
+    spark.eventLog.dir                  hdfs://hadoop-namenode-0.namenode.{{ .Release.Namespace }}.svc.cluster.local:9000/spark-logs
+    spark.history.fs.logDirectory       hdfs://hadoop-namenode-0.namenode.{{ .Release.Namespace }}.svc.cluster.local:9000/spark-logs
     spark.history.provider              org.apache.spark.deploy.history.FsHistoryProvider
     spark.history.fs.update.interval    10s
     spark.history.ui.port               18080
