@@ -1,9 +1,9 @@
 # Images for the used components YARN, NameNode, DataNode
 images:
-  yarn: stfnltnr/hadoop-yarn
-  namenode: stfnltnr/hadoop-namenode
-  datanode: stfnltnr/hadoop-datanode
-  tag: 3.1.2
+  yarn: bxjulia/hadoop-yarn #stfnltnr/hadoop-yarn
+  namenode: bxjulia/hadoop-namenode # stfnltnr/hadoop-namenode
+  datanode: bxjulia/hadoop-datanode # stfnltnr/hadoop-datanode
+  tag: latest #3.1.2
   pullPolicy: IfNotPresent
 
 # HadoopVersion
@@ -34,5 +34,4 @@ storage:
   nfs:
     path: /var/nfs/ # + .name
     server: 10.0.0.100
-    #server: 10.1.101.180
     readOnly: false

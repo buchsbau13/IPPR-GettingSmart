@@ -1,20 +1,16 @@
-{{- /*
- {{- $release := .Release.Name -}}
-{{- $dn := .Values.dn -}}
-{{- range $index, $host := .Values.dn.hosts }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{$dn.name}}{{$index}}-local-pv
+  name: datanode1-local-pv
 spec:
   capacity:
-    storage: {{$dn.size}}
+    storage: 4Gi
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: {{$release}}-datanode
+  storageClassName: datanode1
   local:
-    path: {{$dn.path}}
+    path: /opt/hadoop/hdfs/data
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -22,6 +18,4 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
-          - {{ $host }}
-{{- end -}} 
-*/ -}}
+          - k8s-worker1
