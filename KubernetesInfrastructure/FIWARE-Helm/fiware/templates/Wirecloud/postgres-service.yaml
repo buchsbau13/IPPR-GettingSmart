@@ -24,7 +24,7 @@ spec:
   ports:
   - port: 5432
     name: postgres
-    nodePort: 32432
+    nodePort: {{ .Values.postgres.nodePort | default 32432}}
   selector:
      run: postgres
 

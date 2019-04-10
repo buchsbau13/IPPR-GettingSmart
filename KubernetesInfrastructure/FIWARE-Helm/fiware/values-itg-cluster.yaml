@@ -1,0 +1,211 @@
+# Default values for fiware.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# mongo:
+#   version: 4.0.6
+#   mongo_local_pv:
+#     host: minikube
+#     storage: 3Gi
+#     path: /opt/fiware/mongo
+#   storage: 3Gi
+#   external: true
+
+mysql:
+  version: 5.7.21
+  root_password: idm
+  external: true
+  pv:
+    storage: 1Gi
+    accessModes: ReadWriteOnce
+    #local:
+    #  host: minikube
+    #  path: /opt/fiware/mysql
+    nfs:
+      path: /var/nfs/fiware/mysql
+      server: 10.1.101.180
+      readOnly: false
+
+keyrock:
+  image: fiwareaustria/fiware-idm:latest
+  #idm_host: http://i101v180.intra.graz.at:31534
+  #nodePort: 31534
+  idm_host: http://i101v180.intra.graz.at:31533
+  nodePort: 31533
+  port: 5000
+  database:
+    dialect: mysql
+    host: mysql
+    user: root
+    password: idm
+    name: idm
+    port: 3306
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    user: fiwaregraz@gmail.com
+    password: IPPR_aim16
+  # This option will expose a locally (outside k8s) running keyrock
+  # instance to the kubernetes cluster, which is useful for debugging
+  # and development.
+  # it will disable the k8s keyrock deployment and Service and create
+  # a labelless service with host endpoint on your developer machine
+  # Attention: Still under development!
+  #debug_local:
+  #  ip: 10.12.200.5
+  #  port: 3000
+
+orion:
+  image: fiware/orion:2.2.0
+  dbhost: mongo4.mongo4
+  replicas: 1
+
+idas:
+  image: fiware/iotagent-ul:1.8.0
+  replicas: 1
+  admin_port: 4041
+  device_port: 7896
+
+cygnus:
+  image: fiware/cygnus-ngsi:1.10.0
+  http_source_port: 5050
+  replicas: 1
+  external: true
+  sinks:
+    mongo:
+      uri: mongo-router-svc.mongo:27017
+      username: "fiware"
+      password: "graziot"
+      batch_size: 1000
+      batch_timeout: 30
+    hdfs:
+      host: namenode.hadoop.svc.cluster.local
+      port: 9870
+      username: fiware
+
+
+comet:
+  image: amarbajric/sth-comet:2.6.1
+  max_page_size: 8000
+  port: 8666
+  replicas: 1
+
+pep:
+  image: fiware/pep-proxy:FIWARE_7.5
+  idm:
+    host: keyrock
+    port: 5000
+  instances:
+    - name: orion
+      port: 1026
+      host: orion
+      app_id: 777b7fee-6af9-44c0-b184-6c264fd9cbe9
+      username: pep_proxy_c13579a1-264a-4b13-a1e3-b370c961ef87
+      password: pep_proxy_50e7cded-b043-4831-84c9-895803d79db8
+      #nodePort: 30100
+      nodePort: 30099
+    - name: idas-admin
+      port: 4041
+      host: idas
+      app_id: 777b7fee-6af9-44c0-b184-6c264fd9cbe9
+      username: pep_proxy_c13579a1-264a-4b13-a1e3-b370c961ef87
+      password: pep_proxy_50e7cded-b043-4831-84c9-895803d79db8
+      nodePort: 30042
+      #nodePort: 30041
+    - name: idas-sensor
+      port: 7896
+      host: idas
+      app_id: 56dc0a24-9592-4382-881a-61d19578a1e3
+      username: pep_proxy_57d58f3c-4902-4614-8c30-09b2408837da
+      password: pep_proxy_43cfcf76-1da3-43ab-b9ff-7258e2daf2d5
+      #nodePort: 32325
+      nodePort: 32324
+    - name: comet
+      port: 8666
+      host: comet
+      app_id: 777b7fee-6af9-44c0-b184-6c264fd9cbe9
+      username: pep_proxy_c13579a1-264a-4b13-a1e3-b370c961ef87
+      password: pep_proxy_50e7cded-b043-4831-84c9-895803d79db8
+      #nodePort: 30777
+      nodePort: 30666
+    - name: cygnus
+      port: 5050
+      host: cygnus
+      app_id: 777b7fee-6af9-44c0-b184-6c264fd9cbe9
+      username: pep_proxy_c13579a1-264a-4b13-a1e3-b370c961ef87
+      password: pep_proxy_50e7cded-b043-4831-84c9-895803d79db8
+      #nodePort: 32551
+      nodePort: 32550
+
+
+
+postgres:
+  external: true
+  nodePort: 32432
+  pv:
+    # either use 'local' or 'nfs'
+    # if 'nfs' is declared it takes precedence
+    accessModes: ReadWriteOnce
+    storage: 1Gi
+    #local:
+    #  host: minikube
+    #  path: /opt/fiware/postgres
+    nfs:
+      path: /var/nfs/fiware/postgres
+      server: 10.1.101.180
+      readOnly: false
+
+memcached:
+  image: memcached:1
+  containerPort: 11211
+
+elasticsearch:
+  replicas: 1
+  image: elasticsearch:2.4
+  containerPort: 9200
+  external: true
+  nodePort: 32093
+  #nodePort: 32092
+  pv:
+    # either use 'local' or 'nfs'
+    # if 'nfs' is declared it takes precedence
+    accessModes: ReadWriteOnce
+    storage: 1Gi
+    #local:
+    #  host: minikube
+    #  path: /opt/fiware/elasticsearch
+    nfs:
+      path: /var/nfs/fiware/elasticsearch
+      server: 10.1.101.180
+      readOnly: false
+
+
+wirecloud:
+  ngsi:
+    #nodePort: 30004
+    nodePort: 30003
+  db:
+    host: postgres
+    username: postgres
+    dbName: wirecloud
+    password: wirepass
+  pv:
+    # either use 'local' or 'nfs'
+    # if 'nfs' is declared it takes precedence
+    accessModes: ReadWriteOnce
+    storage: 1Gi
+    #local:
+    #  host: minikube
+    #  path: /opt/fiware/wirecloud
+    nfs:
+      path: /var/nfs/fiware/wirecloud
+      server: 10.1.101.180
+      readOnly: false
+  pvc:
+    storage: 1Gi
+  #nodePort: 30083
+  nodePort: 30082
+  image: fiware/wirecloud:1.2
+  env:
+    social_auth_fiware_key: 777b7fee-6af9-44c0-b184-6c264fd9cbe9
+    social_auth_fiware_secret: 8ce801e3-2100-4102-aa79-014d597217c6

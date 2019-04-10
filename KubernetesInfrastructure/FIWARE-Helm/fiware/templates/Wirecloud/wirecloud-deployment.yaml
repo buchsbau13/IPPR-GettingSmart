@@ -21,17 +21,19 @@ spec:
         - name: DEBUG
           value: "true"
         - name: DB_NAME
-          value: "wirecloud"
+          value: {{ .Values.wirecloud.db.dbName | default "wirecloud" | quote }}
+        - name: DB_USERNAME
+          value: {{ .Values.wirecloud.db.username | default "postgres" | quote }}
         - name: DB_HOST
-          value: "postgres"
+          value: {{ .Values.wirecloud.db.host | default "postgres" | quote }}
         - name: DB_PASSWORD
-          value: "wirepass"
+          value: {{ .Values.wirecloud.db.password | default "wirepass" | quote }}
         - name: FORWARDED_ALLOW_IPS
           value: "*"
         - name: MEMCACHED_LOCATION
-          value: "memcached:11211"
+          value: "memcached:{{ .Values.memcached.containerPort}}"
         - name: FIWARE_IDM_SERVER
-          value: {{ if .Values.keyrock.debug_local }}{{ cat "http://" .Values.keyrock.debug_local.ip ":" .Values.keyrock.debug_local.port | replace " " "" |quote }}{{else}}{{quote .Values.wirecloud.env.fiware_idm_server}}{{end}}
+          value: {{ if .Values.keyrock.debug_local }}{{ cat "http://" .Values.keyrock.debug_local.ip ":" .Values.keyrock.debug_local.port | replace " " "" |quote }}{{else}}{{quote .Values.keyrock.idm_host}}{{end}}
         - name: SOCIAL_AUTH_FIWARE_KEY
           value: {{quote .Values.wirecloud.env.social_auth_fiware_key}}
         - name: SOCIAL_AUTH_FIWARE_SECRET

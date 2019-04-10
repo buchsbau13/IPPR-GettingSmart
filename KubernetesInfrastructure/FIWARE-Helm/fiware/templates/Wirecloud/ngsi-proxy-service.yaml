@@ -8,7 +8,7 @@ spec:
   ports:
   - port: 30003
     targetPort: 30003
-    nodePort: 30003
+    nodePort: {{ .Values.wirecloud.ngsi.nodePort | default 30003 }}
   selector:
     run: ngsi-proxy
   type: LoadBalancer

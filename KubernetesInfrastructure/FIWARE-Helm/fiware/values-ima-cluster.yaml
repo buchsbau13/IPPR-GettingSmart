@@ -54,12 +54,12 @@ keyrock:
   #  port: 3000
 
 orion:
-  image: fiware/orion:latest
+  image: fiware/orion:2.2.0
   dbhost: mongo.mongo4
   replicas: 1
 
 idas:
-  image: fiware/iotagent-ul:latest
+  image: fiware/iotagent-ul:1.8.0
   replicas: 1
   admin_port: 4041
   device_port: 7896
@@ -79,7 +79,7 @@ cygnus:
     #hdfs:
 
 comet:
-  image: amarbajric/sth-comet:2.5.0
+  image: amarbajric/sth-comet:2.6.1 
   max_page_size: 8000
   port: 8666
   replicas: 1

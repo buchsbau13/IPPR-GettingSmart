@@ -19,8 +19,12 @@ spec:
         ports:
         - containerPort: 5432
         env:
+        - name: POSTGRES_USER
+          value: {{ .Values.wirecloud.db.username | default "postgres" | quote }}
         - name: POSTGRES_PASSWORD
-          value: "wirepass"
+          value: {{ .Values.wirecloud.db.password | default "wirepass" | quote }}
+        - name: POSTGRES_DB
+          value: {{ .Values.wirecloud.db.dbName | default "wirecloud" | quote}}
         volumeMounts:
            - mountPath: /var/lib/postgresql/data
              name: postgres-volume
