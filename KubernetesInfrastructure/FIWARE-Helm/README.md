@@ -20,6 +20,8 @@ Some of the pods defined in this chart require local volumes that are mapped to 
 sudo mkdir -p /opt/fiware/mysql
 sudo mkdir -p /opt/fiware/mongo
 sudo mkdir -p /opt/fiware/wirecloud
+sudo mkdir -p /opt/fiware/postgres
+sudo mkdir -p /opt/fiware/elasticsearch
 ```
 
 ## Helm
@@ -36,7 +38,7 @@ The default settings of this chart assume that the ip of your kubernetes node is
 
 Installing the chart is pretty straight forward. Simple run
 
-`helm install fiware -n fiware --namespace fiware-graziot --values=fiware/values-minikube.yaml`
+`helm install fiware -n fiware --namespace fiware-iot --values=fiware/values-minikube.yaml`
 
 This will send the entire configuration to your kubernetes cluster. Whenever you run `helm install`, helm will assign a new name to your deployment. You can get the names of all deployment using the command:
 
@@ -46,21 +48,39 @@ You can delete a deployment using:
 
 `helm delete deploymentName`
 
-where `deploymentName` is the name of your deployment as listed by `helm list`.
+where `deploymentName` is the name of your deployment as listed by `helm list` (should be `fiware` when using the statement from above).
 
 Whenever you make changes to the configuration you can upgrade the current deployment by using:
 
-`helm upgrade deploymentName fiware`
+`helm upgrade deploymentName fiware --values a_values_file
+`
 
 This will automatically perform a rolling upgrade of all pods concerned. If the update, however, concerns a `ConfigMap` you need to delete the dependent pods manually.
 
 ## Installing the Database dumps
 
-This project comes with a prototypic IdM (keyrock) configuration and context broker as well as historic data. To restore these datasets run the script `restore-idm.sh`. Until the databes is restored, pep-proxies won't be able to connect with the IdM, without terminating with an error. Thus you need to check the logs of all pep proxies an propably need to delete them in order to force re-creation once the databes is restored.
+This project comes with a snapshot of IdM (keyrock) configuration and some context broker as well as historic data. To restore these datasets run the following scripts:
+
+ `restore-idm.sh minikube fiware-iot idm-backup/idm-mk-2019-03-10.sql`
+
+Of course you can pick another dump as well. The fist argument of the script is the _context name_, which discribes a valid cluster as it is defined in your `~/kube/config` file. The second argument is the namespace of your fiware installation.
+
+Until the database is restored, pep-proxies won't be able to connect with the IdM, without terminating with an error. Thus you need to check the logs of all pep proxies an propably need to delete them in order to force re-creation once the databes is restored.
 
 ## Dumping your IdM-Database
 
-When you make changes to your IdM settings, don't forget to export these changes using the script `backup-idm.sh`
+When you make changes to your IdM settings, don't forget to export these changes using the script `backup-idm.sh`:
+
+`./backup-idm.sh minikube fiware-iot my-dumy-file.sql`
+
+
+## Restoring Sensor Data
+
+In order to get some sample data into your system you need to run this script:
+
+`./restore-mongo.sh fiware-iot`
+
+where `fiware-iot` is the namespace of your fiware installation. The script will take the archive `mongo-dump.tar.bzip2` that contains historic data from October 2018.
 
 ## Accessing your Services
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ "$#" -ne 3 ]
   then
-    echo "Usage: restore-idm.sh  context_name namspace some_file.sql"
+    echo "Usage: restore-idm.sh context_name namspace some_file.sql"
     exit 1
 fi
 NAMESPACE=$2
