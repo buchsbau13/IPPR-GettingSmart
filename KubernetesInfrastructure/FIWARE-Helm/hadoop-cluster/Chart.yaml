@@ -1,5 +1,0 @@
-apiVersion: v1
-appVersion: 3.1.2
-description: A Helm chart for Hadoop-cluster
-name: hadoop-cluster
-version: 0.1.0
