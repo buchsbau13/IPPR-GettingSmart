@@ -17,7 +17,7 @@ i101v182 ansible_host=10.1.101.182 ansible_user=e20143 ansible_become=yes
 i101v183 ansible_host=10.1.101.183 ansible_user=e20143 ansible_become=yes
 ```
 ## Run playbook
-Run the playbook with inventory file with the following command
+Run the playbook with the following command
 ```
 ansible-playbook -i hosts setup-hadoop-cluster-nodes.yaml 
 ```
