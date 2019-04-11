@@ -1,9 +1,12 @@
-# datanodes for persistent volumes /opt/hadoop/hdfs/data
-[datanodes]
-kubernetes01 ansible_host=10.0.0.101 ansible_user=root
-kubernetes02 ansible_host=10.0.0.102 ansible_user=root
-kubernetes03 ansible_host=10.0.0.103 ansible_user=root
-
-# node for nfs storage
+### ITG Environment
+# nfs storage for yarn and namenode
 [nfs]
-kubernetes01 ansible_host=10.0.0.101 ansible_user=root
+I101V180.intra.graz.at ansible_host=10.1.101.180 ansible_user=e20143 ansible_become=yes
+[nfs:vars]
+network=10.1.101.0/24
+
+# datanodes for persistent volumes /opt/hadoop-cluster/hdfs/data
+[datanodes]
+i101v181 ansible_host=10.1.101.181 ansible_user=e20143 ansible_become=yes
+i101v182 ansible_host=10.1.101.182 ansible_user=e20143 ansible_become=yes
+i101v183 ansible_host=10.1.101.183 ansible_user=e20143 ansible_become=yes
