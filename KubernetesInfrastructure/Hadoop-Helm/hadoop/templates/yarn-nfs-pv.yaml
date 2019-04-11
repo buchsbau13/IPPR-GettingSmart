@@ -11,9 +11,7 @@ spec:
     storage: {{ $y.size }}
   accessModes:
     - ReadWriteMany
-  {{ if and $y.name (eq $y.name "namenode") }}
   persistentVolumeReclaimPolicy: Retain
-  {{ end }}
   storageClassName: {{ $relname }}-{{ $y.name }}
   {{ with $storage.nfs }}
   nfs:
