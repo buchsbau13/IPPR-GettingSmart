@@ -14,10 +14,11 @@ mongo:
 mysql:
   version: 5.7.21
   pv:
-    host: minikube
     storage: 1Gi
-    path: /opt/fiware/mysql
     accessModes: ReadWriteOnce
+    local:
+      host: minikube
+      path: /opt/fiware/mysql
   storage: 1Gi
   root_password: idm
   external: true
@@ -119,6 +120,7 @@ pep:
 
 postgres:
   external: true
+  version: 11
   pv:
     # either use 'local' or 'nfs'
     # if 'nfs' is declared it takes precedence
@@ -157,6 +159,12 @@ elasticsearch:
 
 
 wirecloud:
+  db:
+    username: postgres
+    password: wirepass
+    dbName: wirecloud
+  ngsi:
+    nodePort: 30003
   pv:
     # either use 'local' or 'nfs'
     # if 'nfs' is declared it takes precedence

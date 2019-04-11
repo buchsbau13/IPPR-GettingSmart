@@ -78,9 +78,21 @@ When you make changes to your IdM settings, don't forget to export these changes
 
 In order to get some sample data into your system you need to run this script:
 
-`./restore-mongo.sh fiware-iot`
+`./restore-mongo.sh minikube fiware-iot`
 
 where `fiware-iot` is the namespace of your fiware installation. The script will take the archive `mongo-dump.tar.bzip2` that contains historic data from October 2018.
+
+## Setting up Wirecloud
+
+To get wireloud populated with userdate workspaces use the following script, from folder `wirecloud-transfer`:
+
+`./load_dump.hs minikube fiware-iot django-mk-2019-04-04.json`
+
+This script deletes all existing configuration and imports the one from the dump file.
+
+Additionally you can easily install custom widgets by running:
+
+`./copy-widgets.sh minikube fiware-iot`
 
 ## Accessing your Services
 
@@ -110,4 +122,4 @@ Once your cluster is running to can get an overwiew of all services and how to a
 
 ### Keyrock (Identity Manager)
 
-The default endpoint for `keyrock` should be [http://192.168.99.100:30500](http://192.168.99.100:30500). The admin account that comes with the database dump is `jd@test.com` with password  `topsecret`.
+The default endpoint for `keyrock` should be [http://192.168.99.100:30500](http://192.168.99.100:30500). The admin account that comes with the database dump is `admin@test.com` with password  `1234`.

@@ -1,9 +1,9 @@
-if [ "$#" -ne 1 ]
+if [ "$#" -ne 2 ]
   then
-    echo "Usage: copy-widgets.sh clustername"
+    echo "Usage: copy-widgets.sh clustername namespace"
     exit 1
 fi
-NAMESPACE=fiware-graziot
+NAMESPACE=$2
 kubectl config use-context $1
 WIRECLOUD_POD=$(kubectl get pod -l run=wirecloud -n $NAMESPACE -o go-template --template '{{range .items}}{{.metadata.name}}{{end}}')
 echo "Wircloud pod: $WIRECLOUD_POD"
