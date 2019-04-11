@@ -1,4 +1,4 @@
-# ansible-hadoop-cluster
+# ansible-hadoop
 Ansible playbook that prepares the provided k8s cluster for hadoop deployment. The playbook
 - installs nfs-utils on all a nodes
 - creates required nfs-shares on one node
