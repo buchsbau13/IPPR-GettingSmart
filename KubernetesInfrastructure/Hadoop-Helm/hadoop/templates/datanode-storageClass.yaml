@@ -1,0 +1,10 @@
+{{- $relname := .Release.Name -}}
+{{- range $index, $hosts := .Values.hosts }}
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: {{ $relname }}-datanode-{{ $index }}
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+{{- end -}}

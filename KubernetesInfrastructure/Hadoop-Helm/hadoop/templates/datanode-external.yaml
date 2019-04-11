@@ -1,0 +1,24 @@
+{{- $relname := .Release.Name -}}
+{{- $dn := .Values.datanode -}}
+{{- range $index, $host := $dn.hosts }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: datanode-{{ $index }}-external
+  labels:
+    app: datanode-{{ $index }}-external
+spec:
+  ports:
+  - port: 9864
+    targetPort: 9864
+    nodePort: {{ $host.dnPort }}
+    name: datanode-{{ $index }}
+  - port: 8042
+    targetPort: 8042
+    nodePort: {{ $host.nmPort }}
+    name: nodemanger-{{ $index }}
+  selector:
+    app: datanode-{{$index}}
+  type: LoadBalancer
+{{- end -}}

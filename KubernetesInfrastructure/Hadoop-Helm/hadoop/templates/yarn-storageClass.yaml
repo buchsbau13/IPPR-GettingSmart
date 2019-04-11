@@ -1,0 +1,10 @@
+{{- $relname := .Release.Name -}}
+{{- range $y := .Values.yarn }}
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: {{ $relname }}-{{ $y.name }}
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+{{- end -}}

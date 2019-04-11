@@ -1,0 +1,22 @@
+{{- $relname := .Release.Name -}}
+{{- $storage := .Values.storage -}}
+{{- range $y := .Values.yarn }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ $relname }}-{{ $y.name }}-pv
+spec:
+  capacity:
+    storage: {{ $y.size }}
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ $relname }}-{{ $y.name }}
+  {{ with $storage.nfs }}
+  nfs:
+    path: {{ .path }}/{{ $y.name }}
+    server: {{ .server }}
+    readOnly: {{ .readOnly }}
+  {{- end -}}
+{{- end -}}

@@ -1,0 +1,16 @@
+{{- $relname := .Release.Name -}}
+{{- range $y := .Values.yarn }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $y.name }}-external
+  labels:
+    app: {{ $y.name }}-external
+spec:
+  ports:
+{{ toYaml $y.externalPorts | indent 4 }}
+  selector:
+    app: {{ $y.name }}
+  type: LoadBalancer
+{{- end -}}

@@ -1,20 +1,21 @@
 ---
+- hosts: all
+  tasks:
+    - name: install tools
+      yum:
+        name: nfs-utils
+        state: present
+        update_cache: true
+
 - hosts: datanodes
   tasks:
     - name: create folder for hdfs/data
       file:
-          path: /opt/hadoop/hdfs/data/ # required. Path to the file being managed.
+          path: /opt/hadoop-cluster/hdfs/data/
           state: directory
 
 - hosts: nfs
   tasks:
-    - name: install tools
-      yum:
-        name:
-         - nfs-utils
-        state: present
-        update_cache: true
-
     - name: start service nfs-server
       service:
         name: nfs-server
@@ -23,25 +24,22 @@
 
     - name: create nfs-share folders
       file:
-        path: /var/nfs/{{item}}
+        path: /var/nfs/hadoop-cluster/{{item}}
         state: directory
         owner: nfsnobody
         group: nfsnobody
         mode: 0755
       loop:
         - yarn
-        - hadoop
+        - namenode
 
     - name: update /etc/exports
       lineinfile:
         path: /etc/exports
-        line: "/var/nfs/yarn  10.0.0.0/24(rw,sync,no_subtree_check)"
-      
-    - name: update /etc/exports
-      lineinfile:
-        path: /etc/exports
-        line: "/var/nfs/hadoop  10.0.0.0/24(rw,sync,no_subtree_check)"
-
+        line: "{{ item }}"
+      with_items:
+        - "/var/nfs/hadoop-cluster/yarn {{ network }}(rw,sync,no_root_squash,no_subtree_check)"
+        - "/var/nfs/hadoop-cluster/namenode {{ network }}(rw,sync,no_root_squash,no_subtree_check)"
+    
     - name: make changes effective
       command: 'exportfs -a'
-
