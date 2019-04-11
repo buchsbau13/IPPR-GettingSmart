@@ -7,8 +7,6 @@ yarn:
     image: stfnltnr/hadoop-yarn
     size: 10Gi
     servicePorts:
-#      8088 : "yarn-rm"
-#      19888 : "yarn-hs"
       - port: 8088
         name: yarn-rm
       - port: 19888
@@ -42,8 +40,6 @@ yarn:
     image: "stfnltnr/hadoop-namenode"
     size: 10Gi
     servicePorts:
-#      9870 : "webhdfs"
-#      9000 : "defaultfs"
       - port: 9870
         name: webhdfs
       - port: 9000
