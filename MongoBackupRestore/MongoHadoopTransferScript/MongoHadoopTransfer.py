@@ -132,6 +132,8 @@ if NUM_ARG!=1:
     print '     [mongo] section:'
     print '        host = Host of the MongoDB instance'
     print '        port = Port of the MongoDB instance'
+    print '        user = Username for the MongoDB instance (ignored if term is empty)'
+    print '        password = Pasword for the MongoDB instance (ignored if term is empty)'
     print '        database = Name of the MongoDB database'
     print '        service = FIWARE service/tenant name'
     print '        servicePath = FIWARE service path'
@@ -157,6 +159,8 @@ config.readfp(io.BytesIO(sample_config))
 
 MONGO_HOST=config.get('mongo', 'host')
 MONGO_PORT=config.get('mongo', 'port')
+MONGO_USER=config.get('mongo', 'user')
+MONGO_PASSWORD=config.get('mongo', 'password')
 DATABASE=config.get('mongo', 'database')
 SRV=config.get('mongo', 'service')
 SRV_PATH=config.get('mongo', 'servicePath')
@@ -172,7 +176,10 @@ DATANODE_3=[str.strip() for str in config.get('hadoop', 'datanode3').split(',')]
 HADOOP_USER=config.get('hadoop', 'user')
 
 # Connect to MongoDB
-mongo=MongoClient(MONGO_HOST,int(MONGO_PORT))
+if MONGO_USER!='' and MONGO_PASSWORD!='':
+    mongo=MongoClient(MONGO_HOST,int(MONGO_PORT),username=MONGO_USER,password=MONGO_PASSWORD)
+else:
+    mongo=MongoClient(MONGO_HOST,int(MONGO_PORT))
 db=mongo[DATABASE]
 
 # Get collection names of database
@@ -215,7 +222,7 @@ for collection in colList:
         
         path='/webhdfs/v1/user/'+HADOOP_USER+'/'+SRV+'/'+filename+'/'+filename+'.txt?user.name='+HADOOP_USER
         
-        # Create hadoop file if necessary
+        # Create hadoop file, if necessary
         if getFileStatus(HADOOP_HOST, NAMENODE[1], path)!=200:
             createFile(HADOOP_HOST, NAMENODE[1], path)
 
