@@ -40,6 +40,8 @@ if NUM_ARG!=1:
     print '  List of available settings:'
     print '        host = Host of the MongoDB instance'
     print '        port = Port of the MongoDB instance'
+    print '        user = Username for the MongoDB instance (ignored if term is empty)'
+    print '        password = Pasword for the MongoDB instance (ignored if term is empty)'
     print '        database = Name of the database with STH collections'
     print '        prefix = Prefix for sensor IDs (e.g. Test_Sensor_)'
     print '        type = Type of sensors (e.g. test)'
@@ -60,6 +62,8 @@ config.readfp(io.BytesIO(sample_config))
 
 HOST=config.get('mongo', 'host')
 PORT=config.get('mongo', 'port')
+USER=config.get('mongo', 'user')
+PASSWORD=config.get('mongo', 'password')
 DATABASE=config.get('mongo', 'database')
 PREFIX=config.get('mongo', 'prefix')
 TYPE=config.get('mongo', 'type')
@@ -67,7 +71,10 @@ START=config.get('mongo', 'firstNum')
 END=config.get('mongo', 'lastNum')
 
 # Connect to MongoDB
-mongo=pymongo.MongoClient(HOST,int(PORT))
+if USER!='' and PASSWORD!='':
+    mongo=pymongo.MongoClient(HOST,int(PORT),username=USER,password=PASSWORD)
+else:
+    mongo=pymongo.MongoClient(HOST,int(PORT))
 db=mongo[DATABASE]
 
 for cnt in range(int(START), int(END)+1):
