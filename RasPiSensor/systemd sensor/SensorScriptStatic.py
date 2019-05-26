@@ -14,7 +14,10 @@ API_KEY = "apistatic"
 FIWARE_SERVICE = "graziot"
 FIWARE_SERVICE_PATH = "/"
 
-# Authentication settings (set AUTH_ENABLED to False if not needed)
+# Authentication settings for the ITG Graz gateway
+ITG_TOKEN = "MYnzj0ramFKZGF898CnjNjPgiYkNmid6XMbhSIAr7LkaoZSYNsygKpnRTI2268Wc"
+
+# FIWARE Authentication settings (set AUTH_ENABLED to False if not needed)
 AUTH_ENABLED = True
 AUTH_HOST = "http://192.168.1.129:5000"
 USERNAME = "michi_janusch@chello.at"
@@ -31,35 +34,60 @@ TEMP_HUMID_TYPE = Adafruit_DHT.DHT22
 TEMP_HUMID_GPIO = 4
 
 
-# Set start time for token fetch interval
+# Initialise start time for token fetch interval
 START_TIME = 0.0
 
-# Set token renewal delay (in seconds)
-RENEWAL_DELAY = 600.0
+# Set token renewal offset (in seconds)
+RENEWAL_OFFSET = 60.0
 
-# Set token variable
+# Initialise token renewal delay (in seconds)
+EXPIRES_IN = 0.0
+
+# Initialise token variables
 TOKEN = "invalid_token"
+REFRESH_TOKEN = "invalid_token"
 
 def fetchToken(tries):
   if tries > 0:
     auth_head = "Basic " + base64.b64encode((CLIENT_ID + ":" + CLIENT_SECRET).encode()).decode('UTF-8')
-    token_headers = {'content-type': 'application/x-www-form-urlencoded', 'authorization': auth_head}
+    token_headers = {'content-type': 'application/x-www-form-urlencoded', 'x-authzforce-token': ITG_TOKEN, 'authorization': auth_head}
     token_url = AUTH_HOST + "/oauth2/token"
     token_payload = {'grant_type': 'password', 'username': USERNAME, 'password': PASSWORD}
     try:
       r = requests.post(token_url, data=token_payload, headers=token_headers, timeout=1)
       if r.status_code == 200:
-        return r.json()['access_token']
+        # Return token, refresh token and refresh delay
+        return r.json()['access_token'], r.json()['refresh_token'], float(r.json()['expires_in'])
       else:
         return fetchToken(tries - 1)
     except requests.exceptions.RequestException:
       return fetchToken(tries - 1)
   else:
-    return "invalid_token"
+    # Return default values for token, refresh token and refresh delay
+    return "invalid_token", "invalid_token", 0.0
+
+def renewToken(tries):
+  if tries > 0:
+    auth_head = "Basic " + base64.b64encode((CLIENT_ID + ":" + CLIENT_SECRET).encode()).decode('UTF-8')
+    token_headers = {'content-type': 'application/x-www-form-urlencoded', 'x-authzforce-token': ITG_TOKEN, 'authorization': auth_head}
+    token_url = AUTH_HOST + "/oauth2/token"
+    token_payload = {'grant_type': 'refresh_token', 'refresh_token': REFRESH_TOKEN}
+    try:
+      r = requests.post(token_url, data=token_payload, headers=token_headers, timeout=1)
+      if r.status_code == 200:
+        # Return token, refresh token and refresh delay
+        return r.json()['access_token'], r.json()['refresh_token'], float(r.json()['expires_in'])
+      else:
+        return renewToken(tries - 1)
+    except requests.exceptions.RequestException:
+      return renewToken(tries - 1)
+  else:
+    # If renewing the token using the refresh token fails, try the default method
+    return fetchToken(3)
 
 def sendValues(tries):
   if tries > 0:
-    headers = {'content-type': 'text/plain', 'X-Auth-Token' : TOKEN, 'Fiware-Service': FIWARE_SERVICE, 'Fiware-ServicePath': FIWARE_SERVICE_PATH}
+    headers = {'content-type': 'text/plain', 'x-authzforce-token': ITG_TOKEN, 'X-Auth-Token' : TOKEN, 'Fiware-Service': FIWARE_SERVICE, 'Fiware-ServicePath': FIWARE_SERVICE_PATH}
     # Original path:
     #url = HOST + "/iot/d?k=" + API_KEY + "&i=" + DEVICE_ID
     # New path:
@@ -136,9 +164,12 @@ while True:
       # Only renew token after interval expires (if authentication is enabled)
       END_TIME = time.time()
 
-      if AUTH_ENABLED and END_TIME - START_TIME >= RENEWAL_DELAY:
+      if AUTH_ENABLED and END_TIME - START_TIME >= EXPIRES_IN - RENEWAL_OFFSET:
         print "\n[Fetching valid OAuth2 token...]"
-        TOKEN = fetchToken(3)
+        if REFRESH_TOKEN == "invalid_token":
+          TOKEN, REFRESH_TOKEN, EXPIRES_IN = fetchToken(3)
+        else:
+          TOKEN, REFRESH_TOKEN, EXPIRES_IN = renewToken(3)
         if TOKEN != "invalid_token":
           START_TIME = time.time()
           print "+++ Token successfully received! +++"
